@@ -16,7 +16,7 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data\"
+    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
     local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
