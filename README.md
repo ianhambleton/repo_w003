@@ -34,16 +34,16 @@ A. LIFE EXPECTANCY GAINS BETWEEN 2000 AND 2019
     - by sex
 
 > **Graphic** 
-> TYPE:   Vertical bubbles. 
-> USE:    Highlights LE range within each stratification group
-> PANELS: One chart per year 
-> X-AXIS: Country/sex stratifications) 
-> Y-AXIS: Life Expectancy point estimate)
-> **Metrics Available**
-> LE by country 
-> **Metrics Not Available**
-> LE by region (aggregated) 
-> LE by sub-region
+> TYPE:   Vertical bubbles.<br> 
+> USE:    Highlights LE range within each stratification group<br>
+> PANELS: One chart per year<br> 
+> X-AXIS: Country/sex stratifications)<br> 
+> Y-AXIS: Life Expectancy point estimate)<br>
+> **Metrics Available**<br>
+> LE by country<br> 
+> **Metrics Not Available**<br>
+> LE by region (aggregated)<br> 
+> LE by sub-region<br>
 
 
 B. BROAD CAUSES OF DEATH
