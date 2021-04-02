@@ -29,11 +29,23 @@
     log using "`logpath'\p001-ghe-burden", replace
 ** HEADER -----------------------------------------------------
 
+** ************************************************************
+** 1. SET UP Frame Structure
+** We do this to break up the large WHO dataset
+** for computational efficiency
+** ************************************************************
+frame create iso 
+frame create africa 
+frame create americas 
+frame create asia
+frame create europe 
+frame create oceania 
+
+tempfile iso3 
 
 ** ************************************************************
 ** 1. LOAD and prepare ISO country metadata
 ** ************************************************************
-tempfile iso3 
 insheet using "`datapath'\from-un\iso3.csv", clear comma names
 rename iso3 iso3c
 drop v3
@@ -94,57 +106,10 @@ replace un_broad = "Europe" if iso3c=="MNE"
 replace un_det = "Southern Europe" if iso3c=="MNE"
 replace cname_std = cname if iso3c=="MNE"
 replace iso3n = 499 if iso3c=="MNE"
-drop cname 
-label var cname_std "Country name"
-label var iso3c "UN M49 iso3 text country code"
-label var iso3n "UN M49 iso3 numeric country code"
-label data "UN country and region file, with M49 iso3 codes: Mar 2021" 
 
-** Attach UN M49 region codes to the text regions
-gen un_region = .
-replace un_region = 2 if un_broad=="Africa" 
-replace un_region = 19 if un_broad=="Americas" 
-replace un_region = 142 if un_broad=="Asia" 
-replace un_region = 150 if un_broad=="Europe" 
-replace un_region = 9 if un_broad=="Oceania" 
-labmask un_region, values(un_broad)
-drop un_broad
-
-** Attach UN M49 sub-region codes to text sub-regions
-gen un_subregion = .
-** Africa sub-regions
-replace un_subregion = 15 if un_det=="Northern Africa"
-replace un_subregion = 14 if un_det=="Eastern Africa"
-replace un_subregion = 17 if un_det=="Middle Africa"
-replace un_subregion = 18 if un_det=="Southern Africa"
-replace un_subregion = 11 if un_det=="Western Africa"
-** Americas sub-regions 
-replace un_subregion = 29 if un_det=="Caribbean"
-replace un_subregion = 13 if un_det=="Central America"
-replace un_subregion = 5 if un_det=="South America"
-replace un_subregion = 21 if un_det=="Northern America"
-** Asia sub-regions 
-replace un_subregion = 143 if un_det=="Central Asia"
-replace un_subregion = 30 if un_det=="Eastern Asia"
-replace un_subregion = 35 if un_det=="South-Eastern Asia"
-replace un_subregion = 34 if un_det=="Southern Asia"
-replace un_subregion = 145 if un_det=="Western Asia"
-** Europe sub-regions 
-replace un_subregion = 151 if un_det=="Eastern Europe"
-replace un_subregion = 154 if un_det=="Northern Europe"
-replace un_subregion = 39 if un_det=="Southern Europe"
-replace un_subregion = 155 if un_det=="Western Europe"
-** Oceania sub-regions 
-replace un_subregion = 53 if un_det=="Australia and New Zealand"
-replace un_subregion = 54 if un_det=="Melanesia"
-replace un_subregion = 57 if un_det=="Micronesia"
-replace un_subregion = 61 if un_det=="Polynesia"
-labmask un_subregion, values(un_det)
-drop un_det
-** Attach UN M49 sub-region codes to text sub-regions
-labmask iso3n, values(cname_std)
-drop cname_std
 save `iso3', replace 
+frame change iso 
+frame 
 
 
 
@@ -183,13 +148,20 @@ save `iso3', replace
 **    We Load an initial 100 rows while the dataset is documented 
 use "`datapath'\from-who\dths_yld_daly", clear 
 rename iso3 iso3c 
+** use in 1/100000 using "`datapath'\from-who\dths_yld_daly", clear 
+merge m:1 iso3c using `iso3' 
+order iso3c cname 
+drop _merge 
+
 
 
 ** ************************************************************
-** 3. ADDING GHE BURDEN DATASET METADATA 
+** 3. ADDING DATASET METADATA 
 ** ************************************************************
 ** Variable-level labelling 
 label var iso3c "UN M49 iso3 text country codes"
+label var iso3n "UN M49 iso3 numeric country codes"
+label var cname "Country name" 
 label var year "Year from 2000 to 2019" 
 
 ** Age categories
@@ -236,7 +208,6 @@ order pop, after(sex)
 label var ghecause "GHE cause categories" 
 label var causename "Text description of GHE cause category" 
 order causename, after(ghecause)
-** labmask ghecause, values(causename)
 
 ** Years of Life lost (YLL)
 label var yll "Years of Life Lost (YLL) point estimate" 
@@ -258,44 +229,37 @@ label var dths "Deaths point estimate"
 label var dths_low "Deaths uncertainty lower bound" 
 label var dths_up "Deaths uncertainty upper bound" 
 
+** Country name 
+drop cname 
+label var cname_std "Country name" 
+rename un_broad un_region 
+rename un_det un_subregion 
+label var un_region "United Nations region" 
+label var un_subregion "United Nations sub-region" 
+order iso3n cname_std un_region un_subregion, after(iso3c)
+
 ** ************************************************************
-** 4. Save the FULL DATASET
+** 4. Save the resulting datasets
 ** ************************************************************
-label data "WHO GHE 2019: Disease Burden Metrics, all countries, all years"
 save "`datapath'\from-who\who-ghe-burden-001", replace
-
-
-** ************************************************************
-** 5. Save DATA SUBSETS
-** ************************************************************
-** use "`datapath'\from-who\who-ghe-burden-001", clear
 
 ** YLL dataset
 preserve
-    keep iso3c year age sex pop ghecause causename yll*
-    label data "WHO GHE 2019: Years of Life Lost, all countries, all years"
+    keep iso3c iso3n canem_std un_region un_subregion year age sex pop ghecause causename yll*
     save "`datapath'\from-who\who-ghe-yll-001", replace
-restore 
-preserve
-    keep iso3c year age sex pop ghecause yll*
-    label data "WHO GHE 2019: Years of Life Lost, all countries, all years"
-    save "`datapath'\from-who\who-ghe-yll-002", replace
 restore 
 ** YLD dataset
 preserve
-    keep iso3c year age sex pop ghecause causename yld*
-    label data "WHO GHE 2019: Years Lost to Disability, all countries, all years"
+    keep iso3c iso3n canem_std un_region un_subregion year age sex pop ghecause causename yld*
     save "`datapath'\from-who\who-ghe-yld-001", replace
 restore 
 ** DALY dataset
 preserve
-    keep iso3c year age sex pop ghecause causename daly*
-    label data "WHO GHE 2019: Disability Adjusted Life Years, all countries, all years"
+    keep iso3c iso3n canem_std un_region un_subregion year age sex pop ghecause causename daly*
     save "`datapath'\from-who\who-ghe-daly-001", replace
 restore 
 ** Deaths dataset
 preserve
-    keep iso3c year age sex pop ghecause causename dths*
-    label data "WHO GHE 2019: Deaths, all countries, all years"
+    keep iso3c iso3n canem_std un_region un_subregion year age sex pop ghecause causename dths*
     save "`datapath'\from-who\who-ghe-deaths-001", replace
 restore 

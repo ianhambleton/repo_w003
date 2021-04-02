@@ -16,8 +16,8 @@ The purpose of this project is to produce an in-depth analysis using the GHE (20
 We plan to have 4 chapters, at a total length of between 30 and 40 pages. Chapters broadly might have the following structure.
 
 #### General questions
-<mark>Q1. Always use full available time-range for change?</mark>
-<mark>Q2. To what extent should we expand analytics to additional data resources (which may of course have a range of different biases?</mark>
+<quote>Q1. Always use full available time-range for change?</quote><br>
+<code>Q2. To what extent should we expand analytics to additional data resources (which may of course have a range of different biases?</code>
 <mark>Q3. WHO has no sub-region classification. Use UN M49 categorization instead? Follow-up - several "Caribbean" nations than fall out of a Caribbean definition (Belize, Guyana, Suriname, French Guiana). Tweak UN classification?</mark>
 <mark>Q4. If using WHO life table estimates (a) Only results for select yrs via GHO and (b) no sub-regional aggregation of LE estimates. 
 
