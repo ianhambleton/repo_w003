@@ -139,14 +139,143 @@ replace un_subregion = 53 if un_det=="Australia and New Zealand"
 replace un_subregion = 54 if un_det=="Melanesia"
 replace un_subregion = 57 if un_det=="Micronesia"
 replace un_subregion = 61 if un_det=="Polynesia"
-labmask un_subregion, values(un_det)
-drop un_det
+**labmask un_subregion, values(un_det)
+**drop un_det
 ** Attach UN M49 sub-region codes to text sub-regions
 labmask iso3n, values(cname_std)
 drop cname_std
 save `iso3', replace 
+sort iso3c 
+save "`datapath'\from-un\un-iso3", replace
 
 
+** ************************************************************
+** 2. LOAD WHO REGIONS and MERGE with UN REGIONS
+** ************************************************************
+tempfile who 
+insheet using "`datapath'\from-owid\who-regions.csv", clear comma names
+**drop entity
+rename code iso3c
+drop year
+rename whoregion who_region
+save `who', replace 
+sort iso3c 
+save "`datapath'\from-owid\who-iso3", replace
+merge 1:1 iso3c using `iso3'
+
+** Code WHO region 
+rename who_region whoname
+gen who_region = .
+replace who_region = 1 if whoname == "Africa"
+replace who_region = 2 if whoname == "Americas"
+replace who_region = 3 if whoname == "Eastern Mediterranean"
+replace who_region = 4 if whoname == "Europe"
+replace who_region = 5 if whoname == "South-East Asia"
+replace who_region = 6 if whoname == "Western Pacific"
+labmask who_region, values(whoname) 
+order who_region, after(iso3n)
+
+** Fixing missng entry the from older UN file
+* South Sudan 
+replace iso3n=729 if iso3c=="SSD"
+replace un_region = 2 if iso3c=="SSD"
+replace un_subregion = 14 if iso3c=="SSD"
+replace un_det = "Eastern Africa" if iso3c=="SSD" 
+labmask un_subregion, values(un_det)
+drop un_det whoname entity _merge 
+
+* Adding minor territories to the WHO regional classification
+replace who_region = 1 if un_region == 2     /* africa */
+replace who_region = 2 if un_region == 19     /* americas */
+* Oceania 
+replace who_region = 6 if iso3c=="ASM"
+replace who_region = 6 if iso3c=="GUM"
+replace who_region = 6 if iso3c=="NCL"
+replace who_region = 6 if iso3c=="PYF"
+replace who_region = 6 if iso3c=="WLF"
+* Europe
+replace who_region = 4 if iso3c=="FRO"
+replace who_region = 4 if iso3c=="GIB"
+replace who_region = 4 if iso3c=="LIE"
+replace who_region = 4 if iso3c=="VAT"
+* China/Hong Kong/Macau
+replace who_region = 6 if iso3c=="HKG"
+replace who_region = 6 if iso3c=="MAC"
+* Palestine
+replace who_region = 3 if iso3c=="PSE"
+
+* create PAHO sub-regions (AMERICAS only of course)
+* Source: https://www.paho.org/hq/index.php?option=com_content&view=article&id=97:2008-regional-subregional-centers-institutes-programs&Itemid=1110&lang=en
+gen paho_subregion = . 
+* north america
+replace paho_subregion = 1 if iso3c=="CAN"
+replace paho_subregion = 1 if iso3c=="BMU"
+replace paho_subregion = 1 if iso3c=="USA"
+* latin america 
+replace paho_subregion = 2 if iso3c=="BRA"
+replace paho_subregion = 2 if iso3c=="MEX"
+* central america
+replace paho_subregion = 3 if iso3c=="BLZ"
+replace paho_subregion = 3 if iso3c=="CRI"
+replace paho_subregion = 3 if iso3c=="GTM"
+replace paho_subregion = 3 if iso3c=="HND"
+replace paho_subregion = 3 if iso3c=="NIC"
+replace paho_subregion = 3 if iso3c=="PAN"
+replace paho_subregion = 3 if iso3c=="SLV"
+* Andean area 
+replace paho_subregion = 4 if iso3c=="BOL"
+replace paho_subregion = 4 if iso3c=="COL"
+replace paho_subregion = 4 if iso3c=="ECU"
+replace paho_subregion = 4 if iso3c=="PER"
+replace paho_subregion = 4 if iso3c=="VEN"
+* Southern Cone 
+replace paho_subregion = 5 if iso3c=="ARG"
+replace paho_subregion = 5 if iso3c=="CHL"
+replace paho_subregion = 5 if iso3c=="PRY"
+replace paho_subregion = 5 if iso3c=="URY"
+* Latin Caribbean
+replace paho_subregion = 6 if iso3c=="CUB"
+replace paho_subregion = 6 if iso3c=="DOM"
+replace paho_subregion = 6 if iso3c=="HTI"
+replace paho_subregion = 6 if iso3c=="PRI"
+* Non-Latin Caribbean
+replace paho_subregion = 7 if iso3c=="AIA"
+replace paho_subregion = 7 if iso3c=="ATG"
+replace paho_subregion = 7 if iso3c=="ABW"
+replace paho_subregion = 7 if iso3c=="BHS"
+replace paho_subregion = 7 if iso3c=="BRB"
+replace paho_subregion = 7 if iso3c=="CYM"
+replace paho_subregion = 7 if iso3c=="DMA"
+replace paho_subregion = 7 if iso3c=="GRD"
+replace paho_subregion = 7 if iso3c=="GLP"
+replace paho_subregion = 7 if iso3c=="GUF"
+replace paho_subregion = 7 if iso3c=="GUY"
+replace paho_subregion = 7 if iso3c=="JAM"
+replace paho_subregion = 7 if iso3c=="MTQ"
+replace paho_subregion = 7 if iso3c=="MSR"
+replace paho_subregion = 7 if iso3c=="ANT"
+replace paho_subregion = 7 if iso3c=="KNA"
+replace paho_subregion = 7 if iso3c=="LCA"
+replace paho_subregion = 7 if iso3c=="VCT"
+replace paho_subregion = 7 if iso3c=="SUR"
+replace paho_subregion = 7 if iso3c=="TCA"
+replace paho_subregion = 7 if iso3c=="TTO"
+replace paho_subregion = 7 if iso3c=="VGB"
+#delimit ; 
+label define paho_subregion_    1 "north america"
+                                2 "latin america"
+                                3 "central american isthmus"
+                                4 "andean area"
+                                5 "southern cone"
+                                6 "latin caribbean"
+                                7 "non-latin caribbean";
+#delimit cr 
+label values paho_subregion paho_subregion_ 
+
+** FINAL REGIONS DATASET 
+save "`datapath'\from-owid\regions", replace
+
+/*
 
 ** ************************************************************
 ** 2. LOAD GHE BURDEN DATASET
