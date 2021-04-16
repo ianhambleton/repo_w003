@@ -9,136 +9,198 @@ The estimates are produced using data from multiple consolidated sources, includ
 WHO’s Global Health Estimates (GHE) provide the latest available data on death and disability globally and geographically disaggregated by WHO regions and countries. The latest updates include global, regional, and country trends estimates from 2000 to 2019.<br>
 
 ## Broad goal of analyses
-The purpose of this project is to produce an in-depth analysis using the GHE (2000-2019) trend-series presenting results on health-related indicators disaggregated by age, sex, and cause. The analysis should consider the different subregions and focus on changes over time. The idea is to produce one technical report, and two peer-reviewed articles from this work. Potential outlines are presented below.
+The purpose of this project is to produce an analysis using the GHE (2000-2019) trend-series presenting results on health-related indicators disaggregated by age, sex, and cause. The analysis will consider the different subregions and focus on changes over time. The idea is to produce one technical report, and two peer-reviewed articles from this work. 
 
----
-### 1. Technical Document - potential outline
-We plan to have 4 chapters, at a total length of between 30 and 40 pages. Chapters broadly might have the following structure.
+## Algorithms
+The algorithms in this repository are all written to run in the Stata statistical statistical software (cuurent version used is v16).
 
-#### General questions
-<code>Q1. Always use full available time-range for change?</code><br>
-<code>Q2. To what extent should we expand analytics to additional data resources (which may of course have a range of different biases?)</code><br>
-<code>Q3. WHO has no sub-region classification. Am using UN M49 categorization instead? Corollary of this is that several "Caribbean" nations then belong to other subregions (Belize in Central America, Guyana, Suriname, and French Guiana in South America). Tweak UN classification?</code><br>
-<code>Q4. If using WHO life table estimates (a) Only results for select yrs via GHO and (b) no sub-regional aggregation of LE estimates. Have limited burden and death files to match those limited years (2000, 05, 10, 15, 19)</code><br> 
-<code>Q5. The Americas. Do we want North America subsumed into this broad categorisation - the aggrgated region-level summaries do include North America?</code><br> 
 
-#### Chapter 1: Regional Overview
-_Initial Brief_: The leading causes of deaths and disabilities and the changes over time (should include analysis on inequities and demographic/epidemiological transition). This chapter should also present results for the three main broad group of causes of deaths and disabilities: communicable (infectious diseases, along with maternal, perinatal, and nutritional conditions), noncommunicable diseases (including mental health) and external causes.
+#### 1. Load the GHE disease burden file
+- DO FILE: p001-load-ghe-burden.do
+> Input dataset: dths_yld_daly.dta
+> - Received as a large Stata dataset, from Bochen Cao (WHO). 
 
-_Outline_:<br> 
-**Section 1A.** LIFE EXPECTANCY GAINS (2000 to 2019)
-Uses WHO GHE Life Table metrics (data for 2000, 05, 10, 15, 19). This provides the basic measure of health improvement over time for the region.
-    - Present for all Americas - unstratified
-    - Stratified by subregion only
-    - Stratified by income classification only
-    - Stratified by sex only
+> **Prepare file for attaching regions to country data**
+> 1. First load a country-region dataset (algorithm: -kountry-). 
+> 2. This allows us to automatically attach UN regions to the dataset
+> 3. Manually add UN subregions, WHO regions, and informal PAHO subregions
 
-> **Graphic** 
-> TYPE:   Vertical scatterplot.
-> UNIT:   Each point is LE point estimate for one country
-> X-AXIS: Country/sex stratifications 
-> Y-AXIS: Life Expectancy at birth in years 
-> USE:    Highlights LE range across countries within each stratification group
-> PANELS: 
->    - Panel 1A. All Americas - unstratified (2000)
->    - Panel 1B. All Americas - unstratified (2019)
->    - Panel 2A. By subregion (2000)
->    - Panel 2B. By subregion (2019)
->    - Panel 3A. By WB income groups (2000)
->    - Panel 3B. By WB income groups (2019)
->    - Panel 4A. By sex (2000)
->    - Panel 4B. By sex (2019)
-> 
-> **Metrics Available**
-> LE at birth by country
-> LE at birth by region (aggregated) 
-> **Metrics Not Available**
-> LE at birth by sub-region (but average values not needed for this)
+> **Add metadata to disease burden dataset**
+> 1. Next load the burden dataset (dths_yld_daly.dta)
+> 2. Add variable metadata
+> 3. Save full dataset as (who-ghe-burden-001.dta)
 
-<code>**PROBABLE MESSAGE.** The region is living longer, but there remains important inequalities.</code><br><br>
-
-**SECTION 1B.** AGING IN THE AMERICAS
-Improvements in life expectancy mean that across the region people are living longer lives. Our populations are aging rapidly
-Section based on basic demographics.
-- population pyramids
-- fraction of the elderly / dependency ratios
-
-**SECTION 1C.** BROAD CAUSES OF DEATH (2000 to 2019)
-Present the change in *standardized mortality rates (SMR)* between 2000 and 2019, for broad categories:
-    - all cause 
-    - infectious disease, maternal, perinatal, nutritional
-    - noncommuunicable diseases
-    - external causes
-
-> **Graphic** 
-> TYPE:   Line chart
-> UNIT:   Each line is smoothed mortality rate for SMR group listed above
-> X-AXIS: Time (in years, from 2000 to 2019) 
-> Y-AXIS: Standardized Mortality rate (per 100,000)
-> USE:    Highlights change in MR over time. Each line is a particular MR group (all cause, infect dis, etc). 
-> PANELS: 
->   - Panel 1. All-cause (by subregion, include all Americas)
->   - Panel 2. All-cause (by WB country groups, include all Americas)
->   - Panel 3. All cause (by sex, include all Americas)
->
-> **Metrics Available**
-> Deaths.  
-> **Metrics Not Available**
-> Will calculate SMR overall, for subregions, and for each country
-
-<code>**POSSIBLE MESSAGE.** Improvements in SMR pverall. Improvements in communicable disease, maternal deaths, perinatal deaths. Less improvement in SMR due to NCDs. Regional inequalities large (to be explored).</code><br><br>
+> **Save data subsets to reduce filesize:**
+> YLL: who-ghe-yll-001.dta
+> YLD: who-ghe-yld-001.dta
+> DALY: who-ghe-daly-001.dta
+> DEATHS: who-ghe-deaths-001.dta
 
 
 
-**SECTION 1D.** TOP CAUSES OF DEATH and DISABILITY
-SMR and DALY
+#### 2. Further GHE disease burden file restrictions
+Further dataset reductions to reduce filesize. 
+- DO FILE: p002-ghe-burden-byregion.do
+> Input datasets: 
+> - who-ghe-yll-001
+> - who-ghe-yld-001 
+> - who-ghe-daly-001 
+> - who-ghe-deaths-001
 
-SECTION 1D. XXX
-xxx
+> **Restrict to limited set of GHE causes**
+> List as follows:
+>     0       (All causes)
+      10      (Communicable, maternal, perinatal, nutritional)
+      20      (Infectious)
+      420     (Maternal)
+      490     (Neonatal)
+      540     (Nutritional deficiencies)
+      600     (Noncommunicable diseases)
+      610     (Malignant neoplasms)
+      800     (Diabetes)
+      820     (Mental and substance use disorders)
+      830     (Depressive disorders)
+      940     (Neurological conditions)
+      950     (Alzeimer's disease and other dementias)
+      1100    (Cardiovascular diseases)
+      1130    (Ischaemic Heart disease)
+      1140    (Stroke)
+      1170    (Respiratory Diseases)
+      1510    (Injuries)
+      1520    (Unintentional injuries)
+      1530    (Road injury)
+      1540    (poisonings)
+      1550    (falls)
+      1560    (fire)
+      1570    (drowning)
+      1575    (machanical)
+      1580    (disasters)
+      1590    (Other)
+      1600    (intentional injuries)
+      1610    (suicide)
+      1620    (homicide)
+      1630   (conflict)
+
+> **Restrict to regional datasets- one for each UN and WHO region**
+> 'var' = yll / yld / daly / deaths 
+> - who-ghe-`var'-001-africa
+> - who-ghe-`var'-001-americas
+> - who-ghe-`var'-001-asia
+> - who-ghe-`var'-001-europe
+> - who-ghe-`var'-001-oceania
+> - who-ghe-`var'-001-who1 (Africa)
+> - who-ghe-`var'-001-who2 (Americas)
+> - who-ghe-`var'-001-who3 (Eastern Mediterranean)
+> - who-ghe-`var'-001-who4 (Europe)
+> - who-ghe-`var'-001-who5 (South-East Asia)
+> - who-ghe-`var'-001-who5 (Western Pacific)
 
 
-#### Chapter 2: NCDs and deaths from external causes
-_Initial Brief_: NCDs (including mental health) and external causes: two preventable killers
-(including the dangerous combination of COVID-19 and NCDs and the impact of COVID-19 on the increase of violence).
 
-_Outline_: 
-Split chapter into NCDs then External causes
+#### 3. Americas dataset without restricting cause of death
+- DO FILE: p002-ghe-burden-leading.do 
+> input dataset: 
+> - who-ghe-yll-001 
+> - who-ghe-yld-001 
+> - who-ghe-daly-001 
+> - who-ghe-deaths-001
 
-**NCDs**
-- Link to SDG 3.4
-- Mortality rate due to 4 major NCD groups (cancer, cvd, diabetes, respiratory)
-- Premature mortality (prob of dying between 35 and 70 yrs)
-
-**External Causes**
-Link to SDG (16.1.1 - intentional homicide)
-- Mortality rate per 100,000 by sex and age 
-Link to SDG (16.1.2 - conflict related deaths)
-- Mortality rate per 100,000 by sex and age 
+> Save data subset(s):
+> - who-ghe-`var'-002-who2
 
 
-
-#### Chapter 3: Saving lives and Improving quality of health
-_Initial Brief_: Saving lives and improving quality of health: implementing policies and programs and strengthening the health care system response (including an assessment on losses and gains over time)
-
-_Outline_: 
-
-**NCDs / Avoidable mortality** 
-- Avoidable mortality
-- Focus on NCD Progress Monitor
-
-**External causes**
+#### 4. Equiplot example for report draft 
+- DO FILE: p003-equiplot-example.do 
+Uses Americas dataset (who-ghe-deaths-001-who2)
 
 
-
----
-### 2. Peer-reviewed article A: GHEs with focus on NCDs (incl. mental health)
-_Initial Brief_: Scientific manuscript to be published in a high impact journal – using the GHE (2000-2019) trend-series to conduct a more in-depth analysis for the Americas on NCDs including mental health. The consultant will submit a proposed outline and an analysis plan for review and comments.
-
-_Outline_: 
+#### 5. Heatmap example for report draft 
+- DO FILE: p003-heatmap-example.do 
+Used heatmap from a previous analysis (p122)
 
 
----
-### 3. Peer-reviewed article B: GHEs with focus on NCDs (incl. mental health)
-_Initial Brief_: Scientific manuscript to be published in a high impact journal - using the GHE (2000-2019) trend-series to conduct a more in-depth analysis for the Americas on external causes. The consultant will submit a proposed outline and an analysis plan for review and comments.
+#### 6. Linechart example for report draft 
+- DO FILE: p003-linechart-example.do 
+Uses Americas dataset (who-ghe-deaths-002-who2)
 
-_Outline_: 
+
+#### 7. Slopechart example for report draft 
+- DO FILE: p003-slopechart-example.do 
+Uses Americas dataset (who-ghe-deaths-002-who2)
+
+
+#### 8. Sparklines example for report draft 
+- DO FILE: p003-sparklines-example.do 
+Uses Caribbean dataset of elderly metrics (Figures.xlsx)
+
+
+#### 9. Stacked area chart example for report draft 
+- DO FILE: p003-stacked-example.do 
+Uses Americas dataset (who-ghe-deaths-001-who2)
+
+
+#### 10. Load and prepare global lifetable dataset
+- DO FILE: p004-life-global.do
+> input dataset: 
+> - lifetable-2019-global.csv  
+> Downloaded from WHO GHO website (https://apps.who.int/gho/data/node.main.687?lang=en)
+> Downloaded on: 15-Apr-2021
+
+
+#### 11. Load and prepare WHO regions lifetable datasets
+- DO FILE: p004-life-whoregions.do
+> input dataset: 
+> - lifetable-2019-<region>.csv (africa, americas, eastern-mediterranean, europe, south-east-asia, western pacific) 
+> Downloaded from WHO GHO website (https://apps.who.int/gho/data/node.main.687?lang=en)
+> Downloaded on: 15-Apr-2021
+
+
+#### 12. Load and prepare WB income groups lifetable datasets
+- DO FILE: p004-life-wbregions.do
+> input dataset: 
+> - lifetable-2019-<region>.csv (low-income, low-middle-income, upper-middle-income, high-income) 
+> Downloaded from WHO GHO website (https://apps.who.int/gho/data/node.main.687?lang=en)
+> Downloaded on: 15-Apr-2021
+
+
+#### 13. Load and prepare country-level lifetable datasets for the Americas only
+- DO FILE: p004-life-country.do
+> input dataset: 
+> - lifetable-2019-<country>.csv, where countries are:
+> - antigua
+> - argentina 
+> - bahamas 
+> - barbados
+> - belize
+> - bolivia
+> - brazil
+> - canada
+> - chile
+> - colombia
+> - costarica
+> - cuba
+> - dominican republic
+> - ecuador
+> - el salvador
+> - grenada
+> - guatemala
+> - guyana
+> - haiti
+> - honduras
+> - jamaica
+> - mexico
+> - nicaragua
+> - panama
+> - paraguay
+> - peru
+> - st lucia
+> - st vincent
+> - suriname
+> - trinidad
+> - uruguay
+> - usa 
+ 
+> Downloaded from WHO GHO website (https://apps.who.int/gho/data/node.main.687?lang=en)
+> Downloaded on: 15-Apr-2021
+
+

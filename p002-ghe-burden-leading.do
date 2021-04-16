@@ -80,6 +80,6 @@ foreach var in daly {
     labmask ghecause, values(causename)
     drop causename
     label data "WHO GHE 2019: `var', WHO Americas, all years, All conditions"
-    save "`datapath'\from-who\who-ghe-`var'-002-who2", replace
+    save "`datapath'\from-who\+", replace
 }
 
