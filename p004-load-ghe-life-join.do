@@ -32,7 +32,7 @@
 ** Load global file 
 use "`datapath'\from-who\lifetables\who-lifetable-2019-global", replace
 
-local country antigua argentina bahamas barbados belize bolivia brazil canada chile colombia costarica cuba dominicanrepublic ecuador elsalvador grenada guatemala guyana haiti honduras jamaica mexico nicaragua panama paraguay peru stlucia stvincent suriname trinidad uruguay usa 
+local country antigua argentina bahamas barbados belize bolivia brazil canada chile colombia costarica cuba dominicanrepublic ecuador elsalvador grenada guatemala guyana haiti honduras jamaica mexico nicaragua panama paraguay peru stlucia stvincent suriname trinidad uruguay usa venezuela
 local whoregion africa americas eastern-mediterranean europe south-east-asia western-pacific wb-low-income wb-low-middle-income wb-upper-middle-income wb-high-income
 
 ** Append regional files 
@@ -47,3 +47,32 @@ foreach x of local country {
     label data "WHO GHE 2019: Life Table Global"
     save "`datapath'\from-who\lifetables\who-lifetable-2019-all", replace
  
+** *******************************************
+** Prepare Life Expectancy datasets
+** *******************************************
+
+** DATASET 1. Life expectancy at birth in 2000 and in 2019 
+** We also want to ADD iso2c to dataset to help with creating MAP dataset  
+use "`datapath'\from-owid\regions", clear
+    kountry iso3c, from(iso3c) to(iso2c)
+    rename _ISO2C_ iso2c 
+    replace iso2c = "BL" if iso3c=="BLM"
+    replace iso2c = "MF" if iso3c=="MAF"
+    save "`datapath'\from-owid\americas-iso", replace
+
+use "`datapath'\from-who\lifetables\who-lifetable-2019-all", replace
+    keep if region=="AMR" 
+    keep if agroup==1 
+    keep if ghocode==35 
+    keep if year==2000 | year==2019 
+    rename country iso3c 
+    merge m:1 iso3c using "`datapath'\from-owid\americas-iso"
+    preserve
+        drop _merge
+        save "`datapath'\from-who\lifetables\americas-ex0-full", replace
+    restore
+    drop if _merge==2 
+    drop _merge 
+    sort region cname year sex agroup ghocode 
+    save "`datapath'\from-who\lifetables\americas-ex0", replace
+

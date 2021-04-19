@@ -35,7 +35,7 @@
 **! NOTE - Dominica available for downlaod but dataset is empty
 **! NOTE - St.Kitts available for downlaod but dataset is empty
 ** ************************************************************
-local country antigua argentina bahamas barbados belize bolivia brazil canada chile colombia costarica cuba dominicanrepublic ecuador elsalvador grenada guatemala guyana haiti honduras jamaica mexico nicaragua panama paraguay peru stlucia stvincent suriname trinidad uruguay usa 
+local country antigua argentina bahamas barbados belize bolivia brazil canada chile colombia costarica cuba dominicanrepublic ecuador elsalvador grenada guatemala guyana haiti honduras jamaica mexico nicaragua panama paraguay peru stlucia stvincent suriname trinidad uruguay usa venezuela
 
 foreach x of local country {
     
