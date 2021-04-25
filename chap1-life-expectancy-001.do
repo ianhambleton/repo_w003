@@ -192,356 +192,53 @@ sort _ID year sex
 colorpalette Spectral, n(11)  nograph
 local colors `r(p)'
 
-** LATIN AMERICA AND THE CARIBBEAN 
-* Drop Saint Pierre and Miquelon
-drop if _ID==62 
-
+** Complete selection indicators for graphic among countries with no GHE data
+** This allows countries to exist on map with grey (no information) shading
 replace year=2019 if year==. 
 replace sex=3 if sex==. 
 
-** BERMUDA (UKOT - 2019)
-#delimit ; 
-spmap metric using americas_shp if _ID==34 & year==2019 & sex==3
-    ,
-    fysize(10) 
-    id(_ID)
-    clmethod(custom) 
-    clbreaks(30 40 50 60 65 67.5 70 73.5 75 77.5 80 85)
-    ocolor(black ..) fcolor("`colors'") osize(0.04 ..)  
-    ndocolor(black ..) ndfcolor(gs10 ..) ndsize(0.04 ..) ndlabel("Missing") 
-    legend(off pos(7) size(*0.8)) legstyle(2) 
-    /// title("Life expectancy at birth (2000)", size(4))
-    note("Bermuda (UKOT)" , size(4))
-    name(map_bma)
-    saving("`outputpath'/graphics/ex0-bma-2019", replace)
-    ;
-#delimit cr
-graph export "`outputpath'/graphics/ex0-bma-2019.png", replace width(500)
+
+** ***************************************************
+** EASTERN CARIBBEAN COUNTRY MAPS
+** ***************************************************
+** This will be combined with the regional map
+** LOOP through each country
+** ***************************************************
+local ukot ""Bermuda (UKOT)" "Anguilla (UKOT)" "BVI (UKOT)" "Cayman Islands (UKOT)" "Montserrat (UKOT)" "Turks and Caicos Islands (UKOT)" "
+local ec "Antigua "St. Kitts and Nevis" Guadeloupe Dominica Martinique "St. Lucia" Barbados "St. Vincent" Grenada "Trinidad and Tobago" " 
+local country "`ukot' `ec'"
+local cname "bma aia vgb cym msr tca atg kna glp dma mtq lca brb vct grd tto"
+local cvalu "34 28 36 37 52 67 29 59 46 42 51 60 32 63 45 66"
+local n: word count `cname' 
+
+forvalues i = 1/`n' {
+    local a : word `i' of `cvalu'
+    local b : word `i' of `cname'
+    local c : word `i' of `country'
+
+    #delimit ; 
+    spmap metric using americas_shp if _ID==`a' & year==2019 & sex==3
+        ,
+        fysize(10) 
+        id(_ID)
+        clmethod(custom) 
+        clbreaks(30 40 50 60 65 67.5 70 73.5 75 77.5 80 85)
+        ocolor(black ..) fcolor("`colors'") osize(0.04 ..)  
+        ndocolor(black ..) ndfcolor(gs10 ..) ndsize(0.04 ..) ndlabel("Missing") 
+        legend(off pos(7) size(*0.8)) legstyle(2) 
+        /// title("Life expectancy at birth (2000)", size(4))
+        note("`c'" , size(4))
+        name(map_`b')
+        saving("`outputpath'/graphics/ex0-`b'-2019", replace)
+        ;
+    #delimit cr
+    graph export "`outputpath'/graphics/ex0-`b'-2019.png", replace width(500)
+}
 
 
-* Drop Bermuda 
-drop if _ID==34 
-
-
-** LATIN AMERICA AND THE CARIBBEAN 
-** 2019
-#delimit ; 
-spmap metric using americas_shp if year==2019 & sex==3
-    ,
-    fysize(100) 
-    id(_ID)
-    clmethod(custom) 
-    clbreaks(30 40 50 60 65 67.5 70 73.5 75 77.5 80 85)
-    ocolor(black ..) fcolor("`colors'") osize(0.04 ..)  
-    ndocolor(black ..) ndfcolor(gs10 ..) ndsize(0.04 ..) ndlabel("Missing") 
-    legend(pos(7) size(*0.8)) legstyle(2) 
-    note("Data source: WHO GHE (2019). The following Caribbean territories have no data, and are not represented. " 
-    "Six United Kingdom Overseas Territories or UKOTS: Anguilla, Bermuda, British Virgin Islands, Cayman Islands, "
-    "Montserrat, Turks and Caicos Islands), Guadeloupe, Martinique, Sint Eustatius and Saba, St. Martin and St. Barthelemy." , size(1.75))
-    name(maplac2019)
-    saving("`outputpath'/graphics/ex0-lac-2019", replace)
-    ;
-#delimit cr
-graph export "`outputpath'/graphics/ex0-lac-2019.png", replace width(500)
-
-
-** ANGUILLA (UKOT - 2019)
-#delimit ; 
-spmap metric using americas_shp if _ID==28 & year==2019 & sex==3
-    ,
-    fysize(10) 
-    id(_ID)
-    clmethod(custom) 
-    clbreaks(30 40 50 60 65 67.5 70 73.5 75 77.5 80 85)
-    ocolor(black ..) fcolor("`colors'") osize(0.04 ..)  
-    ndocolor(black ..) ndfcolor(gs10 ..) ndsize(0.04 ..) ndlabel("Missing") 
-    legend(off pos(7) size(*0.8)) legstyle(2) 
-    /// title("Life expectancy at birth (2000)", size(4))
-    note("Anguilla (UKOT)" , size(4))
-    name(map_aia)
-    saving("`outputpath'/graphics/ex0-aia-2019", replace)
-    ;
-#delimit cr
-graph export "`outputpath'/graphics/ex0-aia-2019.png", replace width(500)
-
-** BVI (UKOT - 2019)
-#delimit ; 
-spmap metric using americas_shp if _ID==36 & year==2019 & sex==3
-    ,
-    fysize(10) 
-    id(_ID)
-    clmethod(custom) 
-    clbreaks(30 40 50 60 65 67.5 70 73.5 75 77.5 80 85)
-    ocolor(black ..) fcolor("`colors'") osize(0.04 ..)  
-    ndocolor(black ..) ndfcolor(gs10 ..) ndsize(0.04 ..) ndlabel("Missing") 
-    legend(off pos(7) size(*0.8)) legstyle(2) 
-    /// title("Life expectancy at birth (2000)", size(4))
-    note("British Virgin Islands (UKOT)" , size(4))
-    name(map_vgb)
-    saving("`outputpath'/graphics/ex0-vgb-2019", replace)
-    ;
-#delimit cr
-graph export "`outputpath'/graphics/ex0-vgb-2019.png", replace width(500)
-
-** CAYMAN ISLANDS (UKOT - 2019)
-#delimit ; 
-spmap metric using americas_shp if _ID==37 & year==2019 & sex==3
-    ,
-    fysize(10) 
-    id(_ID)
-    clmethod(custom) 
-    clbreaks(30 40 50 60 65 67.5 70 73.5 75 77.5 80 85)
-    ocolor(black ..) fcolor("`colors'") osize(0.04 ..)  
-    ndocolor(black ..) ndfcolor(gs10 ..) ndsize(0.04 ..) ndlabel("Missing") 
-    legend(off pos(7) size(*0.8)) legstyle(2) 
-    /// title("Life expectancy at birth (2000)", size(4))
-    note("Cayman Islands (UKOT)" , size(4))
-    name(map_cym)
-    saving("`outputpath'/graphics/ex0-cym-2019", replace)
-    ;
-#delimit cr
-graph export "`outputpath'/graphics/ex0-cym-2019.png", replace width(500)
-
-
-** MONTSERRAT (2019)
-#delimit ; 
-spmap metric using americas_shp if _ID==52 & year==2019 & sex==3
-    ,
-    fysize(10) 
-    id(_ID)
-    clmethod(custom) 
-    clbreaks(30 40 50 60 65 67.5 70 73.5 75 77.5 80 85)
-    ocolor(black ..) fcolor("`colors'") osize(0.04 ..)  
-    ndocolor(black ..) ndfcolor(gs10 ..) ndsize(0.04 ..) ndlabel("Missing") 
-    legend(off pos(7) size(*0.8)) legstyle(2) 
-    /// title("Life expectancy at birth (2000)", size(4))
-    note("Montserrat (UKOT)" , size(4))
-    name(map_msr)
-    saving("`outputpath'/graphics/ex0-msr-2019", replace)
-    ;
-#delimit cr
-graph export "`outputpath'/graphics/ex0-msr-2019.png", replace width(500)
-
-
-** TURKS AND CAICOS ISLANDS (UKOT - 2019)
-#delimit ; 
-spmap metric using americas_shp if _ID==67 & year==2019 & sex==3
-    ,
-    fysize(10) 
-    id(_ID)
-    clmethod(custom) 
-    clbreaks(30 40 50 60 65 67.5 70 73.5 75 77.5 80 85)
-    ocolor(black ..) fcolor("`colors'") osize(0.04 ..)  
-    ndocolor(black ..) ndfcolor(gs10 ..) ndsize(0.04 ..) ndlabel("Missing") 
-    legend(off pos(7) size(*0.8)) legstyle(2) 
-    /// title("Life expectancy at birth (2000)", size(4))
-    note("Turks and Caicos Islands (UKOT)" , size(4))
-    name(map_tca)
-    saving("`outputpath'/graphics/ex0-tca-2019", replace)
-    ;
-#delimit cr
-graph export "`outputpath'/graphics/ex0-tca-2019.png", replace width(500)
-
-
-
-** ANTIGUA and BARBUDA (2019)
-#delimit ; 
-spmap metric using americas_shp if _ID==29 & year==2019 & sex==3
-    ,
-    fysize(10) 
-    id(_ID)
-    clmethod(custom) 
-    clbreaks(30 40 50 60 65 67.5 70 73.5 75 77.5 80 85)
-    ocolor(black ..) fcolor("`colors'") osize(0.04 ..)  
-    ndocolor(black ..) ndfcolor(gs10 ..) ndsize(0.04 ..) ndlabel("Missing") 
-    legend(off pos(7) size(*0.8)) legstyle(2) 
-    /// title("Life expectancy at birth (2000)", size(4))
-    note("Antigua and Barbuda" , size(4))
-    name(map_atg)
-    saving("`outputpath'/graphics/ex0-atg-2019", replace)
-    ;
-#delimit cr
-graph export "`outputpath'/graphics/ex0-atg-2019.png", replace width(500)
-
-
-** ST KITTS and NEVIS (2019)
-#delimit ; 
-spmap metric using americas_shp if _ID==59 & year==2019 & sex==3
-    ,
-    fysize(10) 
-    id(_ID)
-    clmethod(custom) 
-    clbreaks(30 40 50 60 65 67.5 70 73.5 75 77.5 80 85)
-    ocolor(black ..) fcolor("`colors'") osize(0.04 ..)  
-    ndocolor(black ..) ndfcolor(gs10 ..) ndsize(0.04 ..) ndlabel("Missing") 
-    legend(off pos(7) size(*0.8)) legstyle(2) 
-    /// title("Life expectancy at birth (2000)", size(4))
-    note("St. Kitts and Nevis" , size(4))
-    name(map_kna)
-    saving("`outputpath'/graphics/ex0-kna-2019", replace)
-    ;
-#delimit cr
-graph export "`outputpath'/graphics/ex0-kna-2019.png", replace width(500)
-
-
-
-** GUADELOUPE (2019)
-#delimit ; 
-spmap metric using americas_shp if _ID==46 & year==2019 & sex==3
-    ,
-    fysize(10) 
-    id(_ID)
-    clmethod(custom) 
-    clbreaks(30 40 50 60 65 67.5 70 73.5 75 77.5 80 85)
-    ocolor(black ..) fcolor("`colors'") osize(0.04 ..)  
-    ndocolor(black ..) ndfcolor(gs10 ..) ndsize(0.04 ..) ndlabel("Missing") 
-    legend(off pos(7) size(*0.8)) legstyle(2) 
-    /// title("Life expectancy at birth (2000)", size(4))
-    note("Guadeloupe" , size(4))
-    name(map_glp)
-    saving("`outputpath'/graphics/ex0-glp-2019", replace)
-    ;
-#delimit cr
-graph export "`outputpath'/graphics/ex0-glp-2019.png", replace width(500)
-
-
-** DOMINICA (2019)
-#delimit ; 
-spmap metric using americas_shp if _ID==42 & year==2019 & sex==3
-    ,
-    fysize(10) 
-    id(_ID)
-    clmethod(custom) 
-    clbreaks(30 40 50 60 65 67.5 70 73.5 75 77.5 80 85)
-    ocolor(black ..) fcolor("`colors'") osize(0.04 ..)  
-    ndocolor(black ..) ndfcolor(gs10 ..) ndsize(0.04 ..) ndlabel("Missing") 
-    legend(off pos(7) size(*0.8)) legstyle(2) 
-    /// title("Life expectancy at birth (2000)", size(4))
-    note("Dominica" , size(4))
-    name(map_dma)
-    saving("`outputpath'/graphics/ex0-dma-2019", replace)
-    ;
-#delimit cr
-graph export "`outputpath'/graphics/ex0-dma-2019.png", replace width(500)
-
-
-** MARTINIQUE (2019)
-#delimit ; 
-spmap metric using americas_shp if _ID==51 & year==2019 & sex==3
-    ,
-    fysize(10) 
-    id(_ID)
-    clmethod(custom) 
-    clbreaks(30 40 50 60 65 67.5 70 73.5 75 77.5 80 85)
-    ocolor(black ..) fcolor("`colors'") osize(0.04 ..)  
-    ndocolor(black ..) ndfcolor(gs10 ..) ndsize(0.04 ..) ndlabel("Missing") 
-    legend(off pos(7) size(*0.8)) legstyle(2) 
-    /// title("Life expectancy at birth (2000)", size(4))
-    note("Martinique" , size(4))
-    name(map_mtq)
-    saving("`outputpath'/graphics/ex0-mtq-2019", replace)
-    ;
-#delimit cr
-graph export "`outputpath'/graphics/ex0-mtq-2019.png", replace width(500)
-
-** ST.LUCIA (2019)
-#delimit ; 
-spmap metric using americas_shp if _ID==60 & year==2019 & sex==3
-    ,
-    fysize(10) 
-    id(_ID)
-    clmethod(custom) 
-    clbreaks(30 40 50 60 65 67.5 70 73.5 75 77.5 80 85)
-    ocolor(black ..) fcolor("`colors'") osize(0.04 ..)  
-    ndocolor(black ..) ndfcolor(gs10 ..) ndsize(0.04 ..) ndlabel("Missing") 
-    legend(off pos(7) size(*0.8)) legstyle(2) 
-    /// title("Life expectancy at birth (2000)", size(4))
-    note("St. Lucia" , size(4))
-    name(map_lca)
-    saving("`outputpath'/graphics/ex0-lca-2019", replace)
-    ;
-#delimit cr
-graph export "`outputpath'/graphics/ex0-lca-2019.png", replace width(500)
-
-** BARBADOS (2019)
-#delimit ; 
-spmap metric using americas_shp if _ID==32 & year==2019 & sex==3
-    ,
-    fysize(10) 
-    id(_ID)
-    clmethod(custom) 
-    clbreaks(30 40 50 60 65 67.5 70 73.5 75 77.5 80 85)
-    ocolor(black ..) fcolor("`colors'") osize(0.04 ..)  
-    ndocolor(black ..) ndfcolor(gs10 ..) ndsize(0.04 ..) ndlabel("Missing") 
-    legend(off pos(7) size(*0.8)) legstyle(2) 
-    /// title("Life expectancy at birth (2000)", size(4))
-    note("Barbados" , size(4))
-    name(map_brb)
-    saving("`outputpath'/graphics/ex0-brb-2019", replace)
-    ;
-#delimit cr
-graph export "`outputpath'/graphics/ex0-brb-2019.png", replace width(500)
-
-** ST.VINCENT (2019)
-#delimit ; 
-spmap metric using americas_shp if _ID==63 & year==2019 & sex==3
-    ,
-    fysize(10) 
-    id(_ID)
-    clmethod(custom) 
-    clbreaks(30 40 50 60 65 67.5 70 73.5 75 77.5 80 85)
-    ocolor(black ..) fcolor("`colors'") osize(0.04 ..)  
-    ndocolor(black ..) ndfcolor(gs10 ..) ndsize(0.04 ..) ndlabel("Missing") 
-    legend(off pos(7) size(*0.8)) legstyle(2) 
-    /// title("Life expectancy at birth (2000)", size(4))
-    note("St. Vincent" , size(4))
-    name(map_vct)
-    saving("`outputpath'/graphics/ex0-vct-2019", replace)
-    ;
-#delimit cr
-graph export "`outputpath'/graphics/ex0-vct-2019.png", replace width(500)
-
-** GRENADA (2019)
-#delimit ; 
-spmap metric using americas_shp if _ID==45 & year==2019 & sex==3
-    ,
-    fysize(10) 
-    id(_ID)
-    clmethod(custom) 
-    clbreaks(30 40 50 60 65 67.5 70 73.5 75 77.5 80 85)
-    ocolor(black ..) fcolor("`colors'") osize(0.04 ..)  
-    ndocolor(black ..) ndfcolor(gs10 ..) ndsize(0.04 ..) ndlabel("Missing") 
-    legend(off pos(7) size(*0.8)) legstyle(2) 
-    /// title("Life expectancy at birth (2000)", size(4))
-    note("Grenada" , size(4))
-    name(map_grd)
-    saving("`outputpath'/graphics/ex0-grd-2019", replace)
-    ;
-#delimit cr
-graph export "`outputpath'/graphics/ex0-grd-2019.png", replace width(500)
-
-
-** TRINIDAD AND TOBAGO (2019)
-#delimit ; 
-spmap metric using americas_shp if _ID==66 & year==2019 & sex==3
-    ,
-    fysize(10) 
-    id(_ID)
-    clmethod(custom) 
-    clbreaks(30 40 50 60 65 67.5 70 73.5 75 77.5 80 85)
-    ocolor(black ..) fcolor("`colors'") osize(0.04 ..)  
-    ndocolor(black ..) ndfcolor(gs10 ..) ndsize(0.04 ..) ndlabel("Missing") 
-    legend(off pos(7) size(*0.8)) legstyle(2) 
-    /// title("Life expectancy at birth (2000)", size(4))
-    note("Trinidad and Tobago" , size(4))
-    name(map_tto)
-    saving("`outputpath'/graphics/ex0-tto-2019", replace)
-    ;
-#delimit cr
-graph export "`outputpath'/graphics/ex0-tto-2019.png", replace width(500)
-
-
+** ***************************************************
 ** CREATING A SINGLE GRAPHIC FOR THE EASTERN CARIBBEAN
+** ***************************************************
 #delimit ; 
 gr combine 
     "`outputpath'/graphics/ex0-kna-2019" 
@@ -562,15 +259,48 @@ gr combine
     ;
 #delimit cr
 
+** DROP geographically outlying territories to improve visual
+    * Drop Bermuda 
+    drop if _ID==34 
+    * Drop Saint Pierre and Miquelon
+    drop if _ID==62 
 
+** ***************************************************
+** LATIN AMERICA AND THE CARIBBEAN 
+** ***************************************************
+#delimit ; 
+spmap metric using americas_shp if year==2019 & sex==3
+    ,
+    fysize(100) 
+    id(_ID)
+    clmethod(custom) 
+    clbreaks(30 40 50 60 65 67.5 70 73.5 75 77.5 80 85)
+    ocolor(black ..) fcolor("`colors'") osize(0.04 ..)  
+    ndocolor(black ..) ndfcolor(gs10 ..) ndsize(0.04 ..) ndlabel("Missing") 
+    legend(pos(7) size(*0.8)) legstyle(2) 
+    note("Data source: WHO GHE (2019). The following Caribbean territories have no data, and are not represented. " 
+    "Six United Kingdom Overseas Territories or UKOTS: Anguilla, Bermuda, British Virgin Islands, Cayman Islands, "
+    "Montserrat, Turks and Caicos Islands), Guadeloupe, Martinique, Sint Eustatius and Saba, St. Martin and St. Barthelemy." , size(1.75))
+    name(maplac2019)
+    saving("`outputpath'/graphics/ex0-lac-2019", replace)
+    ;
+#delimit cr
+graph export "`outputpath'/graphics/ex0-lac-2019.png", replace width(500)
+
+
+** ***************************************************
 ** CREATING A SINGLE GRAPHIC FOR THE AMERICAS
+** ***************************************************
 #delimit ; 
 gr combine 
     "`outputpath'/graphics/ex0-lac-2019" 
     "`outputpath'/graphics/ex0-ec-2019" 
     ,
     rows(1) cols(3)
+    /// Outline
+    graphregion(lpattern("l") lcolor(gs10) lwidth(0.1) lalign(outside)) 
     saving("`outputpath'/graphics/ex0-americas-2019", replace)
     name(map_lac)
     ;
 #delimit cr
+

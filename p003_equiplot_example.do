@@ -75,8 +75,8 @@ local iqr2 `p25_2019' 1.5 `p75_2019' 1.5 `p75_2019' 2.5 `p25_2019' 2.5  `p25_201
 		/// outer boxes 
         (scatteri `outer1' , recast(area) lw(0.2) lc(gs10) fc(none)  )
         /// 25th to 75th percentiles
-        (scatteri `iqr1' , recast(area) color("red*0.15")  )
-        (scatteri `iqr2' , recast(area) color("red*0.15")  )
+        (scatteri `iqr1' , recast(area) color("orange*0.4")  )
+        (scatteri `iqr2' , recast(area) color("orange*0.4")  )
 		/// median values
         (function y=`p50_2000' if year==2000, range(0.5 1.5) lc(gs5))
 		(function y=`p50_2019' if year==2019, range(1.5 2.5) lc(gs5))
@@ -84,8 +84,8 @@ local iqr2 `p25_2019' 1.5 `p75_2019' 1.5 `p75_2019' 2.5 `p25_2019' 2.5  `p25_201
         (scatteri `outer1' , recast(area) lw(0.2) lc(gs10) fc(none)  )
         (scatteri `outer2' , recast(area) lw(0.2) lc(gs10) fc(none)  )
 		/// country values
-        (sc mr_crude ycode if year==2000 , msize(7) m(oh) mlc(gs10) mlw(0.2))
-		(sc mr_crude ycode if year==2019 , msize(7) m(oh) mlc(gs10) mlw(0.2))
+        (sc mr_crude ycode if year==2000 , msize(7) m(oh) mlc(orange) mlw(0.2))
+		(sc mr_crude ycode if year==2019 , msize(7) m(oh) mlc(orange) mlw(0.2))
 		,
 			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin)) 		
 			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin)) 

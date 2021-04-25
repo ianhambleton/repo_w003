@@ -38,5 +38,29 @@
 **      (b) Difference between LE in women and men 
 **          - regional - chart with men centred at 0
 **          - country - men on x, women on y. Diagonal=equality
+**
+** NOTE ON LENGTH 
+** WorldHealthStats2020 is 26 pages with graphics
+** Word count of each chapter:
+**
+** INTRODUCTION + KEY MESSAGES: 212 + 1145 = 1357
+** CHAPTER 1: 368 + 476 + 565 + 235 + 201 
+** CHAPTER 2: 392 + 99 + 247 + 178 + 614 + 38 + 172 + 135
+** CHAPTER 3: 378 + 421 + 303 + 268 + 458 + 368
+** CHAPTER 4: 349 + 176 + 136 + 374 + 204
+** CHAPTER 5: 383 + 790 + 659
+** ALL CHAPTERS: 8987
+** FULL DOCUMENT: 1357 + 8987 = 10,344
 ** ***************************************************************
+
+** LOAD LE for countries, regions, and globally
+use "`datapath'\from-who\lifetables\who-lifetable-2019-all", clear 
+
+** List LE0 for each WHO region, and globally
+keep if agroup==1 & ghocode==35 
+keep if (region=="GLOBAL" | region=="AFR" | region=="AMR" | region=="EMR" | region=="EUR" |                          ///
+        region=="SEAR" | region=="WPR" | region=="WB_LI" | region=="WB_LMI" | region=="WB_UMI" | region=="WB_HI") & cname==""          
+tabdisp region year sex , c(metric) format(%9.1f)
+
+
 
