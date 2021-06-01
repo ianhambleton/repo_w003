@@ -3,10 +3,7 @@
 
 ---
 ## Project background
-WHO’s Global Health Estimates (GHE) present comprehensive and comparable time-series data from 2000 onwards for health-related indicators, including life expectancy, healthy life expectancy, mortality and morbidity, as well as burden of diseases at global, regional and country levels, disaggregated by age, sex and cause1.<br>
-
-The estimates are produced using data from multiple consolidated sources, including national vital registration data, latest estimates from its technical programmes, United Nations partners and inter-agency groups, and other scientific studies. A broad spectrum of robust and well-established scientific methods is applied for the processing, synthesis, and analysis of data¹.
-WHO’s Global Health Estimates (GHE) provide the latest available data on death and disability globally and geographically disaggregated by WHO regions and countries. The latest updates include global, regional, and country trends estimates from 2000 to 2019.<br>
+WHO’s Global Health Estimates (GHE) present comprehensive and comparable time-series data from 2000 onwards for health-related indicators, including life expectancy, healthy life expectancy, mortality and morbidity, as well as burden of diseases at global, regional and country levels, disaggregated by age, sex and cause. The estimates are produced using data from multiple consolidated sources, including national vital registration data, latest estimates from its technical programmes, United Nations partners and inter-agency groups, and other scientific studies. A broad spectrum of robust and well-established scientific methods is applied for the processing, synthesis, and analysis of data. WHO’s Global Health Estimates (GHE) provide the latest available data on death and disability globally and geographically disaggregated by WHO regions and countries. The latest updates include global, regional, and country trends estimates from 2000 to 2019.<br>
 
 ## Broad goal of analyses
 The purpose of this project is to produce an analysis using the GHE (2000-2019) trend-series presenting results on health-related indicators disaggregated by age, sex, and cause. The analysis will consider the different subregions and focus on changes over time. The idea is to produce one technical report, and two peer-reviewed articles from this work. 
@@ -14,9 +11,11 @@ The purpose of this project is to produce an analysis using the GHE (2000-2019) 
 ## Algorithms
 The algorithms in this repository are all written to run in the Stata statistical statistical software (cuurent version used is v16).
 
+# PART 1. 
+# IMPORTING AND PREPARING THE GHE DATA
 
-#### 1. Load the GHE disease burden file
-- DO FILE: p001-load-ghe-burden.do
+## DO FILE: p001-load-ghe-burden.do
+## Load the GHE disease burden file
 > Input dataset: dths_yld_daly.dta
 > - Received as a large Stata dataset, from Bochen Cao (WHO). 
 
@@ -38,9 +37,9 @@ The algorithms in this repository are all written to run in the Stata statistica
 
 
 
-#### 2. Further GHE disease burden file restrictions
+## DO FILE: p002-ghe-burden-byregion.do
+## Further GHE disease burden file restrictions
 Further dataset reductions to reduce filesize. 
-- DO FILE: p002-ghe-burden-byregion.do
 > Input datasets: 
 > - who-ghe-yll-001
 > - who-ghe-yld-001 
@@ -79,7 +78,7 @@ Further dataset reductions to reduce filesize.
       1600    (intentional injuries)
       1610    (suicide)
       1620    (homicide)
-      1630   (conflict)
+      1630    (conflict)
 
 > **Restrict to regional datasets- one for each UN and WHO region**
 > 'var' = yll / yld / daly / deaths 
@@ -93,12 +92,12 @@ Further dataset reductions to reduce filesize.
 > - who-ghe-`var'-001-who3 (Eastern Mediterranean)
 > - who-ghe-`var'-001-who4 (Europe)
 > - who-ghe-`var'-001-who5 (South-East Asia)
-> - who-ghe-`var'-001-who5 (Western Pacific)
+> - who-ghe-`var'-001-who6 (Western Pacific)
 
 
 
-#### 3. Americas dataset without restricting cause of death
-- DO FILE: p002-ghe-burden-leading.do 
+## DO FILE: p002-ghe-burden-leading.do 
+## Americas dataset without restricting cause of death
 > input dataset: 
 > - who-ghe-yll-001 
 > - who-ghe-yld-001 
@@ -108,63 +107,77 @@ Further dataset reductions to reduce filesize.
 > Save data subset(s):
 > - who-ghe-`var'-002-who2
 
+# PART 2
+# GRAPHICS TEMPLATES 
 
-#### 4. Equiplot example for report draft 
-- DO FILE: p003-equiplot-example.do 
+## DO FILE: p003-equiplot-example.do 
+## Equiplot example for report draft 
 Uses Americas dataset (who-ghe-deaths-001-who2)
 
 
-#### 5. Heatmap example for report draft 
-- DO FILE: p003-heatmap-example.do 
+## DO FILE: p003-heatmap-example.do 
+## Heatmap example for report draft 
 Used heatmap from a previous analysis (p122)
 
 
-#### 6. Linechart example for report draft 
-- DO FILE: p003-linechart-example.do 
+## DO FILE: p003-linechart-example.do 
+## Linechart example for report draft 
 Uses Americas dataset (who-ghe-deaths-002-who2)
 
 
-#### 7. Slopechart example for report draft 
-- DO FILE: p003-slopechart-example.do 
+## DO FILE: p003-slopechart-example.do 
+## Slopechart example for report draft 
 Uses Americas dataset (who-ghe-deaths-002-who2)
 
 
-#### 8. Sparklines example for report draft 
-- DO FILE: p003-sparklines-example.do 
+## DO FILE: p003-sparklines-example.do 
+## Sparklines example for report draft 
 Uses Caribbean dataset of elderly metrics (Figures.xlsx)
 
 
-#### 9. Stacked area chart example for report draft 
-- DO FILE: p003-stacked-example.do 
+## DO FILE: p003-stacked-example.do 
+## Stacked area chart example for report draft 
 Uses Americas dataset (who-ghe-deaths-001-who2)
 
 
-#### 10. Load and prepare global lifetable dataset
-- DO FILE: p004-life-global.do
+## DO FILE: p003-linepanel-example.do 
+## Panel of line charts for report draft 
+Uses Life Expectancy dataset (who-lifetable-2019-all)
+
+
+## DO FILE: p003-map-example.do 
+## Choropleth map example for report draft 
+Uses Americas dataset (americas-ex0-full)
+
+# PART 3
+# LIFE EXPECTANCY DATASET PREPARATION
+
+## DO FILE: p004-life-global.do
+## Load and prepare global lifetable dataset
 > input dataset: 
 > - lifetable-2019-global.csv  
 > Downloaded from WHO GHO website (https://apps.who.int/gho/data/node.main.687?lang=en)
 > Downloaded on: 15-Apr-2021
 
 
-#### 11. Load and prepare WHO regions lifetable datasets
-- DO FILE: p004-life-whoregions.do
+## DO FILE: p004-life-whoregions.do
+## Load and prepare WHO regions lifetable datasets
 > input dataset: 
 > - lifetable-2019-<region>.csv (africa, americas, eastern-mediterranean, europe, south-east-asia, western pacific) 
 > Downloaded from WHO GHO website (https://apps.who.int/gho/data/node.main.687?lang=en)
 > Downloaded on: 15-Apr-2021
 
 
-#### 12. Load and prepare WB income groups lifetable datasets
-- DO FILE: p004-life-wbregions.do
+## DO FILE: p004-life-wbregions.do
+## Load and prepare WB income groups lifetable datasets
 > input dataset: 
 > - lifetable-2019-<region>.csv (low-income, low-middle-income, upper-middle-income, high-income) 
 > Downloaded from WHO GHO website (https://apps.who.int/gho/data/node.main.687?lang=en)
 > Downloaded on: 15-Apr-2021
 
 
-#### 13. Load and prepare country-level lifetable datasets for the Americas only
-- DO FILE: p004-life-country.do
+## DO FILE: p004-life-country.do
+## Load and prepare country-level lifetable datasets for the Americas only
 > input dataset: 
 > - lifetable-2019-<country>.csv, where countries are:
 > - antigua
@@ -204,3 +217,14 @@ Uses Americas dataset (who-ghe-deaths-001-who2)
 > Downloaded on: 15-Apr-2021
 
 
+
+## DO FILE: p004-life-join.do
+## Join the global, regional, and country-level life expectancy datasets
+> input datasets: 
+> - lifetable-2019-<country>.csv (Countries of the Americas)
+> - lifetable-2019-<region>.csv (low-income, low-middle-income, upper-middle-income, high-income) 
+> - lifetable-2019-<region>.csv (africa, americas, eastern-mediterranean, europe, south-east-asia, western pacific) 
+> - lifetable-2019-global.csv  
+
+The final LE dataset becomes
+- americas-ex0.dta
