@@ -192,24 +192,32 @@ sort _ID year sex
 colorpalette Spectral, n(11)  nograph
 local colors `r(p)'
 
-** Complete selection indicators for graphic among countries with no GHE data
-** This allows countries to exist on map with grey (no information) shading
-replace year=2019 if year==. 
-replace sex=3 if sex==. 
-
 
 ** ***************************************************
-** EASTERN CARIBBEAN COUNTRY MAPS
+** 2019 EASTERN CARIBBEAN COUNTRY MAPS
 ** ***************************************************
 ** This will be combined with the regional map
 ** LOOP through each country
 ** ***************************************************
 local ukot ""Bermuda (UKOT)" "Anguilla (UKOT)" "BVI (UKOT)" "Cayman Islands (UKOT)" "Montserrat (UKOT)" "Turks and Caicos Islands (UKOT)" "
 local ec "Antigua "St. Kitts and Nevis" Guadeloupe Dominica Martinique "St. Lucia" Barbados "St. Vincent" Grenada "Trinidad and Tobago" " 
-local country "`ukot' `ec'"
-local cname "bma aia vgb cym msr tca atg kna glp dma mtq lca brb vct grd tto"
-local cvalu "34 28 36 37 52 67 29 59 46 42 51 60 32 63 45 66"
+local car "Bahamas Belize Guyana Haiti Jamaica Suriname" 
+local country "`ukot' `ec' `car'"
+local cname "bma aia vgb cym msr tca atg kna glp dma mtq lca brb vct grd tto bhs blz guy hti jam sur"
+local cvalu "34 28 36 37 52 67 29 59 46 42 51 60 32 63 45 66 31 33 47 48 50 65"
 local n: word count `cname' 
+
+
+
+forval y = 2000(19)2019 {
+
+
+** Complete selection indicators for graphic among countries with no GHE data
+** This allows countries to exist on map with grey (no information) shading
+gen year`y' = year 
+gen sex`y' = sex 
+replace year`y' = `y' if year`y'==. 
+replace sex`y' = 3 if sex`y'==. 
 
 forvalues i = 1/`n' {
     local a : word `i' of `cvalu'
@@ -217,47 +225,50 @@ forvalues i = 1/`n' {
     local c : word `i' of `country'
 
     #delimit ; 
-    spmap metric using americas_shp if _ID==`a' & year==2019 & sex==3
+    spmap metric using americas_shp if _ID==`a' & year`y'==`y' & sex`y'==3
         ,
         fysize(10) 
         id(_ID)
         clmethod(custom) 
         clbreaks(30 40 50 60 65 67.5 70 73.5 75 77.5 80 85)
-        ocolor(black ..) fcolor("`colors'") osize(0.04 ..)  
-        ndocolor(black ..) ndfcolor(gs10 ..) ndsize(0.04 ..) ndlabel("Missing") 
+        ocolor(gs10 ..) fcolor("`colors'") osize(0.04 ..)  
+        ndocolor(gs10 ..) ndfcolor(gs10 ..) ndsize(0.04 ..) ndlabel("Missing") 
         legend(off pos(7) size(*0.8)) legstyle(2) 
         /// title("Life expectancy at birth (2000)", size(4))
         note("`c'" , size(4))
-        name(map_`b')
-        saving("`outputpath'/graphics/ex0-`b'-2019", replace)
+        name(map_`b'`y')
+        saving("`outputpath'/graphics/ex0-`b'-`y'", replace)
         ;
     #delimit cr
-    graph export "`outputpath'/graphics/ex0-`b'-2019.png", replace width(500)
+    graph export "`outputpath'/graphics/ex0-`b'-`y'.png", replace width(500)
 }
-
+}
 
 ** ***************************************************
 ** CREATING A SINGLE GRAPHIC FOR THE EASTERN CARIBBEAN
 ** ***************************************************
+forval y = 2000(19)2019 {
+
 #delimit ; 
 gr combine 
-    "`outputpath'/graphics/ex0-kna-2019" 
-    "`outputpath'/graphics/ex0-atg-2019" 
-    "`outputpath'/graphics/ex0-glp-2019" 
-    "`outputpath'/graphics/ex0-dma-2019" 
-    "`outputpath'/graphics/ex0-mtq-2019" 
+    "`outputpath'/graphics/ex0-atg-`y'" 
+    "`outputpath'/graphics/ex0-bhs-`y'" 
+    "`outputpath'/graphics/ex0-blz-`y'" 
+    "`outputpath'/graphics/ex0-hti-`y'" 
+    "`outputpath'/graphics/ex0-jam-`y'" 
 
-    "`outputpath'/graphics/ex0-lca-2019" 
-    "`outputpath'/graphics/ex0-brb-2019" 
-    "`outputpath'/graphics/ex0-vct-2019" 
-    "`outputpath'/graphics/ex0-grd-2019" 
-    "`outputpath'/graphics/ex0-tto-2019" 
+    "`outputpath'/graphics/ex0-lca-`y'" 
+    "`outputpath'/graphics/ex0-brb-`y'" 
+    "`outputpath'/graphics/ex0-vct-`y'" 
+    "`outputpath'/graphics/ex0-grd-`y'" 
+    "`outputpath'/graphics/ex0-tto-`y'" 
     ,
     rows(5) cols(2) colfirst
-    saving("`outputpath'/graphics/ex0-ec-2019", replace)
-    name(map_ec)
+    saving("`outputpath'/graphics/ex0-ec-`y'", replace)
+    name(map_ec`y')
     ;
 #delimit cr
+}
 
 ** DROP geographically outlying territories to improve visual
     * Drop Bermuda 
@@ -268,39 +279,44 @@ gr combine
 ** ***************************************************
 ** LATIN AMERICA AND THE CARIBBEAN 
 ** ***************************************************
+forval y = 2000(19)2019 {
+
 #delimit ; 
-spmap metric using americas_shp if year==2019 & sex==3
+spmap metric using americas_shp if year`y'==`y' & sex`y'==3
     ,
     fysize(100) 
     id(_ID)
     clmethod(custom) 
     clbreaks(30 40 50 60 65 67.5 70 73.5 75 77.5 80 85)
-    ocolor(black ..) fcolor("`colors'") osize(0.04 ..)  
-    ndocolor(black ..) ndfcolor(gs10 ..) ndsize(0.04 ..) ndlabel("Missing") 
+    ocolor(gs10 ..) fcolor("`colors'") osize(0.04 ..)  
+    ndocolor(gs10 ..) ndfcolor(gs10 ..) ndsize(0.04 ..) ndlabel("Missing") 
     legend(pos(7) size(*0.8)) legstyle(2) 
-    note("Data source: WHO GHE (2019). The following Caribbean territories have no data, and are not represented. " 
+    note("Data source: WHO GHE (`y'). The following Caribbean territories have no data, and are not represented. " 
     "Six United Kingdom Overseas Territories or UKOTS: Anguilla, Bermuda, British Virgin Islands, Cayman Islands, "
     "Montserrat, Turks and Caicos Islands), Guadeloupe, Martinique, Sint Eustatius and Saba, St. Martin and St. Barthelemy." , size(1.75))
-    name(maplac2019)
-    saving("`outputpath'/graphics/ex0-lac-2019", replace)
+    name(maplac`y')
+    saving("`outputpath'/graphics/ex0-lac-`y'", replace)
     ;
 #delimit cr
-graph export "`outputpath'/graphics/ex0-lac-2019.png", replace width(500)
-
+graph export "`outputpath'/graphics/ex0-lac-`y'.png", replace width(500)
+}
 
 ** ***************************************************
 ** CREATING A SINGLE GRAPHIC FOR THE AMERICAS
 ** ***************************************************
+forval y = 2000(19)2019 {
+
 #delimit ; 
 gr combine 
-    "`outputpath'/graphics/ex0-lac-2019" 
-    "`outputpath'/graphics/ex0-ec-2019" 
+    "`outputpath'/graphics/ex0-lac-`y'" 
+    "`outputpath'/graphics/ex0-ec-`y'" 
     ,
     rows(1) cols(3)
     /// Outline
-    graphregion(lpattern("l") lcolor(gs10) lwidth(0.1) lalign(outside)) 
-    saving("`outputpath'/graphics/ex0-americas-2019", replace)
-    name(map_lac)
+    graphregion(lpattern("l") lcolor(gs16) lwidth(0.1) lalign(outside)) 
+    title("Life Expectancy in the Americas, `y'", color(gs10) size(3.75) justification(left))
+    saving("`outputpath'/graphics/ex0-americas-`y'", replace)
+    name(map_lac`y')
     ;
 #delimit cr
-
+}

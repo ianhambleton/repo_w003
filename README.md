@@ -11,11 +11,13 @@ The purpose of this project is to produce an analysis using the GHE (2000-2019) 
 ## Algorithms
 The algorithms in this repository are all written to run in the Stata statistical statistical software (cuurent version used is v16).
 
-# PART 1. 
-# IMPORTING AND PREPARING THE GHE DATA
+## PART 1. 
+## IMPORTING AND PREPARING THE GHE DATA
+## PREFIX: p001 / p002
+---
 
-## DO FILE: p001-load-ghe-burden.do
-## Load the GHE disease burden file
+### DO FILE: p001-load-ghe-burden.do
+### Load the GHE disease burden file
 > Input dataset: dths_yld_daly.dta
 > - Received as a large Stata dataset, from Bochen Cao (WHO). 
 
@@ -37,8 +39,8 @@ The algorithms in this repository are all written to run in the Stata statistica
 
 
 
-## DO FILE: p002-ghe-burden-byregion.do
-## Further GHE disease burden file restrictions
+### DO FILE: p002-ghe-burden-byregion.do
+### Further GHE disease burden file restrictions
 Further dataset reductions to reduce filesize. 
 > Input datasets: 
 > - who-ghe-yll-001
@@ -96,8 +98,8 @@ Further dataset reductions to reduce filesize.
 
 
 
-## DO FILE: p002-ghe-burden-leading.do 
-## Americas dataset without restricting cause of death
+### DO FILE: p002-ghe-burden-leading.do 
+### Americas dataset without restricting cause of death
 > input dataset: 
 > - who-ghe-yll-001 
 > - who-ghe-yld-001 
@@ -107,77 +109,81 @@ Further dataset reductions to reduce filesize.
 > Save data subset(s):
 > - who-ghe-`var'-002-who2
 
-# PART 2
-# GRAPHICS TEMPLATES 
+## PART 2
+## GRAPHICS TEMPLATES 
+## PREFIX: p003
+---
 
-## DO FILE: p003-equiplot-example.do 
-## Equiplot example for report draft 
+### DO FILE: p003-equiplot-example.do 
+### Equiplot example for report draft 
 Uses Americas dataset (who-ghe-deaths-001-who2)
 
 
-## DO FILE: p003-heatmap-example.do 
-## Heatmap example for report draft 
+### DO FILE: p003-heatmap-example.do 
+### Heatmap example for report draft 
 Used heatmap from a previous analysis (p122)
 
 
-## DO FILE: p003-linechart-example.do 
-## Linechart example for report draft 
+### DO FILE: p003-linechart-example.do 
+### Linechart example for report draft 
 Uses Americas dataset (who-ghe-deaths-002-who2)
 
 
-## DO FILE: p003-slopechart-example.do 
-## Slopechart example for report draft 
+### DO FILE: p003-slopechart-example.do 
+### Slopechart example for report draft 
 Uses Americas dataset (who-ghe-deaths-002-who2)
 
 
-## DO FILE: p003-sparklines-example.do 
-## Sparklines example for report draft 
+### DO FILE: p003-sparklines-example.do 
+### Sparklines example for report draft 
 Uses Caribbean dataset of elderly metrics (Figures.xlsx)
 
 
-## DO FILE: p003-stacked-example.do 
-## Stacked area chart example for report draft 
+### DO FILE: p003-stacked-example.do 
+### Stacked area chart example for report draft 
 Uses Americas dataset (who-ghe-deaths-001-who2)
 
 
-## DO FILE: p003-linepanel-example.do 
-## Panel of line charts for report draft 
+### DO FILE: p003-linepanel-example.do 
+### Panel of line charts for report draft 
 Uses Life Expectancy dataset (who-lifetable-2019-all)
 
 
-## DO FILE: p003-map-example.do 
-## Choropleth map example for report draft 
+### DO FILE: p003-map-example.do 
+### Choropleth map example for report draft 
 Uses Americas dataset (americas-ex0-full)
 
-# PART 3
-# LIFE EXPECTANCY DATASET PREPARATION
+## PART 3
+## LIFE EXPECTANCY DATASET PREPARATION
+## PREFIX: p004
+---
 
-## DO FILE: p004-life-global.do
-## Load and prepare global lifetable dataset
+### DO FILE: p004-life-global.do
+### Load and prepare global lifetable dataset
 > input dataset: 
 > - lifetable-2019-global.csv  
 > Downloaded from WHO GHO website (https://apps.who.int/gho/data/node.main.687?lang=en)
 > Downloaded on: 15-Apr-2021
 
 
-## DO FILE: p004-life-whoregions.do
-## Load and prepare WHO regions lifetable datasets
+### DO FILE: p004-life-whoregions.do
+### Load and prepare WHO regions lifetable datasets
 > input dataset: 
 > - lifetable-2019-<region>.csv (africa, americas, eastern-mediterranean, europe, south-east-asia, western pacific) 
 > Downloaded from WHO GHO website (https://apps.who.int/gho/data/node.main.687?lang=en)
 > Downloaded on: 15-Apr-2021
 
 
-## DO FILE: p004-life-wbregions.do
-## Load and prepare WB income groups lifetable datasets
+### DO FILE: p004-life-wbregions.do
+### Load and prepare WB income groups lifetable datasets
 > input dataset: 
 > - lifetable-2019-<region>.csv (low-income, low-middle-income, upper-middle-income, high-income) 
 > Downloaded from WHO GHO website (https://apps.who.int/gho/data/node.main.687?lang=en)
 > Downloaded on: 15-Apr-2021
 
 
-## DO FILE: p004-life-country.do
-## Load and prepare country-level lifetable datasets for the Americas only
+### DO FILE: p004-life-country.do
+### Load and prepare country-level lifetable datasets for the Americas only
 > input dataset: 
 > - lifetable-2019-<country>.csv, where countries are:
 > - antigua
@@ -218,8 +224,8 @@ Uses Americas dataset (americas-ex0-full)
 
 
 
-## DO FILE: p004-life-join.do
-## Join the global, regional, and country-level life expectancy datasets
+### DO FILE: p004-life-join.do
+### Join the global, regional, and country-level life expectancy datasets
 > input datasets: 
 > - lifetable-2019-<country>.csv (Countries of the Americas)
 > - lifetable-2019-<region>.csv (low-income, low-middle-income, upper-middle-income, high-income) 
@@ -228,3 +234,69 @@ Uses Americas dataset (americas-ex0-full)
 
 The final LE dataset becomes
 - americas-ex0.dta
+
+
+## PART 4
+## CHAPTER 1 
+## PREFIX: chap1
+---
+
+### DO FILE: chap1-life-expectancy-001.do
+### Creating choropleth maps of LE0 in 2000 and in 2019
+> input datasets: 
+> - americas-ex0-full.dta
+> - Americas / Caribbean shapefiles from:
+> - https://hub.arcgis.com/datasets/UIA::uia-world-countries-boundaries/explore?location=-2.688200%2C0.000000%2C1.54
+
+
+### DO FILE: chap1-life-expectancy-002-all.do
+### Panel Graphic of life expectancy (LE) and Healthy Life Expectancy (HALE) over time for EIGHT subregions of the Americas
+> input dataset: 
+> - who-lifetable-2019-all.dta
+> - who-hale-2019-regions.dta
+This graphic is not used. It combines graphs for LE/HALE at birth (top panel set) and LE/HALE at 60 years of age (lower panel set)
+
+
+### DO FILE: chap1-life-expectancy-002-birth.do
+### Panel Graphic of life expectancy (LE) and Healthy Life Expectancy (HALE) AT BIRTH over time for EIGHT subregions of the Americas
+> input dataset: 
+> - who-lifetable-2019-all.dta
+> - who-hale-2019-regions.dta
+
+
+### DO FILE: chap1-life-expectancy-002-elderly.do
+### Panel Graphic of life expectancy (LE) and Healthy Life Expectancy (HALE) AT 60 YEARS over time for EIGHT subregions of the Americas
+> input dataset: 
+> - who-lifetable-2019-all.dta
+> - who-hale-2019-regions.dta
+
+
+### DO FILE: chap1-life-expectancy-003.do
+### Creates most of the metrics we quote in the text associated with the LIFE EXPECTANCY SECTION
+> input dataset: 
+> - who-lifetable-2019-all.dta
+> - who-hale-2019-regions.dta
+> - who-ghe-deaths-americas.dta
+
+
+### DO FILE: chap1-life-expectancy-004-subregions.do
+### Panel Equiplot showing range of LE/HALE at birth within each subregion of the Americas.
+> input dataset: 
+> - who-lifetable-2019-all.dta
+> - who-hale-2019-country.dta
+This generates an associated discussion of LE/HALE range between countries of the Americas
+
+
+### DO FILE: chap1-life-expectancy-005-ecological.do
+### Panel regression plot - showing association of Health expenditure and health staffing with Life expectancy at birth (for 8 subregions)
+> input dataset: 
+> - who-lifetable-2019-all.dta
+> - who-hale-2019-country.dta
+> - Also external datasets:
+> - health-expenditure-gho
+> - who-ghe-deaths-001-americas
+> - World Bank. Per capita GDP. NY.GDP.PCAP.CD
+> - doctors-per-10000
+> - nurses-per-10000
+Brief and not-comprehensive regression work to highlight the role of economics in life expectancy. 
+

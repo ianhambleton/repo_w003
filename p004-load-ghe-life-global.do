@@ -141,7 +141,7 @@ gen sex = .
 replace sex = 1 if sexcode=="FMLE"
 replace sex = 2 if sexcode=="MLE"
 replace sex = 3 if sexcode=="BTSX"
-label define sex_ 1 "male" 2 "female" 3 "both",modify 
+label define sex_ 1 "female" 2 "male" 3 "both",modify 
 label values sex sex_ 
 drop sexcode sexdisplay sexurl 
 label var sex "Sex. 1=female, 2=male, 3=both"

@@ -66,8 +66,7 @@ use "`datapath'\from-owid\regions", clear
 **      Restrict mortality categories 
 **      and save external files: by METRIC and by UN-REGION
 ** **********************************************************
-** foreach var in yll yld daly deaths { 
-foreach var in daly { 
+foreach var in yll yld daly deaths { 
     frame change `var'
     use "`datapath'\from-who\who-ghe-`var'-001", clear
 
@@ -80,6 +79,6 @@ foreach var in daly {
     labmask ghecause, values(causename)
     drop causename
     label data "WHO GHE 2019: `var', WHO Americas, all years, All conditions"
-    save "`datapath'\from-who\+", replace
+    save "`datapath'\from-who\who-ghe-`var'-americas", replace
 }
 

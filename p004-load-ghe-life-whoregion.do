@@ -140,7 +140,7 @@ foreach x of local region {
     replace sex = 1 if sexcode=="FMLE"
     replace sex = 2 if sexcode=="MLE"
     replace sex = 3 if sexcode=="BTSX"
-    label define sex_ 1 "male" 2 "female" 3 "both",modify 
+    label define sex_ 1 "female" 2 "male" 3 "both",modify 
     label values sex sex_ 
     drop sexcode sexdisplay sexurl 
     label var sex "Sex. 1=female, 2=male, 3=both"
@@ -153,6 +153,6 @@ foreach x of local region {
     label var metric "Life table value"
 
 ** Life Table dataset
-    label data "WHO GHE 2019: Life Table Global"
+    label data "WHO GHE 2019: Life Table Region"
     save "`datapath'\from-who\lifetables\who-lifetable-2019-`x'", replace
 }

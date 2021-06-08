@@ -46,24 +46,25 @@ keep if ghocode==35
 #delimit ;
 	gr twoway 
 		/// Number 2 (SAME - GRAY)
-		(line metric agroup if region=="EUR" & sex==2 & year==2000 & agroup<=15, lw(0.25) lc("127 127 127%50"))
+		(line metric year if region=="AMR" & sex==1 & agroup==1 , lw(0.25) lc("127 127 127%50"))
+		(line metric year if region=="AMR" & sex==2 & agroup==1 , lw(0.25) lc("127 127 127%50"))
 		///(line metric agroup if region=="AMR" & sex==2 & year==2005 & agroup<=15, lw(0.25) lc("127 127 127%50"))
 		///(line metric agroup if region=="AMR" & sex==2 & year==2010 & agroup<=15, lw(0.25) lc("127 127 127%50"))
 		///(line metric agroup if region=="AMR" & sex==2 & year==2015 & agroup<=15, lw(0.25) lc("127 127 127%50"))
-		(line metric agroup if region=="EUR" & sex==2 & year==2019 & agroup<=15, lw(0.25) lc("127 127 127%50"))
+		///(line metric agroup if region=="EUR" & sex==2 & year==2019 & agroup<=15, lw(0.25) lc("127 127 127%50"))
 		,
 			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin)) 		
 			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin)) 
-			ysize(2) xsize(10)
+			ysize(10) xsize(5)
 
-			xlab(none, 
+			xlab(, 
             notick tlc(gs0) labc(gs0) notick nogrid glc(gs16))
-			xscale(noline) 
+			xscale(lw(vthin)) 
 			xtitle(" ", size(5) color(gs0) margin(l=2 r=2 t=5 b=2)) 
 			
-			ylab(,
+			ylab(60(5)85,
 			valuelabel labc(gs0) labs(6) tstyle(major_notick) nogrid glc(gs16) angle(0) format(%9.0f))
-			yscale( lw(vthin)) 
+			yscale(lw(vthin)) 
 			ytitle(" Life Expectancy (yrs)", size(5) margin(l=2 r=5 t=2 b=2)) 
 
             /// title("DALYs in the Americas", size(7) color(gs0) position(11))
