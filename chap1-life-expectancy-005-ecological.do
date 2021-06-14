@@ -85,8 +85,9 @@ replace sr = 3 if country=="CRI" | country=="SLV" | country=="GTM" | country=="H
 replace sr = 4 if country=="BOL" | country=="COL" | country=="ECU" | country=="PER" | country=="VEN"
 replace sr = 5 if country=="CUB" | country=="DOM" | country=="HTI" 
 replace sr = 6 if country=="ATG" | country=="BHS" | country=="BLZ" | country=="BRB" | country=="GRD" | country=="GUY" | country=="JAM" | country=="LCA" | country=="SUR" | country=="TTO" | country=="VCT"
-replace sr = 7 if country=="MEX"
-replace sr = 8 if country=="BRA"
+replace sr = 7 if country=="BRA"
+replace sr = 8 if country=="MEX"
+
 
 #delimit ; 
 label define sr_    1 "north america"
@@ -95,8 +96,8 @@ label define sr_    1 "north america"
                     4 "andean" 
                     5 "latin caribbean"
                     6 "non-latin caribbean"
-                    7 "mexico"
-                    8 "brazil", modify; 
+                    7 "brazil"
+                    8 "mexico", modify; 
 #delimit cr 
 label values sr sr_ 
 
@@ -334,8 +335,8 @@ gen zhrh_hi = zhrh_xb + 1.96 * zhrh_se
             lab(6 "andean")
             lab(7 "latin caribbean")
             lab(8 "non-latin caribbean")
-            lab(9 "mexico")
-            lab(10 "brazil")
+            lab(9 "brazil")
+            lab(10 "mexico")
 			)
 			name(subregion2)
 			;

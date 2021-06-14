@@ -61,8 +61,9 @@ replace sr = 3 if country=="CRI" | country=="SLV" | country=="GTM" | country=="H
 replace sr = 4 if country=="BOL" | country=="COL" | country=="ECU" | country=="PER" | country=="VEN"
 replace sr = 5 if country=="CUB" | country=="DOM" | country=="HTI" 
 replace sr = 6 if country=="ATG" | country=="BHS" | country=="BLZ" | country=="BRB" | country=="GRD" | country=="GUY" | country=="JAM" | country=="LCA" | country=="SUR" | country=="TTO" | country=="VCT"
-replace sr = 7 if country=="MEX"
-replace sr = 8 if country=="BRA"
+replace sr = 7 if country=="BRA"
+replace sr = 8 if country=="MEX"
+
 
 #delimit ; 
 label define sr_    1 "north america"
@@ -71,8 +72,8 @@ label define sr_    1 "north america"
                     4 "andean" 
                     5 "latin caribbean"
                     6 "non-latin caribbean"
-                    7 "mexico"
-                    8 "brazil", modify; 
+                    7 "brazil"
+                    8 "mexico", modify; 
 #delimit cr 
 label values sr sr_ 
 
@@ -262,18 +263,18 @@ restore
         /// (scatteri `iqr6b' , recast(area) color("orange*0.2")  )
 
 		/// median values
-        (function y=`p50_1a' if yax==1,     range(0.6 1.4)      lc(gs10) lw(0.05))
-		(function y=`p50_1b' if yax==2,     range(1.6 2.4)      lc(gs10) lw(0.05))
-        (function y=`p50_2a' if yax==3,     range(2.6 3.4)      lc(gs10) lw(0.05))
-		(function y=`p50_2b' if yax==4,     range(3.6 4.4)      lc(gs10) lw(0.05))
-        (function y=`p50_3a' if yax==5,     range(4.6 5.4)      lc(gs10) lw(0.05))
-		(function y=`p50_3b' if yax==6,     range(5.6 6.4)      lc(gs10) lw(0.05))
-        (function y=`p50_4a' if yax==7,     range(6.6 7.4)      lc(gs10) lw(0.05))
-		(function y=`p50_4b' if yax==8,     range(7.6 8.4)      lc(gs10) lw(0.05))
-        (function y=`p50_5a' if yax==9,     range(8.6 9.4)      lc(gs10) lw(0.05))
-		(function y=`p50_5b' if yax==10,    range(9.6 10.4)     lc(gs10) lw(0.05))
-        (function y=`p50_6a' if yax==11,    range(10.6 11.4)    lc(gs10) lw(0.05))
-		(function y=`p50_6b' if yax==12,    range(11.6 12.4)    lc(gs10) lw(0.05))
+        /// (function y=`p50_1a' if yax==1,     range(0.6 1.4)      lc(gs10) lw(0.05))
+		/// (function y=`p50_1b' if yax==2,     range(1.6 2.4)      lc(gs10) lw(0.05))
+        /// (function y=`p50_2a' if yax==3,     range(2.6 3.4)      lc(gs10) lw(0.05))
+		/// (function y=`p50_2b' if yax==4,     range(3.6 4.4)      lc(gs10) lw(0.05))
+        /// (function y=`p50_3a' if yax==5,     range(4.6 5.4)      lc(gs10) lw(0.05))
+		/// (function y=`p50_3b' if yax==6,     range(5.6 6.4)      lc(gs10) lw(0.05))
+        /// (function y=`p50_4a' if yax==7,     range(6.6 7.4)      lc(gs10) lw(0.05))
+		/// (function y=`p50_4b' if yax==8,     range(7.6 8.4)      lc(gs10) lw(0.05))
+        /// (function y=`p50_5a' if yax==9,     range(8.6 9.4)      lc(gs10) lw(0.05))
+		/// (function y=`p50_5b' if yax==10,    range(9.6 10.4)     lc(gs10) lw(0.05))
+        /// (function y=`p50_6a' if yax==11,    range(10.6 11.4)    lc(gs10) lw(0.05))
+		/// (function y=`p50_6b' if yax==12,    range(11.6 12.4)    lc(gs10) lw(0.05))
 
 		/// outer boxes 
         (scatteri `outer1' , recast(area) lw(0.2) lc(gs10) fc(none)  )
@@ -347,7 +348,7 @@ restore
         (sc srmax yax           if year==2019 & sex==3 & sr==6 & ghocode==100 , msize(4.5) m(o) mlc("`hale'") mfc("`hale'*0.5") mlw(0.025))
         (sc srmin yax           if year==2019 & sex==3 & sr==6 & ghocode==100 , msize(4.5) m(o) mlc("`hale'") mfc("`hale'*0.5") mlw(0.025))
 
-        /// Mexico
+        /// Brazil
         (rbar srmax srmin yax   if year==2019 & sex==3 & sr==7 & ghocode==35 , fc("`le'%50") barw(0.025) lw(none))
         (sc metric yax          if year==2019 & sex==3 & sr==7 & ghocode==35 , msize(4.5) m(oh) mlc("`le'%45") mfc("`le'%45") mlw(0.1))
         (sc srmax yax           if year==2019 & sex==3 & sr==7 & ghocode==35 , msize(4.5) m(o) mlc("`le'") mfc("`le'*0.5") mlw(0.025))
@@ -357,7 +358,7 @@ restore
         (sc srmax yax           if year==2019 & sex==3 & sr==7 & ghocode==100 , msize(4.5) m(o) mlc("`hale'") mfc("`hale'*0.5") mlw(0.025))
         (sc srmin yax           if year==2019 & sex==3 & sr==7 & ghocode==100 , msize(4.5) m(o) mlc("`hale'") mfc("`hale'*0.5") mlw(0.025))        
 
-        /// Brazil
+        /// Mexico
         (rbar srmax srmin yax   if year==2019 & sex==3 & sr==8 & ghocode==35 , fc("`le'%50") barw(0.025) lw(none))
         (sc metric yax          if year==2019 & sex==3 & sr==8 & ghocode==35 , msize(4.5) m(oh) mlc("`le'%45") mfc("`le'%45") mlw(0.1))
         (sc srmax yax           if year==2019 & sex==3 & sr==8 & ghocode==35 , msize(4.5) m(o) mlc("`le'") mfc("`le'*0.5") mlw(0.025))
@@ -406,8 +407,8 @@ restore
             text(93 7.5 "Andean",  place(c) size(3) color(gs5))
             text(93 9.5 "Latin" "Caribbean",  place(c) size(3) color(gs5))
             text(93 11.5 "non-Latin" "Caribbean",  place(c) size(3) color(gs5))
-            text(93 13.5 "Mexico",  place(c) size(3) color(gs5))
-            text(93 15.5 "Brazil",  place(c) size(3) color(gs5))
+            text(93 13.5 "Brazil",  place(c) size(3) color(gs5))
+            text(93 15.5 "Mexico",  place(c) size(3) color(gs5))
 
 			legend(off size(5) position(11) ring(1) bm(t=1 b=4 l=5 r=0) colf cols(2)
 			region(fcolor(gs16) lw(vthin) margin(l=2 r=2 t=2 b=2)) 
