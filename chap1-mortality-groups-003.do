@@ -82,7 +82,7 @@ tabstat pd if year==2019 & agroup==2, by(ghecause) stat(sum) format(%12.0fc)
 tabstat pd if year==2019 & agroup==3, by(ghecause) stat(sum) format(%12.0fc)
 tabstat pd if year==2019 & agroup==4, by(ghecause) stat(sum) format(%12.0fc)
 tabstat pd if year==2019 & agroup==5, by(ghecause) stat(sum) format(%12.0fc)
-/*
+
 ** ------------------------------------------------------------
 ** GRAPHIC
 ** ------------------------------------------------------------

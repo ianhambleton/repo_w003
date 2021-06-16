@@ -300,3 +300,22 @@ This generates an associated discussion of LE/HALE range between countries of th
 > - nurses-per-10000
 Brief and not-comprehensive regression work to highlight the role of economics in life expectancy. 
 
+
+### DO FILE: chap1-mortality-groups-001.do
+### Panel Area Chart - showing number of deaths by WHO region and by cause of death group (Communicable, NCDs, Injuries)
+> input dataset: 
+> - who-ghe-deaths-001-who1/who6 (The 6 WHO regions)
+
+
+### DO FILE: chap1-mortality-groups-002.do
+### Associated statistics for text - number of deaths by WHO region and by cause of death groups
+> input dataset: 
+> - who-ghe-deaths-001-who1/who6 (The 6 WHO regions)
+This DO file produces all statistics associated with number of deaths by WHO region, and percentage of deaths due to three broad causes of death (Communicable, NCDs, Injuries).
+
+
+### DO FILE: chap1-mortality-groups-003.do
+### Panel Area Chart - showing percentage of deaths due to three causes of death (Comm, NCDs, Injury) in - broad age groups (young children, youth, young adults, older adults, the elderly). The Americas only.
+> input dataset: 
+> - who-ghe-deaths-001-who2 (The Americas only)
+This DO file produces all statistics associated with number of deaths by WHO region, and percentage of deaths due to three broad causes of death (Communicable, NCDs, Injuries).
