@@ -38,7 +38,6 @@
 ** 1510 Injuries
 ** ------------------------------------------------------------
 tempfile afr amr emr eur sear wpr world
-
 ** Africa (AFR)
 use "`datapath'\from-who\who-ghe-deaths-001-who1", replace
     keep if ghecause==10 | ghecause==600 | ghecause==1510

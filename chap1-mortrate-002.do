@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap1-mortrate-001.do
+    //  algorithm name			    chap1-mortrate-002.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	16-Apr-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap1-mortrate-001", replace
+    log using "`logpath'\chap1-mortrate-002", replace
 ** HEADER -----------------------------------------------------
 
 ** ------------------------------------------
@@ -86,18 +86,69 @@ save `who_std', replace
 
 
 ** ------------------------------------------
-** Loading DEATHS dataset for the Americas only 
-** Americas (AMR)
+** Loading DEATHS datasets for WHO regions 
 ** ------------------------------------------
+
+tempfile afr amr emr eur sear wpr world
+** Africa (AFR)
+use "`datapath'\from-who\who-ghe-deaths-001-who1", replace
+    keep if ghecause==10 | ghecause==600 | ghecause==1510
+    drop if age<0 
+    ** Collapse to WHO regions 
+    collapse (sum) dths pop, by(ghecause year who_region sex age)
+    save `afr' , replace
+
+** Americas (AMR)
 use "`datapath'\from-who\who-ghe-deaths-001-who2", replace
     keep if ghecause==10 | ghecause==600 | ghecause==1510
-    keep if who_region==2
     drop if age<0 
-    drop dths_low dths_up
+    ** Collapse to WHO regions 
+    collapse (sum) dths pop, by(ghecause year who_region sex age)
+    save `amr' , replace
 
-    ** Collapse from countries to subregions
-    collapse (sum) dths pop, by(ghecause year paho_subregion sex age)
-    save "`datapath'\from-who\chap1_mortrate_001", replace
+** Eastern Mediterranean (EMR)
+use "`datapath'\from-who\who-ghe-deaths-001-who3", replace
+    keep if ghecause==10 | ghecause==600 | ghecause==1510
+    drop if age<0 
+    ** Collapse to WHO regions 
+    collapse (sum) dths pop, by(ghecause year who_region sex age)
+    save `emr' , replace
+
+** Europe (EUR)
+use "`datapath'\from-who\who-ghe-deaths-001-who4", replace
+    keep if ghecause==10 | ghecause==600 | ghecause==1510
+    drop if age<0 
+    ** Collapse to WHO regions 
+    collapse (sum) dths pop, by(ghecause year who_region sex age)
+    save `eur' , replace
+
+** South-East Asia (SEAR)
+use "`datapath'\from-who\who-ghe-deaths-001-who5", replace
+    keep if ghecause==10 | ghecause==600 | ghecause==1510
+    drop if age<0 
+    ** Collapse to WHO regions 
+    collapse (sum) dths pop, by(ghecause year who_region sex age)
+    save `sear' , replace
+
+** Western Pacific (WPR)
+use "`datapath'\from-who\who-ghe-deaths-001-who6", replace
+    keep if ghecause==10 | ghecause==600 | ghecause==1510
+    drop if age<0 
+    ** Collapse to WHO regions 
+    collapse (sum) dths pop, by(ghecause year who_region sex age)
+    save `wpr' , replace
+
+** Join the WHO regions
+use `afr', clear 
+    append using `amr'
+    append using `emr'
+    append using `eur'
+    append using `sear'
+    append using `wpr'
+    save "`datapath'\from-who\chap1_mortrate_002", replace
+
+** -------------------------------------------------------------------
+** -------------------------------------------------------------------
 
 ** BROAD age groups
 ** 1 Young children --> under-5s
@@ -132,7 +183,7 @@ replace age18 = 15 if age==70
 replace age18 = 16 if age==75
 replace age18 = 17 if age==80
 replace age18 = 18 if age==85
-collapse (sum) dths pop, by(year ghecause paho_subregion sex age18 agroup)
+collapse (sum) dths pop, by(year ghecause who_region sex age18 agroup)
 
 ** Join the DEATHS dataset with the WHO STD population
 ** merge m:m age18 using `who_std'
@@ -162,7 +213,7 @@ label values age18 age18_
 ** drop _merge
 
 ** Variable labelling
-label var paho_subregion "8 PAHO subregions of the Americas"
+label var who_region "6 WHO regions"
 label var agroup "5 broad age groups: young children, youth, young adult, older adult, elderly"
 label var age18 "5-year age groups: 18 groups"
 label var dths "Count of all deaths"
@@ -198,7 +249,7 @@ forval x = 2000(1)2019 {
             keep if year==`x' 
             keep if sex==`y'
             keep if ghecause==`z' 
-            dstdize deaths pop age18, by(paho_subregion) using(`who_std')
+            dstdize deaths pop age18, by(who_region) using(`who_std')
             matrix m`x'_`y'_`z' = r(crude) \ r(adj) \r(ub_adj) \ r(lb_adj) \  r(se) \ r(Nobs)
             matrix m`x'_`y'_`z' = m`x'_`y'_`z''
             svmat double m`x'_`y'_`z', name(col)
@@ -223,7 +274,7 @@ forval x = 2000(1)2019 {
 }
 bysort year sex ghecause : gen region = _n 
 * Drop duplicated initial dataset (2000, male, communicable) 
-drop if region > 8
+drop if region > 6
 
 ** Variable re-naming
 rename Crude crate
@@ -246,22 +297,15 @@ label var ghecause "Broad causes of death"
 label var region "WHO region / PAHO subregion"
 
 ** Variable level labelling
-* subregions
+* Regions
+recode region 1=100 2=200 3=300 4=400 5=500 6=600
 #delimit ; 
-label define region_    1 "north america"
-                    2 "southern cone"
-                    3 "central america"
-                    4 "andean" 
-                    5 "latin caribbean"
-                    6 "non-latin caribbean"
-                    7 "brazil"
-                    8 "mexico"
-                    100 "africa"
+label define region_    100 "africa"
                     200 "americas"
                     300 "eastern mediterranean"
                     400 "europe" 
                     500 "south-east asia"
-                    600 "western pacific", modify;                     
+                    600 "western pacific", modify; 
 #delimit cr 
 label values region region_ 
 * sex
@@ -272,8 +316,8 @@ label define ghecause_ 10 "communicable" 20 "ncd" 30 "injury" , modify
 label values ghecause ghecause_ 
 
 ** Save the final MR dataset
-label data "Crude and Adjusted mortality rates: PAHO sub-regions"
-save "`datapath'\from-who\chap1_mortrate_001", replace
+label data "Crude and Adjusted mortality rates: WHO regions"
+save "`datapath'\from-who\chap1_mortrate_002", replace
 
 
 
