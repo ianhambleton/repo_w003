@@ -82,6 +82,10 @@ Further dataset reductions to reduce filesize.
       1620    (homicide)
       1630    (conflict)
 
+> There is a version of this DO file called
+> DO FILE: p002-ghe-burden-byregion-allcauses.do
+> Which does not restrict GHE CAUSES
+
 > **Restrict to regional datasets- one for each UN and WHO region**
 > 'var' = yll / yld / daly / deaths 
 > - who-ghe-`var'-001-africa
@@ -97,6 +101,10 @@ Further dataset reductions to reduce filesize.
 > - who-ghe-`var'-001-who6 (Western Pacific)
 
 
+### DO FILE: p002-ghe-burden-byregion-allcauses.do
+### Further GHE disease burden file restrictions
+Same as previous DO file except without CAUSE restriction
+We use this for Chapter 2 individual causes of death
 
 ### DO FILE: p002-ghe-burden-leading.do 
 ### Americas dataset without restricting cause of death
@@ -319,3 +327,72 @@ This DO file produces all statistics associated with number of deaths by WHO reg
 > input dataset: 
 > - who-ghe-deaths-001-who2 (The Americas only)
 This DO file produces all statistics associated with number of deaths by WHO region, and percentage of deaths due to three broad causes of death (Communicable, NCDs, Injuries).
+
+
+
+### DO FILE: chap1-mortrate-001.do
+### The Americas only. PAHO-Subregions. Mortality Rate calculations
+> input dataset: 
+> - who-ghe-deaths-001-who2 (The Americas only)
+
+
+### DO FILE: chap1-mortrate-002.do
+### The Americas only. WHO-Regions. Mortality Rate calculations
+> input dataset: 
+> - who-ghe-deaths-001-who1/who6 
+
+
+### DO FILE: chap1-mortrate-003.do
+### All regions. Panel chart of Mortaity Rates
+> input dataset: 
+> - chap1_mortrate_001 and chap1_mortrate_002 
+Panel chart of mortality rates
+
+### DO FILE: chap1-mortrate-004.do
+### Equiplot of Excess Mortality Rate
+> input dataset: 
+> - chap1_mortrate_001 and chap1_mortrate_002 
+Equiplot of Excess Mortality Rates
+
+
+
+## CHAPTER TWO
+
+### DO FILE: chap2-cvd-001.do
+### Calculate Mortality Rates for CVD: PAHO-Subregions
+> input dataset: 
+> - who-ghe-deaths-001-who2-allcauses
+Equiplot of Excess Mortality Rates
+
+### DO FILE: chap2-cvd-002.do
+### Calculate Mortality Rates for CVD: WHO-Regions
+> input dataset: 
+> - who-ghe-deaths-001-who1/who6-allcauses
+Equiplot of Excess Mortality Rates
+
+### DO FILE: chap2-cvd-003.do
+### Calculate Mortality Rates for CVD: PAHO-Countries
+> input dataset: 
+> - who-ghe-deaths-001-who2-allcauses
+Equiplot of Excess Mortality Rates
+
+### DO FILE: chap2-cvd-join.do
+### Calculate Mortality Rates for CVD: JOIN FILES
+> input dataset: 
+> - chap2_cvd_001
+> - chap2_cvd_002
+> - chap2_cvd_003
+Join the THREE Mortality Rate files
+
+### DO FILE: chap2-cvd-004.do
+### Calculate DALYs for CVD: Countries / Subregions / Regions
+> input dataset: 
+> - who-ghe-daly-001-who2-allcauses
+Equiplot of Excess Mortality Rates
+
+### DO FILE: chap2-cvd-005.do
+### Calculate YLLs for CVD: Countries / Subregions / Regions
+> input dataset: 
+> - who-ghe-yll-001-who2-allcauses
+Equiplot of Excess Mortality Rates
+

@@ -136,7 +136,7 @@ local inj `r(p9)'
 		,
 			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 		
 			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 
-			ysize(10) xsize(15)
+			ysize(11) xsize(15)
 
 			/// TOP
 			xlab(none, 
@@ -171,7 +171,7 @@ local inj `r(p9)'
 					26 "southern cone"
 					,
 			axis(1) labc(gs8) labs(2.25) tlc(gs8) nogrid notick glc(blue) angle(0) format(%9.0f) labgap(0))
-			yscale(axis(1) noline reverse range(-5(0.5)29) noextend) 
+			yscale(axis(1) noline reverse range(-6(0.5)29) noextend) 
 			ytitle(" ", axis(1) color(gs8) size(3) margin(l=1 r=1 t=1 b=1)) 
 
 			/// women
@@ -202,7 +202,7 @@ local inj `r(p9)'
 					26	"latin caribbean"
 					,
 			axis(2) labc(gs8) labs(2.25) tlc(gs8) nogrid notick glc(red) angle(0) format(%9.0f) labgap(0))
-			yscale(axis(2) noline reverse range(-5(0.5)29) noextend) 
+			yscale(axis(2) noline reverse range(-6(0.5)29) noextend) 
 			ytitle(" ", axis(2) color(gs8) size(3) margin(l=1 r=1 t=1 b=1)) 
 
             /// Legend Text
@@ -221,7 +221,13 @@ local inj `r(p9)'
 			text(23.4 90 "75",  place(c) size(2.5) color("`inj'"))   
 			text(23.4 411 "24",  place(c) size(2.5) color("`inj'"))   
 
-			legend(off)
+			legend(size(2.5) position(12) nobox ring(0) bm(t=0 b=0 l=0 r=0) colf cols(3)
+			region(fcolor(gs16)  lw(none) margin(t=0 b=1 l=0 r=0)) 
+			order(24 26 28) 
+			lab(24 "Communicable") 
+			lab(26 "NCDs") 		
+			lab(28 "Injuries") 		
+            )
 			name(men_adiff)
 			;
 #delimit cr	
