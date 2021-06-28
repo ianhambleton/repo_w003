@@ -382,3 +382,9 @@ label values region region_
 ** Save the final MR dataset
 label data "DEATHS : Countries, PAHO sub-regions, WHO regions"
 save "`datapath'\from-who\chap2_cvd_dths", replace
+
+** Save the final MR dataset - collapsed over SEX
+collapse (sum) dths pop , by(iso3c iso3n who_region paho_subregion region year ghecause) 
+gen sex = 3 
+label data "DEATHS : Countries, PAHO sub-regions, WHO regions"
+save "`datapath'\from-who\chap2_cvd_dths_both", replace

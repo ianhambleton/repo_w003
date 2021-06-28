@@ -360,8 +360,7 @@ label define region_
                     31 "United States"
                     32 "Uruguay"
                     33 "Venezuela"
-                    
-                    
+
                     100 "north america"
                     200 "southern cone"
                     300 "central america"
@@ -370,6 +369,7 @@ label define region_
                     600 "non-latin caribbean"
                     700 "brazil"
                     800 "mexico"
+
                     1000 "africa"
                     2000 "americas"
                     3000 "eastern mediterranean"

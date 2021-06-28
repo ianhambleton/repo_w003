@@ -34,13 +34,22 @@
 use "`datapath'\from-who\chap2_cvd_003", clear
 append using "`datapath'\from-who\chap2_cvd_002"
 append using "`datapath'\from-who\chap2_cvd_001"
+append using "`datapath'\from-who\chap2_cvd_001_both"
+append using "`datapath'\from-who\chap2_cvd_002_both"
+append using "`datapath'\from-who\chap2_cvd_003_both"
 sort year sex ghecause region
+label define sex_ 1 "men" 2 "women" 3 "both" , modify
+label values sex sex_ 
 tempfile mr1 
 save `mr1', replace 
 
 ** Merge the deaths dataset
 tempfile d1 
 use "`datapath'\from-who\chap2_cvd_dths", clear
+append using "`datapath'\from-who\chap2_cvd_dths_both"
+
+label define sex_ 1 "men" 2 "women" 3 "both" , modify
+label values sex sex_ 
 keep dths year sex ghecause region 
 sort year sex ghecause region 
 merge 1:1 year sex ghecause region using `mr1' 
@@ -83,7 +92,6 @@ label define region_
                     32 "Uruguay"
                     33 "Venezuela"
                     
-                    
                     100 "north america"
                     200 "southern cone"
                     300 "central america"
@@ -92,6 +100,7 @@ label define region_
                     600 "non-latin caribbean"
                     700 "brazil"
                     800 "mexico"
+
                     1000 "africa"
                     2000 "americas"
                     3000 "eastern mediterranean"
