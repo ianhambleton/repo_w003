@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    ap20-ghe-burden-byregion.do
+    //  algorithm name			    ap020-ghe-burden-byregion.do
     //  project:				        WHO Global Health Estimates
     //  analysts:				        Ian HAMBLETON
     // 	date last modified	    2-April-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\ap20-ghe-burden-byregion", replace
+    log using "`logpath'\ap020-ghe-burden-byregion", replace
 ** HEADER -----------------------------------------------------
 
 ** set segmentsize allocates memory for data in units of segmentsize. 

@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    ap10-ghe-burden.do
+    //  algorithm name			    ap010-ghe-burden.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	31-MAr-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\ap10-ghe-burden", replace
+    log using "`logpath'\ap010-ghe-burden", replace
 ** HEADER -----------------------------------------------------
 
 
