@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			        p003-heatmap.do
+    //  algorithm name			        ap110-heatmap.do
     //  project:				        WHO Global Health Estimates
     //  analysts:				        Ian HAMBLETON
     // 	date last modified	            5-April-2021
@@ -26,6 +26,6 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\p003-heatmap", replace
+    log using "`logpath'\ap110-heatmap", replace
 ** HEADER -----------------------------------------------------
 

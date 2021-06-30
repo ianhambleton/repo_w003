@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    p003-linepanel-example.do
+    //  algorithm name			    ap160-linepanel-example.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	16-Apr-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\p003-linepanel-example", replace
+    log using "`logpath'\ap160-linepanel-example", replace
 ** HEADER -----------------------------------------------------
 
 ** EXAMPLE IS LIFE EXPECTANCY at BIRTH

@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap2-cvd-summary-table.do
+    //  algorithm name			    chap2-210-cvd-table.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	26-Apr-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap2-cvd-summary-table", replace
+    log using "`logpath'\chap2-210-cvd-table", replace
 ** HEADER -----------------------------------------------------
 
 

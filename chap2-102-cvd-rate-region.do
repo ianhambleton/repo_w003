@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap2-cvd-002.do
+    //  algorithm name			    chap2-102-cvd-rate-region.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	16-Apr-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap2-cvd-002", replace
+    log using "`logpath'\chap2-102-cvd-rate-region", replace
 ** HEADER -----------------------------------------------------
 
 ** ------------------------------------------

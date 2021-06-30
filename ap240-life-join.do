@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    p004-load-ghe-life-join.do
+    //  algorithm name			    ap240-life-join.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	15-Apr-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\p004-load-ghe-life-join", replace
+    log using "`logpath'\ap240-life-join", replace
 ** HEADER -----------------------------------------------------
 
 ** Load global file 

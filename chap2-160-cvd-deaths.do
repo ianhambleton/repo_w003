@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap2-cvd-005.do
+    //  algorithm name			    chap2-160-cvd-deaths.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	26-Apr-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap2-cvd-005", replace
+    log using "`logpath'\chap2-160-cvd-deaths", replace
 ** HEADER -----------------------------------------------------
 
 ** ------------------------------------------
@@ -98,14 +98,14 @@ save `who_std', replace
 **  1150    Cardiomyopathy, myocarditis, endocarditis I30-I33, I38, I40, I42 
 **  1160    Other circulatory diseases I00, I26-I28, I34-I37, I44-I51, I70-I99
 ** ------------------------------------------
-use "`datapath'\from-who\who-ghe-yll-001-who2-allcauses", replace
+use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
 * TODO: Change restriction for each disease group
 keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghecause==1140 | ghecause==1150 | ghecause==1160
     keep if who_region==2
     drop if age<0 
-    drop yll_low yll_up
+    drop dths_low dths_up
     ** Collapse from countries to subregions
-    collapse (sum) yll pop, by(ghecause year iso3n iso3c who_region paho_subregion sex age)
+    collapse (sum) dths pop, by(ghecause year iso3n iso3c who_region paho_subregion sex age)
     ** save "`datapath'\from-who\chap2_cvd_001", replace
 
 ** BROAD age groups
@@ -141,7 +141,7 @@ replace age18 = 15 if age==70
 replace age18 = 16 if age==75
 replace age18 = 17 if age==80
 replace age18 = 18 if age==85
-collapse (sum) yll pop, by(year ghecause iso3n iso3c who_region paho_subregion sex age18 agroup)
+collapse (sum) dths pop, by(year ghecause iso3n iso3c who_region paho_subregion sex age18 agroup)
 
 ** Join the DEATHS dataset with the WHO STD population
 ** merge m:m age18 using `who_std'
@@ -174,7 +174,7 @@ label values age18 age18_
 label var paho_subregion "8 PAHO subregions of the Americas"
 label var agroup "5 broad age groups: young children, youth, young adult, older adult, elderly"
 label var age18 "5-year age groups: 18 groups"
-label var yll "YLL"
+label var dths "Deaths"
 label var pop "PAHO subregional populations" 
 format pop %12.0fc 
 ** label var spop "WHO Standard population: sums to 1 million"
@@ -208,12 +208,12 @@ tempfile for_mr
 save `for_mr' , replace
 
 
-tempfile yll1 yll2 yll3 
+tempfile dths1 dths2 dths3 
 
 ** Collapse to country-level DALYs
 ** Collapse out age
 preserve
-    collapse (sum) yll pop, by(year ghecause iso3n iso3c who_region paho_subregion sex)
+    collapse (sum) dths pop, by(year ghecause iso3n iso3c who_region paho_subregion sex)
     egen region = group(iso3n)  
     #delimit ; 
     label define region_   
@@ -256,13 +256,13 @@ preserve
     label var region "WHO region / PAHO subregion / Country"
     ** Variable level labelling
     ** recode region 1=100 2=200 3=300 4=400 5=500 6=600 7=700 8=800
-    save `yll1', replace
+    save `dths1', replace
 restore
 
 ** Collapse to subregion-level DALYs
 ** Collapse out age
 preserve
-    collapse (sum) yll pop, by(year ghecause who_region paho_subregion sex)
+    collapse (sum) dths pop, by(year ghecause who_region paho_subregion sex)
     egen region = group(paho_subregion)  
     ** Variable level labelling
     recode region 1=100 2=200 3=300 4=400 5=500 6=600 7=700 8=800
@@ -286,14 +286,14 @@ preserve
     label values region region_ 
     ** Variable Labelling
     label var region "WHO region / PAHO subregion / Country"
-    save `yll2', replace
+    save `dths2', replace
 restore
 
 
 ** Collapse to subregion-level DALYs
 ** Collapse out age
 preserve
-    collapse (sum) yll pop, by(year ghecause who_region sex)
+    collapse (sum) dths pop, by(year ghecause who_region sex)
     egen region = group(who_region)  
     ** Variable level labelling
     recode region 1=2000 
@@ -317,12 +317,12 @@ preserve
     label values region region_ 
     ** Variable Labelling
     label var region "WHO region / PAHO subregion / Country"
-    save `yll3', replace
+    save `dths3', replace
 restore
 
-use `yll1', clear 
-append using `yll2'
-append using `yll3' 
+use `dths1', clear 
+append using `dths2'
+append using `dths3' 
 
 ** Region labelling
 #delimit ; 
@@ -380,5 +380,11 @@ label define region_
 label values region region_ 
 
 ** Save the final MR dataset
-label data "YLLs : Countries, PAHO sub-regions, WHO regions"
-save "`datapath'\from-who\chap2_cvd_yll", replace
+label data "DEATHS : Countries, PAHO sub-regions, WHO regions"
+save "`datapath'\from-who\chap2_cvd_dths", replace
+
+** Save the final MR dataset - collapsed over SEX
+collapse (sum) dths pop , by(iso3c iso3n who_region paho_subregion region year ghecause) 
+gen sex = 3 
+label data "DEATHS : Countries, PAHO sub-regions, WHO regions"
+save "`datapath'\from-who\chap2_cvd_dths_both", replace

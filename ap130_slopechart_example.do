@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			        p003-slopechart.do
+    //  algorithm name			        ap130-slopechart.do
     //  project:				        WHO Global Health Estimates
     //  analysts:				        Ian HAMBLETON
     // 	date last modified	            5-April-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\p003-slopechart", replace
+    log using "`logpath'\ap130-slopechart", replace
 ** HEADER -----------------------------------------------------
 
 ** UN deaths equiplot example

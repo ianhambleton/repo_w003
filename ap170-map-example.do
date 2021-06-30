@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    p003-map-example.do
+    //  algorithm name			    ap170-map-example.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	16-Apr-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\p003-map-example", replace
+    log using "`logpath'\ap170-map-example", replace
 ** HEADER -----------------------------------------------------
 
 ** ***************************************************************

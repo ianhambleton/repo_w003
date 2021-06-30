@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			        p003-sparklines.do
+    //  algorithm name			        ap140-sparklines.do
     //  project:				        WHO Global Health Estimates
     //  analysts:				        Ian HAMBLETON
     // 	date last modified	            5-April-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\p003-sparklines", replace
+    log using "`logpath'\ap140-sparklines", replace
 ** HEADER -----------------------------------------------------
 
 ** ---------------------------------------------------------------------------------------------

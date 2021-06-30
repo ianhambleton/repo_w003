@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap1-mortality-groups-002.do
+    //  algorithm name			    chap1-death-020-count-stats.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	16-Apr-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap1-mortality-groups-002", replace
+    log using "`logpath'\chap1-death-010-count-stats", replace
 ** HEADER -----------------------------------------------------
 
 ** Loading COD dataset for world regions

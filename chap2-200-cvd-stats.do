@@ -1,10 +1,10 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap1-mortrate-001.do
+    //  algorithm name			    chap2-200-cvd-stats.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
-    // 	date last modified	    	16-Apr-2021
-    //  algorithm task			    Panel graphic - proportion of deaths by AGE group
+    // 	date last modified	    	26-Apr-2021
+    //  algorithm task			    Preparing CVD mortality rates: PAHO-subregions in the Americas
 
     ** General algorithm set-up
     version 17
@@ -26,8 +26,9 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap1-mortrate-001", replace
+    log using "`logpath'\chap2-200-cvd-stats", replace
 ** HEADER -----------------------------------------------------
+
 
 ** ------------------------------------------
 ** Load and save the WHO standard population
@@ -85,19 +86,27 @@ tempfile who_std
 save `who_std', replace
 
 
+
 ** ------------------------------------------
 ** Loading DEATHS dataset for the Americas only 
 ** Americas (AMR)
+**  1100    Cardiovascular 
+**  1110    Rheumatic heart disease I01-I09
+**  1120    Hypertensive heart disease I11-I15 
+**  1130    Ischaemic heart disease I20-I25 
+**  1140    Stroke I60-I69 
+**  1150    Cardiomyopathy, myocarditis, endocarditis I30-I33, I38, I40, I42 
+**  1160    Other circulatory diseases I00, I26-I28, I34-I37, I44-I51, I70-I99
 ** ------------------------------------------
-use "`datapath'\from-who\who-ghe-deaths-001-who2", replace
-    keep if ghecause==10 | ghecause==600 | ghecause==1510
+use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
+* TODO: Change restriction for each disease group
+keep if ghecause==0 | ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghecause==1140 | ghecause==1150 | ghecause==1160
     keep if who_region==2
     drop if age<0 
     drop dths_low dths_up
-
     ** Collapse from countries to subregions
     collapse (sum) dths pop, by(ghecause year paho_subregion sex age)
-    save "`datapath'\from-who\chap1_mortrate_001", replace
+    ** save "`datapath'\from-who\chap2_cvd_001", replace
 
 ** BROAD age groups
 ** 1 Young children --> under-5s
@@ -181,99 +190,86 @@ replace pop = round(pop)
 ** YEAR (2000 to 2019)
 ** SEX (1=male, 2=female)
 ** COD (10=COM, 600=NCD, 1510=INJ)
-recode ghecause 10=10 600=20 1510=30
-label define ghecause_ 10 "communicable" 20 "ncd" 30 "injury" , modify
+** recode ghecause 10=10 600=20 1510=30
+* TODO: Change labelling for each disease group
+#delimit ; 
+label define ghecause_  1100 "cvd" 
+                        1110 "rheumatic"
+                        1120 "hypertensive" 
+                        1130 "ischaemic"
+                        1140 "stroke"
+                        1150 "cardiomyopathy etc"
+                        1160 "other", modify;
+#delimit cr
 label values ghecause ghecause_ 
 
 ** Save dataset ready for direct standardization 
 tempfile for_mr
 save `for_mr' , replace
 
-** 2019, Male, Communicable Disease
-forval x = 2000(1)2019 {
-    forval y = 1(1)2 {
-        forval z = 10(10)30 {
-            use `for_mr' , clear 
-            tempfile results
-            keep if year==`x' 
-            keep if sex==`y'
-            keep if ghecause==`z' 
-            dstdize deaths pop age18, by(paho_subregion) using(`who_std')
-            matrix m`x'_`y'_`z' = r(crude) \ r(adj) \r(ub_adj) \ r(lb_adj) \  r(se) \ r(Nobs)
-            matrix m`x'_`y'_`z' = m`x'_`y'_`z''
-            svmat double m`x'_`y'_`z', name(col)
-            keep Crude Adjusted Right Left Se Nobs
-            keep if Crude < .
-            gen year = `x' 
-            gen sex = `y'
-            gen ghecause = `z'
-            tempfile f_`x'_`y'_`z'
-            save `f_`x'_`y'_`z'' , replace
-        }    
-    }
-}
-use `f_2000_1_10' , clear
+** Collapse
+collapse (sum) dths pop, by(year ghecause)
+drop pop 
+reshape wide dths , i(year) j(ghecause)
 
-forval x = 2000(1)2019 {
-    forval y = 1(1)2 {
-        forval z = 10(10)30 {
-            append using `f_`x'_`y'_`z''
-        }
-    }
-}
-bysort year sex ghecause : gen region = _n 
-* Drop duplicated initial dataset (2000, male, communicable) 
-drop if region > 8
+** CVD as percentage of all deaths
+gen p1100 = (dths1100/dths0)*100
 
-** Variable re-naming
-rename Crude crate
-rename Adjusted arate
-rename Right aupp
-rename Left alow 
-rename Se ase 
-rename Nobs pop
+** Ischaemic as percentage of CVD and all-deaths
+gen p1130a = (dths1130/dths0)*100
+gen p1130b = (dths1130/dths1100)*100
 
-** Variable Labelling
-label var crate "Crude rate"
-label var arate "Adjusted rate"
-label var alow "Lower 95% limit of adjusted rate"
-label var aupp "Upper 95% limit of adjusted rate"
-label var ase "standard error of adjusted rate"
-label var pop "Population of subregion"
-label var year "Year of mortality rate"
-label var sex "Men (1) and Women (2)"
-label var ghecause "Broad causes of death"
-label var region "WHO region / PAHO subregion"
+** Stroke as percentage of CVD and all-deaths
+gen p1140a = (dths1140/dths0)*100
+gen p1140b = (dths1140/dths1100)*100
 
-** Variable level labelling
-* subregions
-#delimit ; 
-label define region_    1 "north america"
-                    2 "southern cone"
-                    3 "central america"
-                    4 "andean" 
-                    5 "latin caribbean"
-                    6 "non-latin caribbean"
-                    7 "brazil"
-                    8 "mexico"
-                    100 "africa"
-                    200 "americas"
-                    300 "eastern mediterranean"
-                    400 "europe" 
-                    500 "south-east asia"
-                    600 "western pacific", modify;                     
-#delimit cr 
-label values region region_ 
-* sex
-label define sex_ 1 "male" 2 "female" , modify 
-label values sex sex_ 
-* Cause of death
-label define ghecause_ 10 "communicable" 20 "ncd" 30 "injury" , modify
-label values ghecause ghecause_ 
+** Hypertensive as percentage of CVD and all-deaths
+gen p1120a = (dths1120/dths0)*100
+gen p1120b = (dths1120/dths1100)*100
 
-** Save the final MR dataset
-label data "Crude and Adjusted mortality rates: PAHO sub-regions"
-save "`datapath'\from-who\chap1_mortrate_001", replace
+** Cardiomyopathy as percentage of CVD and all-deaths
+gen p1150a = (dths1150/dths0)*100
+gen p1150b = (dths1150/dths1100)*100
+
+** Rheumatic as percentage of CVD and all-deaths
+gen p1110a = (dths1110/dths0)*100
+gen p1110b = (dths1110/dths1100)*100
 
 
 
+
+
+
+** Mortality rates by sex
+** IHD 
+use "`datapath'\from-who\chap2_cvd_mr", clear
+keep if ghecause == 1130 & region==2000
+drop crate aupp alow ase pop region ghecause
+replace arate = arate * 100000
+** 1=men 2=women 3=both
+reshape wide arate dths, i(year) j(sex)
+gen aratio = arate1 / arate2
+gen adiff = arate1 - arate2
+gen ddiff = dths1 - dths2 
+order year dths* ddiff arate* 
+format dths1 %12.1fc
+format dths2 %12.1fc
+format dths3 %12.1fc
+format ddiff %12.1fc
+
+** DALY by sex
+** IHD 
+use "`datapath'\from-who\chap2_cvd_daly", clear
+keep if ghecause == 1130 & region==2000
+drop iso3c iso3n pop who_region paho_subregion ghecause
+** replace arate = arate * 100000
+** 1=men 2=women 3=both
+reshape wide daly, i(year) j(sex)
+gen dratio = daly1 / daly2
+gen ddiff = daly1 - daly2
+gen daly3 = daly1 + daly2
+order year daly* dratio ddiff 
+format daly1 %12.1fc
+format daly2 %12.1fc
+format daly3 %12.1fc
+format ddiff %12.1fc

@@ -1,10 +1,10 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap2-cvd-001.do
+    //  algorithm name			    chap2-104-cvd-rate-country.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	26-Apr-2021
-    //  algorithm task			    Preparing CVD mortality rates: PAHO-subregions in the Americas
+    //  algorithm task			    Preparing CVD mortality rates: Countries of the Americas
 
     ** General algorithm set-up
     version 17
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap2-cvd-001", replace
+    log using "`logpath'\chap2-104-cvd-rate-country", replace
 ** HEADER -----------------------------------------------------
 
 ** ------------------------------------------
@@ -86,6 +86,8 @@ save `who_std', replace
 
 
 
+
+
 ** ------------------------------------------
 ** Loading DEATHS dataset for the Americas only 
 ** Americas (AMR)
@@ -104,7 +106,7 @@ keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghec
     drop if age<0 
     drop dths_low dths_up
     ** Collapse from countries to subregions
-    collapse (sum) dths pop, by(ghecause year paho_subregion sex age)
+    collapse (sum) dths pop, by(ghecause year sex age iso3n iso3c paho_subregion)
     ** save "`datapath'\from-who\chap2_cvd_001", replace
 
 ** BROAD age groups
@@ -140,7 +142,8 @@ replace age18 = 15 if age==70
 replace age18 = 16 if age==75
 replace age18 = 17 if age==80
 replace age18 = 18 if age==85
-collapse (sum) dths pop, by(year ghecause paho_subregion sex age18 agroup)
+* TODO: This collapse only now down to country-level (instead of subregion level)
+collapse (sum) dths pop, by(year ghecause iso3n iso3c paho_subregion sex age18 agroup)
 
 ** Join the DEATHS dataset with the WHO STD population
 ** merge m:m age18 using `who_std'
@@ -216,7 +219,8 @@ forval x = 2000(1)2019 {
             keep if year==`x' 
             keep if sex==`y'
             keep if ghecause==`z' 
-            dstdize deaths pop age18, by(paho_subregion) using(`who_std')
+            * TODO: This loop is by country for each year/sex/disease group
+            dstdize deaths pop age18, by(iso3n) using(`who_std')
             matrix m`x'_`y'_`z' = r(crude) \ r(adj) \r(ub_adj) \ r(lb_adj) \  r(se) \ r(Nobs)
             matrix m`x'_`y'_`z' = m`x'_`y'_`z''
             svmat double m`x'_`y'_`z', name(col)
@@ -243,7 +247,8 @@ forval x = 2000(1)2019 {
 }
 bysort year sex ghecause : gen region = _n 
 * Drop duplicated initial dataset (2000, male, communicable) 
-drop if region > 8
+* TODO: This value is above 33 and 33 is the number of countries in LAC region
+drop if region > 33
 
 ** Variable re-naming
 rename Crude crate
@@ -266,23 +271,43 @@ label var ghecause "Broad causes of death"
 label var region "WHO region / PAHO subregion"
 
 ** Variable level labelling
-recode region 1=100 2=200 3=300 4=400 5=500 6=600 7=700 8=800
-* subregions
+* Countries
+
 #delimit ; 
-label define region_    100 "north america"
-                        200 "southern cone"
-                        300 "central america"
-                        400 "andean" 
-                        500 "latin caribbean"
-                        600 "non-latin caribbean"
-                        700 "brazil"
-                        800 "mexico"
-                        1000 "africa"
-                        2000 "americas"
-                        3000 "eastern mediterranean"
-                        4000 "europe" 
-                        5000 "south-east asia"
-                        6000 "western pacific", modify;                     
+label define region_   
+                    1 "Antigua and Barbuda"
+                    2 "Argentina"
+                    3 "Bahamas"
+                    4 "Barbados"
+                    5 "Bolivia"
+                    6 "Brazil"
+                    7 "Belize"
+                    8 "Canada"
+                    9 "Chile"
+                    10 "Colombia"
+                    11 "Costa Rica"
+                    12 "Cuba"
+                    13 "Dominican Republic"
+                    14 "Ecuador"
+                    15 "El Salvador"
+                    16 "Grenada"
+                    17 "Guatemala"
+                    18 "Guyana"
+                    19 "Haiti"
+                    20 "Honduras"
+                    21 "Jamaica"
+                    22 "Mexico"
+                    23 "Nicaragua"
+                    24 "Panama"
+                    25 "Paraguay"
+                    26 "Peru"
+                    27 "Saint Lucia"
+                    28 "Saint Vincent and the Grenadines"
+                    29 "Suriname"
+                    30 "Trinidad and Tobago"
+                    31 "United States"
+                    32 "Uruguay"
+                    33 "Venezuela", modify;                     
 #delimit cr 
 label values region region_ 
 * sex
@@ -303,11 +328,13 @@ label values ghecause ghecause_
 
 ** Save the final MR dataset
 label data "Crude and Adjusted mortality rates: PAHO sub-regions"
-save "`datapath'\from-who\chap2_cvd_001", replace
+save "`datapath'\from-who\chap2_cvd_003", replace
 
 
 
-** REPEAT FOR WOMEN AND MEN COMBINED
+
+** Repeat for women and men combined 
+
 
 ** ------------------------------------------
 ** Loading DEATHS dataset for the Americas only 
@@ -327,7 +354,7 @@ keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghec
     drop if age<0 
     drop dths_low dths_up
     ** Collapse from countries to subregions
-    collapse (sum) dths pop, by(ghecause year paho_subregion sex age)
+    collapse (sum) dths pop, by(ghecause year sex age iso3n iso3c paho_subregion)
     ** save "`datapath'\from-who\chap2_cvd_001", replace
 
 ** BROAD age groups
@@ -363,7 +390,8 @@ replace age18 = 15 if age==70
 replace age18 = 16 if age==75
 replace age18 = 17 if age==80
 replace age18 = 18 if age==85
-collapse (sum) dths pop, by(year ghecause paho_subregion age18 agroup)
+* TODO: This collapse only now down to country-level (instead of subregion level)
+collapse (sum) dths pop, by(year ghecause iso3n iso3c paho_subregion age18 agroup)
 
 ** Join the DEATHS dataset with the WHO STD population
 ** merge m:m age18 using `who_std'
@@ -437,7 +465,8 @@ forval x = 2000(1)2019 {
             tempfile results
             keep if year==`x' 
             keep if ghecause==`z' 
-            dstdize deaths pop age18, by(paho_subregion) using(`who_std')
+            * TODO: This loop is by country for each year/sex/disease group
+            dstdize deaths pop age18, by(iso3n) using(`who_std')
             matrix m`x'_`z' = r(crude) \ r(adj) \r(ub_adj) \ r(lb_adj) \  r(se) \ r(Nobs)
             matrix m`x'_`z' = m`x'_`z''
             svmat double m`x'_`z', name(col)
@@ -460,7 +489,8 @@ forval x = 2000(1)2019 {
 }
 bysort year ghecause : gen region = _n 
 * Drop duplicated initial dataset (2000, male, communicable) 
-drop if region > 8
+* TODO: This value is above 33 and 33 is the number of countries in LAC region
+drop if region > 33
 
 ** Variable re-naming
 rename Crude crate
@@ -482,25 +512,45 @@ label var ghecause "Broad causes of death"
 label var region "WHO region / PAHO subregion"
 
 ** Variable level labelling
-recode region 1=100 2=200 3=300 4=400 5=500 6=600 7=700 8=800
-* subregions
+* Countries
+
 #delimit ; 
-label define region_    100 "north america"
-                        200 "southern cone"
-                        300 "central america"
-                        400 "andean" 
-                        500 "latin caribbean"
-                        600 "non-latin caribbean"
-                        700 "brazil"
-                        800 "mexico"
-                        1000 "africa"
-                        2000 "americas"
-                        3000 "eastern mediterranean"
-                        4000 "europe" 
-                        5000 "south-east asia"
-                        6000 "western pacific", modify;                     
+label define region_   
+                    1 "Antigua and Barbuda"
+                    2 "Argentina"
+                    3 "Bahamas"
+                    4 "Barbados"
+                    5 "Bolivia"
+                    6 "Brazil"
+                    7 "Belize"
+                    8 "Canada"
+                    9 "Chile"
+                    10 "Colombia"
+                    11 "Costa Rica"
+                    12 "Cuba"
+                    13 "Dominican Republic"
+                    14 "Ecuador"
+                    15 "El Salvador"
+                    16 "Grenada"
+                    17 "Guatemala"
+                    18 "Guyana"
+                    19 "Haiti"
+                    20 "Honduras"
+                    21 "Jamaica"
+                    22 "Mexico"
+                    23 "Nicaragua"
+                    24 "Panama"
+                    25 "Paraguay"
+                    26 "Peru"
+                    27 "Saint Lucia"
+                    28 "Saint Vincent and the Grenadines"
+                    29 "Suriname"
+                    30 "Trinidad and Tobago"
+                    31 "United States"
+                    32 "Uruguay"
+                    33 "Venezuela", modify;                     
 #delimit cr 
-label values region region_ 
+label values region region_  
 * Cause of death
 * TODO: Change labelling for each disease group
 #delimit ;
@@ -515,7 +565,6 @@ label define ghecause_  1100 "cvd"
 label values ghecause ghecause_ 
 
 ** Save the final MR dataset
-gen sex = 3 
+gen sex = 3
 label data "Crude and Adjusted mortality rates: PAHO sub-regions"
-save "`datapath'\from-who\chap2_cvd_001_both", replace
-
+save "`datapath'\from-who\chap2_cvd_003_both", replace

@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    p004-load-ghe-life-global.do
+    //  algorithm name			    ap200-life-global.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	15-Apr-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\p004-load-ghe-life-global", replace
+    log using "`logpath'\ap200-life-global", replace
 ** HEADER -----------------------------------------------------
 
 

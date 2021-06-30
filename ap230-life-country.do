@@ -1,10 +1,10 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    p004-load-ghe-life-wbregion.do
+    //  algorithm name			    ap230-life-country.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	15-Apr-2021
-    //  algorithm task			    Reading the WHO GHE dataset - Life Tables - WB region
+    //  algorithm task			    Reading the WHO GHE dataset - Life Tables - Country-level data
 
     ** General algorithm set-up
     version 16
@@ -26,19 +26,20 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\p004-load-ghe-life-wbregion", replace
+    log using "`logpath'\ap230-life-country", replace
 ** HEADER -----------------------------------------------------
 
 
 ** ************************************************************
 ** 1. LOAD and prepare Life Table metadata
+**! NOTE - Dominica available for downlaod but dataset is empty
+**! NOTE - St.Kitts available for downlaod but dataset is empty
 ** ************************************************************
-local region wb-low-income wb-low-middle-income wb-upper-middle-income wb-high-income
+local country antigua argentina bahamas barbados belize bolivia brazil canada chile colombia costarica cuba dominicanrepublic ecuador elsalvador grenada guatemala guyana haiti honduras jamaica mexico nicaragua panama paraguay peru stlucia stvincent suriname trinidad uruguay usa venezuela
 
-foreach x of local region {
-
-    ** Load WHO life table dataset 
-    insheet using "`datapath'\from-who\lifetables\lifetable-2019-`x'.csv", clear comma names
+foreach x of local country {
+    
+    insheet using "`datapath'\from-who\lifetables\lifetable-2019-country-`x'.csv", clear comma names
 
     ** GHO metric code
     rename ghocode temp1 
@@ -83,10 +84,24 @@ foreach x of local region {
     label var year "Life table year"
 
 
+    ** Country
+    rename countrycode country 
+    rename countrydisplay cname 
+    drop countryurl
+    label var country "country iso3 alphanumeric code"
+    label var cname "country full name"
+
     ** Region
-    rename worldbankincomegroupcode region 
+    rename regioncode region 
     label var region "Region"
+    drop regiondisplay regionurl 
+
+
+    ** World Bank region
+    rename worldbankincomegroupcode wbregion 
+    label var wbregion "World bank income group"
     drop worldbankincomegroupdisplay worldbankincomegroupurl
+
 
     ** Age groups 
     gen agroup = . 
@@ -146,12 +161,12 @@ foreach x of local region {
 
     ** METRIC 
     rename displayvalue metric 
-    drop numeric low high stderr stddev comments 
-    order year region agroup sex ghocode 
+    drop numeric low high stderr stddev comments
+    order year country cname region wbregion agroup sex ghocode 
     gsort year sex agroup ghocode
     label var metric "Life table value"
 
 ** Life Table dataset
     label data "WHO GHE 2019: Life Table Global"
     save "`datapath'\from-who\lifetables\who-lifetable-2019-`x'", replace
-}
+} 

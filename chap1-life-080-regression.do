@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap1-life-expectancy-005-ecological.do
+    //  algorithm name			    chap1-life-080-regression.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	16-Apr-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap1-life-expectancy-005-ecological", replace
+    log using "`logpath'\chap1-life-080-regression", replace
 ** HEADER -----------------------------------------------------
 
 ** LIFE EXPECTANCY STATISTICS for CHAPTER ONE

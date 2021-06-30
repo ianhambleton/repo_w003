@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap1-mortrate-004.do
+    //  algorithm name			    chap1-death-070-rate-equiplot.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	16-Apr-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap1-mortrate-004", replace
+    log using "`logpath'\chap1-death-070-rate-equiplot", replace
 ** HEADER -----------------------------------------------------
 
 ** Use MR datasets

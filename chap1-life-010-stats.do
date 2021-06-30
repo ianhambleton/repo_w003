@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap1-life-expectancy-001.do
+    //  algorithm name			    chap1-life-010-stats.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	16-Apr-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap1-life-expectancy-001", replace
+    log using "`logpath'\chap1-life-010-stats", replace
 ** HEADER -----------------------------------------------------
 
 ** ***************************************************************

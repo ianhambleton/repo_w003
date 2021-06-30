@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			        p003-equiplot.do
+    //  algorithm name			        ap100-equiplot.do
     //  project:				        WHO Global Health Estimates
     //  analysts:				        Ian HAMBLETON
     // 	date last modified	            4-April-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\p003-equiplot", replace
+    log using "`logpath'\ap100-equiplot", replace
 ** HEADER -----------------------------------------------------
 
 ** UN deaths equiplot example
@@ -112,5 +112,5 @@ local iqr2 `p25_2019' 1.5 `p75_2019' 1.5 `p75_2019' 2.5 `p25_2019' 2.5  `p25_201
 			name(eq1)
 			;
 #delimit cr	
-gr export "X:\OneDrive - The University of the West Indies\repo_ianhambleton\repo_w003\example_graphics\equiplot1.jpg", replace
+gr export "X:\OneDrive - The University of the West Indies\repo_ianhambleton\repo_w003\example_graphics\equiplot1.jpg", replace height(400)
 
