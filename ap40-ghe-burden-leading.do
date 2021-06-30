@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			        p002-ghe-burden-leading.do
+    //  algorithm name			        ap40-ghe-burden-leading.do
     //  project:				        WHO Global Health Estimates
     //  analysts:				        Ian HAMBLETON
     // 	date last modified	            2-April-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\p002-ghe-burden-leading", replace
+    log using "`logpath'\ap40-ghe-burden-leading", replace
 ** HEADER -----------------------------------------------------
 
 ** set segmentsize allocates memory for data in units of segmentsize. 

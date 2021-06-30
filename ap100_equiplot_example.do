@@ -112,3 +112,5 @@ local iqr2 `p25_2019' 1.5 `p75_2019' 1.5 `p75_2019' 2.5 `p25_2019' 2.5  `p25_201
 			name(eq1)
 			;
 #delimit cr	
+gr export "X:\OneDrive - The University of the West Indies\repo_ianhambleton\repo_w003\example_graphics\equiplot1.jpg", replace
+

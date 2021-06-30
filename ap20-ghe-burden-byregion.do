@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    p002-ghe-burden-byregion-allcauses.do
+    //  algorithm name			    ap20-ghe-burden-byregion.do
     //  project:				        WHO Global Health Estimates
     //  analysts:				        Ian HAMBLETON
     // 	date last modified	    2-April-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\p002-ghe-burden-byregion-allcauses", replace
+    log using "`logpath'\ap20-ghe-burden-byregion", replace
 ** HEADER -----------------------------------------------------
 
 ** set segmentsize allocates memory for data in units of segmentsize. 
@@ -67,42 +67,42 @@ use "`datapath'\from-owid\regions", clear
 **      and save external files: by METRIC and by UN-REGION
 ** **********************************************************
 ** foreach var in yll yld daly deaths { 
-foreach var in yll { 
+foreach var in yld daly deaths { 
     frame change `var'
     use "`datapath'\from-who\who-ghe-`var'-001", clear
-**    #delimit ;
-**    keep if ghecause==0  |       /// All causes
-**            ghecause==10 |       /// Communicable, maternal, perinatal, nutritional
-**            ghecause==20 |       /// Infectious
-**            ghecause==420 |      /// Maternal
-**            ghecause==490 |      /// Neonatal
-**            ghecause==540 |      /// Nutritional deficiencies
-**            ghecause==600 |      /// Noncommunicable diseases
-**            ghecause==610 |      /// Malignant neoplasms
-**            ghecause==800 |      /// Diabetes
-**            ghecause==820 |      /// Mental and substance use disorders
-**            ghecause==830 |      /// Depressive disorders
-**            ghecause==940 |      /// Neurological conditions
-**            ghecause==950 |      /// Alzeimer's disease and other dementias
-**            ghecause==1100 |      /// Cardiovascular diseases
-**            ghecause==1130 |      /// Ischaemic Heart disease
-**            ghecause==1140 |      /// Stroke
-**            ghecause==1170 |      /// Respiratory Diseases
-**            ghecause==1510 |      /// Injuries
-**            ghecause==1520 |      /// Unintentional injuries
-**            ghecause==1530 |      /// Road injury
-**            ghecause==1540 |      /// poisonings
-**            ghecause==1550 |      /// falls
-**            ghecause==1560 |      /// fire
-**            ghecause==1570 |      /// drowning
-**            ghecause==1575 |      /// machanical
-**            ghecause==1580 |      /// disasters
-**            ghecause==1590 |      /// Other
-**            ghecause==1600 |      /// intentional injuries
-**            ghecause==1610 |      /// suicide
-**            ghecause==1620 |      /// homicide
-**            ghecause==1630;      /// conflict
-**    #delimit cr
+    #delimit ;
+    keep if ghecause==0  |       /// All causes
+            ghecause==10 |       /// Communicable, maternal, perinatal, nutritional
+            ghecause==20 |       /// Infectious
+            ghecause==420 |      /// Maternal
+            ghecause==490 |      /// Neonatal
+            ghecause==540 |      /// Nutritional deficiencies
+            ghecause==600 |      /// Noncommunicable diseases
+            ghecause==610 |      /// Malignant neoplasms
+            ghecause==800 |      /// Diabetes
+            ghecause==820 |      /// Mental and substance use disorders
+            ghecause==830 |      /// Depressive disorders
+            ghecause==940 |      /// Neurological conditions
+            ghecause==950 |      /// Alzeimer's disease and other dementias
+            ghecause==1100 |      /// Cardiovascular diseases
+            ghecause==1130 |      /// Ischaemic Heart disease
+            ghecause==1140 |      /// Stroke
+            ghecause==1170 |      /// Respiratory Diseases
+            ghecause==1510 |      /// Injuries
+            ghecause==1520 |      /// Unintentional injuries
+            ghecause==1530 |      /// Road injury
+            ghecause==1540 |      /// poisonings
+            ghecause==1550 |      /// falls
+            ghecause==1560 |      /// fire
+            ghecause==1570 |      /// drowning
+            ghecause==1575 |      /// machanical
+            ghecause==1580 |      /// disasters
+            ghecause==1590 |      /// Other
+            ghecause==1600 |      /// intentional injuries
+            ghecause==1610 |      /// suicide
+            ghecause==1620 |      /// homicide
+            ghecause==1630;      /// conflict
+    #delimit cr
 
     ** restrict to UN Africa (iso3n==2) 
     frame copy `var' `var'_africa 
@@ -113,7 +113,7 @@ foreach var in yll {
     labmask ghecause, values(causename)
     drop causename
     label data "WHO GHE 2019: `var', Africa, all years"
-    save "`datapath'\from-who\who-ghe-`var'-001-africa-allcauses", replace
+    save "`datapath'\from-who\who-ghe-`var'-001-africa", replace
 
     ** restrict to UN Americas (iso3n==19) 
     frame copy `var' `var'_americas 
@@ -124,7 +124,7 @@ foreach var in yll {
     labmask ghecause, values(causename)
     drop causename
     label data "WHO GHE 2019: `var', Americas, all years"
-    save "`datapath'\from-who\who-ghe-`var'-001-americas-allcauses", replace
+    save "`datapath'\from-who\who-ghe-`var'-001-americas", replace
 
     ** restrict to UN Asia (iso3n==142) 
     frame copy `var' `var'_asia 
@@ -135,7 +135,7 @@ foreach var in yll {
     labmask ghecause, values(causename)
     drop causename
     label data "WHO GHE 2019: `var', Asia, all years"
-    save "`datapath'\from-who\who-ghe-`var'-001-asia-allcauses", replace
+    save "`datapath'\from-who\who-ghe-`var'-001-asia", replace
 
     ** restrict to UN Europe (iso3n==150) 
     frame copy `var' `var'_europe 
@@ -146,7 +146,7 @@ foreach var in yll {
     labmask ghecause, values(causename)
     drop causename
     label data "WHO GHE 2019: `var', Europe, all years"
-    save "`datapath'\from-who\who-ghe-`var'-001-europe-allcauses", replace
+    save "`datapath'\from-who\who-ghe-`var'-001-europe", replace
 
     ** restrict to UN Oceania (iso3n==9) 
     frame copy `var' `var'_oceania 
@@ -157,7 +157,7 @@ foreach var in yll {
     labmask ghecause, values(causename)
     drop causename
     label data "WHO GHE 2019: `var', Oceania, all years"
-    save "`datapath'\from-who\who-ghe-`var'-001-oceania-allcauses", replace
+    save "`datapath'\from-who\who-ghe-`var'-001-oceania", replace
 
     ** restrict to WHO Africa (who_regions==1) 
     frame copy `var' `var'_who1 
@@ -168,7 +168,7 @@ foreach var in yll {
     labmask ghecause, values(causename)
     drop causename
     label data "WHO GHE 2019: `var', WHO Africa, all years"
-    save "`datapath'\from-who\who-ghe-`var'-001-who1-allcauses", replace
+    save "`datapath'\from-who\who-ghe-`var'-001-who1", replace
 
     ** restrict to WHO Americas (who_regions==2) 
     frame copy `var' `var'_who2 
@@ -179,8 +179,8 @@ foreach var in yll {
     labmask ghecause, values(causename)
     drop causename
     label data "WHO GHE 2019: `var', WHO Americas, all years"
-    save "`datapath'\from-who\who-ghe-`var'-001-who2-allcauses", replace
-
+    save "`datapath'\from-who\who-ghe-`var'-001-who2", replace
+/*
     ** restrict to WHO Eastern Mediterranean (who_regions==3) 
     frame copy `var' `var'_who3 
     frame change `var'_who3 
@@ -190,7 +190,7 @@ foreach var in yll {
     labmask ghecause, values(causename)
     drop causename
     label data "WHO GHE 2019: `var', WHO Eastern Mediterranean, all years"
-    save "`datapath'\from-who\who-ghe-`var'-001-who3-allcauses", replace
+    save "`datapath'\from-who\who-ghe-`var'-001-who3", replace
 
     ** restrict to WHO Europe (who_regions==4) 
     frame copy `var' `var'_who4 
@@ -201,7 +201,7 @@ foreach var in yll {
     labmask ghecause, values(causename)
     drop causename
     label data "WHO GHE 2019: `var', WHO Europe, all years"
-    save "`datapath'\from-who\who-ghe-`var'-001-who4-allcauses", replace
+    save "`datapath'\from-who\who-ghe-`var'-001-who4", replace
 
     ** restrict to WHO South-East Asia (who_regions==5) 
     frame copy `var' `var'_who5 
@@ -212,7 +212,7 @@ foreach var in yll {
     labmask ghecause, values(causename)
     drop causename
     label data "WHO GHE 2019: `var', WHO South-East Asia, all years"
-    save "`datapath'\from-who\who-ghe-`var'-001-who5-allcauses", replace
+    save "`datapath'\from-who\who-ghe-`var'-001-who5", replace
 
     ** restrict to WHO Western Pacific (who_regions==6) 
     frame copy `var' `var'_who6 
@@ -223,7 +223,7 @@ foreach var in yll {
     labmask ghecause, values(causename)
     drop causename
     label data "WHO GHE 2019: `var', WHO Western Pacific, all years"
-    save "`datapath'\from-who\who-ghe-`var'-001-who6-allcauses", replace
+    save "`datapath'\from-who\who-ghe-`var'-001-who6", replace
 
 }
 
