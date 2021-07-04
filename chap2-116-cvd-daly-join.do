@@ -31,7 +31,7 @@
 
 use "`datapath'\from-who\chap2_cvd_daly_001", clear
 
-/*
+
 ** DEATHS. Countries.
 ** Append PAHO sub-regions and append WHO regions
 use "`datapath'\from-who\chap2_cvd_daly_003", clear
@@ -46,17 +46,39 @@ label values sex sex_
 tempfile mr1 
 save `mr1', replace 
 
+
+
 ** Merge the deaths dataset
 tempfile d1 
-use "`datapath'\from-who\chap2_cvd_dths", clear
-append using "`datapath'\from-who\chap2_cvd_dths_both"
+    use "`datapath'\from-who\chap2_cvd_dths", clear
+    append using "`datapath'\from-who\chap2_cvd_dths_both"
+    label define sex_ 1 "men" 2 "women" 3 "both" , modify
+    label values sex sex_ 
+    keep dths year sex ghecause region 
+    sort year sex ghecause region 
+    merge 1:1 year sex ghecause region using `mr1' 
+    drop _merge 
+    tempfile mr2 
+save `mr2', replace 
 
-label define sex_ 1 "men" 2 "women" 3 "both" , modify
-label values sex sex_ 
-keep dths year sex ghecause region 
-sort year sex ghecause region 
-merge 1:1 year sex ghecause region using `mr1' 
+
+
+** Merge the DALY dataset
+tempfile d1 
+    use "`datapath'\from-who\chap2_cvd_daly", clear
+    append using "`datapath'\from-who\chap2_cvd_daly_both"
+    label define sex_ 1 "men" 2 "women" 3 "both" , modify
+    label values sex sex_ 
+    keep daly year sex ghecause region 
+    sort year sex ghecause region 
+    merge 1:1 year sex ghecause region using `mr2' 
 drop _merge 
+
+
+
+** -------------------------------------------
+** DATASET FORMATTING 
+** -------------------------------------------
 
 ** Region labelling
 #delimit ; 

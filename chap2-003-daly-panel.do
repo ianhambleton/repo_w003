@@ -100,7 +100,20 @@ save `who_std', replace
 ** ------------------------------------------
 use "`datapath'\from-who\who-ghe-daly-001-who2-allcauses", replace
 * TODO: Change restriction for each disease group
-keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghecause==1140 | ghecause==1150 | ghecause==1160
+    #delimit ;
+    keep if     ghecause==0    | 
+                ghecause==600  | 
+                ghecause==610  | 
+                ghecause==800  | 
+                ghecause==820  | 
+                ghecause==940  | 
+                ghecause==1100 |
+                ghecause==1170 |
+                ghecause==1510;
+    #delimit cr
+    ** Recode for mortality rate loop
+    recode ghecause (0=1) (600=2) (1100=3) (610=4) (1170=5) (800=6) (820 940=7) (1510=8)
+
     keep if who_region==2
     drop if age<0 
     drop daly_low daly_up
@@ -193,13 +206,14 @@ replace pop = round(pop)
 ** recode ghecause 10=10 600=20 1510=30
 * TODO: Change labelling for each disease group
 #delimit ; 
-label define ghecause_  1100 "cvd" 
-                        1110 "rheumatic"
-                        1120 "hypertensive" 
-                        1130 "ischaemic"
-                        1140 "stroke"
-                        1150 "cardiomyopathy etc"
-                        1160 "other", modify;
+label define ghecause_  1 "all cause" 
+                        2 "ncds"
+                        3 "cvd" 
+                        4 "cancer"
+                        5 "crd"
+                        6 "diabetes"
+                        7 "mental health"
+                        8 "external causes", modify;
 #delimit cr
 label values ghecause ghecause_ 
 
@@ -324,6 +338,19 @@ use `daly1', clear
 append using `daly2'
 append using `daly3' 
 
+** CoD labelling
+#delimit ; 
+label define ghecause_  1 "all cause" 
+                        2 "ncds"
+                        3 "cvd" 
+                        4 "cancer"
+                        5 "crd"
+                        6 "diabetes"
+                        7 "mental health"
+                        8 "external causes", modify;
+#delimit cr
+label values ghecause ghecause_ 
+
 ** Region labelling
 #delimit ; 
 label define region_   
@@ -381,10 +408,10 @@ label values region region_
 
 ** Save the final MR dataset
 label data "DALYs : Countries, PAHO sub-regions, WHO regions"
-save "`datapath'\from-who\chap2_cvd_daly", replace
+save "`datapath'\from-who\chap2_daly_panel", replace
 
 ** Save the final MR dataset - collapsed over SEX
 collapse (sum) daly pop , by(iso3c iso3n who_region paho_subregion region year ghecause) 
 gen sex = 3 
 label data "DALY COUNT : Countries, PAHO sub-regions, WHO regions"
-save "`datapath'\from-who\chap2_cvd_daly_both", replace
+save "`datapath'\from-who\chap2_daly_panel_both", replace

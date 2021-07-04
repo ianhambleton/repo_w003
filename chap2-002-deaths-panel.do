@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap2-150-cvd-daly.do
+    //  algorithm name			    chap2-160-cvd-deaths.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	26-Apr-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap2-150-cvd-daly", replace
+    log using "`logpath'\chap2-160-cvd-deaths", replace
 ** HEADER -----------------------------------------------------
 
 ** ------------------------------------------
@@ -98,14 +98,27 @@ save `who_std', replace
 **  1150    Cardiomyopathy, myocarditis, endocarditis I30-I33, I38, I40, I42 
 **  1160    Other circulatory diseases I00, I26-I28, I34-I37, I44-I51, I70-I99
 ** ------------------------------------------
-use "`datapath'\from-who\who-ghe-daly-001-who2-allcauses", replace
+use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
 * TODO: Change restriction for each disease group
-keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghecause==1140 | ghecause==1150 | ghecause==1160
+    #delimit ;
+    keep if     ghecause==0    | 
+                ghecause==600  | 
+                ghecause==610  | 
+                ghecause==800  | 
+                ghecause==820  | 
+                ghecause==940  | 
+                ghecause==1100 |
+                ghecause==1170 |
+                ghecause==1510;
+    #delimit cr
+    ** Recode for mortality rate loop
+    recode ghecause (0=1) (600=2) (1100=3) (610=4) (1170=5) (800=6) (820 940=7) (1510=8)
+
     keep if who_region==2
     drop if age<0 
-    drop daly_low daly_up
+    drop dths_low dths_up
     ** Collapse from countries to subregions
-    collapse (sum) daly pop, by(ghecause year iso3n iso3c who_region paho_subregion sex age)
+    collapse (sum) dths pop, by(ghecause year iso3n iso3c who_region paho_subregion sex age)
     ** save "`datapath'\from-who\chap2_cvd_001", replace
 
 ** BROAD age groups
@@ -141,7 +154,7 @@ replace age18 = 15 if age==70
 replace age18 = 16 if age==75
 replace age18 = 17 if age==80
 replace age18 = 18 if age==85
-collapse (sum) daly pop, by(year ghecause iso3n iso3c who_region paho_subregion sex age18 agroup)
+collapse (sum) dths pop, by(year ghecause iso3n iso3c who_region paho_subregion sex age18 agroup)
 
 ** Join the DEATHS dataset with the WHO STD population
 ** merge m:m age18 using `who_std'
@@ -174,7 +187,7 @@ label values age18 age18_
 label var paho_subregion "8 PAHO subregions of the Americas"
 label var agroup "5 broad age groups: young children, youth, young adult, older adult, elderly"
 label var age18 "5-year age groups: 18 groups"
-label var daly "DALY"
+label var dths "Deaths"
 label var pop "PAHO subregional populations" 
 format pop %12.0fc 
 ** label var spop "WHO Standard population: sums to 1 million"
@@ -193,13 +206,14 @@ replace pop = round(pop)
 ** recode ghecause 10=10 600=20 1510=30
 * TODO: Change labelling for each disease group
 #delimit ; 
-label define ghecause_  1100 "cvd" 
-                        1110 "rheumatic"
-                        1120 "hypertensive" 
-                        1130 "ischaemic"
-                        1140 "stroke"
-                        1150 "cardiomyopathy etc"
-                        1160 "other", modify;
+label define ghecause_  1 "all cause" 
+                        2 "ncds"
+                        3 "cvd" 
+                        4 "cancer"
+                        5 "crd"
+                        6 "diabetes"
+                        7 "mental health"
+                        8 "external causes", modify;
 #delimit cr
 label values ghecause ghecause_ 
 
@@ -208,12 +222,12 @@ tempfile for_mr
 save `for_mr' , replace
 
 
-tempfile daly1 daly2 daly3 
+tempfile dths1 dths2 dths3 
 
 ** Collapse to country-level DALYs
 ** Collapse out age
 preserve
-    collapse (sum) daly pop, by(year ghecause iso3n iso3c who_region paho_subregion sex)
+    collapse (sum) dths pop, by(year ghecause iso3n iso3c who_region paho_subregion sex)
     egen region = group(iso3n)  
     #delimit ; 
     label define region_   
@@ -256,13 +270,13 @@ preserve
     label var region "WHO region / PAHO subregion / Country"
     ** Variable level labelling
     ** recode region 1=100 2=200 3=300 4=400 5=500 6=600 7=700 8=800
-    save `daly1', replace
+    save `dths1', replace
 restore
 
 ** Collapse to subregion-level DALYs
 ** Collapse out age
 preserve
-    collapse (sum) daly pop, by(year ghecause who_region paho_subregion sex)
+    collapse (sum) dths pop, by(year ghecause who_region paho_subregion sex)
     egen region = group(paho_subregion)  
     ** Variable level labelling
     recode region 1=100 2=200 3=300 4=400 5=500 6=600 7=700 8=800
@@ -286,14 +300,14 @@ preserve
     label values region region_ 
     ** Variable Labelling
     label var region "WHO region / PAHO subregion / Country"
-    save `daly2', replace
+    save `dths2', replace
 restore
 
 
 ** Collapse to subregion-level DALYs
 ** Collapse out age
 preserve
-    collapse (sum) daly pop, by(year ghecause who_region sex)
+    collapse (sum) dths pop, by(year ghecause who_region sex)
     egen region = group(who_region)  
     ** Variable level labelling
     recode region 1=2000 
@@ -317,12 +331,25 @@ preserve
     label values region region_ 
     ** Variable Labelling
     label var region "WHO region / PAHO subregion / Country"
-    save `daly3', replace
+    save `dths3', replace
 restore
 
-use `daly1', clear 
-append using `daly2'
-append using `daly3' 
+use `dths1', clear 
+append using `dths2'
+append using `dths3' 
+
+** CoD labelling
+#delimit ; 
+label define ghecause_  1 "all cause" 
+                        2 "ncds"
+                        3 "cvd" 
+                        4 "cancer"
+                        5 "crd"
+                        6 "diabetes"
+                        7 "mental health"
+                        8 "external causes", modify;
+#delimit cr
+label values ghecause ghecause_ 
 
 ** Region labelling
 #delimit ; 
@@ -360,7 +387,8 @@ label define region_
                     31 "United States"
                     32 "Uruguay"
                     33 "Venezuela"
-
+                    
+                    
                     100 "north america"
                     200 "southern cone"
                     300 "central america"
@@ -369,7 +397,6 @@ label define region_
                     600 "non-latin caribbean"
                     700 "brazil"
                     800 "mexico"
-
                     1000 "africa"
                     2000 "americas"
                     3000 "eastern mediterranean"
@@ -380,11 +407,14 @@ label define region_
 label values region region_ 
 
 ** Save the final MR dataset
-label data "DALYs : Countries, PAHO sub-regions, WHO regions"
-save "`datapath'\from-who\chap2_cvd_daly", replace
+label data "DEATHS : Countries, PAHO sub-regions, WHO regions"
+save "`datapath'\from-who\chap2_deaths_panel", replace
 
 ** Save the final MR dataset - collapsed over SEX
-collapse (sum) daly pop , by(iso3c iso3n who_region paho_subregion region year ghecause) 
+collapse (sum) dths pop , by(iso3c iso3n who_region paho_subregion region year ghecause) 
 gen sex = 3 
-label data "DALY COUNT : Countries, PAHO sub-regions, WHO regions"
-save "`datapath'\from-who\chap2_cvd_daly_both", replace
+label data "DEATHS : Countries, PAHO sub-regions, WHO regions"
+save "`datapath'\from-who\chap2_deaths_panel_both", replace
+
+
+

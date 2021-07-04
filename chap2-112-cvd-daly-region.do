@@ -78,7 +78,9 @@ replace age21 = 19 if atext=="90-94"
 replace age21 = 20 if atext=="95-99"
 replace age21 = 21 if atext=="100+"
 gen age18 = age21
-recode age18 (18 19 20 21 = 18) 
+** For DALY standardization we use 17 groups instead of 18 
+** We do this because Guyana estimates. DALY > Population when age 85+ 
+recode age18 (16 17 18 19 20 21 = 16) 
 collapse (sum) spop , by(age18) 
 rename spop pop 
 tempfile who_std
@@ -94,6 +96,10 @@ save `who_std', replace
 tempfile afr amr emr eur sear wpr world
 ** Africa (AFR)
 use "`datapath'\from-who\who-ghe-daly-001-who1-allcauses", replace
+** Collapse from 18 to 17 5 year groups.
+** This means 80+ instead of 85+ 
+recode age (75 80 85 = 75) 
+collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex ghecause un_region un_subregion who_region paho_subregion)
 * TODO: Change restriction for each disease group
 keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghecause==1140 | ghecause==1150 | ghecause==1160
     drop if age<0 
@@ -101,8 +107,13 @@ keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghec
     collapse (sum) daly pop, by(ghecause year who_region sex age)
     save `afr' , replace
 
+
 ** Americas (AMR)
 use "`datapath'\from-who\who-ghe-daly-001-who2-allcauses", replace
+** Collapse from 18 to 17 5 year groups.
+** This means 80+ instead of 85+ 
+recode age (75 80 85 = 75) 
+collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex ghecause un_region un_subregion who_region paho_subregion)
 * TODO: Change restriction for each disease group
 keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghecause==1140 | ghecause==1150 | ghecause==1160
     drop if age<0 
@@ -110,8 +121,13 @@ keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghec
     collapse (sum) daly pop, by(ghecause year who_region sex age)
     save `amr' , replace
 
+
 ** Eastern Mediterranean (EMR)
 use "`datapath'\from-who\who-ghe-daly-001-who3-allcauses", replace
+** Collapse from 18 to 17 5 year groups.
+** This means 80+ instead of 85+ 
+recode age (75 80 85 = 75) 
+collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex ghecause un_region un_subregion who_region paho_subregion)
 * TODO: Change restriction for each disease group
 keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghecause==1140 | ghecause==1150 | ghecause==1160
     drop if age<0 
@@ -119,8 +135,13 @@ keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghec
     collapse (sum) daly pop, by(ghecause year who_region sex age)
     save `emr' , replace
 
+
 ** Europe (EUR)
 use "`datapath'\from-who\who-ghe-daly-001-who4-allcauses", replace
+** Collapse from 18 to 17 5 year groups.
+** This means 80+ instead of 85+ 
+recode age (75 80 85 = 75) 
+collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex ghecause un_region un_subregion who_region paho_subregion)
 * TODO: Change restriction for each disease group
 keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghecause==1140 | ghecause==1150 | ghecause==1160
     drop if age<0 
@@ -128,8 +149,13 @@ keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghec
     collapse (sum) daly pop, by(ghecause year who_region sex age)
     save `eur' , replace
 
+
 ** South-East Asia (SEAR)
 use "`datapath'\from-who\who-ghe-daly-001-who5-allcauses", replace
+** Collapse from 18 to 17 5 year groups.
+** This means 80+ instead of 85+ 
+recode age (75 80 85 = 75) 
+collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex ghecause un_region un_subregion who_region paho_subregion)
 * TODO: Change restriction for each disease group
 keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghecause==1140 | ghecause==1150 | ghecause==1160
     drop if age<0 
@@ -137,14 +163,20 @@ keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghec
     collapse (sum) daly pop, by(ghecause year who_region sex age)
     save `sear' , replace
 
+
 ** Western Pacific (WPR)
 use "`datapath'\from-who\who-ghe-daly-001-who6-allcauses", replace
+** Collapse from 18 to 17 5 year groups.
+** This means 80+ instead of 85+ 
+recode age (75 80 85 = 75) 
+collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex ghecause un_region un_subregion who_region paho_subregion)
 * TODO: Change restriction for each disease group
 keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghecause==1140 | ghecause==1150 | ghecause==1160
     drop if age<0 
     ** Collapse to WHO regions 
     collapse (sum) daly pop, by(ghecause year who_region sex age)
     save `wpr' , replace
+
 
 ** Join the WHO regions
 use `afr', clear 
@@ -189,8 +221,6 @@ replace age18 = 13 if age==60
 replace age18 = 14 if age==65
 replace age18 = 15 if age==70
 replace age18 = 16 if age==75
-replace age18 = 17 if age==80
-replace age18 = 18 if age==85
 collapse (sum) daly pop, by(year ghecause who_region sex age18 agroup)
 
 ** Join the DALYs dataset with the WHO STD population
@@ -213,9 +243,7 @@ label define age18_     1 "0-4"
                         13 "60-64"
                         14 "65-69"
                         15 "70-74"
-                        16 "75-79"
-                        17 "80-84"
-                        18 "85+";
+                        16 "75+";
 #delimit cr
 label values age18 age18_ 
 ** drop _merge
@@ -223,7 +251,7 @@ label values age18 age18_
 ** Variable labelling
 label var who_region "6 WHO regions"
 label var agroup "5 broad age groups: young children, youth, young adult, older adult, elderly"
-label var age18 "5-year age groups: 18 groups"
+label var age18 "5-year age groups: 17 groups"
 label var daly "Count of all DALYs"
 label var pop "PAHO subregional populations" 
 format pop %12.0fc 
@@ -360,6 +388,10 @@ save "`datapath'\from-who\chap2_cvd_daly_002", replace
 tempfile afr amr emr eur sear wpr world
 ** Africa (AFR)
 use "`datapath'\from-who\who-ghe-daly-001-who1-allcauses", replace
+** Collapse from 18 to 17 5 year groups.
+** This means 80+ instead of 85+ 
+recode age (75 80 85 = 75) 
+collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex ghecause un_region un_subregion who_region paho_subregion)
 * TODO: Change restriction for each disease group
 keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghecause==1140 | ghecause==1150 | ghecause==1160
     drop if age<0 
@@ -369,6 +401,10 @@ keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghec
 
 ** Americas (AMR)
 use "`datapath'\from-who\who-ghe-daly-001-who2-allcauses", replace
+** Collapse from 18 to 17 5 year groups.
+** This means 80+ instead of 85+ 
+recode age (75 80 85 = 75) 
+collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex ghecause un_region un_subregion who_region paho_subregion)
 * TODO: Change restriction for each disease group
 keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghecause==1140 | ghecause==1150 | ghecause==1160
     drop if age<0 
@@ -378,6 +414,10 @@ keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghec
 
 ** Eastern Mediterranean (EMR)
 use "`datapath'\from-who\who-ghe-daly-001-who3-allcauses", replace
+** Collapse from 18 to 17 5 year groups.
+** This means 80+ instead of 85+ 
+recode age (75 80 85 = 75) 
+collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex ghecause un_region un_subregion who_region paho_subregion)
 * TODO: Change restriction for each disease group
 keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghecause==1140 | ghecause==1150 | ghecause==1160
     drop if age<0 
@@ -387,6 +427,10 @@ keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghec
 
 ** Europe (EUR)
 use "`datapath'\from-who\who-ghe-daly-001-who4-allcauses", replace
+** Collapse from 18 to 17 5 year groups.
+** This means 80+ instead of 85+ 
+recode age (75 80 85 = 75) 
+collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex ghecause un_region un_subregion who_region paho_subregion)
 * TODO: Change restriction for each disease group
 keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghecause==1140 | ghecause==1150 | ghecause==1160
     drop if age<0 
@@ -396,6 +440,10 @@ keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghec
 
 ** South-East Asia (SEAR)
 use "`datapath'\from-who\who-ghe-daly-001-who5-allcauses", replace
+** Collapse from 18 to 17 5 year groups.
+** This means 80+ instead of 85+ 
+recode age (75 80 85 = 75) 
+collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex ghecause un_region un_subregion who_region paho_subregion)
 * TODO: Change restriction for each disease group
 keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghecause==1140 | ghecause==1150 | ghecause==1160
     drop if age<0 
@@ -405,6 +453,10 @@ keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghec
 
 ** Western Pacific (WPR)
 use "`datapath'\from-who\who-ghe-daly-001-who6-allcauses", replace
+** Collapse from 18 to 17 5 year groups.
+** This means 80+ instead of 85+ 
+recode age (75 80 85 = 75) 
+collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex ghecause un_region un_subregion who_region paho_subregion)
 * TODO: Change restriction for each disease group
 keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghecause==1140 | ghecause==1150 | ghecause==1160
     drop if age<0 
@@ -455,8 +507,6 @@ replace age18 = 13 if age==60
 replace age18 = 14 if age==65
 replace age18 = 15 if age==70
 replace age18 = 16 if age==75
-replace age18 = 17 if age==80
-replace age18 = 18 if age==85
 collapse (sum) daly pop, by(year ghecause who_region age18 agroup)
 
 ** Join the DALYs dataset with the WHO STD population
@@ -479,9 +529,7 @@ label define age18_     1 "0-4"
                         13 "60-64"
                         14 "65-69"
                         15 "70-74"
-                        16 "75-79"
-                        17 "80-84"
-                        18 "85+";
+                        16 "75+";
 #delimit cr
 label values age18 age18_ 
 ** drop _merge

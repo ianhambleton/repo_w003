@@ -78,7 +78,9 @@ replace age21 = 19 if atext=="90-94"
 replace age21 = 20 if atext=="95-99"
 replace age21 = 21 if atext=="100+"
 gen age18 = age21
-recode age18 (18 19 20 21 = 18) 
+** For DALY standardization we use 16 groups instead of 18 
+** We do this because Guyana estimates. DALY > Population when age 85+ 
+recode age18 (16 17 18 19 20 21 = 16) 
 collapse (sum) spop , by(age18) 
 rename spop pop 
 tempfile who_std
@@ -100,6 +102,10 @@ save `who_std', replace
 **  1160    Other circulatory diseases I00, I26-I28, I34-I37, I44-I51, I70-I99
 ** ------------------------------------------
 use "`datapath'\from-who\who-ghe-daly-001-who2-allcauses", replace
+** Collapse from 18 to 17 5 year groups.
+** This means 80+ instead of 85+ 
+recode age (75 80 85 = 75) 
+collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex ghecause un_region un_subregion who_region paho_subregion)
 * TODO: Change restriction for each disease group
 keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghecause==1140 | ghecause==1150 | ghecause==1160
     keep if who_region==2
@@ -140,8 +146,6 @@ replace age18 = 13 if age==60
 replace age18 = 14 if age==65
 replace age18 = 15 if age==70
 replace age18 = 16 if age==75
-replace age18 = 17 if age==80
-replace age18 = 18 if age==85
 * TODO: This collapse only now down to country-level (instead of subregion level)
 collapse (sum) daly pop, by(year ghecause iso3n iso3c paho_subregion sex age18 agroup)
 
@@ -165,9 +169,7 @@ label define age18_     1 "0-4"
                         13 "60-64"
                         14 "65-69"
                         15 "70-74"
-                        16 "75-79"
-                        17 "80-84"
-                        18 "85+";
+                        16 "75+";
 #delimit cr
 label values age18 age18_ 
 ** drop _merge
@@ -209,7 +211,7 @@ label values ghecause ghecause_
 ** Save dataset ready for direct standardization 
 tempfile for_mr
 save `for_mr' , replace
-/*
+
 ** Standardised MR values
 forval x = 2000(1)2019 {
     forval y = 1(1)2 {
@@ -349,6 +351,10 @@ save "`datapath'\from-who\chap2_cvd_daly_003", replace
 **  1160    Other circulatory diseases I00, I26-I28, I34-I37, I44-I51, I70-I99
 ** ------------------------------------------
 use "`datapath'\from-who\who-ghe-daly-001-who2-allcauses", replace
+** Collapse from 18 to 17 5 year groups.
+** This means 80+ instead of 85+ 
+recode age (75 80 85 = 75) 
+collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex ghecause un_region un_subregion who_region paho_subregion)
 * TODO: Change restriction for each disease group
 keep if ghecause==1100 | ghecause==1110 | ghecause==1120 | ghecause==1130 | ghecause==1140 | ghecause==1150 | ghecause==1160
     keep if who_region==2
@@ -389,8 +395,6 @@ replace age18 = 13 if age==60
 replace age18 = 14 if age==65
 replace age18 = 15 if age==70
 replace age18 = 16 if age==75
-replace age18 = 17 if age==80
-replace age18 = 18 if age==85
 * TODO: This collapse only now down to country-level (instead of subregion level)
 collapse (sum) daly pop, by(year ghecause iso3n iso3c paho_subregion age18 agroup)
 
@@ -414,9 +418,7 @@ label define age18_     1 "0-4"
                         13 "60-64"
                         14 "65-69"
                         15 "70-74"
-                        16 "75-79"
-                        17 "80-84"
-                        18 "85+";
+                        16 "75+";
 #delimit cr
 label values age18 age18_ 
 ** drop _merge
