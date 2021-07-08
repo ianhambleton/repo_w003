@@ -134,7 +134,7 @@ preserve
     }
 restore 
 
-
+/*
 
 ** -----------------------------------------------------
 ** COLUMN 3 
@@ -331,6 +331,8 @@ label define cod_   1 "ischaemic"
 #delimit cr
 label values cod cod_ 
 
+
+
 ** -----------------------------------------------------
 ** COLUMN 6
 ** Outputs: Total DALYs
@@ -373,6 +375,7 @@ preserve
         global drate`x' = col2[`x',2]
     }
 restore 
+
 
 
 
@@ -521,6 +524,7 @@ preserve
 restore
 
 
+
 ** -----------------------------------------------------
 ** COLUMN 9 
 ** Outputs: DALY Gender ratio
@@ -547,7 +551,7 @@ restore
 
 
 
-
+/*
 
 ** -----------------------------------------------------
 ** AUTOMATED WORD TABLE FOR REPORT
@@ -630,7 +634,7 @@ putdocx table cvd(5,1) = ("Stroke"), halign(right) bold
 putdocx table cvd(6,1) = ("Hypertensive "), halign(right) bold
 putdocx table cvd(6,1) = ("2"), halign(right) script(super) append
 
-putdocx table cvd(7,1) = ("Cardiomyopthy "), halign(right) bold
+putdocx table cvd(7,1) = ("Cardiomyopathy "), halign(right) bold
 putdocx table cvd(7,1) = ("3"), halign(right) script(super) append
 
 putdocx table cvd(8,1) = ("Rheumatic "), halign(right) bold

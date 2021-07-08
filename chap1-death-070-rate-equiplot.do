@@ -56,6 +56,80 @@ replace drate = 0 if drate<0.001
 ** Ordered y-axis
 bysort sex ghecause : gen oregion = _n
 decode region, gen(tregion)
+sort ghecause sex arate
+
+
+** A few statistics to accompany the EQUIPLOT graphic below 
+preserve
+	use "`datapath'\from-who\chap1_mortrate_003", clear
+	**append using "`datapath'\from-who\chap1_mortrate_002"
+
+	** Rates per 100,000
+	replace crate = crate * 100000
+	replace arate = arate * 100000
+	replace aupp = aupp * 100000
+	replace alow = alow * 100000
+	format pop %15.0fc
+
+	** Inequality in 2019 
+	** keep if year==2019
+	keep if region<100
+	drop crate aupp alow ase pop
+	sort sex ghecause
+	order sex ghecause region 
+
+	** There will be SIX charts, by SEX x GHECAUSE
+	** Identify minimum rate for each chart
+	sort sex ghecause arate 
+	bysort sex ghecause : egen mrate = min(arate)
+	gen drate = arate - mrate
+	replace drate = 0 if drate<0.001
+	** Ordered y-axis
+	bysort sex ghecause : gen oregion = _n
+	decode region, gen(tregion)
+
+	sort ghecause sex arate
+	#delimit ; 
+	label define oregion_   
+                    1 "Antigua and Barbuda"
+                    2 "Argentina"
+                    3 "Bahamas"
+                    4 "Barbados"
+                    5 "Bolivia"
+                    6 "Brazil"
+                    7 "Belize"
+                    8 "Canada"
+                    9 "Chile"
+                    10 "Colombia"
+                    11 "Costa Rica"
+                    12 "Cuba"
+                    13 "Dominican Republic"
+                    14 "Ecuador"
+                    15 "El Salvador"
+                    16 "Grenada"
+                    17 "Guatemala"
+                    18 "Guyana"
+                    19 "Haiti"
+                    20 "Honduras"
+                    21 "Jamaica"
+                    22 "Mexico"
+                    23 "Nicaragua"
+                    24 "Panama"
+                    25 "Paraguay"
+                    26 "Peru"
+                    27 "Saint Lucia"
+                    28 "Saint Vincent and the Grenadines"
+                    29 "Suriname"
+                    30 "Trinidad and Tobago"
+                    31 "United States"
+                    32 "Uruguay"
+                    33 "Venezuela", modify;                     
+	#delimit cr 
+	label values region oregion_  
+	sort year ghecause sex arate
+restore
+
+
 
 ** -------------------------------------------------------------------
 ** GRAPHIC

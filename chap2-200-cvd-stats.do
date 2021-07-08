@@ -239,9 +239,8 @@ gen p1110b = (dths1110/dths1100)*100
 
 
 
-
-** Mortality rates by sex
 ** IHD 
+** Mortality rates by sex
 use "`datapath'\from-who\chap2_cvd_mr", clear
 keep if ghecause == 1130 & region==2000
 drop crate aupp alow ase pop region ghecause
@@ -257,19 +256,227 @@ format dths2 %12.1fc
 format dths3 %12.1fc
 format ddiff %12.1fc
 
-** DALY by sex
-** IHD 
-use "`datapath'\from-who\chap2_cvd_daly", clear
-keep if ghecause == 1130 & region==2000
-drop iso3c iso3n pop who_region paho_subregion ghecause
-** replace arate = arate * 100000
+** STROKE 
+** Mortality rates by sex
+use "`datapath'\from-who\chap2_cvd_mr", clear
+keep if ghecause == 1140 & region==2000
+drop crate aupp alow ase pop region ghecause
+replace arate = arate * 100000
 ** 1=men 2=women 3=both
-reshape wide daly, i(year) j(sex)
-gen dratio = daly1 / daly2
-gen ddiff = daly1 - daly2
-gen daly3 = daly1 + daly2
-order year daly* dratio ddiff 
+reshape wide arate dths, i(year) j(sex)
+gen aratio = arate1 / arate2
+gen adiff = arate1 - arate2
+gen ddiff = dths1 - dths2 
+order year dths* ddiff arate* 
+format dths1 %12.1fc
+format dths2 %12.1fc
+format dths3 %12.1fc
+format ddiff %12.1fc
+
+** STROKE 
+** DALY rates by sex
+use "`datapath'\from-who\chap2_cvd_daly", clear
+keep if ghecause == 1140 & region==2000
+drop crate aupp alow ase pop dths region ghecause
+replace arate = arate * 100000
+** 1=men 2=women 3=both
+reshape wide arate daly, i(year) j(sex)
+gen aratio = arate1 / arate2
+gen adiff = arate1 - arate2
+gen ddiff = daly1 - daly2 
+order year daly* ddiff arate* 
 format daly1 %12.1fc
 format daly2 %12.1fc
 format daly3 %12.1fc
 format ddiff %12.1fc
+
+** HYPERTENSIVE HEART DISEASE 
+** Mortality rates by sex
+use "`datapath'\from-who\chap2_cvd_mr", clear
+keep if ghecause == 1120 & region==2000
+drop crate aupp alow ase pop region ghecause
+replace arate = arate * 100000
+** 1=men 2=women 3=both
+reshape wide arate dths, i(year) j(sex)
+gen aratio = arate1 / arate2
+gen adiff = arate1 - arate2
+gen ddiff = dths1 - dths2 
+order year dths* ddiff arate* 
+format dths1 %12.1fc
+format dths2 %12.1fc
+format dths3 %12.1fc
+format ddiff %12.1fc
+
+** HYPERTENSIVE HEART DISEASE 
+** DALY rates by sex
+use "`datapath'\from-who\chap2_cvd_daly", clear
+keep if ghecause == 1120 & region==2000
+drop crate aupp alow ase pop dths region ghecause
+replace arate = arate * 100000
+** 1=men 2=women 3=both
+reshape wide arate daly, i(year) j(sex)
+gen aratio = arate1 / arate2
+gen adiff = arate1 - arate2
+gen ddiff = daly1 - daly2 
+order year daly* ddiff arate* 
+format daly1 %12.1fc
+format daly2 %12.1fc
+format daly3 %12.1fc
+format ddiff %12.1fc
+
+
+
+** CARDIOMYOPATHY etc
+** Mortality rates by sex
+use "`datapath'\from-who\chap2_cvd_mr", clear
+keep if ghecause == 1150 & region==2000
+drop crate aupp alow ase pop region ghecause
+replace arate = arate * 100000
+** 1=men 2=women 3=both
+reshape wide arate dths, i(year) j(sex)
+gen aratio = arate1 / arate2
+gen adiff = arate1 - arate2
+gen ddiff = dths1 - dths2 
+order year dths* ddiff arate* 
+format dths1 %12.1fc
+format dths2 %12.1fc
+format dths3 %12.1fc
+format ddiff %12.1fc
+
+** CARDIOMYOPATHY etc
+** DALY rates by sex
+use "`datapath'\from-who\chap2_cvd_daly", clear
+keep if ghecause == 1150 & region==2000
+drop crate aupp alow ase pop dths region ghecause
+replace arate = arate * 100000
+** 1=men 2=women 3=both
+reshape wide arate daly, i(year) j(sex)
+gen aratio = arate1 / arate2
+gen adiff = arate1 - arate2
+gen ddiff = daly1 - daly2 
+order year daly* ddiff arate* 
+format daly1 %12.1fc
+format daly2 %12.1fc
+format daly3 %12.1fc
+format ddiff %12.1fc
+
+
+** RHD
+** Mortality rates by sex
+use "`datapath'\from-who\chap2_cvd_mr", clear
+keep if ghecause == 1110 & region==2000
+drop crate aupp alow ase pop region ghecause
+replace arate = arate * 100000
+** 1=men 2=women 3=both
+reshape wide arate dths, i(year) j(sex)
+gen aratio = arate1 / arate2
+gen adiff = arate1 - arate2
+gen ddiff = dths1 - dths2 
+order year dths* ddiff arate* 
+format dths1 %12.1fc
+format dths2 %12.1fc
+format dths3 %12.1fc
+format ddiff %12.1fc
+/*
+** RHD
+** DALY rates by sex
+use "`datapath'\from-who\chap2_cvd_daly", clear
+keep if ghecause == 1110 & region==2000
+drop crate aupp alow ase pop dths region ghecause
+replace arate = arate * 100000
+** 1=men 2=women 3=both
+reshape wide arate daly, i(year) j(sex)
+gen aratio = arate1 / arate2
+gen adiff = arate1 - arate2
+gen ddiff = daly1 - daly2 
+order year daly* ddiff arate* 
+format daly1 %12.1fc
+format daly2 %12.1fc
+format daly3 %12.1fc
+format ddiff %12.1fc
+
+
+/*
+
+** DALY rate by sex
+** All CVD 
+use "`datapath'\from-who\chap2_cvd_daly", clear
+keep if ghecause == 1100 & region==2000
+drop crate aupp alow ase pop region ghecause
+** replace arate = arate * 100000
+** 1=men 2=women 3=both
+replace arate = arate * 100000
+reshape wide arate dths daly, i(year) j(sex)
+order year arate* daly* dths*
+** Restrict to 2000 and 2019, and reshape to wide
+** drop daly* dths* 
+keep if year==2000 | year==2019
+gen k=1
+reshape wide dths1 dths2 dths3 daly1 daly2 daly3 arate1 arate2 arate3 , i(k) j(year)
+order k arate1* arate2* arate3* dths1* dths2* dths3* daly1* daly2* daly3*
+** percentage improvement
+gen perc1 = ((arate12019 - arate12000)/arate12000) * 100
+gen perc2 = ((arate22019 - arate22000)/arate22000) * 100
+gen perc3 = ((arate32019 - arate32000)/arate32000) * 100
+format perc1 perc2 perc3 %9.1f
+** death excess (women and men combined)
+gen dth_excess = dths12019-dths22019
+gen daly_excess = daly12019-daly22019
+format dths12019 dths22019 daly12019 daly22019 dth_excess daly_excess %12.0fc
+
+
+
+** DALY rate by sex
+** IHD 
+use "`datapath'\from-who\chap2_cvd_daly", clear
+keep if ghecause == 1130 & region==2000
+drop crate aupp alow ase pop region ghecause
+** replace arate = arate * 100000
+** 1=men 2=women 3=both
+replace arate = arate * 100000
+reshape wide arate dths daly, i(year) j(sex)
+order year arate* daly* dths*
+** Restrict to 2000 and 2019, and reshape to wide
+** drop daly* dths* 
+keep if year==2000 | year==2019
+gen k=1
+reshape wide dths1 dths2 dths3 daly1 daly2 daly3 arate1 arate2 arate3 , i(k) j(year)
+order k arate1* arate2* arate3* dths1* dths2* dths3* daly1* daly2* daly3*
+** percentage improvement
+gen perc1 = ((arate12019 - arate12000)/arate12000) * 100
+gen perc2 = ((arate22019 - arate22000)/arate22000) * 100
+gen perc3 = ((arate32019 - arate32000)/arate32000) * 100
+format perc1 perc2 perc3 %9.1f
+** death excess (women and men combined)
+gen dth_excess = dths12019-dths22019
+gen daly_excess = daly12019-daly22019
+format dths12019 dths22019 daly12019 daly22019 dth_excess daly_excess %12.0fc
+
+
+
+
+** DALY rate by sex
+** STROKE 
+use "`datapath'\from-who\chap2_cvd_daly", clear
+keep if ghecause == 1140 & region==2000
+drop crate aupp alow ase pop region ghecause
+** replace arate = arate * 100000
+** 1=men 2=women 3=both
+replace arate = arate * 100000
+reshape wide arate dths daly, i(year) j(sex)
+order year arate* daly* dths*
+** Restrict to 2000 and 2019, and reshape to wide
+** drop daly* dths* 
+keep if year==2000 | year==2019
+gen k=1
+reshape wide dths1 dths2 dths3 daly1 daly2 daly3 arate1 arate2 arate3 , i(k) j(year)
+order k arate1* arate2* arate3* dths1* dths2* dths3* daly1* daly2* daly3*
+** percentage improvement
+gen perc1 = ((arate12019 - arate12000)/arate12000) * 100
+gen perc2 = ((arate22019 - arate22000)/arate22000) * 100
+gen perc3 = ((arate32019 - arate32000)/arate32000) * 100
+format perc1 perc2 perc3 %9.1f
+** death excess (women and men combined)
+gen dth_excess = dths12019-dths22019
+gen daly_excess = daly12019-daly22019
+format dths12019 dths22019 daly12019 daly22019 dth_excess daly_excess %12.0fc

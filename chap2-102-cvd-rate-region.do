@@ -86,6 +86,7 @@ save `who_std', replace
 
 
 
+/*
 
 ** ------------------------------------------
 ** Loading DEATHS datasets for WHO regions 
@@ -257,6 +258,8 @@ label values ghecause ghecause_
 tempfile for_mr
 save `for_mr' , replace
 
+** Save out a dataset
+
 ** 2019, Male, Communicable Disease
 forval x = 2000(1)2019 {
     forval y = 1(1)2 {
@@ -349,6 +352,7 @@ label data "Crude and Adjusted mortality rates: WHO regions"
 save "`datapath'\from-who\chap2_cvd_002", replace
 
 
+*/
 
 ** Repeat for women and men combined 
 
@@ -521,6 +525,12 @@ label values ghecause ghecause_
 ** Save dataset ready for direct standardization 
 tempfile for_mr
 save `for_mr' , replace
+
+** Used for Equiplot by age 
+** 18 age groups
+save "`datapath'\from-who\chap2_cvd_byage", replace
+
+
 
 ** 2019, Male, Communicable Disease
 forval x = 2000(1)2019 {

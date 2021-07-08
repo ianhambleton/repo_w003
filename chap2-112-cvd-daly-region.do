@@ -572,6 +572,10 @@ label values ghecause ghecause_
 tempfile for_mr
 save `for_mr' , replace
 
+** Used for Equiplot by age 
+save "`datapath'\from-who\chap2_cvd_byage_daly", replace
+
+
 ** 2019, Male, Communicable Disease
 forval x = 2000(1)2019 {
         * TODO: Change next line for each disease group
