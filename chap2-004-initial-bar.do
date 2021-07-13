@@ -4,7 +4,7 @@
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	4-JUL-2021
-    //  algorithm task			    nitial Bar chart for Chapter 2
+    //  algorithm task			    Initial Bar chart for Chapter 2
 
     ** General algorithm set-up
     version 17

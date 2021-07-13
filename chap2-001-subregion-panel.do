@@ -226,7 +226,7 @@ save `for_mr' , replace
 
 
 ** Standardised MR values
-forval x = 2000(1)2001 {
+forval x = 2000(1)2019 {
     forval y = 1(1)2 {
         * TODO: Change loop range for each disease group
         forval z = 1(1)8 {
@@ -252,7 +252,7 @@ forval x = 2000(1)2001 {
 
 use `f_2000_1_1' , clear
 
-forval x = 2000(1)2001 {
+forval x = 2000(1)2019 {
     forval y = 1(1)2 {
         * TODO: Change loop range for each disease group
         forval z = 1(1)8 {
@@ -454,7 +454,7 @@ tempfile for_mr
 save `for_mr' , replace
 
 ** Standardised MR values
-forval x = 2000(1)2001 {
+forval x = 2000(1)2019 {
         * TODO: Change loop range for each disease group
         forval z = 1(1)8 {
             use `for_mr' , clear 
@@ -476,7 +476,7 @@ forval x = 2000(1)2001 {
 
 use `f_2000_1100' , clear
 
-forval x = 2000(1)2001 {
+forval x = 2000(1)2019 {
         * TODO: Change loop range for each disease group
         forval z = 1(1)8 {
             append using `f_`x'_`z''
