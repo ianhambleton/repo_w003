@@ -111,7 +111,7 @@ label values region region_
 ** Save the JOINED Mortality Rate file
 label data "Deaths and DALYs: Countries, PAHO sub-regions, WHO regions"
 save "`datapath'\from-who\chap2_initial_panel", replace
-
+/*
 ** Restrict to Entire region of the Americas
 keep if region==2000
 drop iso3c iso3n who_region paho_subregion region
@@ -163,10 +163,72 @@ preserve
     tabdisp ghecause if year==2019 , cellvar(dalyp) format(%9.1f)
 restore
 
+** DALY numbers in 2019 by GHECAUSE
+preserve
+    keep if year==2019 & sex==3
+    egen all = max(daly) 
+    format all %16.1fc
+    **drop if ghecause<=2
+    gsort -daly
+    gen idaly = _n
+    gsort -dths
+    gen idths = _n
+    sort idaly
+    gen daly_perc = (daly/all) * 100
+restore
+
+** DALY numbers in 2019 by GHECAUSE - sex specific
+preserve
+    keep if year==2019 & sex<3
+    drop year pop
+    reshape wide dths daly, i(ghecause) j(sex)
+    egen all_daly1 = max(daly1) 
+    egen all_dths1 = max(dths1)
+    egen all_daly2 = max(daly2) 
+    egen all_dths2 = max(dths2)
+    drop if ghecause<=2
+
+    gsort -daly1
+    gen idaly1 = _n
+    gsort -dths1
+    gen idths1 = _n
+    gsort -daly2
+    gen idaly2 = _n
+    gsort -dths2
+    gen idths2 = _n
+
+    gen daly1_perc = (daly1/all_daly1) * 100
+    gen daly2_perc = (daly2/all_daly2) * 100
+    gen dths1_perc = (dths1/all_dths1) * 100
+    gen dths2_perc = (dths2/all_dths2) * 100
+    order ghecause idaly1 daly1_perc idaly2 daly2_perc idths1 dths1_perc idths2 dths2_perc
+restore
+
+** Change between 2000 and 2019 
+**preserve 
+    keep if year==2000 | year==2019
+    keep if sex==3
+    keep if ghecause>2
+    drop pop 
+    bysort year : egen dth_sum = sum(dths) 
+    bysort year : egen daly_sum = sum(daly) 
+    format dth_sum %15.1fc
+    format daly_sum %15.1fc
+    gen p_dths = (dths/dth_sum) * 100
+    gen p_daly = (daly/daly_sum) * 100
+    sort ghecause year
 
 
 
+/*    reshape wide dths daly , i(ghecause) j(year)
+    gen dths_perc = ( (dths2019 - dths2000)/dths2000) * 100
+    gen daly_perc = ( (daly2019 - daly2000)/daly2000) * 100
+    tabdisp ghecause if ghecause>2, cellvar(dths_perc) format(%9.1f)
+    tabdisp ghecause if ghecause>2, cellvar(daly_perc) format(%9.1f)
+/*restore
 
+
+/*
 ** -------------------------------------------------------------------
 ** GRAPHIC
 ** -------------------------------------------------------------------

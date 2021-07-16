@@ -192,6 +192,10 @@ gen daly4 = p4 + 120 if type==2
 gen daly5 = p5 + 120 if type==2
 
 
+* Statistics text to accompany the graphic
+sort type cod
+
+
 #delimit ;
 	gr twoway 
         (scatteri `outer1' , recast(area) lw(0.25) lc(gs10) fc(none) )

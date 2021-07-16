@@ -1016,7 +1016,6 @@ use `afr', clear
     append using `eur'
     append using `sear'
     append using `wpr'
-    **save "`datapath'\from-who\chap2_cvd_002", replace
 
 ** -------------------------------------------------------------------
 ** -------------------------------------------------------------------

@@ -45,7 +45,7 @@ replace dalyr = dalyr * 100000
 keep year sex ghecause region dalyr 
 merge 1:1 year sex ghecause region using `t1' 
 drop _merge
-/*
+
 ** Restrict
 keep if sex==3
 keep if year==2019 
@@ -135,6 +135,47 @@ local outer6a  1.75 5.5    1.75 6.5
 local outer6b  1.75 6.5   -3.75 6.5  
 local outer6c -3.75 5.5   -3.75 6.5 
 
+** ---------------------------------------------------
+** Statistics for the text to accompany this graphic
+** Simple relative measure of inequality : Rate (R)
+** Simple absolute measure of inequality : Difference (D)
+** Simple absolute measure of inequality : Mean Absolute Deviation (MAD) 
+** Simple relative measure of inequality : Index of Disparity (ID) 
+** ---------------------------------------------------
+sort cod mr_rel2
+
+** BASED ON ADJUSTED MORTALITY RATE 
+** (R) Simple - relative
+    bysort cod : egen m_min = min(mortr)
+    bysort cod : egen m_max = max(mortr)
+    gen rel_sim = m_max / m_min
+    label var rel_sim "Relative inequality: WHO simple measure"
+
+** (D) Simple - absolute
+    gen abs_sim = m_max - m_min
+    label var abs_sim "Absolute inequality: WHO simple measure"
+    drop m_min m_max 
+
+** (MAD) Complex - absolute
+    ** Mean Absolute deviation
+    * --> number of countries in group 
+    bysort cod : gen J = _N - 1
+    * --> MD using best rate in group (best = lowest)
+    bysort cod : egen rref = min(mortr)
+    gen rdiff = abs(rref - mortr)
+    bysort cod : egen abs_com = sum(rdiff/J)
+** (ID) Complex - relative
+    * --> Index of Disparity (Average Rate)
+    gen rel_com = ( (abs_com) / rref) * 100
+    format rel_com %9.4f
+
+bysort cod: gen touse = 1 if _n==1 
+tabdisp cod, c(abs_sim rel_sim) format(%9.1f)
+tabdisp cod, c(abs_com rel_com) format(%9.1f)
+
+** Temp fix for Haiti (Rheumatic Heart Disease)
+replace mr_rel2 = -3.4 if mr_rel2<-9 & cod==5 & region==19
+
 #delimit ;
 	gr twoway 
         /// 25th to 75th percentiles
@@ -189,7 +230,8 @@ local outer6c -3.75 5.5   -3.75 6.5
         (sc mr_rel2 cod if cod==4 & mr_rel2==1, msize(7) m(o) mlc("`child'") mfc("`child'") mlw(0.2))
         ///(sc mr_rel2 cod if cod==4 & region==2000, msize(7) m(o) mlc(gs0*0.5) mfc(gs0*0.5) mlw(0.2))        
         
-		(sc mr_rel2 cod if cod==5 & mr_rel2>-9 & region<2000, msize(7) m(oh) mlc("`child'*0.5") mlw(0.2))
+		(sc mr_rel2 cod if cod==5 & mr_rel2>-2.5 & region<2000, msize(7) m(oh) mlc("`child'*0.5") mlw(0.2))
+		(sc mr_rel2 cod if cod==5 & mr_rel2 <= -3.4 & region<2000, msize(7) m(oh) mlc("`child'*0.5") mlw(0.2))
         (sc mr_rel2 cod if cod==5 & mr_rel2==1, msize(7) m(o) mlc("`child'") mfc("`child'") mlw(0.2))
         ///(sc mr_rel2 cod if cod==5 & region==2000, msize(7) m(o) mlc(gs0*0.5) mfc(gs0*0.5) mlw(0.2))
 
@@ -223,7 +265,7 @@ local outer6c -3.75 5.5   -3.75 6.5
            text(1.45 2 "Canada"              ,  place(c) size(3.1) color("`child'") just(center))
            text(1.45 3 "El Salvador"         ,  place(c) size(3.1) color("`child'") just(center))
            text(1.45 4 "El Salvador"         ,  place(c) size(3.1) color("`child'") just(center))
-           text(1.45 5 "Belize *"            ,  place(c) size(3.1) color("`child'") just(center))
+           text(1.45 5 "Multiple *"            ,  place(c) size(3.1) color("`child'") just(center))
            text(1.45 6 "Peru"                ,  place(c) size(3.1) color("`child'") just(center))
 
             /// HIGHEST RATE countries
@@ -244,9 +286,9 @@ local outer6c -3.75 5.5   -3.75 6.5
            text(-3.25 4 "Haiti"                 ,  place(c) size(3.1) color("`child'*0.5") just(center))
            text(-2.95 4 "Bahamas"               ,  place(c) size(3.1) color("`child'*0.5") just(center))
            /// RHEUMATIC
-           text(-3.55 5 "Haiti"                 ,  place(c) size(3.1) color("`child'*0.5") just(center))
-           text(-3.25 5 "Bolivia"               ,  place(c) size(3.1) color("`child'*0.5") just(center))
-           text(-2.95 5 "St Vincent"            ,  place(c) size(3.1) color("`child'*0.5") just(center))
+           text(-3.375 5.25 "Haiti"                 ,  place(c) size(3.1) color("`child'*0.5") just(center))
+           text(-2.75 5 "Bolivia"               ,  place(c) size(3.1) color("`child'*0.5") just(center))
+           text(-2.45 5 "St Vincent"            ,  place(c) size(3.1) color("`child'*0.5") just(center))
            /// CVD
            text(-3.55 6 "Haiti"                 ,  place(c) size(3.1) color("`child'*0.5") just(center))
            text(-3.25 6 "Guyana"                ,  place(c) size(3.1) color("`child'*0.5") just(center))
@@ -256,7 +298,7 @@ local outer6c -3.75 5.5   -3.75 6.5
            text(-0.75 0.2 "Higher" "Rate" ,  place(c) size(3.1) color("`child'*0.5") just(center))
 
             /// Note text 
-           text(1.90 0.5 "* Five countries with joint lowest mortality rate from rheumatic heart disease: Antigua, Bahamas, Belize, Grenada, St Lucia." ,  place(e) size(2.5) color("`child'*0.5"))
+           text(1.90 0.5 "* Five Caribbean countries with no cases of rheumatic heart disease in 2019: Antigua, Bahamas, Belize, Grenada, St Lucia." ,  place(e) size(2.5) color("`child'*0.5"))
 
 			legend(off)
 			name(eq1)

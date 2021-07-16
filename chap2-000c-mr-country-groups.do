@@ -1,10 +1,10 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap1-death-050-rate-region.do
+    //  algorithm name			    chap2-000c-mr-country.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
-    // 	date last modified	    	16-Apr-2021
-    //  algorithm task			    Panel graphic - proportion of deaths by AGE group
+    // 	date last modified	    	26-Apr-2021
+    //  algorithm task			    Preparing CVD mortality rates: Countries of the Americas
 
     ** General algorithm set-up
     version 17
@@ -26,8 +26,9 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap1-death-050-rate-region", replace
+    log using "`logpath'\chap2-000c-mr-country", replace
 ** HEADER -----------------------------------------------------
+
 
 ** ------------------------------------------
 ** Load and save the WHO standard population
@@ -86,73 +87,56 @@ save `who_std', replace
 
 
 
-/*
 
 
 ** ------------------------------------------
-** Loading DEATHS datasets for WHO regions 
-** ------------------------------------------
-
-tempfile afr amr emr eur sear wpr world
-** Africa (AFR)
-use "`datapath'\from-who\who-ghe-deaths-001-who1", replace
-    keep if ghecause==10 | ghecause==600 | ghecause==1510
-    drop if age<0 
-    ** Collapse to WHO regions 
-    collapse (sum) dths pop, by(ghecause year who_region sex age)
-    save `afr' , replace
-
+** Loading DEATHS dataset for the Americas only 
 ** Americas (AMR)
-use "`datapath'\from-who\who-ghe-deaths-001-who2", replace
-    keep if ghecause==10 | ghecause==600 | ghecause==1510
+**  1100    Cardiovascular 
+**  1110    Rheumatic heart disease I01-I09
+**  1120    Hypertensive heart disease I11-I15 
+**  1130    Ischaemic heart disease I20-I25 
+**  1140    Stroke I60-I69 
+**  1150    Cardiomyopathy, myocarditis, endocarditis I30-I33, I38, I40, I42 
+**  1160    Other circulatory diseases I00, I26-I28, I34-I37, I44-I51, I70-I99
+** ------------------------------------------
+use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
+* TODO: Change restriction for each disease group
+   #delimit ;
+    keep if     
+                /// MAJOR DISEASE GROUPS
+                ghecause==0     |
+                ghecause==10    |
+                ghecause==600   |
+                ghecause==1100  |
+                ghecause==610   | 
+                ghecause==1170  | 
+                ghecause==800   | 
+                ghecause==820   |
+                ghecause==940   |
+                ghecause==1510 
+                ;
+    #delimit cr
+    ** Recode for mortality rate loop
+    #delimit ; 
+    recode ghecause 
+                    (0 = 100 )
+                    (10 = 200 )
+                    (600 = 300 )
+                    (1100 = 400 )
+                    (610  = 500 )
+                    (1170 = 600 )
+                    (800  = 700 )
+                    (820 940 = 800 )
+                    (1510 = 900 )
+                    ;
+    #delimit cr
+    keep if who_region==2
     drop if age<0 
-    ** Collapse to WHO regions 
-    collapse (sum) dths pop, by(ghecause year who_region sex age)
-    save `amr' , replace
-
-** Eastern Mediterranean (EMR)
-use "`datapath'\from-who\who-ghe-deaths-001-who3", replace
-    keep if ghecause==10 | ghecause==600 | ghecause==1510
-    drop if age<0 
-    ** Collapse to WHO regions 
-    collapse (sum) dths pop, by(ghecause year who_region sex age)
-    save `emr' , replace
-
-** Europe (EUR)
-use "`datapath'\from-who\who-ghe-deaths-001-who4", replace
-    keep if ghecause==10 | ghecause==600 | ghecause==1510
-    drop if age<0 
-    ** Collapse to WHO regions 
-    collapse (sum) dths pop, by(ghecause year who_region sex age)
-    save `eur' , replace
-
-** South-East Asia (SEAR)
-use "`datapath'\from-who\who-ghe-deaths-001-who5", replace
-    keep if ghecause==10 | ghecause==600 | ghecause==1510
-    drop if age<0 
-    ** Collapse to WHO regions 
-    collapse (sum) dths pop, by(ghecause year who_region sex age)
-    save `sear' , replace
-
-** Western Pacific (WPR)
-use "`datapath'\from-who\who-ghe-deaths-001-who6", replace
-    keep if ghecause==10 | ghecause==600 | ghecause==1510
-    drop if age<0 
-    ** Collapse to WHO regions 
-    collapse (sum) dths pop, by(ghecause year who_region sex age)
-    save `wpr' , replace
-
-** Join the WHO regions
-use `afr', clear 
-    append using `amr'
-    append using `emr'
-    append using `eur'
-    append using `sear'
-    append using `wpr'
-    **save "`datapath'\from-who\chap1_mortrate_002", replace
-
-** -------------------------------------------------------------------
-** -------------------------------------------------------------------
+    drop dths_low dths_up
+    ** Collapse from countries to subregions
+    collapse (sum) dths pop, by(ghecause year sex age iso3n iso3c paho_subregion)
+    ** save "`datapath'\from-who\chap2_cvd_001", replace
 
 ** BROAD age groups
 ** 1 Young children --> under-5s
@@ -187,7 +171,8 @@ replace age18 = 15 if age==70
 replace age18 = 16 if age==75
 replace age18 = 17 if age==80
 replace age18 = 18 if age==85
-collapse (sum) dths pop, by(year ghecause who_region sex age18 agroup)
+* TODO: This collapse only now down to country-level (instead of subregion level)
+collapse (sum) dths pop, by(year ghecause iso3n iso3c paho_subregion sex age18 agroup)
 
 ** Join the DEATHS dataset with the WHO STD population
 ** merge m:m age18 using `who_std'
@@ -217,7 +202,7 @@ label values age18 age18_
 ** drop _merge
 
 ** Variable labelling
-label var who_region "6 WHO regions"
+label var paho_subregion "8 PAHO subregions of the Americas"
 label var agroup "5 broad age groups: young children, youth, young adult, older adult, elderly"
 label var age18 "5-year age groups: 18 groups"
 label var dths "Count of all deaths"
@@ -236,28 +221,43 @@ replace pop = round(pop)
 ** YEAR (2000 to 2019)
 ** SEX (1=male, 2=female)
 ** COD (10=COM, 600=NCD, 1510=INJ)
-recode ghecause 10=10 600=20 1510=30
-label define ghecause_ 10 "communicable" 20 "ncd" 30 "injury" , modify
+** recode ghecause 10=10 600=20 1510=30
+* TODO: Change labelling for each disease group
+#delimit ; 
+label define ghecause_  
+                    100  "all causes"
+                    200  "communicable"
+                    300  "NCD"
+                    400  "CVD"
+                    500  "cancer"
+                    600  "respiratory"
+                    700  "diabetes"
+                    800  "mental/neurological"
+                    900  "injuries", modify
+                    ;
+#delimit cr
 label values ghecause ghecause_ 
 
 ** Save dataset ready for direct standardization 
 tempfile for_mr
 save `for_mr' , replace
 
-** 2019, Male, Communicable Disease
+** Standardised MR values
 forval x = 2000(1)2019 {
     forval y = 1(1)2 {
-        forval z = 10(10)30 {
+        * TODO: Change loop range for each disease group
+        forval z = 100(100)900 {
             use `for_mr' , clear 
             tempfile results
             keep if year==`x' 
             keep if sex==`y'
             keep if ghecause==`z' 
-            dstdize deaths pop age18, by(who_region) using(`who_std')
+            * TODO: This loop is by country for each year/sex/disease group
+            dstdize deaths pop age18, by(iso3n) using(`who_std')
             matrix m`x'_`y'_`z' = r(crude) \ r(adj) \r(ub_adj) \ r(lb_adj) \  r(se) \ r(Nobs)
             matrix m`x'_`y'_`z' = m`x'_`y'_`z''
             svmat double m`x'_`y'_`z', name(col)
-            keep Crude Adjusted Right Left Se Nobs
+            keep  Crude Adjusted Right Left Se Nobs
             keep if Crude < .
             gen year = `x' 
             gen sex = `y'
@@ -267,18 +267,21 @@ forval x = 2000(1)2019 {
         }    
     }
 }
-use `f_2000_1_10' , clear
+
+use `f_2000_1_100' , clear
 
 forval x = 2000(1)2019 {
     forval y = 1(1)2 {
-        forval z = 10(10)30 {
+        * TODO: Change loop range for each disease group
+        forval z = 100(100)900 {
             append using `f_`x'_`y'_`z''
         }
     }
 }
 bysort year sex ghecause : gen region = _n 
 * Drop duplicated initial dataset (2000, male, communicable) 
-drop if region > 6
+* TODO: This value is above 33 and 33 is the number of countries in LAC region
+drop if region > 33
 
 ** Variable re-naming
 rename Crude crate
@@ -301,101 +304,123 @@ label var ghecause "Broad causes of death"
 label var region "WHO region / PAHO subregion"
 
 ** Variable level labelling
-* Regions
-recode region 1=100 2=200 3=300 4=400 5=500 6=600
+* Countries
+
 #delimit ; 
-label define region_    100 "africa"
-                    200 "americas"
-                    300 "eastern mediterranean"
-                    400 "europe" 
-                    500 "south-east asia"
-                    600 "western pacific", modify; 
+label define region_   
+                    1 "Antigua and Barbuda"
+                    2 "Argentina"
+                    3 "Bahamas"
+                    4 "Barbados"
+                    5 "Bolivia"
+                    6 "Brazil"
+                    7 "Belize"
+                    8 "Canada"
+                    9 "Chile"
+                    10 "Colombia"
+                    11 "Costa Rica"
+                    12 "Cuba"
+                    13 "Dominican Republic"
+                    14 "Ecuador"
+                    15 "El Salvador"
+                    16 "Grenada"
+                    17 "Guatemala"
+                    18 "Guyana"
+                    19 "Haiti"
+                    20 "Honduras"
+                    21 "Jamaica"
+                    22 "Mexico"
+                    23 "Nicaragua"
+                    24 "Panama"
+                    25 "Paraguay"
+                    26 "Peru"
+                    27 "Saint Lucia"
+                    28 "Saint Vincent and the Grenadines"
+                    29 "Suriname"
+                    30 "Trinidad and Tobago"
+                    31 "United States"
+                    32 "Uruguay"
+                    33 "Venezuela", modify;                     
 #delimit cr 
 label values region region_ 
 * sex
 label define sex_ 1 "male" 2 "female" , modify 
 label values sex sex_ 
 * Cause of death
-label define ghecause_ 10 "communicable" 20 "ncd" 30 "injury" , modify
+* TODO: Change labelling for each disease group
+#delimit ; 
+label define ghecause_  
+                    100  "all causes"
+                    200  "communicable"
+                    300  "NCD"
+                    400  "CVD"
+                    500  "cancer"
+                    600  "respiratory"
+                    700  "diabetes"
+                    800  "mental/neurological"
+                    900  "injuries", modify
+                    ;
+#delimit cr
 label values ghecause ghecause_ 
 
 ** Save the final MR dataset
-label data "Crude and Adjusted mortality rates: WHO regions"
-save "`datapath'\from-who\chap1_mortrate_002", replace
+label data "Crude and Adjusted mortality rates: PAHO sub-regions"
+save "`datapath'\from-who\chap2_000c_mr_country_groups", replace
 
 
 
 
-*/
-
-
-** WOMEN AND MEN COMBINED
+** Repeat for women and men combined 
 
 
 ** ------------------------------------------
-** Loading DEATHS datasets for WHO regions 
-** ------------------------------------------
-
-tempfile afr amr emr eur sear wpr world
-** Africa (AFR)
-use "`datapath'\from-who\who-ghe-deaths-001-who1", replace
-    keep if ghecause==10 | ghecause==600 | ghecause==1510
-    drop if age<0 
-    ** Collapse to WHO regions 
-    collapse (sum) dths pop, by(ghecause year who_region sex age)
-    save `afr' , replace
-
+** Loading DEATHS dataset for the Americas only 
 ** Americas (AMR)
-use "`datapath'\from-who\who-ghe-deaths-001-who2", replace
-    keep if ghecause==10 | ghecause==600 | ghecause==1510
+**  1100    Cardiovascular 
+**  1110    Rheumatic heart disease I01-I09
+**  1120    Hypertensive heart disease I11-I15 
+**  1130    Ischaemic heart disease I20-I25 
+**  1140    Stroke I60-I69 
+**  1150    Cardiomyopathy, myocarditis, endocarditis I30-I33, I38, I40, I42 
+**  1160    Other circulatory diseases I00, I26-I28, I34-I37, I44-I51, I70-I99
+** ------------------------------------------
+use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
+* TODO: Change restriction for each disease group
+   #delimit ;
+    keep if     
+                /// MAJOR DISEASE GROUPS
+                ghecause==0     |
+                ghecause==10    |
+                ghecause==600   |
+                ghecause==1100  |
+                ghecause==610   | 
+                ghecause==1170  | 
+                ghecause==800   | 
+                ghecause==820   |
+                ghecause==940   |
+                ghecause==1510 
+                ;
+    #delimit cr
+    ** Recode for mortality rate loop
+    #delimit ; 
+    recode ghecause 
+                    (0 = 100 )
+                    (10 = 200 )
+                    (600 = 300 )
+                    (1100 = 400 )
+                    (610  = 500 )
+                    (1170 = 600 )
+                    (800  = 700 )
+                    (820 940 = 800 )
+                    (1510 = 900 )
+                    ;
+    #delimit cr
+    keep if who_region==2
     drop if age<0 
-    ** Collapse to WHO regions 
-    collapse (sum) dths pop, by(ghecause year who_region sex age)
-    save `amr' , replace
-
-** Eastern Mediterranean (EMR)
-use "`datapath'\from-who\who-ghe-deaths-001-who3", replace
-    keep if ghecause==10 | ghecause==600 | ghecause==1510
-    drop if age<0 
-    ** Collapse to WHO regions 
-    collapse (sum) dths pop, by(ghecause year who_region sex age)
-    save `emr' , replace
-
-** Europe (EUR)
-use "`datapath'\from-who\who-ghe-deaths-001-who4", replace
-    keep if ghecause==10 | ghecause==600 | ghecause==1510
-    drop if age<0 
-    ** Collapse to WHO regions 
-    collapse (sum) dths pop, by(ghecause year who_region sex age)
-    save `eur' , replace
-
-** South-East Asia (SEAR)
-use "`datapath'\from-who\who-ghe-deaths-001-who5", replace
-    keep if ghecause==10 | ghecause==600 | ghecause==1510
-    drop if age<0 
-    ** Collapse to WHO regions 
-    collapse (sum) dths pop, by(ghecause year who_region sex age)
-    save `sear' , replace
-
-** Western Pacific (WPR)
-use "`datapath'\from-who\who-ghe-deaths-001-who6", replace
-    keep if ghecause==10 | ghecause==600 | ghecause==1510
-    drop if age<0 
-    ** Collapse to WHO regions 
-    collapse (sum) dths pop, by(ghecause year who_region sex age)
-    save `wpr' , replace
-
-** Join the WHO regions
-use `afr', clear 
-    append using `amr'
-    append using `emr'
-    append using `eur'
-    append using `sear'
-    append using `wpr'
-    **save "`datapath'\from-who\chap1_mortrate_002", replace
-
-** -------------------------------------------------------------------
-** -------------------------------------------------------------------
+    drop dths_low dths_up
+    ** Collapse from countries to subregions
+    collapse (sum) dths pop, by(ghecause year sex age iso3n iso3c paho_subregion)
+    ** save "`datapath'\from-who\chap2_cvd_001", replace
 
 ** BROAD age groups
 ** 1 Young children --> under-5s
@@ -430,7 +455,8 @@ replace age18 = 15 if age==70
 replace age18 = 16 if age==75
 replace age18 = 17 if age==80
 replace age18 = 18 if age==85
-collapse (sum) dths pop, by(year ghecause who_region age18 agroup)
+* TODO: This collapse only now down to country-level (instead of subregion level)
+collapse (sum) dths pop, by(year ghecause iso3n iso3c paho_subregion age18 agroup)
 
 ** Join the DEATHS dataset with the WHO STD population
 ** merge m:m age18 using `who_std'
@@ -460,7 +486,7 @@ label values age18 age18_
 ** drop _merge
 
 ** Variable labelling
-label var who_region "6 WHO regions"
+label var paho_subregion "8 PAHO subregions of the Americas"
 label var agroup "5 broad age groups: young children, youth, young adult, older adult, elderly"
 label var age18 "5-year age groups: 18 groups"
 label var dths "Count of all deaths"
@@ -479,27 +505,41 @@ replace pop = round(pop)
 ** YEAR (2000 to 2019)
 ** SEX (1=male, 2=female)
 ** COD (10=COM, 600=NCD, 1510=INJ)
-recode ghecause 10=10 600=20 1510=30
-label define ghecause_ 10 "communicable" 20 "ncd" 30 "injury" , modify
+** recode ghecause 10=10 600=20 1510=30
+* TODO: Change labelling for each disease group
+#delimit ; 
+label define ghecause_  
+                    100  "all causes"
+                    200  "communicable"
+                    300  "NCD"
+                    400  "CVD"
+                    500  "cancer"
+                    600  "respiratory"
+                    700  "diabetes"
+                    800  "mental/neurological"
+                    900  "injuries", modify
+                    ;
+#delimit cr
 label values ghecause ghecause_ 
 
 ** Save dataset ready for direct standardization 
 tempfile for_mr
 save `for_mr' , replace
 
-
-** 2019, Male, Communicable Disease
+** Standardised MR values
 forval x = 2000(1)2019 {
-        forval z = 10(10)30 {
+        * TODO: Change loop range for each disease group
+        forval z = 100(100)900 {
             use `for_mr' , clear 
             tempfile results
             keep if year==`x' 
             keep if ghecause==`z' 
-            dstdize deaths pop age18, by(who_region) using(`who_std')
+            * TODO: This loop is by country for each year/sex/disease group
+            dstdize deaths pop age18, by(iso3n) using(`who_std')
             matrix m`x'_`z' = r(crude) \ r(adj) \r(ub_adj) \ r(lb_adj) \  r(se) \ r(Nobs)
             matrix m`x'_`z' = m`x'_`z''
             svmat double m`x'_`z', name(col)
-            keep Crude Adjusted Right Left Se Nobs
+            keep  Crude Adjusted Right Left Se Nobs
             keep if Crude < .
             gen year = `x' 
             gen ghecause = `z'
@@ -507,16 +547,19 @@ forval x = 2000(1)2019 {
             save `f_`x'_`z'' , replace
         }    
 }
-use `f_2000_10' , clear
+
+use `f_2000_100' , clear
 
 forval x = 2000(1)2019 {
-        forval z = 10(10)30 {
+        * TODO: Change loop range for each disease group
+        forval z = 100(100)900 {
             append using `f_`x'_`z''
         }
 }
 bysort year ghecause : gen region = _n 
 * Drop duplicated initial dataset (2000, male, communicable) 
-drop if region > 6
+* TODO: This value is above 33 and 33 is the number of countries in LAC region
+drop if region > 33
 
 ** Variable re-naming
 rename Crude crate
@@ -538,23 +581,63 @@ label var ghecause "Broad causes of death"
 label var region "WHO region / PAHO subregion"
 
 ** Variable level labelling
-* Regions
-recode region 1=100 2=200 3=300 4=400 5=500 6=600
-#delimit ; 
-label define region_    100 "africa"
-                    200 "americas"
-                    300 "eastern mediterranean"
-                    400 "europe" 
-                    500 "south-east asia"
-                    600 "western pacific", modify; 
-#delimit cr 
-label values region region_ 
+* Countries
 
+#delimit ; 
+label define region_   
+                    1 "Antigua and Barbuda"
+                    2 "Argentina"
+                    3 "Bahamas"
+                    4 "Barbados"
+                    5 "Bolivia"
+                    6 "Brazil"
+                    7 "Belize"
+                    8 "Canada"
+                    9 "Chile"
+                    10 "Colombia"
+                    11 "Costa Rica"
+                    12 "Cuba"
+                    13 "Dominican Republic"
+                    14 "Ecuador"
+                    15 "El Salvador"
+                    16 "Grenada"
+                    17 "Guatemala"
+                    18 "Guyana"
+                    19 "Haiti"
+                    20 "Honduras"
+                    21 "Jamaica"
+                    22 "Mexico"
+                    23 "Nicaragua"
+                    24 "Panama"
+                    25 "Paraguay"
+                    26 "Peru"
+                    27 "Saint Lucia"
+                    28 "Saint Vincent and the Grenadines"
+                    29 "Suriname"
+                    30 "Trinidad and Tobago"
+                    31 "United States"
+                    32 "Uruguay"
+                    33 "Venezuela", modify;                     
+#delimit cr 
+label values region region_  
 * Cause of death
-label define ghecause_ 10 "communicable" 20 "ncd" 30 "injury" , modify
+* TODO: Change labelling for each disease group
+#delimit ; 
+label define ghecause_  
+                    100  "all causes"
+                    200  "communicable"
+                    300  "NCD"
+                    400  "CVD"
+                    500  "cancer"
+                    600  "respiratory"
+                    700  "diabetes"
+                    800  "mental/neurological"
+                    900  "injuries", modify
+                    ;
+#delimit cr
 label values ghecause ghecause_ 
 
 ** Save the final MR dataset
-label data "Crude and Adjusted mortality rates: WHO regions"
-save "`datapath'\from-who\chap1_mortrate_002_both", replace
-
+gen sex = 3
+label data "Crude and Adjusted mortality rates: PAHO sub-regions"
+save "`datapath'\from-who\chap2_000c_mr_country_groups_both", replace

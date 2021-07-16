@@ -45,7 +45,6 @@ format pop %15.0fc
 ** -------------------------------------------------------------------
 
 ** Creating PANEL by shifting sub-regions along the x-axis
-** EMR, AMR, EUR, AFR, WPR, SEAR
 gen yr1 = . 
 replace yr1 = year if region==1
 replace yr1 = year + 21 if region==2
@@ -79,6 +78,63 @@ local outer3 575 2013 610 2013 610 2018 575 2018 575 2013
 
 reshape wide crate arate alow aupp ase pop, i(year yr1 ghecause region) j(sex) 
 
+** Associated stats for text
+** NCDs in 2000 and 2019, women and men separately
+preserve
+	keep if year==2000 | year==2019
+	keep region ghecause year arate1 arate2 
+	order region ghecause year arate1 arate2 
+	sort region ghecause year  
+	keep if region<100  | region==200
+	sort ghecause year arate2
+	gen diff = arate1 - arate2 
+	gen ratio = ( (arate1-arate2) / arate1) * 100
+	keep if year==2019
+	gsort ghecause -diff 
+restore
+
+** subregional differences, women and men combined
+** Want % fall between 2000 and 2019 for each subregion (NCDs)
+use "`datapath'\from-who\chap1_mortrate_001_both", clear
+	keep if year==2000 | year==2019
+	keep region ghecause year arate
+	order region ghecause year arate
+	sort region ghecause year 
+	replace arate = arate * 100000
+	reshape wide arate , i(region ghecause) j(year)
+	gen diff = ((arate2000 - arate2019)/arate2000) * 100
+	gsort ghecause -diff
+	gsort ghecause arate2019
+/*
+** Regional differences, women and men combined
+** Difference between causes in 2019
+use "`datapath'\from-who\chap1_mortrate_002_both", clear
+	keep if year==2019
+	keep region ghecause year arate
+	order region ghecause year arate
+	sort region ghecause year 
+	replace arate = arate * 100000
+	reshape wide arate , i(region year) j(ghecause)
+	** 20-NCD   10-COM    30-INJ
+	gen diff10 = arate20/arate10
+	gen diff30 = arate20/arate30
+
+** Regional differences, women and men combined
+** Want % fall between 2000 and 2019 for each subregion (NCDs)
+use "`datapath'\from-who\chap1_mortrate_002_both", clear
+	keep if year==2000 | year==2019
+	keep region ghecause year arate
+	order region ghecause year arate
+	sort region ghecause year 
+	replace arate = arate * 100000
+	reshape wide arate , i(region ghecause) j(year)
+	** 20-NCD   10-COM    30-INJ
+	gen diff = arate2000 - arate2019 
+	gen perc = (diff/arate2000) * 100 
+
+
+
+/*
 #delimit ;
 	gr twoway 
 		/// North America
