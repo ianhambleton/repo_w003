@@ -111,7 +111,7 @@ label values region region_
 ** Save the JOINED Mortality Rate file
 label data "Deaths and DALYs: Countries, PAHO sub-regions, WHO regions"
 save "`datapath'\from-who\chap2_initial_panel", replace
-/*
+
 ** Restrict to Entire region of the Americas
 keep if region==2000
 drop iso3c iso3n who_region paho_subregion region
@@ -205,7 +205,7 @@ preserve
 restore
 
 ** Change between 2000 and 2019 
-**preserve 
+/*preserve 
     keep if year==2000 | year==2019
     keep if sex==3
     keep if ghecause>2
@@ -218,17 +218,15 @@ restore
     gen p_daly = (daly/daly_sum) * 100
     sort ghecause year
 
-
-
-/*    reshape wide dths daly , i(ghecause) j(year)
+    reshape wide dths daly , i(ghecause) j(year)
     gen dths_perc = ( (dths2019 - dths2000)/dths2000) * 100
     gen daly_perc = ( (daly2019 - daly2000)/daly2000) * 100
     tabdisp ghecause if ghecause>2, cellvar(dths_perc) format(%9.1f)
     tabdisp ghecause if ghecause>2, cellvar(daly_perc) format(%9.1f)
-/*restore
+restore
+*/
 
 
-/*
 ** -------------------------------------------------------------------
 ** GRAPHIC
 ** -------------------------------------------------------------------

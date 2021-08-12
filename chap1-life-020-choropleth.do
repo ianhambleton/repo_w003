@@ -58,7 +58,9 @@ list COUNTRY _ID ISO if tag==1
 
 ** Keep South and Central America and the Caribbean
 #delimit ; 
-keep if ISO=="SV" |
+keep if ISO=="CA" | 
+        ISO=="US" |
+        ISO=="SV" |
         ISO=="GT" |
         ISO=="MX" |
         ISO=="AR" |
@@ -113,14 +115,18 @@ keep if ISO=="SV" |
         ISO=="VE";
 #delimit cr 
 rename COUNTRY country 
+drop if ISO=="US" & _X>150 & _X<200
 keep _ID _X _Y rec_header shape_order 
 save americas_shp.dta, replace
+
 
 ** Save the labels data for the Americas only 
 use americas, clear 
 ** Keep South and Central America and the Caribbean
 #delimit ; 
-keep if ISO=="SV" |
+keep if ISO=="CA" | 
+        ISO=="US" |
+        ISO=="SV" |
         ISO=="GT" |
         ISO=="MX" |
         ISO=="AR" |
@@ -192,6 +198,7 @@ sort _ID year sex
 colorpalette Spectral, n(11)  nograph
 local colors `r(p)'
 
+/*
 
 ** ***************************************************
 ** 2019 EASTERN CARIBBEAN COUNTRY MAPS
@@ -209,9 +216,8 @@ local n: word count `cname'
 
 
 
+
 forval y = 2000(19)2019 {
-
-
 ** Complete selection indicators for graphic among countries with no GHE data
 ** This allows countries to exist on map with grey (no information) shading
 gen year`y' = year 
@@ -270,53 +276,61 @@ gr combine
 #delimit cr
 }
 
+*/
+
 ** DROP geographically outlying territories to improve visual
     * Drop Bermuda 
     drop if _ID==34 
     * Drop Saint Pierre and Miquelon
     drop if _ID==62 
 
+
+
+
 ** ***************************************************
-** LATIN AMERICA AND THE CARIBBEAN 
+** LATIN AMERICA AND THE CARIBBEAN (2019)
 ** ***************************************************
-forval y = 2000(19)2019 {
+
+** forval y = 2000(19)2019 {
 
 #delimit ; 
-spmap metric using americas_shp if year`y'==`y' & sex`y'==3
+spmap metric using americas_shp if year==2019 & sex==3
     ,
     fysize(100) 
     id(_ID)
     clmethod(custom) 
     clbreaks(30 40 50 60 65 67.5 70 73.5 75 77.5 80 85)
     ocolor(gs10 ..) fcolor("`colors'") osize(0.04 ..)  
-    ndocolor(gs10 ..) ndfcolor(gs10 ..) ndsize(0.04 ..) ndlabel("Missing") 
+    ndocolor(gs10 ..) ndfcolor(gs10 ..) ndsize(0.02 ..) ndlabel("Missing") 
     legend(pos(7) size(*0.8)) legstyle(2) 
-    note("Data source: WHO GHE (`y'). The following Caribbean territories have no data, and are not represented. " 
+    note("Data source: WHO GHE (2019). The following Caribbean territories have no data, and are not represented. " 
     "Six United Kingdom Overseas Territories or UKOTS: Anguilla, Bermuda, British Virgin Islands, Cayman Islands, "
     "Montserrat, Turks and Caicos Islands), Guadeloupe, Martinique, Sint Eustatius and Saba, St. Martin and St. Barthelemy." , size(1.75))
-    name(maplac`y')
-    saving("`outputpath'/graphics/ex0-lac-`y'", replace)
+    name(maplac2019)
+    saving("`outputpath'/graphics/ex0-lac-2019", replace)
     ;
 #delimit cr
-graph export "`outputpath'/graphics/ex0-lac-`y'.png", replace width(500)
-}
+graph export "`outputpath'/graphics/ex0-lac-2019.png", replace width(1500)
+** }
+
+
 
 ** ***************************************************
 ** CREATING A SINGLE GRAPHIC FOR THE AMERICAS
 ** ***************************************************
-forval y = 2000(19)2019 {
+** forval y = 2000(19)2019 {
 
 #delimit ; 
 gr combine 
-    "`outputpath'/graphics/ex0-lac-`y'" 
-    "`outputpath'/graphics/ex0-ec-`y'" 
+    "`outputpath'/graphics/ex0-lac-2019" 
+    "`outputpath'/graphics/ex0-ec-2019" 
     ,
-    rows(1) cols(3)
+    rows(1) cols(2)
     /// Outline
     graphregion(lpattern("l") lcolor(gs16) lwidth(0.1) lalign(outside)) 
-    title("Life Expectancy in the Americas, `y'", color(gs10) size(3.75) justification(left))
-    saving("`outputpath'/graphics/ex0-americas-`y'", replace)
-    name(map_lac`y')
+    title("Life Expectancy in the Americas, 2019", color(gs10) size(3.75) justification(left))
+    saving("`outputpath'/graphics/ex0-americas-2019", replace)
+    name(map_lac2019)
     ;
 #delimit cr
-}
+**}

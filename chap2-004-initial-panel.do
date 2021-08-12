@@ -121,6 +121,7 @@ order ghecause sex year pop dths daly
 sort ghecause sex year
 
 
+/*
 
 ** -------------------------------------------------------------------
 ** GRAPHIC
@@ -171,7 +172,7 @@ local outer3 575 2013 610 2013 610 2018 575 2018 575 2013
 
 reshape wide dths daly pop, i(year yr1 ghecause) j(sex) 
 
-/*
+
 
 #delimit ;
 	gr twoway 
@@ -260,7 +261,7 @@ reshape wide dths daly pop, i(year yr1 ghecause) j(sex)
 #delimit cr	
 
 
-*/
+
 
 #delimit ;
 	gr twoway 

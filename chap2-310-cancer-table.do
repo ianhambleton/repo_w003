@@ -150,7 +150,8 @@ keep if cod<.
 tempfile t1
 save `t1', replace
 
-** Deaths (OR DALYs) for all cancers combined
+** Deaths (OR DALYs) for all-cancers combined
+** DATASET FROM -- chap2-004-initial-panel
 use "`datapath'\from-who\chap2_initial_panel", replace
 keep if ghecause==4 & who_region==2 & paho_subregion==.  & iso3n==.
 replace ghecause = 500 if ghecause==4
@@ -213,7 +214,7 @@ preserve
 restore 
 
 
-
+/*
 ** -----------------------------------------------------
 ** COLUMN 3 
 ** Outputs: Mortality Rate change over time 
@@ -353,7 +354,7 @@ preserve
     }
 restore
 
-
+*/
 
 ** -----------------------------------------------------
 ** COLUMN 5 
@@ -529,6 +530,7 @@ restore
 
 
 
+/*
 
 ** -----------------------------------------------------
 ** COLUMN 8 
@@ -674,7 +676,7 @@ preserve
     }
 restore
 
-
+*/
 
 ** -----------------------------------------------------
 ** COLUMN 9 
@@ -779,36 +781,36 @@ putdocx table cvd(2,11) = ("Percent"), font(calibri light,9) linebreak bold
 putdocx table cvd(2,11) = ("change"), font(calibri light,9) append bold    
 
 putdocx table cvd(4,1) = ("Trachea/lung "), halign(right) bold
-putdocx table cvd(4,1) = ("1"), halign(right) script(super) append
+putdocx table cvd(4,1) = ("X"), halign(right) script(super) append
 
 putdocx table cvd(5,1) = ("Breast"), halign(right) bold
 
 putdocx table cvd(6,1) = ("Prostate "), halign(right) bold
-putdocx table cvd(6,1) = ("2"), halign(right) script(super) append
+/// putdocx table cvd(6,1) = ("2"), halign(right) script(super) append
 
 putdocx table cvd(7,1) = ("Colon/rectum "), halign(right) bold
-putdocx table cvd(7,1) = ("3"), halign(right) script(super) append
+/// putdocx table cvd(7,1) = ("3"), halign(right) script(super) append
 
 putdocx table cvd(8,1) = ("Cervix uteri "), halign(right) bold
-putdocx table cvd(8,1) = ("4"), halign(right) script(super) append
+/// putdocx table cvd(8,1) = ("4"), halign(right) script(super) append
 
 putdocx table cvd(9,1) = ("Pancreas "), halign(right) bold
 putdocx table cvd(9,1) = ("4"), halign(right) script(super) append
 
 putdocx table cvd(10,1) = ("Lymphomas/myeloma "), halign(right) bold
-putdocx table cvd(10,1) = ("4"), halign(right) script(super) append
+/// putdocx table cvd(10,1) = ("4"), halign(right) script(super) append
 
 putdocx table cvd(11,1) = ("Stomach "), halign(right) bold
-putdocx table cvd(11,1) = ("4"), halign(right) script(super) append
+/// putdocx table cvd(11,1) = ("4"), halign(right) script(super) append
 
 putdocx table cvd(12,1) = ("Liver "), halign(right) bold
-putdocx table cvd(12,1) = ("4"), halign(right) script(super) append
+/// putdocx table cvd(12,1) = ("4"), halign(right) script(super) append
 
 putdocx table cvd(13,1) = ("Leukemia "), halign(right) bold
-putdocx table cvd(13,1) = ("4"), halign(right) script(super) append
+/// putdocx table cvd(13,1) = ("4"), halign(right) script(super) append
 
 putdocx table cvd(14,1) = ("All Cancers "), halign(right) bold
-putdocx table cvd(14,1) = ("5"), halign(right) script(super) append
+/// putdocx table cvd(14,1) = ("5"), halign(right) script(super) append
 
 ** ----------------------
 ** DATA
@@ -915,7 +917,7 @@ putdocx table cvd(10,9) = ("$sdaly7") , nformat(%9.2fc)  trim
 putdocx table cvd(11,9) = ("$sdaly8") , nformat(%9.2fc)  trim
 putdocx table cvd(12,9) = ("$sdaly9") , nformat(%9.2fc)  trim
 putdocx table cvd(13,9) = ("$sdaly10") , nformat(%9.2fc)  trim
-putdocx table cvd(14,9) = ("$sdaly111") , nformat(%9.2fc)  trim
+putdocx table cvd(14,9) = ("$sdaly11") , nformat(%9.2fc)  trim
 
 ** COL9. DALY Change since 2000
 putdocx table cvd(4,10) = image("`outputpath'\graphics\spike_daly1.png")
@@ -954,20 +956,20 @@ putdocx table cvd(1,2), halign(center)
 putdocx table cvd(1,3), halign(center) 
 
 ** FINAL TABLE NOTES
-putdocx table cvd(15,2) = ("(1) ") , script(super) font(calibri light, 8)
-putdocx table cvd(15,2) = ("Ischaemic heart disease") , append font(calibri light, 8) 
+putdocx table cvd(15,2) = ("(X) ") , script(super) font(calibri light, 8)
+putdocx table cvd(15,2) = ("Individual Disease clarifications will be in these notes") , append font(calibri light, 8) 
 
-putdocx table cvd(15,2) = ("  (2) ") , script(super) font(calibri light, 8) append
-putdocx table cvd(15,2) = ("Hypertensive heart disease") , append font(calibri light, 8) 
+/// putdocx table cvd(15,2) = ("  (2) ") , script(super) font(calibri light, 8) append
+/// putdocx table cvd(15,2) = ("Hypertensive heart disease") , append font(calibri light, 8) 
 
-putdocx table cvd(15,2) = ("  (3) ") , script(super) font(calibri light, 8) append
-putdocx table cvd(15,2) = ("Cardiomyopathy, myocarditis, endocarditis") , append font(calibri light, 8) 
+/// putdocx table cvd(15,2) = ("  (3) ") , script(super) font(calibri light, 8) append
+/// putdocx table cvd(15,2) = ("Cardiomyopathy, myocarditis, endocarditis") , append font(calibri light, 8) 
 
-putdocx table cvd(15,2) = ("  (4) ") , script(super) font(calibri light, 8) append
-putdocx table cvd(15,2) = ("Rheumatic heart disease") , append font(calibri light, 8) 
+/// putdocx table cvd(15,2) = ("  (4) ") , script(super) font(calibri light, 8) append
+/// putdocx table cvd(15,2) = ("Rheumatic heart disease") , append font(calibri light, 8) 
 
-putdocx table cvd(15,2) = ("  (5) ") , script(super) font(calibri light, 8) append
-putdocx table cvd(15,2) = ("All CVD includes 'other' circulatory diseases. ICD codes: I00, I26-I28, I34-I37, I44-I51, I70-I99") , append font(calibri light, 8) linebreak
+/// putdocx table cvd(15,2) = ("  (5) ") , script(super) font(calibri light, 8) append
+/// putdocx table cvd(15,2) = ("All CVD includes 'other' circulatory diseases. ICD codes: I00, I26-I28, I34-I37, I44-I51, I70-I99") , append font(calibri light, 8) linebreak
 
 ** Save the Table
 putdocx save "`outputpath'\graphics\table_cancer.docx" , replace

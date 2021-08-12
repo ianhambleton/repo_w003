@@ -282,7 +282,7 @@ local inj `r(p9)'
             /// Legend Text
             text(27 170 "Men",  place(c) size(3) color(gs8))   
             text(27 300 "Women",  place(c) size(3) color(gs8))   
-            text(-3 225 "Mortality Rate Excess",  place(c) size(3) color(gs8))   
+            text(-3 225 "Mortality Rate Excess (per 100,000 people)",  place(c) size(3) color(gs8))   
             text(-1 0 "0",  place(c) size(3) color(gs8))   
             text(-1 450 "0",  place(c) size(3) color(gs8))   
 			/// Values

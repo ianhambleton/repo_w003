@@ -86,8 +86,6 @@ save `who_std', replace
 
 
 
-/*
-
 ** ------------------------------------------
 ** Loading DEATHS dataset for the Americas only 
 ** Americas (AMR)
