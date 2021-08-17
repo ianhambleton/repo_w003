@@ -65,22 +65,30 @@
     local inj1 `r(p7)'
     local inj2 `r(p8)'
 
+
+
 ** -----------------------------------------------------
 ** TABLE PART ONE 
 ** DEATHS METRICS
 ** -----------------------------------------------------
 
 ** Mortality Rate statistics first
-use "`datapath'\from-who\chap2_cvd_mr", clear
+** use "`datapath'\from-who\chap2_000_mr", clear
+use "`datapath'\from-who\chap2_000_mr", clear
 
 ** Create new GHE CoD order for Table 
-gen cod = 1 if ghecause==1130 
-replace cod = 2 if ghecause==1140
-replace cod = 3 if ghecause==1120
-replace cod = 4 if ghecause==1150
-replace cod = 5 if ghecause==1110
-replace cod = 6 if ghecause==1100
-drop if ghecause==1160 
+** 3 - IHD
+** 4 - stroke
+** 2 - Hypertensive
+** 5 - Cardiomyopathy
+** 1 - Rheumatic
+** 400 - All CVD
+gen cod = 1 if ghecause==3 
+replace cod = 2 if ghecause==4
+replace cod = 3 if ghecause==2
+replace cod = 4 if ghecause==5
+replace cod = 5 if ghecause==1
+replace cod = 6 if ghecause==400
 #delimit ; 
 label define cod_   1 "ischaemic" 
                     2 "stroke" 
@@ -90,6 +98,7 @@ label define cod_   1 "ischaemic"
                     6 "all cvd", modify ;
 #delimit cr
 label values cod cod_ 
+keep if cod<=6
 
 ** -----------------------------------------------------
 ** COLUMN 1
@@ -134,7 +143,6 @@ preserve
     }
 restore 
 
-/*
 
 ** -----------------------------------------------------
 ** COLUMN 3 
@@ -275,7 +283,7 @@ preserve
     }
 restore
 
-*/
+
 
 ** -----------------------------------------------------
 ** COLUMN 5 
@@ -311,16 +319,22 @@ restore
 ** -----------------------------------------------------
 
 ** Mortality Rate statistics first
-use "`datapath'\from-who\chap2_cvd_daly", clear
+use "`datapath'\from-who\chap2_000_daly", clear
 
 ** Create new GHE CoD order for Table 
-gen cod = 1 if ghecause==1130 
-replace cod = 2 if ghecause==1140
-replace cod = 3 if ghecause==1120
-replace cod = 4 if ghecause==1150
-replace cod = 5 if ghecause==1110
-replace cod = 6 if ghecause==1100
-drop if ghecause==1160 
+** 3 - IHD
+** 4 - stroke
+** 2 - Hypertensive
+** 5 - Cardiomyopathy
+** 1 - Rheumatic
+** 400 - All CVD
+gen cod = 1 if ghecause==3 
+replace cod = 2 if ghecause==4
+replace cod = 3 if ghecause==2
+replace cod = 4 if ghecause==5
+replace cod = 5 if ghecause==1
+replace cod = 6 if ghecause==400
+
 #delimit ; 
 label define cod_   1 "ischaemic" 
                     2 "stroke" 
@@ -330,7 +344,7 @@ label define cod_   1 "ischaemic"
                     6 "all cvd", modify ;
 #delimit cr
 label values cod cod_ 
-
+keep if cod<=6
 
 
 ** -----------------------------------------------------
@@ -352,7 +366,6 @@ preserve
         global daly`x' = col1[`x',2]
     }
 restore
-
 
 
 ** -----------------------------------------------------
@@ -526,7 +539,7 @@ restore
 
 
 ** -----------------------------------------------------
-** COLUMN 9 
+** COLUMN 10 
 ** Outputs: DALY Gender ratio
 ** sratio1 to sratio6 (1-6 are the GHE causes)
 ** -----------------------------------------------------
@@ -551,7 +564,6 @@ restore
 
 
 
-/*
 
 ** -----------------------------------------------------
 ** AUTOMATED WORD TABLE FOR REPORT

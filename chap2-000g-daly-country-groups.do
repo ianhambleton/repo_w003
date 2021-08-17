@@ -108,6 +108,12 @@ use "`datapath'\from-who\who-ghe-daly-001-who2-allcauses", replace
 ** This means 80+ instead of 85+ 
 recode age (75 80 85 = 75) 
 collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex ghecause un_region un_subregion who_region paho_subregion)
+
+** DALY to zero for Haiti in 2010 for natural disasters.
+** The earthquale meant that DALY > POP, causing problems for the algorithms
+** which expects DALY < POP
+replace daly = 0 if iso3n==332 & year==2010 & ghecause==1510
+
 * TODO: Change restriction for each disease group
    #delimit ;
     keep if     
@@ -142,6 +148,9 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
     drop if age<0 
     drop daly_low daly_up
     ** Collapse from countries to subregions
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) daly (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) daly pop, by(ghecause year sex age iso3n iso3c paho_subregion)
     ** save "`datapath'\from-who\chap2_cvd_001", replace
 
@@ -248,21 +257,19 @@ preserve
     save "`datapath'\from-who\chap2_000g_daly_country_haiti_natural_disaster_groups", replace
 restore
 
-** DALY to zero for Haiti in 2010 for natural disasters.
-** The earthquale meant that DALY > POP, causing problems for the algorithms
-** which expects DALY < POP
-replace daly = 0 if iso3n==332 & year==2010 & ghecause==54
-
 ** Save dataset ready for direct standardization 
+drop if ghecause<400
 tempfile for_mr
 save `for_mr' , replace
-
 
 ** Standardised MR values
 forval x = 2000(1)2019 {
     forval y = 1(1)2 {
         * TODO: Change loop range for each disease group
-        forval z = 100(100)900 {
+        forval z = 400(100)900 {
+            dis "YEAR = " `x'
+            dis "SEX = " `y'
+            dis "CAUSE = " `z' 
             use `for_mr' , clear 
             tempfile results
             keep if year==`x' 
@@ -284,12 +291,12 @@ forval x = 2000(1)2019 {
     }
 }
 
-use `f_2000_1_100' , clear
+use `f_2000_1_400' , clear
 
 forval x = 2000(1)2019 {
     forval y = 1(1)2 {
         * TODO: Change loop range for each disease group
-        forval z = 100(100)900 {
+        forval z = 400(100)900 {
             append using `f_`x'_`y'_`z''
         }
     }
@@ -405,6 +412,12 @@ use "`datapath'\from-who\who-ghe-daly-001-who2-allcauses", replace
 ** This means 80+ instead of 85+ 
 recode age (75 80 85 = 75) 
 collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex ghecause un_region un_subregion who_region paho_subregion)
+
+** DALY to zero for Haiti in 2010 for natural disasters.
+** The earthquale meant that DALY > POP, causing problems for the algorithms
+** which expects DALY < POP
+replace daly = 0 if iso3n==332 & year==2010 & ghecause==1510
+
 * TODO: Change restriction for each disease group
    #delimit ;
     keep if     
@@ -439,6 +452,9 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
     drop if age<0 
     drop daly_low daly_up
     ** Collapse from countries to subregions
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) daly (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) daly pop, by(ghecause year sex age iso3n iso3c paho_subregion)
     ** save "`datapath'\from-who\chap2_cvd_001", replace
 
@@ -546,20 +562,15 @@ preserve
     save "`datapath'\from-who\chap2_000g_daly_country_haiti_natural_disaster", replace
 restore
 
-** DALY to zero for Haiti in 2010 for natural disasters.
-** The earthquale meant that DALY > POP, causing problems for the algorithms
-** which expects DALY < POP
-replace daly = 0 if iso3n==332 & year==2010 & ghecause==54
-
-
 ** Save dataset ready for direct standardization 
+drop if ghecause<400
 tempfile for_mr
 save `for_mr' , replace
 
 ** Standardised MR values
 forval x = 2000(1)2019 {
         * TODO: Change loop range for each disease group
-        forval z = 100(100)900 {
+        forval z = 400(100)900 {
             use `for_mr' , clear 
             tempfile results
             keep if year==`x' 
@@ -578,11 +589,11 @@ forval x = 2000(1)2019 {
         }    
 }
 
-use `f_2000_100' , clear
+use `f_2000_400' , clear
 
 forval x = 2000(1)2019 {
         * TODO: Change loop range for each disease group
-        forval z = 100(100)900 {
+        forval z = 400(100)900 {
             append using `f_`x'_`z''
         }
 }
