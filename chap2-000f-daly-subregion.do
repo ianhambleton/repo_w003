@@ -3,7 +3,7 @@
     //  algorithm name			    chap2-000f-daly-subregion.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
-    // 	date last modified	    	26-Apr-2021
+    // 	date last modified	    	15-Aug-2021
     //  algorithm task			    Preparing CVD mortality rates: PAHO-subregions in the Americas
 
     ** General algorithm set-up

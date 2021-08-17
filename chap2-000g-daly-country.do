@@ -3,7 +3,7 @@
     //  algorithm name			    chap2-000g-daly-country.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
-    // 	date last modified	    	26-Apr-2021
+    // 	date last modified	    	16-Aug-2021
     //  algorithm task			    Preparing CVD mortality rates: Countries of the Americas
 
     ** General algorithm set-up

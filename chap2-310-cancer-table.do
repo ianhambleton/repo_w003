@@ -111,31 +111,36 @@ label define cod_   1 "trachea/lung"
                     8 "stomach"
                     9 "liver"
                     10 "leukemia"
-                    11 "all cancers", modify ;
+                    11 "all cancers"
+                    12 "all cause", modify ;
 #delimit cr
 label values cod cod_ 
 keep ghecause cod
 save `kcancer' , replace
 
-** Mortality rates - ALL CANCERS 
+** Mortality rates - ALL CANCERS (500) and ALL_CAUSE (100)
 use "`datapath'\from-who\chap2_000a_mr_region-groups", clear
-keep if ghecause==500
+keep if ghecause==500 | ghecause==100
 gen cod = 11 if ghecause==500
+replace cod = 12 if ghecause==100 
 save `region_mr12', replace 
 
 use "`datapath'\from-who\chap2_000a_mr_region_groups_both", clear
-keep if ghecause==500
-gen cod = 11 if ghecause==500
+keep if ghecause==500 | ghecause==100
+gen cod = 11 if ghecause==500 
+replace cod = 12 if ghecause==100 
 save `region_mr3', replace 
 
 use "`datapath'\from-who\chap2_000e_daly_region_groups", clear
-keep if ghecause==500
+keep if ghecause==500 | ghecause==100
 gen cod = 11 if ghecause==500
+replace cod = 12 if ghecause==100 
 save `region_daly12', replace 
 
 use "`datapath'\from-who\chap2_000e_daly_region_groups_both", clear
-keep if ghecause==500
+keep if ghecause==500 | ghecause==100
 gen cod = 11 if ghecause==500
+replace cod = 12 if ghecause==100 
 save `region_daly3', replace 
 
 ** First bring in and save data for ALL CANCERS COMBINED
@@ -153,9 +158,11 @@ save `t1', replace
 ** Deaths (OR DALYs) for all-cancers combined
 ** DATASET FROM -- chap2-004-initial-panel
 use "`datapath'\from-who\chap2_initial_panel", replace
-keep if ghecause==4 & who_region==2 & paho_subregion==.  & iso3n==.
+keep if (ghecause==1 | ghecause==4) & who_region==2 & paho_subregion==.  & iso3n==.
 replace ghecause = 500 if ghecause==4
+replace ghecause = 100 if ghecause==1
 gen cod = 11 if ghecause==500
+replace cod = 12 if ghecause==100
 keep cod dths sex year region
 tempfile t2
 save `t2', replace
@@ -167,6 +174,7 @@ merge m:m region cod sex year using `t2' , update replace
 replace arate = arate_new if arate_new<. 
 tempfile cancer_table
 save `cancer_table', replace
+save "`datapath'\from-who\chap2_cancer_table1", replace
 
 
 ** -----------------------------------------------------
@@ -389,12 +397,6 @@ restore
 ** DALY METRICS
 ** -----------------------------------------------------
 
-
-** -----------------------------------------------------
-** TABLE PART ONE 
-** DEATHS METRICS
-** -----------------------------------------------------
-
 tempfile kcancer region_mr12 region_mr3 region_daly12 region_daly3
 
 ** Mortality Rate statistics first
@@ -434,20 +436,23 @@ keep if ghecause>=6 & ghecause<=28
                         8 "stomach"
                         9 "liver"
                         10 "leukemia"
-                        11 "all cancers", modify ;
+                        11 "all cancers"
+                        12 "all cause", modify ;
     #delimit cr
     label values cod cod_ 
     keep ghecause cod
     save `kcancer' , replace
 
 use "`datapath'\from-who\chap2_000e_daly_region_groups", clear
-keep if ghecause==500
+keep if ghecause==500 | ghecause==100
 gen cod = 11 if ghecause==500
+replace cod = 12 if ghecause==100
 save `region_daly12', replace 
 
 use "`datapath'\from-who\chap2_000e_daly_region_groups_both", clear
-keep if ghecause==500
+keep if ghecause==500 | ghecause==100
 gen cod = 11 if ghecause==500
+replace cod = 12 if ghecause==100
 save `region_daly3', replace 
 
 ** First bring in and save data for ALL CANCERS COMBINED
@@ -464,9 +469,11 @@ save `t1', replace
 
 ** Deaths (OR DALYs) for all cancers combined
 use "`datapath'\from-who\chap2_initial_panel", replace
-keep if ghecause==4 & who_region==2 & paho_subregion==.  & iso3n==.
+keep if (ghecause==4 | ghecause==1) & who_region==2 & paho_subregion==.  & iso3n==.
 replace ghecause = 500 if ghecause==4
+replace ghecause = 100 if ghecause==1
 gen cod = 11 if ghecause==500
+replace cod = 12 if ghecause==100
 keep cod daly sex year region
 tempfile t2
 save `t2', replace
@@ -478,10 +485,10 @@ merge m:m region cod sex year using `t2' , update replace
 replace arate = arate_new if arate_new<. 
 tempfile cancer_table
 save `cancer_table', replace
+save "`datapath'\from-who\chap2_cancer_table2", replace
 
 
-
-
+/*
 
 
 

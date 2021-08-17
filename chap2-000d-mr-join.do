@@ -127,6 +127,14 @@ append using "`datapath'\from-who\chap2_000c_mr_country"
 append using "`datapath'\from-who\chap2_000a_mr_region_both_updated"
 append using "`datapath'\from-who\chap2_000b_mr_subregion_both_updated"
 append using "`datapath'\from-who\chap2_000c_mr_country_both_updated"
+** Append the grouped information
+append using "`datapath'\from-who\chap2_000a_mr_region_groups_both"
+append using "`datapath'\from-who\chap2_000a_mr_region-groups"
+append using "`datapath'\from-who\chap2_000b_mr_subregion_groups_both"
+append using "`datapath'\from-who\chap2_000b_mr_subregion-groups"
+append using "`datapath'\from-who\chap2_000c_mr_country_groups_both"
+append using "`datapath'\from-who\chap2_000c_mr_country_groups"
+
 sort year sex ghecause region
 label define sex_ 1 "men" 2 "women" 3 "both" , modify
 label values sex sex_ 

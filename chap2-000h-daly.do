@@ -165,7 +165,17 @@ use "`datapath'\from-who\who-ghe-daly-001-who2-allcauses", replace
                 ghecause==1580   |            
                 ghecause==1610   |                
                 ghecause==1620   |                
-                ghecause==1630
+                ghecause==1630   |
+                /// BROAD causes (EXCEPT DIABETES)
+                ghecause==0     |
+                ghecause==10    |
+                ghecause==600   |
+                ghecause==1100  |
+                ghecause==610   | 
+                ghecause==1170  | 
+                ghecause==820   |
+                ghecause==940   |
+                ghecause==1510 
                 ;
     #delimit cr
     ** Recode for mortality rate loop
@@ -227,12 +237,25 @@ use "`datapath'\from-who\who-ghe-daly-001-who2-allcauses", replace
                     (1580 = 54)
                     (1610 = 55)
                     (1620 = 56)
-                    (1630 = 57);
+                    (1630 = 57)
+                    /// BROAD causes
+                    (0 = 100 )
+                    (10 = 200 )
+                    (600 = 300 )
+                    (1100 = 400 )
+                    (610  = 500 )
+                    (1170 = 600 )
+                    (820 940 = 800 )
+                    (1510 = 900 )                    
+                    ;
     #delimit cr
     keep if who_region==2
     drop if age<0 
     drop daly_low daly_up
     ** Collapse from countries to subregions
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) daly (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) daly pop, by(ghecause year iso3n iso3c who_region paho_subregion sex age)
 
 ** BROAD age groups
@@ -377,6 +400,15 @@ label define ghecause_
                     55 "Self-harm"
                     56 "Interpersonal violence"
                     57 "Collective violence"
+                    100  "all causes"
+                    200  "communicable"
+                    300  "NCD"
+                    400  "CVD"
+                    500  "cancer"
+                    600  "respiratory"
+                    700  "diabetes"
+                    800  "mental/neurological"
+                    900  "injuries"
 , modify;
 #delimit cr
 label values ghecause ghecause_ 
@@ -557,7 +589,18 @@ label define region_
 #delimit cr 
 label values region region_ 
 
-** Save the final DALY dataset
+
+** SAVE temp file
+tempfile AMR
+save `AMR', replace
+
+** Save the final MR dataset
+use `AMR', clear
+append using "`datapath'\from-who\chap2_000h_daly_AFR"
+append using "`datapath'\from-who\chap2_000h_daly_EMR"
+append using "`datapath'\from-who\chap2_000h_daly_EUR"
+append using "`datapath'\from-who\chap2_000h_daly_SEAR"
+append using "`datapath'\from-who\chap2_000h_daly_WPR"
 label data "DALYs : Countries, PAHO sub-regions, WHO regions"
 save "`datapath'\from-who\chap2_000h_daly", replace
 

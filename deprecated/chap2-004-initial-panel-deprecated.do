@@ -121,7 +121,7 @@ order ghecause sex year pop dths daly
 sort ghecause sex year
 
 
-/*
+
 
 ** -------------------------------------------------------------------
 ** GRAPHIC

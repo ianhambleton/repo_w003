@@ -29,6 +29,8 @@
     log using "`logpath'\chap2-000e-daly-region", replace
 ** HEADER -----------------------------------------------------
 
+/*
+
 ** ------------------------------------------
 ** Load and save the WHO standard population
 ** ------------------------------------------
@@ -132,6 +134,9 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
     #delimit cr
     drop if age<0 
     ** Collapse to WHO regions 
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) daly (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) daly pop, by(ghecause year who_region sex age)
     save `afr' , replace
 
@@ -174,6 +179,9 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
     #delimit cr
     drop if age<0 
     ** Collapse to WHO regions 
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) daly (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) daly pop, by(ghecause year who_region sex age)
     save `amr' , replace
 
@@ -216,6 +224,9 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
     #delimit cr
     drop if age<0 
     ** Collapse to WHO regions 
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) daly (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) daly pop, by(ghecause year who_region sex age)
     save `emr' , replace
 
@@ -258,6 +269,9 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
     #delimit cr
     drop if age<0 
     ** Collapse to WHO regions 
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) daly (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) daly pop, by(ghecause year who_region sex age)
     save `eur' , replace
 
@@ -300,6 +314,11 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
     #delimit cr
     drop if age<0 
     ** Collapse to WHO regions 
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    replace pop = pop/2 if ghecause==820 | ghecause==940
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) daly (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) daly pop, by(ghecause year who_region sex age)
     save `sear' , replace
 
@@ -342,6 +361,9 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
     #delimit cr
     drop if age<0 
     ** Collapse to WHO regions 
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) daly (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) daly pop, by(ghecause year who_region sex age)
     save `wpr' , replace
 
@@ -558,7 +580,7 @@ save "`datapath'\from-who\chap2_000e_daly_region_groups", replace
 
 
 
-
+*/
 
 
 
@@ -607,6 +629,11 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
     #delimit cr
     drop if age<0 
     ** Collapse to WHO regions 
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    replace pop = pop/2 if ghecause==820 | ghecause==940
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) daly (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) daly pop, by(ghecause year who_region sex age)
     save `afr' , replace
 
@@ -648,6 +675,9 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
     #delimit cr
     drop if age<0 
     ** Collapse to WHO regions 
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) daly (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) daly pop, by(ghecause year who_region sex age)
     save `amr' , replace
 
@@ -689,6 +719,9 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
     #delimit cr
     drop if age<0 
     ** Collapse to WHO regions 
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) daly (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) daly pop, by(ghecause year who_region sex age)
     save `emr' , replace
 
@@ -730,6 +763,9 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
     #delimit cr
     drop if age<0 
     ** Collapse to WHO regions 
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) daly (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) daly pop, by(ghecause year who_region sex age)
     save `eur' , replace
 
@@ -771,6 +807,9 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
     #delimit cr
     drop if age<0 
     ** Collapse to WHO regions 
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) daly (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) daly pop, by(ghecause year who_region sex age)
     save `sear' , replace
 
@@ -812,6 +851,9 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
     #delimit cr
     drop if age<0 
     ** Collapse to WHO regions 
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) daly (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) daly pop, by(ghecause year who_region sex age)
     save `wpr' , replace
 
@@ -928,8 +970,11 @@ tempfile for_mr
 save `for_mr' , replace
 
 ** Used for Equiplot by age 
-save "`datapath'\from-who\chap2_000e_daly_region", replace
+** 18 age groups
+save "`datapath'\from-who\chap2_equiplot_daly_byage_allcvd", replace
 
+
+/*
 
 ** 2019, Male, Communicable Disease
 forval x = 2000(1)2019 {

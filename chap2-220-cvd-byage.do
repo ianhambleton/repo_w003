@@ -1,10 +1,10 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap2-200-cvd-stats.do
+    //  algorithm name			    chap2-200-cvd-byage.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
-    // 	date last modified	    	26-Apr-2021
-    //  algorithm task			    Preparing CVD mortality rates: PAHO-subregions in the Americas
+    // 	date last modified	    	17-August-2021
+    //  algorithm task			    Chart of Percentage of all deaths in 5 age groups
 
     ** General algorithm set-up
     version 17
@@ -26,14 +26,19 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap2-200-cvd-stats", replace
+    log using "`logpath'\chap2-200-cvd-byage", replace
 ** HEADER -----------------------------------------------------
 
 ** DEATHS by AGE
-tempfile t1 t2 
-use "`datapath'\from-who\chap2_cvd_byage", clear
+tempfile t1 cvd1 
+use "`datapath'\from-who\chap2_equiplot_mr_byage_allcvd", replace
+keep if year==2019 & who_region==2 & ghecause==400 
+drop pop dths who_region year
+save `cvd1' , replace
+use "`datapath'\from-who\chap2_equiplot_mr_byage", clear
 keep if year==2019 & who_region==2  
 drop pop dths who_region year
+append using `cvd1'
 
 gen age16 = 1       if age18==1
 replace age16 = 2   if age18==2
@@ -77,16 +82,23 @@ save `t1', replace
 
 ** DALY by AGE
 ** Dataset comes from -->  chap2-102-cvd-rate-region.do
-use "`datapath'\from-who\chap2_cvd_byage_daly", clear
+tempfile cvd2 
+use "`datapath'\from-who\chap2_equiplot_daly_byage_allcvd", replace
+keep if year==2019 & who_region==2 & ghecause==400 
+drop pop dalyt who_region year
+save `cvd2' , replace
+
+use "`datapath'\from-who\chap2_equiplot_daly_byage", clear
 keep if year==2019 & who_region==2 
 drop pop who_region year dalyt
+append using `cvd2'
 rename age18 age16
 sort ghecause age16
 
 ** Merge and collapse to broad age groups 
 merge 1:1 ghecause age16 using `t1' 
 drop _merge age16
-collapse (sum)daly deaths , by(ghecause agroup)
+collapse (sum) daly deaths , by(ghecause agroup)
 format deaths daly %15.0fc 
 reshape wide daly deaths , i(ghecause) j(agroup)
 egen deaths_tot = rowtotal(deaths1 deaths2 deaths3 deaths4 deaths5) 
@@ -103,13 +115,21 @@ order ghecause death_* daly_*
 
 
 ** Create new GHE CoD order for Table 
-gen cod = 1 if ghecause==1130 
-replace cod = 2 if ghecause==1140
-replace cod = 3 if ghecause==1120
-replace cod = 4 if ghecause==1150
-replace cod = 5 if ghecause==1110
-replace cod = 6 if ghecause==1100
-drop if ghecause==1160 
+** CODES
+**    1  "Rheumatic heart disease"
+**    2  "Hypertensive heart disease"
+**    3  "Ischaemic heart disease"
+**    4  "Stroke"
+**    5  "Cardiomyopathy etc"
+**    400  ALL CVD
+**    100  ALL DEATHS
+gen     cod = 1 if ghecause==3 
+replace cod = 2 if ghecause==4
+replace cod = 3 if ghecause==2
+replace cod = 4 if ghecause==5
+replace cod = 5 if ghecause==1
+replace cod = 6 if ghecause==400
+keep if cod<=6 
 #delimit ; 
 label define cod_   1 "ischaemic" 
                     2 "stroke" 

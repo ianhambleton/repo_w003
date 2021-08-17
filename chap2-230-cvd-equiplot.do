@@ -32,14 +32,14 @@
 tempfile t1
 
 ** Mortality rate 
-use "`datapath'\from-who\chap2_cvd_mr", clear
+use "`datapath'\from-who\chap2_000_mr", clear
 rename arate mortr
 replace mortr = mortr * 100000
 keep year sex ghecause region mortr 
 save `t1', replace 
 
 ** DALY rate 
-use "`datapath'\from-who\chap2_cvd_daly", clear
+use "`datapath'\from-who\chap2_000_daly", clear
 rename arate dalyr
 replace dalyr = dalyr * 100000
 keep year sex ghecause region dalyr 
@@ -49,16 +49,24 @@ drop _merge
 ** Restrict
 keep if sex==3
 keep if year==2019 
-drop if ghecause==1160 
 drop year sex 
 
-** GHE CAUSE running from 1
-gen cod = 1 if ghecause==1130 
-replace cod = 2 if ghecause==1140
-replace cod = 3 if ghecause==1120
-replace cod = 4 if ghecause==1150
-replace cod = 5 if ghecause==1110
-replace cod = 6 if ghecause==1100
+** GHE CAUSE
+** Create new GHE CoD order for Table 
+** CODES
+**    1  "Rheumatic heart disease"
+**    2  "Hypertensive heart disease"
+**    3  "Ischaemic heart disease"
+**    4  "Stroke"
+**    5  "Cardiomyopathy etc"
+**    400  ALL CVD
+**    100  ALL DEATHS
+gen cod = 1 if ghecause==3 
+replace cod = 2 if ghecause==4
+replace cod = 3 if ghecause==2
+replace cod = 4 if ghecause==5
+replace cod = 5 if ghecause==1
+replace cod = 6 if ghecause==400
 #delimit ; 
 label define cod_   1 "ischaemic" 
                     2 "stroke" 
@@ -68,6 +76,7 @@ label define cod_   1 "ischaemic"
                     6 "all cvd", modify ;
 #delimit cr
 label values cod cod_ 
+keep if cod<=6
 drop ghecause 
 order cod region mortr dalyr 
 

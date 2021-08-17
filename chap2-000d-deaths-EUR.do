@@ -1,10 +1,10 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap2-000d-deaths.do
+    //  algorithm name			    chap2-000d-deaths-EUR.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	26-Apr-2021
-    //  algorithm task			    Preparing CVD mortality rates: PAHO-subregions in the Americas
+    //  algorithm task			    Preparing CVD mortality rates: EUROPE
 
     ** General algorithm set-up
     version 17
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap2-000d-deaths", replace
+    log using "`logpath'\chap2-000d-deaths-EUR", replace
 ** HEADER -----------------------------------------------------
 
 ** ------------------------------------------
@@ -91,7 +91,8 @@ save `who_std', replace
 ** Loading DEATHS dataset for the Americas only 
 ** Americas (AMR)
 ** ------------------------------------------
-use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
+*! Change input file
+use "`datapath'\from-who\who-ghe-deaths-001-who4-allcauses", replace
 
 * TODO: Change restriction for each disease group
     #delimit ;
@@ -242,14 +243,10 @@ use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
                     (820 940 = 800 )
                     (1510 = 900 );
     #delimit cr
-    keep if who_region==2
     drop if age<0 
     drop dths_low dths_up
     ** Collapse from countries to subregions
-    ** Ensure we don't double count population for mental health and neurological (820 940)
-    rename pop pop_temp 
-    collapse (sum) dths (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
-    collapse (sum) dths pop, by(ghecause year iso3n iso3c who_region paho_subregion sex age)
+    collapse (sum) dths pop, by(ghecause year iso3n iso3c who_region sex age)
     ** save "`datapath'\from-who\chap2_cvd_001", replace
 
 ** BROAD age groups
@@ -285,7 +282,7 @@ replace age18 = 15 if age==70
 replace age18 = 16 if age==75
 replace age18 = 17 if age==80
 replace age18 = 18 if age==85
-collapse (sum) dths pop, by(year ghecause iso3n iso3c who_region paho_subregion sex age18 agroup)
+collapse (sum) dths pop, by(year ghecause iso3n iso3c who_region sex age18 agroup)
 
 ** Join the DEATHS dataset with the WHO STD population
 ** merge m:m age18 using `who_std'
@@ -315,11 +312,10 @@ label values age18 age18_
 ** drop _merge
 
 ** Variable labelling
-label var paho_subregion "8 PAHO subregions of the Americas"
 label var agroup "5 broad age groups: young children, youth, young adult, older adult, elderly"
 label var age18 "5-year age groups: 18 groups"
 label var dths "Deaths"
-label var pop "PAHO subregional populations" 
+label var pop "populations" 
 format pop %12.0fc 
 ** label var spop "WHO Standard population: sums to 1 million"
 
@@ -408,98 +404,15 @@ save `for_mr' , replace
 tempfile dths1 dths2 dths3 
 
 ** --------------------------------------------
-** Collapse to country-level DEATHS
-** Collapse out age
-** --------------------------------------------
-preserve
-    collapse (sum) dths pop, by(year ghecause iso3n iso3c who_region paho_subregion sex)
-    egen region = group(iso3n)  
-    #delimit ; 
-    label define region_   
-                        1 "Antigua and Barbuda"
-                        2 "Argentina"
-                        3 "Bahamas"
-                        4 "Barbados"
-                        5 "Bolivia"
-                        6 "Brazil"
-                        7 "Belize"
-                        8 "Canada"
-                        9 "Chile"
-                        10 "Colombia"
-                        11 "Costa Rica"
-                        12 "Cuba"
-                        13 "Dominican Republic"
-                        14 "Ecuador"
-                        15 "El Salvador"
-                        16 "Grenada"
-                        17 "Guatemala"
-                        18 "Guyana"
-                        19 "Haiti"
-                        20 "Honduras"
-                        21 "Jamaica"
-                        22 "Mexico"
-                        23 "Nicaragua"
-                        24 "Panama"
-                        25 "Paraguay"
-                        26 "Peru"
-                        27 "Saint Lucia"
-                        28 "Saint Vincent and the Grenadines"
-                        29 "Suriname"
-                        30 "Trinidad and Tobago"
-                        31 "United States"
-                        32 "Uruguay"
-                        33 "Venezuela", modify;                     
-    #delimit cr 
-    label values region region_ 
-    ** Variable Labelling
-    label var region "WHO region / PAHO subregion / Country"
-    ** Variable level labelling
-    ** recode region 1=100 2=200 3=300 4=400 5=500 6=600 7=700 8=800
-    save `dths1', replace
-restore
-
-** --------------------------------------------
-** Collapse to subregion-level DEATHS
-** Collapse out age
-** --------------------------------------------
-preserve
-    collapse (sum) dths pop, by(year ghecause who_region paho_subregion sex)
-    egen region = group(paho_subregion)  
-    ** Variable level labelling
-    recode region 1=100 2=200 3=300 4=400 5=500 6=600 7=700 8=800
-    * subregions
-    #delimit ; 
-    label define region_    100 "north america"
-                            200 "southern cone"
-                            300 "central america"
-                            400 "andean" 
-                            500 "latin caribbean"
-                            600 "non-latin caribbean"
-                            700 "brazil"
-                            800 "mexico"
-                            1000 "africa"
-                            2000 "americas"
-                            3000 "eastern mediterranean"
-                            4000 "europe" 
-                            5000 "south-east asia"
-                            6000 "western pacific", modify;                     
-    #delimit cr 
-    label values region region_ 
-    ** Variable Labelling
-    label var region "WHO region / PAHO subregion / Country"
-    save `dths2', replace
-restore
-
-
-** --------------------------------------------
-** Collapse to subregion-level DEATHS
+** Collapse to region-level DEATHS
 ** Collapse out age
 ** --------------------------------------------
 preserve
     collapse (sum) dths pop, by(year ghecause who_region sex)
     egen region = group(who_region)  
     ** Variable level labelling
-    recode region 1=2000 
+    *! change region code
+    recode region 1=4000 
     * subregions
     #delimit ; 
     label define region_    100 "north america"
@@ -519,14 +432,12 @@ preserve
     #delimit cr 
     label values region region_ 
     ** Variable Labelling
-    label var region "WHO region / PAHO subregion / Country"
-    save `dths3', replace
+    label var region "WHO region / Country"
+    save `dths1', replace
 restore
 
-** JOIN region, subregion, country-level DEATHS datasets
+** USE region-level DEATHS datasets
 use `dths1', clear 
-append using `dths2'
-append using `dths3' 
 
 ** Region labelling
 #delimit ; 
@@ -581,23 +492,14 @@ label define region_
 #delimit cr 
 label values region region_ 
 
-** SAVE temp file
-tempfile AMR
-save `AMR', replace
-
 ** Save the final MR dataset
-use `AMR', clear
-append using "`datapath'\from-who\chap2_000d_dths_AFR"
-append using "`datapath'\from-who\chap2_000d_dths_EMR"
-append using "`datapath'\from-who\chap2_000d_dths_EUR"
-append using "`datapath'\from-who\chap2_000d_dths_SEAR"
-append using "`datapath'\from-who\chap2_000d_dths_WPR"
-label data "DEATHS : Countries, PAHO sub-regions, WHO regions"
-save "`datapath'\from-who\chap2_000d_dths", replace
-
+*! Change output dataset name 
+label data "DEATHS : Countries, WHO regions"
+save "`datapath'\from-who\chap2_000d_dths_EUR", replace
 
 ** Save the final MR dataset - collapsed over SEX
-collapse (sum) dths pop , by(iso3c iso3n who_region paho_subregion region year ghecause) 
+*! Change output dataset name 
+collapse (sum) dths pop , by(who_region region year ghecause) 
 gen sex = 3 
-label data "DEATHS : Countries, PAHO sub-regions, WHO regions"
-save "`datapath'\from-who\chap2_000d_dths_both", replace
+label data "DEATHS : Countries, WHO regions"
+save "`datapath'\from-who\chap2_000d_dths_both_EUR", replace

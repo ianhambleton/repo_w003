@@ -135,6 +135,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
     drop if age<0 
     drop dths_low dths_up
     ** Collapse from countries to subregions
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) dths (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) dths pop, by(ghecause year sex age iso3n iso3c paho_subregion)
     ** save "`datapath'\from-who\chap2_cvd_001", replace
 
@@ -419,6 +422,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
     drop if age<0 
     drop dths_low dths_up
     ** Collapse from countries to subregions
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) dths (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) dths pop, by(ghecause year sex age iso3n iso3c paho_subregion)
     ** save "`datapath'\from-who\chap2_cvd_001", replace
 

@@ -44,14 +44,14 @@ tempfile region_f region_m subregion_f subregion_m country_f country_m
 
 ** REGION
 ** Female cancers -> bring in the female rates
-use "`datapath'\from-who\chap2_000e_daly_region", clear
+use "`datapath'\from-who\chap2_000a_mr_region", clear
     keep if sex==2 & (ghecause>=14 & ghecause<=17) 
     rename arate arate_new
     rename pop pop_new 
     keep arate_new pop_new year ghecause region
     save `region_f', replace
 ** Male cancer -> bring in the male rates
-use "`datapath'\from-who\chap2_000e_daly_region", clear
+use "`datapath'\from-who\chap2_000a_mr_region", clear
     keep if sex==1 & (ghecause>=18 & ghecause<=19) 
     rename arate arate_new
     rename pop pop_new 
@@ -60,14 +60,14 @@ use "`datapath'\from-who\chap2_000e_daly_region", clear
 
 ** SUBREGION
 ** Female cancers -> bring in the female rates
-use "`datapath'\from-who\chap2_000f_daly_subregion", clear
+use "`datapath'\from-who\chap2_000b_mr_subregion", clear
     keep if sex==2 & (ghecause>=14 & ghecause<=17) 
     rename arate arate_new
     rename pop pop_new 
     keep arate_new pop_new year ghecause region
     save `subregion_f', replace
 ** Male cancer -> bring in the male rates
-use "`datapath'\from-who\chap2_000f_daly_subregion", clear
+use "`datapath'\from-who\chap2_000b_mr_subregion", clear
     keep if sex==1 & (ghecause>=18 & ghecause<=19) 
     rename arate arate_new
     rename pop pop_new 
@@ -76,14 +76,14 @@ use "`datapath'\from-who\chap2_000f_daly_subregion", clear
 
 ** COUNTRY
 ** Female cancers -> bring in the female rates
-use "`datapath'\from-who\chap2_000g_daly_country", clear
+use "`datapath'\from-who\chap2_000c_mr_country", clear
     keep if sex==2 & (ghecause>=14 & ghecause<=17) 
     rename arate arate_new
     rename pop pop_new 
     keep arate_new pop_new year ghecause region
     save `country_f', replace
 ** Male cancer -> bring in the male rates
-use "`datapath'\from-who\chap2_000g_daly_country", clear
+use "`datapath'\from-who\chap2_000c_mr_country", clear
     keep if sex==1 & (ghecause>=18 & ghecause<=19) 
     rename arate arate_new
     rename pop pop_new 
@@ -93,52 +93,40 @@ use "`datapath'\from-who\chap2_000g_daly_country", clear
 
 ** REGION
 ** Replace selected cancers with sex-specific rates
-use "`datapath'\from-who\chap2_000e_daly_region_both" , clear
+use "`datapath'\from-who\chap2_000a_mr_region_both" , clear
 merge 1:1 year ghecause region using `region_f'
 drop _merge
 merge 1:1 year ghecause region using `region_m' , update replace
 drop _merge
-save "`datapath'\from-who\chap2_000e_daly_region_both_updated" , replace
+save "`datapath'\from-who\chap2_000a_mr_region_both_updated" , replace
 
 ** SUBREGION
 ** Replace selected cancers with sex-specific rates
-use "`datapath'\from-who\chap2_000f_daly_subregion_both" , clear
+use "`datapath'\from-who\chap2_000b_mr_subregion_both" , clear
 merge 1:1 year ghecause region using `subregion_f'
 drop _merge
 merge 1:1 year ghecause region using `subregion_m' , update replace
 drop _merge
-save "`datapath'\from-who\chap2_000f_daly_subregion_both_updated" , replace
+save "`datapath'\from-who\chap2_000b_mr_subregion_both_updated" , replace
 
-
-** NOT YET COMPLETED
 ** COUNTRY
 ** Replace selected cancers with sex-specific rates
-use "`datapath'\from-who\chap2_000g_daly_country_both" , clear
+use "`datapath'\from-who\chap2_000c_mr_country_both" , clear
 merge 1:1 year ghecause region using `country_f'
 drop _merge
 merge 1:1 year ghecause region using `country_m' , update replace
 drop _merge
-save "`datapath'\from-who\chap2_000g_daly_country_both_updated" , replace
+save "`datapath'\from-who\chap2_000c_mr_country_both_updated" , replace
 
 
-
-
-** DALY. Countries.
+** DEATHS. Countries.
 ** Append PAHO sub-regions and append WHO regions
-use          "`datapath'\from-who\chap2_000e_daly_region", clear
-append using "`datapath'\from-who\chap2_000f_daly_subregion"
-append using "`datapath'\from-who\chap2_000g_daly_country"
-append using "`datapath'\from-who\chap2_000e_daly_region_both_updated"
-append using "`datapath'\from-who\chap2_000f_daly_subregion_both_updated"
-append using "`datapath'\from-who\chap2_000g_daly_country_both_updated"
-** Append the grouped information
-append using "`datapath'\from-who\chap2_000e_daly_region_groups_both"
-append using "`datapath'\from-who\chap2_000e_daly_region_groups"
-append using "`datapath'\from-who\chap2_000f_daly_subregion_groups_both"
-append using "`datapath'\from-who\chap2_000f_daly_subregion_groups"
-append using "`datapath'\from-who\chap2_000g_daly_country_groups_both"
-append using "`datapath'\from-who\chap2_000g_daly_country_groups"
-
+use          "`datapath'\from-who\chap2_000a_mr_region", clear
+append using "`datapath'\from-who\chap2_000b_mr_subregion"
+append using "`datapath'\from-who\chap2_000c_mr_country"
+append using "`datapath'\from-who\chap2_000a_mr_region_both_updated"
+append using "`datapath'\from-who\chap2_000b_mr_subregion_both_updated"
+append using "`datapath'\from-who\chap2_000c_mr_country_both_updated"
 sort year sex ghecause region
 label define sex_ 1 "men" 2 "women" 3 "both" , modify
 label values sex sex_ 
@@ -146,22 +134,21 @@ tempfile mr1
 save `mr1', replace 
 
 
-
-** Merge the DALY dataset with the DALY rate dataset (mr1)
+** Merge the deaths dataset
 tempfile d1 
-use "`datapath'\from-who\chap2_000h_daly", clear
-append using "`datapath'\from-who\chap2_000h_daly_both"
-rename pop pop_daly 
+use "`datapath'\from-who\chap2_000d_dths", clear
+append using "`datapath'\from-who\chap2_000d_dths_both"
+rename pop pop_dths 
 label define sex_ 1 "men" 2 "women" 3 "both" , modify
 label values sex sex_ 
-keep year ghecause sex region paho_subregion daly pop_daly
+keep year ghecause sex region paho_subregion dths pop_dths
 sort year sex ghecause region 
 merge 1:1 year sex ghecause region using `mr1' 
 
-rename _merge daly_exist
-recode daly_exist 3=1 2=0 1=10
-label define daly_exist_ 1 "yes" 0 "no" 10 "temp code"
-label values daly_exist daly_exist_
+rename _merge dths_exist
+recode dths_exist 3=1 2=0 
+label define dths_exist_ 1 "yes" 0 "no"
+label values dths_exist dths_exist_
 
 
 ** Region labelling
@@ -220,8 +207,8 @@ label define region_
 label values region region_ 
 
 ** Save the JOINED Mortality Rate file
-order year sex ghecause region paho_subregion daly pop_daly daly_exist crate arate arate_new pop_new 
+order year sex ghecause region paho_subregion dths pop_dths dths_exist crate arate arate_new pop_new 
 sort year sex ghecause region
-keep year sex ghecause region paho_subregion daly pop_daly daly_exist crate arate arate_new pop_new 
-label data "Crude and Adjusted DALY rates: Countries, PAHO sub-regions, WHO regions"
-save "`datapath'\from-who\chap2_000_daly", replace
+keep year sex ghecause region paho_subregion dths pop_dths dths_exist crate arate arate_new pop_new 
+label data "Crude and Adjusted mortality rates: Countries, PAHO sub-regions, WHO regions"
+save "`datapath'\from-who\chap2_000_mr", replace

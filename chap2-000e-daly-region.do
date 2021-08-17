@@ -3,7 +3,7 @@
     //  algorithm name			    chap2-000e-daly-region.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
-    // 	date last modified	    	16-Apr-2021
+    // 	date last modified	    	16-Aug-2021
     //  algorithm task			    Preparing CVD mortality rates: WHO-regions
 
     ** General algorithm set-up
@@ -97,6 +97,9 @@
     ** 1610     Self-harm * 
     ** 1620     Interpersonal violence * 
     ** 1630     Collective violence and legal intervention 
+
+
+
 
 ** ------------------------------------------
 ** Load and save the WHO standard population
@@ -1315,11 +1318,6 @@ save "`datapath'\from-who\chap2_000e_daly_region", replace
 
 
 
-
-
-
-
-
 ** Repeat for women and men combined 
 
 ** ------------------------------------------
@@ -2328,7 +2326,9 @@ tempfile for_mr
 save `for_mr' , replace
 
 ** Used for Equiplot by age 
-save "`datapath'\from-who\chap2_000e_daly_region", replace
+** 18 age groups
+save "`datapath'\from-who\chap2_equiplot_daly_byage", replace
+
 
 
 ** 2019, Male, Communicable Disease

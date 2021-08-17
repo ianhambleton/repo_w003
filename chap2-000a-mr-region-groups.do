@@ -30,6 +30,8 @@
 ** HEADER -----------------------------------------------------
 
 
+/*
+
 ** ------------------------------------------
 ** Load and save the WHO standard population
 ** ------------------------------------------
@@ -127,6 +129,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who1-allcauses", replace
     #delimit cr
     drop if age<0 
     ** Collapse to WHO regions 
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) dths (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) dths pop, by(ghecause year who_region sex age)
     save `afr' , replace
 
@@ -165,6 +170,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
 
     drop if age<0 
     ** Collapse to WHO regions 
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) dths (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) dths pop, by(ghecause year who_region sex age)
     save `amr' , replace
 
@@ -202,6 +210,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who3-allcauses", replace
     #delimit cr
     drop if age<0 
     ** Collapse to WHO regions 
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) dths (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) dths pop, by(ghecause year who_region sex age)
     save `emr' , replace
 
@@ -239,6 +250,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who4-allcauses", replace
     #delimit cr
     drop if age<0 
     ** Collapse to WHO regions 
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) dths (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) dths pop, by(ghecause year who_region sex age)
     save `eur' , replace
 
@@ -277,6 +291,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who5-allcauses", replace
     #delimit cr
     drop if age<0 
     ** Collapse to WHO regions 
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) dths (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) dths pop, by(ghecause year who_region sex age)
     save `sear' , replace
 
@@ -315,6 +332,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who6-allcauses", replace
     #delimit cr
     drop if age<0 
     ** Collapse to WHO regions 
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) dths (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) dths pop, by(ghecause year who_region sex age)
     save `wpr' , replace
 
@@ -531,7 +551,7 @@ save "`datapath'\from-who\chap2_000a_mr_region-groups", replace
 
 
 
-
+*/
 
 ** Repeat for women and men combined 
 
@@ -574,6 +594,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who1-allcauses", replace
     #delimit cr
     drop if age<0 
     ** Collapse to WHO regions 
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) dths (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) dths pop, by(ghecause year who_region sex age)
     save `afr' , replace
 
@@ -612,6 +635,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
     #delimit cr
     drop if age<0 
     ** Collapse to WHO regions 
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) dths (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) dths pop, by(ghecause year who_region sex age)
     save `amr' , replace
 
@@ -649,6 +675,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who3-allcauses", replace
     #delimit cr
     drop if age<0 
     ** Collapse to WHO regions 
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) dths (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) dths pop, by(ghecause year who_region sex age)
     save `emr' , replace
 
@@ -686,6 +715,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who4-allcauses", replace
     #delimit cr
     drop if age<0 
     ** Collapse to WHO regions 
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) dths (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) dths pop, by(ghecause year who_region sex age)
     save `eur' , replace
 
@@ -724,6 +756,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who5-allcauses", replace
     #delimit cr
     drop if age<0 
     ** Collapse to WHO regions 
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) dths (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) dths pop, by(ghecause year who_region sex age)
     save `sear' , replace
 
@@ -761,6 +796,11 @@ use "`datapath'\from-who\who-ghe-deaths-001-who6-allcauses", replace
     #delimit cr
     drop if age<0 
     ** Collapse to WHO regions 
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    replace pop = pop/2 if ghecause==820 | ghecause==940
+    ** Ensure we don't double count population for mental health and neurological (820 940)
+    rename pop pop_temp 
+    collapse (sum) dths (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
     collapse (sum) dths pop, by(ghecause year who_region sex age)
     save `wpr' , replace
 
@@ -880,10 +920,9 @@ save `for_mr' , replace
 
 ** Used for Equiplot by age 
 ** 18 age groups
-** save "`datapath'\from-who\chap2_cvd_byage", replace
+save "`datapath'\from-who\chap2_equiplot_mr_byage_allcvd", replace
 
-
-
+/*
 ** 2019, Male, Communicable Disease
 forval x = 2000(1)2019 {
         * TODO: Change next line for each disease group

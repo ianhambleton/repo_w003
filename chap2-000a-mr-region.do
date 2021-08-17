@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap2-000a-mr-region-americas.do
+    //  algorithm name			    chap2-000a-mr-region.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	16-Apr-2021
@@ -28,6 +28,7 @@
     capture log close
     log using "`logpath'\chap2-000a-mr-region", replace
 ** HEADER -----------------------------------------------------
+
 
 
 ** ------------------------------------------
@@ -1070,7 +1071,7 @@ label values ghecause ghecause_
 tempfile for_mr
 save `for_mr' , replace
 
-** Save out a dataset
+
 
 ** 2019, Male, Communicable Disease
 forval x = 2000(1)2019 {
@@ -2207,10 +2208,10 @@ label values ghecause ghecause_
 tempfile for_mr
 save `for_mr' , replace
 
+
 ** Used for Equiplot by age 
 ** 18 age groups
-** save "`datapath'\from-who\chap2_cvd_byage", replace
-
+save "`datapath'\from-who\chap2_equiplot_mr_byage", replace
 
 
 ** 2019, Male, Communicable Disease
