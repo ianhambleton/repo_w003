@@ -86,7 +86,8 @@ save `t1', replace
 ** DALY by AGE
 ** DATASETS FROM: 
 **      chap2-000a-daly-region-groups.do
-**      chap2-000a-daly-region.dotempfile cvd2 
+**      chap2-000a-daly-region.do
+tempfile cvd2 
 use "`datapath'\from-who\chap2_equiplot_daly_byage_allcvd", replace
 keep if year==2019 & who_region==2 & ghecause==400 
 drop pop dalyt who_region year
