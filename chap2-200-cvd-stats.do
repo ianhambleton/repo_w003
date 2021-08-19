@@ -73,10 +73,10 @@ gen p1b = (dths1/dths100)*100
 ** IHD (3)
 **-----------------------------------------------------------
 ** Mortality rates by sex
-use "`datapath'\from-who\chap2_000_mr", clear
+use "`datapath'\from-who\chap2_000_mr_adjusted", clear
+rename mortr arate 
 keep if ghecause == 3 & region==2000
-drop crate arate_new dths_exist pop_dths region ghecause paho_subregion pop_new 
-replace arate = arate * 100000
+drop  ghecause paho_subregion pop_mortr
 ** 1=men 2=women 3=both
 reshape wide arate dths, i(year) j(sex)
 gen aratio = arate1 / arate2
@@ -89,10 +89,10 @@ format dths3 %12.1fc
 format ddiff %12.1fc
 
 ** DALY rates by sex
-use "`datapath'\from-who\chap2_000_daly", clear
+use "`datapath'\from-who\chap2_000_daly_adjusted", clear
+rename dalyr arate
 keep if ghecause == 3 & region==2000
-drop crate arate_new daly_exist pop_daly region ghecause paho_subregion pop_new 
-replace arate = arate * 100000
+drop  ghecause paho_subregion pop_dalyr
 ** 1=men 2=women 3=both
 reshape wide arate daly, i(year) j(sex)
 gen aratio = arate1 / arate2
@@ -109,10 +109,10 @@ format ddiff %12.1fc
 ** STROKE (4)
 **-----------------------------------------------------------
 ** Mortality rates by sex
-use "`datapath'\from-who\chap2_000_mr", clear
+use "`datapath'\from-who\chap2_000_mr_adjusted", clear
+rename mortr arate 
 keep if ghecause == 4 & region==2000
-drop crate arate_new dths_exist pop_dths region ghecause paho_subregion pop_new 
-replace arate = arate * 100000
+drop  ghecause paho_subregion pop_mortr
 ** 1=men 2=women 3=both
 reshape wide arate dths, i(year) j(sex)
 gen aratio = arate1 / arate2
@@ -125,10 +125,10 @@ format dths3 %12.1fc
 format ddiff %12.1fc
 
 ** DALY rates by sex
-use "`datapath'\from-who\chap2_000_daly", clear
+use "`datapath'\from-who\chap2_000_daly_adjusted", clear
+rename dalyr arate 
 keep if ghecause == 4 & region==2000
-drop crate arate_new daly_exist pop_daly region ghecause paho_subregion pop_new 
-replace arate = arate * 100000
+drop  ghecause paho_subregion pop_dalyr
 ** 1=men 2=women 3=both
 reshape wide arate daly, i(year) j(sex)
 gen aratio = arate1 / arate2
@@ -146,10 +146,10 @@ format ddiff %12.1fc
 ** HYPERTENSIVE HEART DISEASE (2)
 **-----------------------------------------------------------
 ** Mortality rates by sex
-use "`datapath'\from-who\chap2_000_mr", clear
+use "`datapath'\from-who\chap2_000_mr_adjusted", clear
+rename mortr arate 
 keep if ghecause == 2 & region==2000
-drop crate arate_new dths_exist pop_dths region ghecause paho_subregion pop_new 
-replace arate = arate * 100000
+drop  ghecause paho_subregion pop_mortr
 ** 1=men 2=women 3=both
 reshape wide arate dths, i(year) j(sex)
 gen aratio = arate1 / arate2
@@ -162,10 +162,10 @@ format dths3 %12.1fc
 format ddiff %12.1fc
 
 ** DALY rates by sex
-use "`datapath'\from-who\chap2_000_daly", clear
+use "`datapath'\from-who\chap2_000_daly_adjusted", clear
+rename dalyr arate 
 keep if ghecause == 2 & region==2000
-drop crate arate_new daly_exist pop_daly region ghecause paho_subregion pop_new 
-replace arate = arate * 100000
+drop  ghecause paho_subregion pop_dalyr
 ** 1=men 2=women 3=both
 reshape wide arate daly, i(year) j(sex)
 gen aratio = arate1 / arate2
@@ -183,10 +183,10 @@ format ddiff %12.1fc
 ** CARDIOMYOPATHY etc (5)
 **-----------------------------------------------------------
 ** Mortality rates by sex
-use "`datapath'\from-who\chap2_000_mr", clear
+use "`datapath'\from-who\chap2_000_mr_adjusted", clear
+rename mortr arate 
 keep if ghecause == 5 & region==2000
-drop crate arate_new dths_exist pop_dths region ghecause paho_subregion pop_new 
-replace arate = arate * 100000
+drop  ghecause paho_subregion pop_mortr
 ** 1=men 2=women 3=both
 reshape wide arate dths, i(year) j(sex)
 gen aratio = arate1 / arate2
@@ -199,10 +199,10 @@ format dths3 %12.1fc
 format ddiff %12.1fc
 
 ** DALY rates by sex
-use "`datapath'\from-who\chap2_000_daly", clear
+use "`datapath'\from-who\chap2_000_daly_adjusted", clear
+rename dalyr arate 
 keep if ghecause == 5 & region==2000
-drop crate arate_new daly_exist pop_daly region ghecause paho_subregion pop_new 
-replace arate = arate * 100000
+drop  ghecause paho_subregion pop_dalyr
 ** 1=men 2=women 3=both
 reshape wide arate daly, i(year) j(sex)
 gen aratio = arate1 / arate2
@@ -219,10 +219,10 @@ format ddiff %12.1fc
 ** Rheumatic Heart Disease (1)
 **-----------------------------------------------------------
 ** Mortality rates by sex
-use "`datapath'\from-who\chap2_000_mr", clear
+use "`datapath'\from-who\chap2_000_mr_adjusted", clear
+rename mortr arate 
 keep if ghecause == 1 & region==2000
-drop crate arate_new dths_exist pop_dths region ghecause paho_subregion pop_new 
-replace arate = arate * 100000
+drop  ghecause paho_subregion pop_mortr
 ** 1=men 2=women 3=both
 reshape wide arate dths, i(year) j(sex)
 gen aratio = arate1 / arate2
@@ -235,10 +235,10 @@ format dths3 %12.1fc
 format ddiff %12.1fc
 
 ** DALY rates by sex
-use "`datapath'\from-who\chap2_000_daly", clear
+use "`datapath'\from-who\chap2_000_daly_adjusted", clear
+rename dalyr arate 
 keep if ghecause == 1 & region==2000
-drop crate arate_new daly_exist pop_daly region ghecause paho_subregion pop_new 
-replace arate = arate * 100000
+drop  ghecause paho_subregion pop_dalyr
 ** 1=men 2=women 3=both
 reshape wide arate daly, i(year) j(sex)
 gen aratio = arate1 / arate2
@@ -258,21 +258,19 @@ format ddiff %12.1fc
 ** Percent Improvement
 ** Death excess (men vs women)
 **-----------------------------------------------------------
-use "`datapath'\from-who\chap2_000_daly", clear
+use "`datapath'\from-who\chap2_000_daly_adjusted", clear
 keep if ghecause == 400 & region==2000
-drop crate arate_new daly_exist pop_daly region ghecause paho_subregion pop_new 
-rename arate drate
+drop  ghecause paho_subregion pop_dalyr
+rename dalyr drate
 tempfile daly 
 save `daly', replace
-use "`datapath'\from-who\chap2_000_mr", clear
+use "`datapath'\from-who\chap2_000_mr_adjusted", clear
 keep if ghecause == 400 & region==2000
-drop crate arate_new dths_exist pop_dths region ghecause paho_subregion pop_new 
-rename arate mrate
+drop  ghecause paho_subregion pop_mortr
+rename mortr mrate
 merge 1:1 year sex using `daly'
 drop _merge
 ** 1=men 2=women 3=both
-replace drate = drate * 100000
-replace mrate = mrate * 100000
 reshape wide mrate drate dths daly, i(year) j(sex)
 order year mrate* drate* dths* daly* 
 ** Restrict to 2000 and 2019, and reshape to wide
@@ -301,21 +299,21 @@ format dths12019 dths22019 daly12019 daly22019 dth_excess daly_excess %12.0fc
 ** Percent Improvement
 ** Death excess (men vs women)
 **-----------------------------------------------------------
-use "`datapath'\from-who\chap2_000_daly", clear
+use "`datapath'\from-who\chap2_000_daly_adjusted", clear
+rename dalyr arate 
 keep if ghecause == 3 & region==2000
-drop crate arate_new daly_exist pop_daly region ghecause paho_subregion pop_new 
+drop  ghecause paho_subregion pop_dalyr
 rename arate drate
 tempfile daly 
 save `daly', replace
-use "`datapath'\from-who\chap2_000_mr", clear
+use "`datapath'\from-who\chap2_000_mr_adjusted", clear
+rename mortr arate 
 keep if ghecause == 3 & region==2000
-drop crate arate_new dths_exist pop_dths region ghecause paho_subregion pop_new 
+drop  ghecause paho_subregion pop_mortr
 rename arate mrate
 merge 1:1 year sex using `daly'
 drop _merge
 ** 1=men 2=women 3=both
-replace drate = drate * 100000
-replace mrate = mrate * 100000
 reshape wide mrate drate dths daly, i(year) j(sex)
 order year mrate* drate* dths* daly* 
 ** Restrict to 2000 and 2019, and reshape to wide
@@ -345,21 +343,21 @@ format dths12019 dths22019 daly12019 daly22019 dth_excess daly_excess %12.0fc
 ** Percent Improvement
 ** Death excess (men vs women)
 **-----------------------------------------------------------
-use "`datapath'\from-who\chap2_000_daly", clear
+use "`datapath'\from-who\chap2_000_daly_adjusted", clear
+rename dalyr arate 
 keep if ghecause == 4 & region==2000
-drop crate arate_new daly_exist pop_daly region ghecause paho_subregion pop_new 
+drop  ghecause paho_subregion pop_dalyr
 rename arate drate
 tempfile daly 
 save `daly', replace
-use "`datapath'\from-who\chap2_000_mr", clear
+use "`datapath'\from-who\chap2_000_mr_adjusted", clear
+rename mortr arate 
 keep if ghecause == 4 & region==2000
-drop crate arate_new dths_exist pop_dths region ghecause paho_subregion pop_new 
+drop  ghecause paho_subregion pop_mortr
 rename arate mrate
 merge 1:1 year sex using `daly'
 drop _merge
 ** 1=men 2=women 3=both
-replace drate = drate * 100000
-replace mrate = mrate * 100000
 reshape wide mrate drate dths daly, i(year) j(sex)
 order year mrate* drate* dths* daly* 
 ** Restrict to 2000 and 2019, and reshape to wide

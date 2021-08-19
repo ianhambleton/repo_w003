@@ -921,6 +921,7 @@ save `for_mr' , replace
 ** Used for Equiplot by age 
 ** 18 age groups
 save "`datapath'\from-who\chap2_equiplot_mr_byage_allcvd", replace
+save "`datapath'\from-who\chap2_equiplot_mr_byage_groupeddeath", replace
 
 /*
 ** 2019, Male, Communicable Disease

@@ -1,10 +1,10 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap2-230-cvd-equiplot.do
+    //  algorithm name			    chap2-330-cancer-equiplot.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
-    // 	date last modified	    	26-Apr-2021
-    //  algorithm task			    CVD leading diseases: by-country equiplot
+    // 	date last modified	    	19-August-2021
+    //  algorithm task			    Leading causes of cancer death: by-country equiplot
 
     ** General algorithm set-up
     version 17
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap2-230-cvd-equiplot", replace
+    log using "`logpath'\chap2-330-cancer-equiplot", replace
 ** HEADER -----------------------------------------------------
 
 tempfile t1
@@ -51,34 +51,51 @@ keep if sex==3
 keep if year==2019 
 drop year sex 
 
-** GHE CAUSE
-** Create new GHE CoD order for Table 
-** CODES
-**    1  "Rheumatic heart disease"
-**    2  "Hypertensive heart disease"
-**    3  "Ischaemic heart disease"
-**    4  "Stroke"
-**    5  "Cardiomyopathy etc"
-**    400  ALL CVD
-**    100  ALL DEATHS
-gen cod = 1 if ghecause==3 
-replace cod = 2 if ghecause==4
-replace cod = 3 if ghecause==2
-replace cod = 4 if ghecause==5
-replace cod = 5 if ghecause==1
-replace cod = 6 if ghecause==400
+**------------------------------------------------
+** Create new GHE CoD order 
+** CANCERS TO USE
+** 12   "trachea/lung" 
+** 14   "breast" 
+** 18   "prostate" 
+** 9    "colon/rectum" 
+** 15   "cervix uteri" 
+** 11   "pancreas"
+** 27   "lymphomas/myeloma"
+** 8    "stomach"
+** 10   "liver"
+** 28   "leukemia"
+** 500  "all cancers"
+** 100  "all cause", modif    
+** -----------------------------------------------
+gen     cod = 1 if ghecause==12 
+replace cod = 2 if ghecause==14
+replace cod = 3 if ghecause==18
+replace cod = 4 if ghecause==9
+replace cod = 5 if ghecause==15
+replace cod = 6 if ghecause==11
+replace cod = 7 if ghecause==27
+replace cod = 8 if ghecause==8
+replace cod = 9 if ghecause==10
+replace cod = 10 if ghecause==28
+replace cod = 11 if ghecause==500
 #delimit ; 
-label define cod_   1 "ischaemic" 
-                    2 "stroke" 
-                    3 "hypertensive" 
-                    4 "cardiomyopathy etc" 
-                    5 "rheumatic" 
-                    6 "all cvd", modify ;
+label define cod_   1 "trachea/lung" 
+                    2 "breast" 
+                    3 "prostate" 
+                    4 "colon/rectum" 
+                    5 "cervix uteri" 
+                    6 "pancreas"
+                    7 "lymphomas/myeloma"
+                    8 "stomach"
+                    9 "liver"
+                    10 "leukemia"
+                    11 "all cancers", modify ;
 #delimit cr
 label values cod cod_ 
-keep if cod<=6
+sort cod 
 drop ghecause 
 order cod region mortr dalyr 
+keep if cod<=11
 
 ** Restrict region to countries + Americas 
 keep if region < 100 | region==2000
@@ -89,17 +106,20 @@ keep if region < 100 | region==2000
 bysort cod : egen mr_mean = mean(mortr)
 bysort cod : egen mr_sd = sd(mortr)
 gen mort1 = (mortr - mr_mean) / mr_sd
+gen mort2 = (mortr - mr_mean)
+sort cod mort1
+/*
 bysort cod : egen mr_min = min(mort1)
 gen mr_rel1 = mortr/mr_min
 gen mr_rel2 = mort1/mr_min
-
+drop mr_mean mr_sd mr_rel1 mr_min
 
 ** --------------------------------------------------------
 ** GRAPHIC
 ** --------------------------------------------------------
 
 ** COLORS - PURPLES for CVD
-    colorpalette hcl, purples  nograph
+    colorpalette hcl, blues nograph n(14)
     local list r(p) 
     ** Age groups
     local child `r(p2)'    
@@ -127,22 +147,22 @@ local iqr5 `p25_5' 4.5 `p75_5' 4.5 `p75_5' 5.5 `p25_5' 5.5  `p25_5' 4.5
 local iqr6 `p25_6' 5.5 `p75_6' 5.5 `p75_6' 6.5 `p25_6' 6.5  `p25_6' 5.5 
 
 ** Outer boxes
-local outer1   1.75 0.5   -3.75 0.5   -3.75 1.5   1.75 1.5   1.75 0.5 
+local outer1   1.75 0.5   -4.75 0.5   -4.75 1.5   1.75 1.5   1.75 0.5 
 local outer2a  1.75 1.5    1.75 2.5  
-local outer2b  1.75 2.5   -3.75 2.5  
-local outer2c -3.75 1.5   -3.75 2.5 
+local outer2b  1.75 2.5   -4.75 2.5  
+local outer2c -4.75 1.5   -4.75 2.5 
 local outer3a  1.75 2.5    1.75 3.5  
-local outer3b  1.75 3.5   -3.75 3.5  
-local outer3c -3.75 2.5   -3.75 3.5 
+local outer3b  1.75 3.5   -4.75 3.5  
+local outer3c -4.75 2.5   -4.75 3.5 
 local outer4a  1.75 3.5    1.75 4.5  
-local outer4b  1.75 4.5   -3.75 4.5  
-local outer4c -3.75 3.5   -3.75 4.5 
+local outer4b  1.75 4.5   -4.75 4.5  
+local outer4c -4.75 3.5   -4.75 4.5 
 local outer5a  1.75 4.5    1.75 5.5  
-local outer5b  1.75 5.5   -3.75 5.5  
-local outer5c -3.75 4.5   -3.75 5.5 
+local outer5b  1.75 5.5   -4.75 5.5  
+local outer5c -4.75 4.5   -4.75 5.5 
 local outer6a  1.75 5.5    1.75 6.5  
-local outer6b  1.75 6.5   -3.75 6.5  
-local outer6c -3.75 5.5   -3.75 6.5 
+local outer6b  1.75 6.5   -4.75 6.5  
+local outer6c -4.75 5.5   -4.75 6.5 
 
 ** ---------------------------------------------------
 ** Statistics for the text to accompany this graphic
@@ -151,6 +171,7 @@ local outer6c -3.75 5.5   -3.75 6.5
 ** Simple absolute measure of inequality : Mean Absolute Deviation (MAD) 
 ** Simple relative measure of inequality : Index of Disparity (ID) 
 ** ---------------------------------------------------
+drop dalyr 
 sort cod mr_rel2
 
 ** BASED ON ADJUSTED MORTALITY RATE 
@@ -168,22 +189,47 @@ sort cod mr_rel2
 ** (MAD) Complex - absolute
     ** Mean Absolute deviation
     * --> number of countries in group 
-    bysort cod : gen J = _N - 1
+    * bysort cod : gen J = _N - 1
     * --> MD using best rate in group (best = lowest)
-    bysort cod : egen rref = min(mortr)
-    gen rdiff = abs(rref - mortr)
-    bysort cod : egen abs_com = sum(rdiff/J)
+    * bysort cod : egen rref = min(mortr)
+    * gen rdiff = abs(rref - mortr)
+    * bysort cod : egen abs_com = sum(rdiff/J)
+
 ** (ID) Complex - relative
-    * --> Index of Disparity (Average Rate)
-    gen rel_com = ( (abs_com) / rref) * 100
-    format rel_com %9.4f
+    * --> Index of Disparity (Each country compared to Americas average rate)
+    * --> number of countries in group 
+    bysort cod : gen J = _N - 1
+    gen americas1 = mortr if region==2000
+    bysort cod : egen mort_am = min(americas1) 
+    drop americas1 
+    order mort_am, after(mortr)
+    gen id1 = abs(mortr - mort_am)
+    bysort cod : egen id2 = sum(id1) 
+    gen id3 = id2 / mort_am
+    gen id = (1/J) * id3 * 100
+    drop mort_am id1 id2 id3 J
+    order abs_sim rel_sim id , after(mortr)
 
-bysort cod: gen touse = 1 if _n==1 
-tabdisp cod, c(abs_sim rel_sim) format(%9.1f)
-tabdisp cod, c(abs_com rel_com) format(%9.1f)
+    bysort cod: gen touse = 1 if _n==1 
+    tabdisp cod, c(abs_sim rel_sim) format(%9.1f)
+    tabdisp cod, c(id) format(%9.1f)
 
-** Temp fix for Haiti (Rheumatic Heart Disease)
-replace mr_rel2 = -3.4 if mr_rel2<-9 & cod==5 & region==19
+** ID to global macros
+forval x = 1(1)6 {
+    preserve
+        keep if cod==`x' & touse==1
+        local id`x' : dis %5.0f id
+    restore
+}
+
+/// †  	U+2020 (alt-08224)	DAGGER = obelisk, obelus, long cross
+/// ‡  	U+2021 (alt-08225)	DOUBLE DAGGER = diesis, double obelisk
+/// •  	U+2022 (alt-08226)	BULLET = black small circle
+local dagger = uchar(8224)
+local ddagger = uchar(8225)
+
+keep if cod<=5 | cod==11
+recode cod 11=6
 
 #delimit ;
 	gr twoway 
@@ -239,11 +285,10 @@ replace mr_rel2 = -3.4 if mr_rel2<-9 & cod==5 & region==19
         (sc mr_rel2 cod if cod==4 & mr_rel2==1, msize(7) m(o) mlc("`child'") mfc("`child'") mlw(0.2))
         ///(sc mr_rel2 cod if cod==4 & region==2000, msize(7) m(o) mlc(gs0*0.5) mfc(gs0*0.5) mlw(0.2))        
         
-		(sc mr_rel2 cod if cod==5 & mr_rel2>-2.5 & region<2000, msize(7) m(oh) mlc("`child'*0.5") mlw(0.2))
-		(sc mr_rel2 cod if cod==5 & mr_rel2 <= -3.4 & region<2000, msize(7) m(oh) mlc("`child'*0.5") mlw(0.2))
+		(sc mr_rel2 cod if cod==5 & region<2000 , msize(7) m(oh) mlc("`child'*0.5") mlw(0.2))
         (sc mr_rel2 cod if cod==5 & mr_rel2==1, msize(7) m(o) mlc("`child'") mfc("`child'") mlw(0.2))
-        ///(sc mr_rel2 cod if cod==5 & region==2000, msize(7) m(o) mlc(gs0*0.5) mfc(gs0*0.5) mlw(0.2))
-
+        ///(sc mr_rel2 cod if cod==4 & region==2000, msize(7) m(o) mlc(gs0*0.5) mfc(gs0*0.5) mlw(0.2))  
+        
 		(sc mr_rel2 cod if cod==6 & region<2000 , msize(7) m(oh) mlc("`child'*0.5") mlw(0.2))
         (sc mr_rel2 cod if cod==6 & mr_rel2==1, msize(7) m(o) mlc("`child'") mfc("`child'") mlw(0.2))
         ///(sc mr_rel2 cod if cod==6 & region==2000, msize(7) m(o) mlc(gs0*0.5) mfc(gs0*0.5) mlw(0.2))        
@@ -258,59 +303,70 @@ replace mr_rel2 = -3.4 if mr_rel2<-9 & cod==5 & region==19
 			
 			ylab(none,
 			valuelabel labc(gs0) labs(6) tstyle(major_notick) nogrid glc(gs16) angle(0) format(%9.0f))
-			yscale(rev noline lw(vthin) range(0.5(0.1)-4.25)) 
+			yscale(rev noline lw(vthin) range(0.5(0.1)-5.25)) 
 			ytitle("", size(5) margin(l=2 r=5 t=2 b=2)) 
 
             /// Region Titles 
-           text(-4 1 "Ischemic" "Heart Disease"         ,  place(c) size(3) color(gs8) just(center))
-           text(-4 2 "Stroke"                           ,  place(c) size(3) color(gs8) just(center))
-           text(-4 3 "Hypertensive" "Heart Diseases"    ,  place(c) size(3) color(gs8) just(center))
-           text(-4 4 "Cardiomyopathy" "etc"             ,  place(c) size(3) color(gs8) just(center))
-           text(-4 5 "Rheumatic" "Heart Disease"        ,  place(c) size(3) color(gs8) just(center))
-           text(-4 6 "All" "CVD"                        ,  place(c) size(3) color(gs8) just(center))
+           /// text(-5 1 "Ischemic" "Heart Disease"         ,  place(c) size(3) color(gs8) just(center))
+           /// text(-5 2 "Stroke"                           ,  place(c) size(3) color(gs8) just(center))
+           /// text(-5 3 "Hypertensive" "Heart Diseases"    ,  place(c) size(3) color(gs8) just(center))
+           /// text(-5 4 "Cardiomyopathy" "etc"             ,  place(c) size(3) color(gs8) just(center))
+           /// text(-5 5 "Rheumatic" "Heart Disease"        ,  place(c) size(3) color(gs8) just(center))
+           /// text(-5 6 "All" "CVD"                        ,  place(c) size(3) color(gs8) just(center))
 
             /// LOWEST RATE countries
-           text(1.45 1 "Chile"               ,  place(c) size(3.1) color("`child'") just(center))
-           text(1.45 2 "Canada"              ,  place(c) size(3.1) color("`child'") just(center))
-           text(1.45 3 "El Salvador"         ,  place(c) size(3.1) color("`child'") just(center))
-           text(1.45 4 "El Salvador"         ,  place(c) size(3.1) color("`child'") just(center))
-           text(1.45 5 "Multiple *"            ,  place(c) size(3.1) color("`child'") just(center))
-           text(1.45 6 "Peru"                ,  place(c) size(3.1) color("`child'") just(center))
+           /// text(1.45 1 "Chile"               ,  place(c) size(3.1) color("`child'") just(center))
+           /// text(1.45 2 "Canada"              ,  place(c) size(3.1) color("`child'") just(center))
+           /// text(1.45 3 "El Salvador"         ,  place(c) size(3.1) color("`child'") just(center))
+           /// text(1.45 4 "El Salvador"         ,  place(c) size(3.1) color("`child'") just(center))
+           /// text(1.45 5 "Multiple `dagger'"            ,  place(c) size(3.1) color("`child'") just(center))
+           /// text(1.45 6 "Peru"                ,  place(c) size(3.1) color("`child'") just(center))
 
             /// HIGHEST RATE countries
            /// IHD
-           text(-3.55 1 "Guyana"                ,  place(c) size(3.1) color("`child'*0.5") just(center))
-           text(-3.25 1 "Haiti"                 ,  place(c) size(3.1) color("`child'*0.5") just(center))
-           text(-2.95 1 "Dominican Rep"         ,  place(c) size(3.1) color("`child'*0.5") just(center))
+           /// text(-3.55 1 "Guyana"                ,  place(c) size(3.1) color("`child'*0.5") just(center))
+           /// text(-3.25 1 "Haiti"                 ,  place(c) size(3.1) color("`child'*0.5") just(center))
+           /// text(-2.95 1 "Dominican Rep"         ,  place(c) size(3.1) color("`child'*0.5") just(center))
            /// STROKE
-           text(-3.55 2 "Haiti"                 ,  place(c) size(3.1) color("`child'*0.5") just(center))
-           text(-3.25 2 "Guyana"                ,  place(c) size(3.1) color("`child'*0.5") just(center))
-           text(-2.95 2 "Suriname"              ,  place(c) size(3.1) color("`child'*0.5") just(center))
+           /// text(-3.55 2 "Haiti"                 ,  place(c) size(3.1) color("`child'*0.5") just(center))
+           /// text(-3.25 2 "Guyana"                ,  place(c) size(3.1) color("`child'*0.5") just(center))
+           /// text(-2.95 2 "Suriname"              ,  place(c) size(3.1) color("`child'*0.5") just(center))
            /// HHD
-           text(-3.55 3 "Bahamas"               ,  place(c) size(3.1) color("`child'*0.5") just(center))
-           text(-3.25 3 "Guyana"                ,  place(c) size(3.1) color("`child'*0.5") just(center))
-           text(-2.95 3 "Haiti"                 ,  place(c) size(3.1) color("`child'*0.5") just(center))
+           /// text(-3.55 3 "Bahamas"               ,  place(c) size(3.1) color("`child'*0.5") just(center))
+           /// text(-3.25 3 "Guyana"                ,  place(c) size(3.1) color("`child'*0.5") just(center))
+           /// text(-2.95 3 "Haiti"                 ,  place(c) size(3.1) color("`child'*0.5") just(center))
            /// CARDIOMYOPATHY
-           text(-3.55 4 "Guyana"                ,  place(c) size(3.1) color("`child'*0.5") just(center))
-           text(-3.25 4 "Haiti"                 ,  place(c) size(3.1) color("`child'*0.5") just(center))
-           text(-2.95 4 "Bahamas"               ,  place(c) size(3.1) color("`child'*0.5") just(center))
+          /// text(-3.55 4 "Guyana"                ,  place(c) size(3.1) color("`child'*0.5") just(center))
+          /// text(-3.25 4 "Haiti"                 ,  place(c) size(3.1) color("`child'*0.5") just(center))
+          /// text(-2.95 4 "Bahamas"               ,  place(c) size(3.1) color("`child'*0.5") just(center))
            /// RHEUMATIC
-           text(-3.375 5.25 "Haiti"                 ,  place(c) size(3.1) color("`child'*0.5") just(center))
-           text(-2.75 5 "Bolivia"               ,  place(c) size(3.1) color("`child'*0.5") just(center))
-           text(-2.45 5 "St Vincent"            ,  place(c) size(3.1) color("`child'*0.5") just(center))
+           /// text(-3.375 5.25 "Haiti"                 ,  place(c) size(3.1) color("`child'*0.5") just(center))
+           /// text(-2.75 5 "Bolivia"               ,  place(c) size(3.1) color("`child'*0.5") just(center))
+           /// text(-2.45 5 "St Vincent"            ,  place(c) size(3.1) color("`child'*0.5") just(center))
            /// CVD
-           text(-3.55 6 "Haiti"                 ,  place(c) size(3.1) color("`child'*0.5") just(center))
-           text(-3.25 6 "Guyana"                ,  place(c) size(3.1) color("`child'*0.5") just(center))
-           text(-2.95 6 "Suriname"              ,  place(c) size(3.1) color("`child'*0.5") just(center))
+           /// text(-3.55 6 "Haiti"                 ,  place(c) size(3.1) color("`child'*0.5") just(center))
+           /// text(-3.25 6 "Guyana"                ,  place(c) size(3.1) color("`child'*0.5") just(center))
+           /// text(-2.95 6 "Suriname"              ,  place(c) size(3.1) color("`child'*0.5") just(center))
+
+            /// INDEX OF DISPARITY VALUES
+           text(-4.4 0.3 "ID{superscript:`ddagger'}" ,  place(c) size(7) color("`child'*0.5") just(center))
+           text(-4.4 0.9 "`id1'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
+           text(-4.4 1.9 "`id2'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
+           text(-4.4 2.9 "`id3'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
+           text(-4.4 3.9 "`id4'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
+           text(-4.4 4.9 "`id5'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
+           text(-4.4 5.9 "`id6'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
 
            /// Arrow text 
            text(-0.75 0.2 "Higher" "Rate" ,  place(c) size(3.1) color("`child'*0.5") just(center))
 
             /// Note text 
-           text(1.90 0.5 "* Five Caribbean countries with no cases of rheumatic heart disease in 2019: Antigua, Bahamas, Belize, Grenada, St Lucia." ,  place(e) size(2.5) color("`child'*0.5"))
+           /// text(1.90 0.5 "`dagger' Five Caribbean countries with no cases of rheumatic heart disease in 2019: Antigua, Bahamas, Belize, Grenada, St Lucia." ,  
+           ///                         place(e) size(2.5) color("`child'*0.75") just(left))
+           text(1.90 0.5 "`ddagger' ID = Index of Disparity." ,  
+                                    place(e) size(2.5) color("`child'*0.75")  just(left))
 
 			legend(off)
 			name(eq1)
 			;
 #delimit cr	
-sort cod mr_rel2

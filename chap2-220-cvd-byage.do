@@ -30,6 +30,9 @@
 ** HEADER -----------------------------------------------------
 
 ** DEATHS by AGE
+** DATASETS FROM: 
+**      chap2-000a-mr-region-groups.do
+**      chap2-000a-mr-region.do
 tempfile t1 cvd1 
 use "`datapath'\from-who\chap2_equiplot_mr_byage_allcvd", replace
 keep if year==2019 & who_region==2 & ghecause==400 
@@ -81,8 +84,9 @@ save `t1', replace
 
 
 ** DALY by AGE
-** Dataset comes from -->  chap2-102-cvd-rate-region.do
-tempfile cvd2 
+** DATASETS FROM: 
+**      chap2-000a-daly-region-groups.do
+**      chap2-000a-daly-region.dotempfile cvd2 
 use "`datapath'\from-who\chap2_equiplot_daly_byage_allcvd", replace
 keep if year==2019 & who_region==2 & ghecause==400 
 drop pop dalyt who_region year
@@ -148,7 +152,7 @@ order cod ghecause death_* daly_*
 ** ------------------------------------------------------
 
 ** COLORS - PURPLES for CVD
-    colorpalette hcl, purples  nograph
+    colorpalette hcl, purples nograph n(14)
     local list r(p) 
     ** Age groups
     local child `r(p2)'    
@@ -296,5 +300,91 @@ sort type cod
 			lab(11 "Elderly") 		
             )
 			name(equiplot_byage)
+			;
+#delimit cr	
+
+** Max and min for deaths
+egen mind = rowmin(p1 p2 p3 p4 p5)
+egen maxd = rowmax(p1 p2 p3 p4 p5)
+order mind maxd, after(p5)
+egen mindaly = rowmin(daly1 daly2 daly3 daly4 daly5)
+egen maxdaly = rowmax(daly1 daly2 daly3 daly4 daly5)
+order mindaly maxdaly, after(daly5)
+
+
+** VERSION 2
+#delimit ;
+	gr twoway 
+        (scatteri `outer1' , recast(area) lw(0.25) lc(gs10) fc(none) )
+        (scatteri `outer2' , recast(line) lw(0.25) lc(gs10) fc(none) )
+        (scatteri `outer3' , recast(line) lw(0.25) lc(gs10) fc(none) )
+        (scatteri `legend1' , msize(6) m(o) mlw(0.1) mlc(gs10) mfc("`child'") )
+        (scatteri `legend2' , msize(6) m(o) mlw(0.1) mlc(gs10) mfc("`youth'") )
+        (scatteri `legend3' , msize(6) m(o) mlw(0.1) mlc(gs10) mfc("`young'") )
+        (scatteri `legend4' , msize(6) m(o) mlw(0.1) mlc(gs5)  mfc("`older'") )
+        (scatteri `legend5' , msize(6) m(o) mlw(0.1) mlc(gs5)  mfc("`elderly'") )
+
+        /// DEATH horizontal lines
+        (rbar mind maxd cod2 if type==1, horizontal fc("`elderly'")   barw(0.5) lw(none))
+
+        /// DALY horizontal lines
+        (rbar mindaly maxdaly cod2 if type==2, horizontal fc("`elderly'")   barw(0.5) lw(none))
+
+		/// DEATH Points
+        (sc cod2 p1 if type==1,  msize(8) m(o) mlc(gs10) mfc("`child'%75") mlw(0.1))
+        (sc cod2 p2 if type==1 , msize(8) m(o) mlc(gs10) mfc("`youth'%75") mlw(0.1))
+        (sc cod2 p3 if type==1 , msize(8) m(o) mlc(gs10) mfc("`young'%75") mlw(0.1))
+        (sc cod2 p4 if type==1 , msize(8) m(o) mlc(gs7) mfc("`older'%75") mlw(0.1))
+        (sc cod2 p5 if type==1 , msize(8) m(o) mlc(gs7) mfc("`elderly'%75") mlw(0.1))
+		/// DALY Points
+        (sc cod2 daly1 , msize(8) m(o) mlc(gs10) mfc("`child'%75") mlw(0.1))
+        (sc cod2 daly2 , msize(8) m(o) mlc(gs10) mfc("`youth'%75") mlw(0.1))
+        (sc cod2 daly3 , msize(8) m(o) mlc(gs10) mfc("`young'%75") mlw(0.1))
+        (sc cod2 daly4 , msize(8) m(o) mlc(gs7) mfc("`older'%75") mlw(0.1))
+        (sc cod2 daly5 , msize(8) m(o) mlc(gs7) mfc("`elderly'%75") mlw(0.1))
+		,
+			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 		
+			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 
+			ysize(6) xsize(15)
+
+			/// X-axis
+			xlab(0 50 100 120 "0" 170 "50" 220 "100", 
+			labc(gs8) labs(4) notick grid glc(gs16) angle(0) format(%9.0f))
+			xscale(noline range(-5(5)100) lw(vthin)) 
+			xtitle(" ", size(3) color(gs8) margin(l=0 r=0 t=0 b=0)) 
+            xmtick(0 25 75 100 120 145 170 195 220, tlc(gs8))
+
+			/// Y-axis
+			ylab(	1 "ischaemic" 
+                    2 "stroke" 
+                    3 "hypertensive" 
+                    4 "cardiomyopathy etc" 
+                    5 "rheumatic" 
+                    6 "all cvd"
+					,
+			labc(gs8) labs(4) tlc(gs8) nogrid notick glc(blue) angle(0) format(%9.0f) labgap(2) )
+			yscale(noline reverse range(0.5(0.5)7.5) noextend   ) 
+			ytitle("", color(gs8) size(3) margin(l=1 r=1 t=1 b=1)) 
+
+            text(-0.3 50 "Deaths"           ,  place(c) size(5) color(gs8) just(right))
+            text(-0.3 170 "DALYs"           ,  place(c) size(5) color(gs8) just(right))
+            text(7 50 "% of all Deaths"     ,  place(c) size(4) color(gs8) just(right))
+            text(7 170 "% of all DALYs"     ,  place(c) size(4) color(gs8) just(right))
+            text(2  245 "young children"     ,  place(e) size(3) color(gs8) just(right))
+            text(2.75  245 "adolescents"     ,  place(e) size(3) color(gs8) just(right))
+            text(3.5   245 "young adults"     ,  place(e) size(3) color(gs8) just(right))
+            text(4.25  245 "older adults"    ,  place(e) size(3) color(gs8) just(right))
+            text(5     245 "elderly"            ,  place(e) size(3) color(gs8) just(right))
+
+			legend(off size(3) color(gs8) position(3) nobox ring(0) bm(t=0 b=0 l=0 r=0) colf cols(1)
+			region(fcolor(gs16) lw(none) margin(t=0 b=1 l=0 r=0)) 
+			order(7 8 9 10 11) textfirst
+			lab(7 "Children") 
+			lab(8 "Youth") 		
+			lab(9 "Young adults") 		
+			lab(10 "Older adults") 		
+			lab(11 "Elderly") 		
+            )
+			name(equiplot_byage2)
 			;
 #delimit cr	

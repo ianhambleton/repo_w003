@@ -73,8 +73,8 @@
 ** -----------------------------------------------------
 
 ** Mortality Rate statistics first
-** use "`datapath'\from-who\chap2_000_mr", clear
-use "`datapath'\from-who\chap2_000_mr", clear
+use "`datapath'\from-who\chap2_000_mr_adjusted", clear
+rename mortr arate 
 
 ** Create new GHE CoD order for Table 
 ** 3 - IHD
@@ -130,7 +130,6 @@ restore
 ** Mortality Rate in 2019
 preserve
     sort sex cod 
-    replace arate = arate* 100000 
     keep if region==2000 & year==2019 & sex==3
     ** Women and Men combined  
     tabdisp cod , cell(arate) format(%6.1fc) 
@@ -192,14 +191,13 @@ restore
 
 ** -----------------------------------------------------
 ** COLUMN 4 
-** Outputs: Relative Change in Mortaity Rate between 2000 and 2019 
+** Outputs: Relative Change in Mortality Rate between 2000 and 2019 
 ** improve{1-6}.png or worsen{1-6}.png (1-6 are the GHE causes)
 ** -----------------------------------------------------
 ** Graphic of Absolute or Relative Change between 2000 and 2019
 preserve
     keep if sex==3 & region==2000 & (year==2000 | year==2019)
     keep year cod arate 
-    replace arate = arate* 100000 
     reshape wide arate, i(cod) j(year)
 
     ** Improving rate (green chart) or Worsening rate (so red chart) 
@@ -294,7 +292,6 @@ restore
 preserve
     keep if sex<3 & region==2000 & year==2019
     keep sex cod arate 
-    replace arate = arate* 100000 
     reshape wide arate, i(cod) j(sex)
 
     gen arate_ratio = arate1 / arate2 
@@ -319,7 +316,8 @@ restore
 ** -----------------------------------------------------
 
 ** Mortality Rate statistics first
-use "`datapath'\from-who\chap2_000_daly", clear
+use "`datapath'\from-who\chap2_000_daly_adjusted", clear
+rename dalyr arate
 
 ** Create new GHE CoD order for Table 
 ** 3 - IHD
@@ -376,7 +374,6 @@ restore
 preserve
     sort sex cod 
     rename arate drate
-    replace drate = drate* 100000 
     keep if region==2000 & year==2019 & sex==3
     ** Women and Men combined  
     tabdisp cod , cell(drate) format(%6.1fc) 
@@ -452,7 +449,6 @@ preserve
     rename arate drate 
     keep if sex==3 & region==2000 & (year==2000 | year==2019)
     keep year cod drate 
-    replace drate = drate* 100000 
     reshape wide drate, i(cod) j(year)
 
     ** Improving rate (green chart) or Worsening rate (so red chart) 
@@ -548,7 +544,6 @@ preserve
     rename arate drate 
     keep if sex<3 & region==2000 & year==2019
     keep sex cod drate 
-    replace drate = drate* 100000 
     reshape wide drate, i(cod) j(sex)
 
     gen drate_ratio = drate1 / drate2 

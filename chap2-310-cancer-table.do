@@ -75,19 +75,25 @@
 tempfile kcancer region_mr12 region_mr3 region_daly12 region_daly3
 
 ** Mortality Rate statistics first
-use "`datapath'\from-who\chap2_000_mr", clear
-** Keep the cancers
-keep if ghecause>=6 & ghecause<=28
-** Identify the top 10 cancers in 2019 by combined (women and men) mortality rate
-keep if region==2000 & year==2019 & sex==3
-keep ghecause dths pop_dths arate*
-replace arate = arate * 100000 
-replace arate_new = arate_new * 100000 
-gen arate_final = arate
-replace arate_final = arate_new if arate_new < . 
-drop arate arate_new 
-gsort -arate_final
-keep if _n <= 10
+** use "`datapath'\from-who\chap2_000_mr", clear
+use "`datapath'\from-who\chap2_000_mr_adjusted", clear
+rename mortr arate
+
+**------------------------------------------------
+** BEGIN STATISTICS FOR TEXT
+** to accompany the CANCER METRICS TABLE
+** 12   "trachea/lung" 
+** 14   "breast" 
+** 18   "prostate" 
+** 9    "colon/rectum" 
+** 15   "cervix uteri" 
+** 11   "pancreas"
+** 27   "lymphomas/myeloma"
+** 8    "stomach"
+** 10   "liver"
+** 28   "leukemia"
+** 500  "all cancers", modif    
+** -----------------------------------------------
 
 ** Create new GHE CoD order for Table 
 gen cod = 1 if ghecause==12 
@@ -100,6 +106,7 @@ replace cod = 7 if ghecause==27
 replace cod = 8 if ghecause==8
 replace cod = 9 if ghecause==10
 replace cod = 10 if ghecause==28
+replace cod = 11 if ghecause==500
 #delimit ; 
 label define cod_   1 "trachea/lung" 
                     2 "breast" 
@@ -111,71 +118,10 @@ label define cod_   1 "trachea/lung"
                     8 "stomach"
                     9 "liver"
                     10 "leukemia"
-                    11 "all cancers"
-                    12 "all cause", modify ;
+                    11 "all cancers", modify ;
 #delimit cr
 label values cod cod_ 
-keep ghecause cod
-save `kcancer' , replace
-
-** Mortality rates - ALL CANCERS (500) and ALL_CAUSE (100)
-use "`datapath'\from-who\chap2_000a_mr_region-groups", clear
-keep if ghecause==500 | ghecause==100
-gen cod = 11 if ghecause==500
-replace cod = 12 if ghecause==100 
-save `region_mr12', replace 
-
-use "`datapath'\from-who\chap2_000a_mr_region_groups_both", clear
-keep if ghecause==500 | ghecause==100
-gen cod = 11 if ghecause==500 
-replace cod = 12 if ghecause==100 
-save `region_mr3', replace 
-
-use "`datapath'\from-who\chap2_000e_daly_region_groups", clear
-keep if ghecause==500 | ghecause==100
-gen cod = 11 if ghecause==500
-replace cod = 12 if ghecause==100 
-save `region_daly12', replace 
-
-use "`datapath'\from-who\chap2_000e_daly_region_groups_both", clear
-keep if ghecause==500 | ghecause==100
-gen cod = 11 if ghecause==500
-replace cod = 12 if ghecause==100 
-save `region_daly3', replace 
-
-** First bring in and save data for ALL CANCERS COMBINED
-use "`datapath'\from-who\chap2_000_mr", clear
-append using `region_mr12'
-append using `region_mr3'
-drop aupp alow ase pop 
-merge m:m ghecause using `kcancer', update replace
-drop _merge
-order ghecause cod year sex region dths pop_dths dths_exist crate arate arate_new 
-keep if cod<.
-tempfile t1
-save `t1', replace
-
-** Deaths (OR DALYs) for all-cancers combined
-** DATASET FROM -- chap2-004-initial-panel
-use "`datapath'\from-who\chap2_initial_panel", replace
-keep if (ghecause==1 | ghecause==4) & who_region==2 & paho_subregion==.  & iso3n==.
-replace ghecause = 500 if ghecause==4
-replace ghecause = 100 if ghecause==1
-gen cod = 11 if ghecause==500
-replace cod = 12 if ghecause==100
-keep cod dths sex year region
-tempfile t2
-save `t2', replace
-
-** The dataset to re-use
-use `t1', replace
-merge m:m region cod sex year using `t2' , update replace
-
-replace arate = arate_new if arate_new<. 
-tempfile cancer_table
-save `cancer_table', replace
-save "`datapath'\from-who\chap2_cancer_table1", replace
-
+keep if cod<=11
 
 ** -----------------------------------------------------
 ** COLUMN 1
@@ -208,7 +154,6 @@ restore
 preserve
     sort sex cod 
     ** replace arate = arate_new if arate_new<. 
-    replace arate = arate* 100000 
     keep if region==2000 & year==2019 & sex==3
     ** Women and Men combined  
     tabdisp cod , cell(arate) format(%6.1fc) 
@@ -222,7 +167,7 @@ preserve
 restore 
 
 
-/*
+
 ** -----------------------------------------------------
 ** COLUMN 3 
 ** Outputs: Mortality Rate change over time 
@@ -278,7 +223,6 @@ restore
 preserve
     keep if sex==3 & region==2000 & (year==2000 | year==2019)
     keep year cod arate 
-    replace arate = arate* 100000 
     reshape wide arate, i(cod) j(year)
 
     ** Improving rate (green chart) or Worsening rate (so red chart) 
@@ -362,7 +306,7 @@ preserve
     }
 restore
 
-*/
+
 
 ** -----------------------------------------------------
 ** COLUMN 5 
@@ -373,7 +317,6 @@ restore
 preserve
     keep if sex<3 & region==2000 & year==2019
     keep sex cod arate 
-    replace arate = arate* 100000 
     reshape wide arate, i(cod) j(sex)
 
     gen arate_ratio = arate1 / arate2 
@@ -399,96 +342,53 @@ restore
 
 tempfile kcancer region_mr12 region_mr3 region_daly12 region_daly3
 
-** Mortality Rate statistics first
-use "`datapath'\from-who\chap2_000_daly", clear
-** Keep the cancers
-keep if ghecause>=6 & ghecause<=28
-** Identify the top 10 cancers in 2019 by combined (women and men) mortality rate
-    keep if region==2000 & year==2019 & sex==3
-    keep ghecause daly pop_daly arate*
-    replace arate = arate * 100000 
-    replace arate_new = arate_new * 100000 
-    gen arate_final = arate
-    replace arate_final = arate_new if arate_new < . 
-    drop arate arate_new 
-    gsort -arate_final
-    keep if _n <= 10
+** DALY Rate statistics
+use "`datapath'\from-who\chap2_000_daly_adjusted", clear
+rename dalyr arate 
 
-    ** Create new GHE CoD order for Table 
-    gen cod = 1 if ghecause==12 
-    replace cod = 2 if ghecause==14
-    replace cod = 3 if ghecause==18
-    replace cod = 4 if ghecause==9
-    replace cod = 5 if ghecause==15
-    replace cod = 6 if ghecause==11
-    replace cod = 7 if ghecause==27
-    replace cod = 8 if ghecause==8
-    replace cod = 9 if ghecause==10
-    replace cod = 10 if ghecause==28
-    #delimit ; 
-    label define cod_   1 "trachea/lung" 
-                        2 "breast" 
-                        3 "prostate" 
-                        4 "colon/rectum" 
-                        5 "cervix uteri" 
-                        6 "pancreas"
-                        7 "lymphomas/myeloma"
-                        8 "stomach"
-                        9 "liver"
-                        10 "leukemia"
-                        11 "all cancers"
-                        12 "all cause", modify ;
-    #delimit cr
-    label values cod cod_ 
-    keep ghecause cod
-    save `kcancer' , replace
+**------------------------------------------------
+** BEGIN STATISTICS FOR TEXT
+** to accompany the CANCER METRICS TABLE
+** 12   "trachea/lung" 
+** 14   "breast" 
+** 18   "prostate" 
+** 9    "colon/rectum" 
+** 15   "cervix uteri" 
+** 11   "pancreas"
+** 27   "lymphomas/myeloma"
+** 8    "stomach"
+** 10   "liver"
+** 28   "leukemia"
+** 500  "all cancers", modif    
+** -----------------------------------------------
 
-use "`datapath'\from-who\chap2_000e_daly_region_groups", clear
-keep if ghecause==500 | ghecause==100
-gen cod = 11 if ghecause==500
-replace cod = 12 if ghecause==100
-save `region_daly12', replace 
-
-use "`datapath'\from-who\chap2_000e_daly_region_groups_both", clear
-keep if ghecause==500 | ghecause==100
-gen cod = 11 if ghecause==500
-replace cod = 12 if ghecause==100
-save `region_daly3', replace 
-
-** First bring in and save data for ALL CANCERS COMBINED
-use "`datapath'\from-who\chap2_000_daly", clear
-append using `region_daly12'
-append using `region_daly3'
-drop aupp alow ase pop 
-merge m:m ghecause using `kcancer', update replace
-drop _merge
-order ghecause cod year sex region daly pop_daly daly_exist crate arate arate_new 
-keep if cod<.
-tempfile t1
-save `t1', replace
-
-** Deaths (OR DALYs) for all cancers combined
-use "`datapath'\from-who\chap2_initial_panel", replace
-keep if (ghecause==4 | ghecause==1) & who_region==2 & paho_subregion==.  & iso3n==.
-replace ghecause = 500 if ghecause==4
-replace ghecause = 100 if ghecause==1
-gen cod = 11 if ghecause==500
-replace cod = 12 if ghecause==100
-keep cod daly sex year region
-tempfile t2
-save `t2', replace
-
-** The dataset to re-use
-use `t1', replace
-merge m:m region cod sex year using `t2' , update replace
-
-replace arate = arate_new if arate_new<. 
-tempfile cancer_table
-save `cancer_table', replace
-save "`datapath'\from-who\chap2_cancer_table2", replace
-
-
-/*
+** Create new GHE CoD order for Table 
+gen cod = 1 if ghecause==12 
+replace cod = 2 if ghecause==14
+replace cod = 3 if ghecause==18
+replace cod = 4 if ghecause==9
+replace cod = 5 if ghecause==15
+replace cod = 6 if ghecause==11
+replace cod = 7 if ghecause==27
+replace cod = 8 if ghecause==8
+replace cod = 9 if ghecause==10
+replace cod = 10 if ghecause==28
+replace cod = 11 if ghecause==500
+#delimit ; 
+label define cod_   1 "trachea/lung" 
+                    2 "breast" 
+                    3 "prostate" 
+                    4 "colon/rectum" 
+                    5 "cervix uteri" 
+                    6 "pancreas"
+                    7 "lymphomas/myeloma"
+                    8 "stomach"
+                    9 "liver"
+                    10 "leukemia"
+                    11 "all cancers", modify ;
+#delimit cr
+label values cod cod_ 
+keep if cod<=11
 
 
 
@@ -522,7 +422,6 @@ restore
 preserve
     sort sex cod 
     rename arate drate
-    replace drate = drate* 100000 
     keep if region==2000 & year==2019 & sex==3
     ** Women and Men combined  
     tabdisp cod , cell(drate) format(%6.1fc) 
@@ -537,7 +436,7 @@ restore
 
 
 
-/*
+
 
 ** -----------------------------------------------------
 ** COLUMN 8 
@@ -599,7 +498,6 @@ preserve
     rename arate drate 
     keep if sex==3 & region==2000 & (year==2000 | year==2019)
     keep year cod drate 
-    replace drate = drate* 100000 
     reshape wide drate, i(cod) j(year)
 
     ** Improving rate (green chart) or Worsening rate (so red chart) 
@@ -683,7 +581,7 @@ preserve
     }
 restore
 
-*/
+
 
 ** -----------------------------------------------------
 ** COLUMN 9 
@@ -695,7 +593,6 @@ preserve
     rename arate drate 
     keep if sex<3 & region==2000 & year==2019
     keep sex cod drate 
-    replace drate = drate* 100000 
     reshape wide drate, i(cod) j(sex)
 
     gen drate_ratio = drate1 / drate2 
@@ -708,8 +605,6 @@ preserve
         global sdaly`x' = col5[`x',2]
     }
 restore
-
-
 
 
 

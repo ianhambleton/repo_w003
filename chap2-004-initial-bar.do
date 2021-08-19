@@ -31,12 +31,12 @@
 
 tempfile t1
 
-** Mortality rate 
+** Mortality COUNT 
 use "`datapath'\from-who\chap2_000_mr", clear
 keep year sex ghecause region dths 
 save `t1', replace 
 
-** DALY rate 
+** DALY COUNT
 use "`datapath'\from-who\chap2_000_daly", clear
 keep year sex ghecause region daly 
 merge 1:1 year sex ghecause region using `t1' 
