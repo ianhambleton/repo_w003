@@ -29,7 +29,6 @@
     log using "`logpath'\chap2-000e-daly-region", replace
 ** HEADER -----------------------------------------------------
 
-/*
 
 ** ------------------------------------------
 ** Load and save the WHO standard population
@@ -128,8 +127,9 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
                     (610  = 500 )
                     (1170 = 600 )
                     (800  = 700 )
-                    (820 940 = 800 )
-                    (1510 = 900 )
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 )
                     ;
     #delimit cr
     drop if age<0 
@@ -173,8 +173,9 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
                     (610  = 500 )
                     (1170 = 600 )
                     (800  = 700 )
-                    (820 940 = 800 )
-                    (1510 = 900 )
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 )
                     ;
     #delimit cr
     drop if age<0 
@@ -218,8 +219,9 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
                     (610  = 500 )
                     (1170 = 600 )
                     (800  = 700 )
-                    (820 940 = 800 )
-                    (1510 = 900 )
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 )
                     ;
     #delimit cr
     drop if age<0 
@@ -263,8 +265,9 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
                     (610  = 500 )
                     (1170 = 600 )
                     (800  = 700 )
-                    (820 940 = 800 )
-                    (1510 = 900 )
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 )
                     ;
     #delimit cr
     drop if age<0 
@@ -308,8 +311,9 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
                     (610  = 500 )
                     (1170 = 600 )
                     (800  = 700 )
-                    (820 940 = 800 )
-                    (1510 = 900 )
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 )
                     ;
     #delimit cr
     drop if age<0 
@@ -355,8 +359,9 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
                     (610  = 500 )
                     (1170 = 600 )
                     (800  = 700 )
-                    (820 940 = 800 )
-                    (1510 = 900 )
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 )
                     ;
     #delimit cr
     drop if age<0 
@@ -469,8 +474,9 @@ label define ghecause_
                     500  "cancer"
                     600  "respiratory"
                     700  "diabetes"
-                    800  "mental/neurological"
-                    900  "injuries", modify
+                    800  "mental"
+                    900  "neurological"
+                    1000 "injuries", modify
                     ;
 #delimit cr
 label values ghecause ghecause_ 
@@ -565,8 +571,9 @@ label define ghecause_
                     500  "cancer"
                     600  "respiratory"
                     700  "diabetes"
-                    800  "mental/neurological"
-                    900  "injuries", modify
+                    800  "mental"
+                    900  "neurological"
+                    1000 "injuries", modify
                     ;
 #delimit cr
 label values ghecause ghecause_ 
@@ -579,8 +586,6 @@ save "`datapath'\from-who\chap2_000e_daly_region_groups", replace
 
 
 
-
-*/
 
 
 
@@ -623,8 +628,9 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
                     (610  = 500 )
                     (1170 = 600 )
                     (800  = 700 )
-                    (820 940 = 800 )
-                    (1510 = 900 )
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 )
                     ;
     #delimit cr
     drop if age<0 
@@ -669,8 +675,9 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
                     (610  = 500 )
                     (1170 = 600 )
                     (800  = 700 )
-                    (820 940 = 800 )
-                    (1510 = 900 )
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 )
                     ;
     #delimit cr
     drop if age<0 
@@ -713,8 +720,9 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
                     (610  = 500 )
                     (1170 = 600 )
                     (800  = 700 )
-                    (820 940 = 800 )
-                    (1510 = 900 )
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 )
                     ;
     #delimit cr
     drop if age<0 
@@ -757,8 +765,9 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
                     (610  = 500 )
                     (1170 = 600 )
                     (800  = 700 )
-                    (820 940 = 800 )
-                    (1510 = 900 )
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 )
                     ;
     #delimit cr
     drop if age<0 
@@ -801,8 +810,9 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
                     (610  = 500 )
                     (1170 = 600 )
                     (800  = 700 )
-                    (820 940 = 800 )
-                    (1510 = 900 )
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 )
                     ;
     #delimit cr
     drop if age<0 
@@ -845,8 +855,9 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
                     (610  = 500 )
                     (1170 = 600 )
                     (800  = 700 )
-                    (820 940 = 800 )
-                    (1510 = 900 )
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 )
                     ;
     #delimit cr
     drop if age<0 
@@ -958,8 +969,9 @@ label define ghecause_
                     500  "cancer"
                     600  "respiratory"
                     700  "diabetes"
-                    800  "mental/neurological"
-                    900  "injuries", modify
+                    800  "mental"
+                    900  "neurological"
+                    1000 "injuries", modify
                     ;
 #delimit cr
 label values ghecause ghecause_ 
@@ -975,7 +987,7 @@ save "`datapath'\from-who\chap2_equiplot_daly_byage_allcvd", replace
 save "`datapath'\from-who\chap2_equiplot_daly_byage_groupeddeath", replace
 
 
-/*
+
 
 ** 2019, Male, Communicable Disease
 forval x = 2000(1)2019 {
@@ -1052,8 +1064,9 @@ label define ghecause_
                     500  "cancer"
                     600  "respiratory"
                     700  "diabetes"
-                    800  "mental/neurological"
-                    900  "injuries", modify
+                    800  "mental"
+                    900  "neurological"
+                    1000 "injuries", modify
                     ;
 #delimit cr
 label values ghecause ghecause_ 

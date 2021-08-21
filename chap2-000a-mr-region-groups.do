@@ -30,7 +30,6 @@
 ** HEADER -----------------------------------------------------
 
 
-/*
 
 ** ------------------------------------------
 ** Load and save the WHO standard population
@@ -123,8 +122,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who1-allcauses", replace
                     (610  = 500 )
                     (1170 = 600 )
                     (800  = 700 )
-                    (820 940 = 800 )
-                    (1510 = 900 )
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 )
                     ;
     #delimit cr
     drop if age<0 
@@ -163,8 +163,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
                     (610  = 500 )
                     (1170 = 600 )
                     (800  = 700 )
-                    (820 940 = 800 )
-                    (1510 = 900 )
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 )
                     ;
     #delimit cr
 
@@ -204,8 +205,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who3-allcauses", replace
                     (610  = 500 )
                     (1170 = 600 )
                     (800  = 700 )
-                    (820 940 = 800 )
-                    (1510 = 900 )
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 )
                     ;
     #delimit cr
     drop if age<0 
@@ -244,8 +246,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who4-allcauses", replace
                     (610  = 500 )
                     (1170 = 600 )
                     (800  = 700 )
-                    (820 940 = 800 )
-                    (1510 = 900 )
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 )
                     ;
     #delimit cr
     drop if age<0 
@@ -285,8 +288,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who5-allcauses", replace
                     (610  = 500 )
                     (1170 = 600 )
                     (800  = 700 )
-                    (820 940 = 800 )
-                    (1510 = 900 )
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 )
                     ;
     #delimit cr
     drop if age<0 
@@ -326,8 +330,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who6-allcauses", replace
                     (610  = 500 )
                     (1170 = 600 )
                     (800  = 700 )
-                    (820 940 = 800 )
-                    (1510 = 900 )
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 )
                     ;
     #delimit cr
     drop if age<0 
@@ -442,8 +447,9 @@ label define ghecause_
                     500  "cancer"
                     600  "respiratory"
                     700  "diabetes"
-                    800  "mental/neurological"
-                    900  "injuries", modify
+                    800  "mental"
+                    900  "neurological"
+                    1000  "injuries", modify
                     ;
 #delimit cr
 label values ghecause ghecause_ 
@@ -539,8 +545,9 @@ label define ghecause_
                     500  "cancer"
                     600  "respiratory"
                     700  "diabetes"
-                    800  "mental/neurological"
-                    900  "injuries", modify
+                    800  "mental"
+                    900  "neurological"
+                    1000  "injuries", modify
                     ;
 #delimit cr
 label values ghecause ghecause_ 
@@ -551,7 +558,10 @@ save "`datapath'\from-who\chap2_000a_mr_region-groups", replace
 
 
 
-*/
+
+
+
+
 
 ** Repeat for women and men combined 
 
@@ -588,8 +598,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who1-allcauses", replace
                     (610  = 500 )
                     (1170 = 600 )
                     (800  = 700 )
-                    (820 940 = 800 )
-                    (1510 = 900 )
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 )
                     ;
     #delimit cr
     drop if age<0 
@@ -629,8 +640,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
                     (610  = 500 )
                     (1170 = 600 )
                     (800  = 700 )
-                    (820 940 = 800 )
-                    (1510 = 900 )
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 )
                     ;
     #delimit cr
     drop if age<0 
@@ -669,8 +681,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who3-allcauses", replace
                     (610  = 500 )
                     (1170 = 600 )
                     (800  = 700 )
-                    (820 940 = 800 )
-                    (1510 = 900 )
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 )
                     ;
     #delimit cr
     drop if age<0 
@@ -709,8 +722,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who4-allcauses", replace
                     (610  = 500 )
                     (1170 = 600 )
                     (800  = 700 )
-                    (820 940 = 800 )
-                    (1510 = 900 )
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 )
                     ;
     #delimit cr
     drop if age<0 
@@ -750,8 +764,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who5-allcauses", replace
                     (610  = 500 )
                     (1170 = 600 )
                     (800  = 700 )
-                    (820 940 = 800 )
-                    (1510 = 900 )
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 )
                     ;
     #delimit cr
     drop if age<0 
@@ -790,8 +805,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who6-allcauses", replace
                     (610  = 500 )
                     (1170 = 600 )
                     (800  = 700 )
-                    (820 940 = 800 )
-                    (1510 = 900 )
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 )
                     ;
     #delimit cr
     drop if age<0 
@@ -908,8 +924,9 @@ label define ghecause_
                     500  "cancer"
                     600  "respiratory"
                     700  "diabetes"
-                    800  "mental/neurological"
-                    900  "injuries", modify
+                    800  "mental"
+                    900  "neurological"
+                    1000  "injuries", modify
                     ;
 #delimit cr
 label values ghecause ghecause_ 
@@ -923,7 +940,7 @@ save `for_mr' , replace
 save "`datapath'\from-who\chap2_equiplot_mr_byage_allcvd", replace
 save "`datapath'\from-who\chap2_equiplot_mr_byage_groupeddeath", replace
 
-/*
+
 ** 2019, Male, Communicable Disease
 forval x = 2000(1)2019 {
         * TODO: Change next line for each disease group
@@ -999,8 +1016,9 @@ label define ghecause_
                     500  "cancer"
                     600  "respiratory"
                     700  "diabetes"
-                    800  "mental/neurological"
-                    900  "injuries", modify
+                    800  "mental"
+                    900 "neurological"
+                    1000  "injuries", modify
                     ;
 #delimit cr
 label values ghecause ghecause_ 

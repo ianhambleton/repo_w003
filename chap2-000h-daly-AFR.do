@@ -245,9 +245,10 @@ use "`datapath'\from-who\who-ghe-daly-001-who1-allcauses", replace
                     (1100 = 400 )
                     (610  = 500 )
                     (1170 = 600 )
-                    (820 940 = 800 )
-                    (1510 = 900 )                    
-                    ;
+                    (820 = 800 )
+                    (940 = 900 )
+                    (1510 = 1000 );
+
     #delimit cr
     **keep if who_region==2
     drop if age<0 
@@ -403,8 +404,9 @@ label define ghecause_
                     500  "cancer"
                     600  "respiratory"
                     700  "diabetes"
-                    800  "mental/neurological"
-                    900  "injuries"
+                    800  "mental" 
+                    900  "neurological"
+                    1000 "injuries"
 , modify;
 #delimit cr
 label values ghecause ghecause_ 
