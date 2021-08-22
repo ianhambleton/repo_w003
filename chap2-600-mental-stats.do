@@ -226,7 +226,7 @@ qui {
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
     format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
 
-    noi dis "DEPRESSIVE DISORDERS" 
+    noi dis "DRUG USE DISORDERS" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
     noi list year drate1 drate2 drate3 dratio_rate ddiff_rate ddiff_count, noobs ab(20)
 }
@@ -284,11 +284,11 @@ qui {
     gen ddiff_count = daly1 - daly2 
 
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
-    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
+    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.4fc
 
-    noi dis "DEPRESSIVE DISORDERS" 
-    noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
-    noi list year drate1 drate2 drate3 dratio_rate ddiff_rate ddiff_count, noobs ab(20)
+    noi dis "ANXIETY DISORDERS" 
+    noi list year mrate1 mrate2 dths3 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20) linesize(120)
+    noi list year drate1 drate2 daly3 drate3 dratio_rate ddiff_rate ddiff_count, noobs ab(20) linesize(120)
 }
 
 
@@ -316,7 +316,7 @@ qui {
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
     format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
 
-    noi dis "DEPRESSIVE DISORDERS" 
+    noi dis "ALCOHOL USE DISORDERS" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
     noi list year drate1 drate2 drate3 dratio_rate ddiff_rate ddiff_count, noobs ab(20)
 }
@@ -347,7 +347,7 @@ qui {
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
     format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
 
-    noi dis "DEPRESSIVE DISORDERS" 
+    noi dis "SCHIZOPHRENIA" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
     noi list year drate1 drate2 drate3 dratio_rate ddiff_rate ddiff_count, noobs ab(20)
 }
@@ -377,7 +377,7 @@ qui {
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
     format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
 
-    noi dis "DEPRESSIVE DISORDERS" 
+    noi dis "ALZHEIMER / DEMENTIAS" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
     noi list year drate1 drate2 drate3 dratio_rate ddiff_rate ddiff_count, noobs ab(20)
 }
@@ -405,11 +405,11 @@ qui {
     gen ddiff_count = daly1 - daly2 
 
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
-    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
+    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.4fc
 
-    noi dis "DEPRESSIVE DISORDERS" 
-    noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
-    noi list year drate1 drate2 drate3 dratio_rate ddiff_rate ddiff_count, noobs ab(20)
+    noi dis "MIGRAINE" 
+    noi list year mrate1 mrate2 dths3 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20) linesize(120)
+    noi list year drate1 drate2 daly3 drate3 dratio_rate ddiff_rate ddiff_count, noobs ab(20) linesize(120)
 }
 
 
@@ -437,7 +437,7 @@ qui {
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
     format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
 
-    noi dis "DEPRESSIVE DISORDERS" 
+    noi dis "EPILEPSY" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
     noi list year drate1 drate2 drate3 dratio_rate ddiff_rate ddiff_count, noobs ab(20)
 }
@@ -467,7 +467,7 @@ qui {
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
     format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
 
-    noi dis "DEPRESSIVE DISORDERS" 
+    noi dis "NON-MIGRAINE HEADACHE" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
     noi list year drate1 drate2 drate3 dratio_rate ddiff_rate ddiff_count, noobs ab(20)
 }
@@ -497,7 +497,7 @@ qui {
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
     format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
 
-    noi dis "DEPRESSIVE DISORDERS" 
+    noi dis "PARKINSON DISEASE" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
     noi list year drate1 drate2 drate3 dratio_rate ddiff_rate ddiff_count, noobs ab(20)
 }
@@ -527,7 +527,7 @@ qui {
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
     format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
 
-    noi dis "DEPRESSIVE DISORDERS" 
+    noi dis "ALL MENTAL HEALTH" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20) linesize(120)
     noi list year drate1 drate2 drate3 dratio_rate ddiff_rate ddiff_count, noobs ab(20) linesize(120)
 }
@@ -557,7 +557,7 @@ qui {
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
     format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
 
-    noi dis "DEPRESSIVE DISORDERS" 
+    noi dis "ALL NEUROLOGICAL" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20) linesize(120)
     noi list year drate1 drate2 drate3 dratio_rate ddiff_rate ddiff_count, noobs ab(20) linesize(120)
 }

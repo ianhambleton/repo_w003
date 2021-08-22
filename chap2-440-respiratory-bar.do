@@ -256,9 +256,9 @@ restore
         (rbar origin2 scaler2 region2 if cod==2 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`child'") lw(0.1))           
         (rbar origin3 scaler3 region3 if cod==3 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`child'") lw(0.1))                
 
-        (rbar origin1 scaler1 region1 if cod==1 & region==2000, horizontal barw(0.6) fcol("`americas3'") lcol("`americas1'") lw(0.1))       
-        (rbar origin2 scaler2 region2 if cod==2 & region==2000, horizontal barw(0.6) fcol("`americas3'") lcol("`americas1'") lw(0.1))           
-        (rbar origin3 scaler3 region3 if cod==3 & region==2000, horizontal barw(0.6) fcol("`americas3'") lcol("`americas1'") lw(0.1))               
+        (rbar origin1 scaler1 region1 if cod==1 & region==2000, horizontal barw(0.6) fcol(gs0) lcol(gs0) lw(0.1))       
+        (rbar origin2 scaler2 region2 if cod==2 & region==2000, horizontal barw(0.6) fcol(gs0) lcol(gs0) lw(0.1))           
+        (rbar origin3 scaler3 region3 if cod==3 & region==2000, horizontal barw(0.6) fcol(gs0) lcol(gs0) lw(0.1))               
                 		,
 			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin)) 		
 			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin)) 
@@ -287,7 +287,7 @@ restore
 
            /// Y-Axis text 
            text(-18 160 "Mortality rate (per 100,000)" ,  
-                                    place(c) size(4) color("`child'*0.75") just(center))
+                                    place(c) size(4) color(gs8) just(center))
 
            /// High Rate Countries
            /// COPD
@@ -320,7 +320,7 @@ restore
  
            /// NOTE
            text(-22 0.5 "`ddagger' RED BAR is the mortality rate for the Region of the Americas." ,  
-                                    place(e) size(2.5) color("`americas1'*0.8")  just(left))
+                                    place(e) size(2.5) color(gs8)  just(left))
 			legend(off)
 			name(bar1)
 			;

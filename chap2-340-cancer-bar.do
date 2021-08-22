@@ -343,12 +343,12 @@ preserve
         (rbar origin5 scaler5 region5 if cod==5 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`child'") lw(0.1))           
         (rbar origin6 scaler6 region6 if cod==6 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`child'") lw(0.1))           
 
-        (rbar origin1 scaler1 region1 if cod==1 & region==2000, horizontal barw(0.6) fcol("`americas3'") lcol("`americas1'") lw(0.1))       
-        (rbar origin2 scaler2 region2 if cod==2 & region==2000, horizontal barw(0.6) fcol("`americas3'") lcol("`americas1'") lw(0.1))           
-        (rbar origin3 scaler3 region3 if cod==3 & region==2000, horizontal barw(0.6) fcol("`americas3'") lcol("`americas1'") lw(0.1))           
-        (rbar origin4 scaler4 region4 if cod==4 & region==2000, horizontal barw(0.6) fcol("`americas3'") lcol("`americas1'") lw(0.1))           
-        (rbar origin5 scaler5 region5 if cod==5 & region==2000, horizontal barw(0.6) fcol("`americas3'") lcol("`americas1'") lw(0.1))           
-        (rbar origin6 scaler6 region6 if cod==6 & region==2000, horizontal barw(0.6) fcol("`americas3'") lcol("`americas1'") lw(0.1))           
+        (rbar origin1 scaler1 region1 if cod==1 & region==2000, horizontal barw(0.6) fcol(gs0) lcol(gs0) lw(0.1))       
+        (rbar origin2 scaler2 region2 if cod==2 & region==2000, horizontal barw(0.6) fcol(gs0) lcol(gs0) lw(0.1))           
+        (rbar origin3 scaler3 region3 if cod==3 & region==2000, horizontal barw(0.6) fcol(gs0) lcol(gs0) lw(0.1))           
+        (rbar origin4 scaler4 region4 if cod==4 & region==2000, horizontal barw(0.6) fcol(gs0) lcol(gs0) lw(0.1))           
+        (rbar origin5 scaler5 region5 if cod==5 & region==2000, horizontal barw(0.6) fcol(gs0) lcol(gs0) lw(0.1))           
+        (rbar origin6 scaler6 region6 if cod==6 & region==2000, horizontal barw(0.6) fcol(gs0) lcol(gs0) lw(0.1))           
                 		,
 			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin)) 		
 			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin)) 
@@ -388,7 +388,7 @@ preserve
 
            /// Y-Axis text 
            text(-18 340 "Mortality rate (per 100,000)" ,  
-                                    place(c) size(4) color("`child'*0.75") just(center))
+                                    place(c) size(4) color(gs8) just(center))
 
            /// High Rate Countries
            /// Trachea / Lung
@@ -453,7 +453,7 @@ preserve
 
            /// NOTE
            text(-22 0.5 "`ddagger' RED BAR is the mortaity rate for the Region of the Americas." ,  
-                                    place(e) size(2.5) color("`americas1'*0.8")  just(left))
+                                    place(e) size(2.5) color(gs8)  just(left))
 			legend(off)
 			name(bar1)
 			;
@@ -533,7 +533,7 @@ preserve
 
            /// Y-Axis text 
            text(6 290 "Mortality rate (per 100,000)" ,  
-                                    place(c) size(7) color("`child'*0.75") just(center))
+                                    place(c) size(7) color(gs8) just(center))
 
            /// High Rate Countries
            /// Trachea / Lung

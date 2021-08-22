@@ -767,43 +767,43 @@ putdocx table cvd(16,3) = ("$arate12") , nformat(%9.1fc)  trim
 
 ** COL4. Sex ratio
 putdocx table cvd(4,4) = ("$sratio1") , nformat(%9.2fc)  trim
-putdocx table cvd(5,4) = ("$sratio2") , nformat(%9.2fc)  trim
-putdocx table cvd(6,4) = ("$sratio3") , nformat(%9.2fc)  trim
+putdocx table cvd(5,4) = ("-") , nformat(%9.2fc)  trim
+putdocx table cvd(6,4) = ("-") , nformat(%9.2fc)  trim
 putdocx table cvd(7,4) = ("$sratio4") , nformat(%9.2fc)  trim
 putdocx table cvd(8,4) = ("$sratio5") , nformat(%9.2fc)  trim
 putdocx table cvd(9,4) = ("$sratio11") , nformat(%9.2fc)  trim
 putdocx table cvd(11,4) = ("$sratio6") , nformat(%9.2fc)  trim
-putdocx table cvd(12,4) = ("$sratio7") , nformat(%9.2fc)  trim
+putdocx table cvd(12,4) = ("-") , nformat(%9.2fc)  trim
 putdocx table cvd(13,4) = ("$sratio8") , nformat(%9.2fc)  trim
-putdocx table cvd(14,4) = ("$sratio9") , nformat(%9.2fc)  trim
+putdocx table cvd(14,4) = ("-") , nformat(%9.2fc)  trim
 putdocx table cvd(15,4) = ("$sratio10") , nformat(%9.2fc)  trim
 putdocx table cvd(16,4) = ("$sratio12") , nformat(%9.2fc)  trim
 
 ** COL5. Mortality Rate Change since 2000
 putdocx table cvd(4,5) = image("`outputpath'\graphics\spike1.png")
-putdocx table cvd(5,5) = image("`outputpath'\graphics\spike2.png")
-putdocx table cvd(6,5) = image("`outputpath'\graphics\spike3.png")
+putdocx table cvd(5,5) = ("-") , nformat(%9.2fc)  trim
+putdocx table cvd(6,5) = ("-") , nformat(%9.2fc)  trim
 putdocx table cvd(7,5) = image("`outputpath'\graphics\spike4.png")
 putdocx table cvd(8,5) = image("`outputpath'\graphics\spike5.png")
 putdocx table cvd(9,5) = image("`outputpath'\graphics\spike11.png")
 putdocx table cvd(11,5) = image("`outputpath'\graphics\spike6.png")
-putdocx table cvd(12,5) = image("`outputpath'\graphics\spike7.png")
+putdocx table cvd(12,5) = ("-") , nformat(%9.2fc)  trim
 putdocx table cvd(13,5) = image("`outputpath'\graphics\spike8.png")
-putdocx table cvd(14,5) = image("`outputpath'\graphics\spike9.png")
+putdocx table cvd(14,5) = ("-") , nformat(%9.2fc)  trim
 putdocx table cvd(15,5) = image("`outputpath'\graphics\spike10.png")
 putdocx table cvd(16,5) = image("`outputpath'\graphics\spike12.png")
 
 ** COL6. Percent change
 putdocx table cvd(4,6) = image("`outputpath'\graphics\mrc1.png"), width(25pt)
-putdocx table cvd(5,6) = image("`outputpath'\graphics\mrc2.png"), width(25pt)
-putdocx table cvd(6,6) = image("`outputpath'\graphics\mrc3.png"), width(25pt)
+putdocx table cvd(5,6) = ("-") , nformat(%9.2fc)  trim
+putdocx table cvd(6,6) = ("-") , nformat(%9.2fc)  trim
 putdocx table cvd(7,6) = image("`outputpath'\graphics\mrc4.png"), width(25pt)
 putdocx table cvd(8,6) = image("`outputpath'\graphics\mrc5.png"), width(25pt)
 putdocx table cvd(9,6) = image("`outputpath'\graphics\mrc11.png"), width(25pt)
 putdocx table cvd(11,6) = image("`outputpath'\graphics\mrc6.png"), width(25pt)
-putdocx table cvd(12,6) = image("`outputpath'\graphics\mrc7.png"), width(25pt)
+putdocx table cvd(12,6) = ("-") , nformat(%9.2fc)  trim
 putdocx table cvd(13,6) = image("`outputpath'\graphics\mrc8.png"), width(25pt)
-putdocx table cvd(14,6) = image("`outputpath'\graphics\mrc9.png"), width(25pt)
+putdocx table cvd(14,6) = ("-") , nformat(%9.2fc)  trim
 putdocx table cvd(15,6) = image("`outputpath'\graphics\mrc10.png"), width(25pt)
 putdocx table cvd(16,6) = image("`outputpath'\graphics\mrc12.png"), width(25pt)
 
