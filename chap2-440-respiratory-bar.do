@@ -252,9 +252,9 @@ restore
         (scatteri `outer3c' , recast(line) lw(0.2) lc(gs10) fc(none) )
 
 		/// country values
-        (rbar origin1 scaler1 region1 if cod==1 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`child'") lw(0.1))       
-        (rbar origin2 scaler2 region2 if cod==2 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`child'") lw(0.1))           
-        (rbar origin3 scaler3 region3 if cod==3 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`child'") lw(0.1))                
+        (rbar origin1 scaler1 region1 if cod==1 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`youth'") lw(0.1))       
+        (rbar origin2 scaler2 region2 if cod==2 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`youth'") lw(0.1))           
+        (rbar origin3 scaler3 region3 if cod==3 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`youth'") lw(0.1))                
 
         (rbar origin1 scaler1 region1 if cod==1 & region==2000, horizontal barw(0.6) fcol(gs0) lcol(gs0) lw(0.1))       
         (rbar origin2 scaler2 region2 if cod==2 & region==2000, horizontal barw(0.6) fcol(gs0) lcol(gs0) lw(0.1))           
@@ -319,7 +319,7 @@ restore
            text(-12 345 "`cid3_13'",  place(w) size(3) color("`child'*0.5") just(right))
  
            /// NOTE
-           text(-22 0.5 "`ddagger' RED BAR is the mortality rate for the Region of the Americas." ,  
+           text(-22 0.5 "`ddagger' BLACK BAR is the mortality rate for the Region of the Americas." ,  
                                     place(e) size(2.5) color(gs8)  just(left))
 			legend(off)
 			name(bar1)

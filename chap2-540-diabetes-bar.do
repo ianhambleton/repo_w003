@@ -216,7 +216,7 @@ restore
         ///(scatteri `outer3c' , recast(line) lw(0.2) lc(gs10) fc(none) )
 
 		/// country values
-        (rbar origin1 scaler1 region1 if cod==1 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`child'") lw(0.1))                   
+        (rbar origin1 scaler1 region1 if cod==1 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`youth'") lw(0.1))                   
 
         (rbar origin1 scaler1 region1 if cod==1 & region==2000, horizontal barw(0.6) fcol(gs0) lcol(gs0) lw(0.1))              
                 		,
@@ -257,7 +257,7 @@ restore
            text(-12 105 "`cid1_1'",  place(w) size(4.5) color("`child'*0.5") just(right))
  
            /// NOTE
-           text(-22 0 "`ddagger' RED BAR, mortality rate for the Region of the Americas." ,  
+           text(-22 0 "`ddagger' BLACK BAR, mortality rate for the Region of the Americas." ,  
                                     place(e) size(3.5) color(gs8)  just(left))
 			legend(off)
 			name(bar1)
