@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap2-200-cvd-stats.do
+    //  algorithm name			    chap2-300-cancer-stats.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	26-Apr-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap2-200-cvd-stats", replace
+    log using "`logpath'\chap2-300-cancer-stats", replace
 ** HEADER -----------------------------------------------------
 
 
@@ -36,7 +36,12 @@ tempfile t1
 ** Mortality AND DALY rates 
 use "`datapath'\from-who\chap2_000_adjusted", clear
 
+** Size of 2019 MR in Americas (women and men combined)
+keep if region==2000 & sex==3 & year==2019 & ghecause<100
+gsort -mortr
+list ghecause mortr
 
+/*
 **------------------------------------------------
 ** BEGIN STATISTICS FOR TEXT
 ** to accompany the CANCER METRICS TABLE
@@ -101,7 +106,7 @@ forval x = 1(1)10 {
     gen p`x'b = (dths`x'/dths12)*100
 }
 
-
+/*
 **-----------------------------------------------------------
 ** TRACHEA / LUNG (ghecause==12)
 ** Mortality rates by sex
@@ -416,8 +421,8 @@ qui {
     format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
 
     noi dis "ALL CANCERS" 
-    noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
-    noi list year drate1 drate2 drate3 dratio_rate ddiff_rate ddiff_count, noobs ab(20)
+    noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20) linesize(120)
+    noi list year drate1 drate2 drate3 dratio_rate ddiff_rate ddiff_count, noobs ab(20) linesize(120)
 }
 
 
@@ -465,7 +470,7 @@ qui {
     xpose , clear varname format(%15.1fc)
     order _varname
     dis "ALL CANCERS - Change between 2000 and 2019"
-    noi list _varname v1, sep(6)
+    noi list _varname v1, sep(6) linesize(120)
 }
 
 

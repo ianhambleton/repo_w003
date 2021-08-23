@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap2-210-cvd-table.do
+    //  algorithm name			    chap2-710-injury-table.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	26-Apr-2021
@@ -16,17 +16,17 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "x:\OneDrive - The University of the West Indies\Writing\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "x:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
 
     ** REPORTS and Other outputs
     local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap2-210-cvd-table", replace
+    capture log using "`logpath'\chap2-710-injury-table", replace
 ** HEADER -----------------------------------------------------
 
 
@@ -72,56 +72,38 @@
 ** DEATHS METRICS
 ** -----------------------------------------------------
 
-tempfile kcancer region_mr12 region_mr3 region_daly12 region_daly3
-
 ** Mortality Rate statistics first
-** use "`datapath'\from-who\chap2_000_mr", clear
 use "`datapath'\from-who\chap2_000_mr_adjusted", clear
-rename mortr arate
+rename mortr arate 
 
 **------------------------------------------------
 ** BEGIN STATISTICS FOR TEXT
 ** to accompany the CANCER METRICS TABLE
-** 12   "trachea/lung" 
-** 14   "breast" 
-** 18   "prostate" 
-** 9    "colon/rectum" 
-** 15   "cervix uteri" 
-** 11   "pancreas"
-** 27   "lymphomas/myeloma"
-** 8    "stomach"
-** 10   "liver"
-** 28   "leukemia"
-** 500  "all cancers", modif    
+** (1) 56   "interpersonal violence" 
+** (2) 48   "road injury" 
+** (3) 55   "self harm" 
+** (4) 50   "falls" 
+** (5) 53   "mechanical forces" 
+** 1000     "all injuries"
+** 100      "all cause", modif    
 ** -----------------------------------------------
-
-** Create new GHE CoD order for Table 
-gen cod = 1 if ghecause==12 
-replace cod = 2 if ghecause==14
-replace cod = 3 if ghecause==18
-replace cod = 4 if ghecause==9
-replace cod = 5 if ghecause==15
-replace cod = 6 if ghecause==11
-replace cod = 7 if ghecause==27
-replace cod = 8 if ghecause==8
-replace cod = 9 if ghecause==10
-replace cod = 10 if ghecause==28
-replace cod = 11 if ghecause==500
+gen cod = 1 if ghecause==56 
+replace cod = 2 if ghecause==48
+replace cod = 3 if ghecause==55
+replace cod = 4 if ghecause==50
+replace cod = 5 if ghecause==53
+replace cod = 6 if ghecause==1000
 #delimit ; 
-label define cod_   1 "trachea/lung" 
-                    2 "breast" 
-                    3 "prostate" 
-                    4 "colon/rectum" 
-                    5 "cervix uteri" 
-                    6 "pancreas"
-                    7 "lymphomas/myeloma"
-                    8 "stomach"
-                    9 "liver"
-                    10 "leukemia"
-                    11 "all cancers", modify ;
+label define cod_   1 "interpersonal violence" 
+                    2 "road injury" 
+                    3 "self harm" 
+                    4 "falls" 
+                    5 "mechanical forces" 
+                    6 "all injuries", modify;
 #delimit cr
 label values cod cod_ 
-keep if cod<=11
+keep if cod<=6
+
 
 ** -----------------------------------------------------
 ** COLUMN 1
@@ -139,7 +121,7 @@ preserve
     gen dths_int = round(dths)
     mkmat cod dths_int , matrix(col1)
     matrix list col1
-    forval x = 1(1)11 {
+    forval x = 1(1)6 {
         global deaths`x' = col1[`x',2]
     }
 restore
@@ -153,7 +135,6 @@ restore
 ** Mortality Rate in 2019
 preserve
     sort sex cod 
-    ** replace arate = arate_new if arate_new<. 
     keep if region==2000 & year==2019 & sex==3
     ** Women and Men combined  
     tabdisp cod , cell(arate) format(%6.1fc) 
@@ -161,11 +142,10 @@ preserve
     gen arate_int = round(arate, 0.1)
     mkmat cod arate_int , matrix(col2)
     matrix list col2
-    forval x = 1(1)11 {
+    forval x = 1(1)6 {
         global arate`x' = col2[`x',2]
     }
 restore 
-
 
 
 ** -----------------------------------------------------
@@ -177,8 +157,8 @@ restore
 preserve
     keep if region==2000
 
-    ** Lower Boundary (0.55 for cancers) for shading boundary 
-    gen y = 0.55 
+    ** Zero line for shading boundary 
+    gen y = 0 
 
     ** Relative Rate 
     gen ar1 = arate if year==2000
@@ -187,12 +167,12 @@ preserve
     gen rel_arate = arate/ar2
 
     ** Women and Men combined
-    forval a = 1(1)11 { 
+    forval a = 1(1)6 { 
         #delimit ;
             gr twoway 
-                (rarea rel_arate y year if cod==`a' & sex==3 & region==2000 , sort lw(none) color("`can1'%85"))
-                (line rel_arate year if cod==`a' & sex==3 & region==2000, sort lc("`can1'") fc("`can1'") lw(6) msize(2.5))
-                ///(sc rel_arate year if cod==`a' & sex==3 & region==2000, sort m(O) mfc("gs16") mlw(1) mlc("`cvd1'") msize(3.5) )
+                (rarea rel_arate y year if cod==`a' & sex==3 & region==2000 , sort lw(none) color("`inj1'%85"))
+                (line rel_arate year if cod==`a' & sex==3 & region==2000, sort lc("`inj1'") fc("`inj1'") lw(6) msize(2.5))
+                ///(sc rel_arate year if cod==`a' & sex==3 & region==2000, sort m(O) mfc("gs16") mlw(1) mlc("`inj1'") msize(3.5) )
                 ,
                     plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin)) 
                     graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin)) 
@@ -241,13 +221,13 @@ preserve
     gen arate_pc_int = round(arate_pc)
     mkmat cod arate_pc_int , matrix(col4)
     matrix list col4
-    forval x = 1(1)11 {
+    forval x = 1(1)6 {
         global pc`x' = col4[`x',2]
     }
 
     ** GRAPHIC
     ** Different graphic according to improving or worsening mortality rate
-    forval a = 1(1)11 { 
+    forval a = 1(1)6 { 
         sort cod
 
         if change[`a'] == 1 {
@@ -325,7 +305,7 @@ preserve
     gen arate_ratio_int = round(arate_ratio, 0.01)
     mkmat cod arate_ratio_int , matrix(col5)
     matrix list col5
-    forval x = 1(1)11 {
+    forval x = 1(1)6 {
         global sratio`x' = col5[`x',2]
     }
 restore
@@ -340,55 +320,37 @@ restore
 ** DALY METRICS
 ** -----------------------------------------------------
 
-tempfile kcancer region_mr12 region_mr3 region_daly12 region_daly3
-
-** DALY Rate statistics
+** Mortality Rate statistics first
 use "`datapath'\from-who\chap2_000_daly_adjusted", clear
-rename dalyr arate 
+rename dalyr arate
 
 **------------------------------------------------
 ** BEGIN STATISTICS FOR TEXT
 ** to accompany the CANCER METRICS TABLE
-** 12   "trachea/lung" 
-** 14   "breast" 
-** 18   "prostate" 
-** 9    "colon/rectum" 
-** 15   "cervix uteri" 
-** 11   "pancreas"
-** 27   "lymphomas/myeloma"
-** 8    "stomach"
-** 10   "liver"
-** 28   "leukemia"
-** 500  "all cancers", modif    
+** (1) 56   "interpersonal violence" 
+** (2) 48   "road injury" 
+** (3) 55   "self harm" 
+** (4) 50   "falls" 
+** (5) 53   "mechanical forces" 
+** 1000     "all injuries"
+** 100      "all cause", modif    
 ** -----------------------------------------------
-
-** Create new GHE CoD order for Table 
-gen cod = 1 if ghecause==12 
-replace cod = 2 if ghecause==14
-replace cod = 3 if ghecause==18
-replace cod = 4 if ghecause==9
-replace cod = 5 if ghecause==15
-replace cod = 6 if ghecause==11
-replace cod = 7 if ghecause==27
-replace cod = 8 if ghecause==8
-replace cod = 9 if ghecause==10
-replace cod = 10 if ghecause==28
-replace cod = 11 if ghecause==500
+gen cod = 1 if ghecause==56 
+replace cod = 2 if ghecause==48
+replace cod = 3 if ghecause==55
+replace cod = 4 if ghecause==50
+replace cod = 5 if ghecause==53
+replace cod = 6 if ghecause==1000
 #delimit ; 
-label define cod_   1 "trachea/lung" 
-                    2 "breast" 
-                    3 "prostate" 
-                    4 "colon/rectum" 
-                    5 "cervix uteri" 
-                    6 "pancreas"
-                    7 "lymphomas/myeloma"
-                    8 "stomach"
-                    9 "liver"
-                    10 "leukemia"
-                    11 "all cancers", modify ;
+label define cod_   1 "interpersonal violence" 
+                    2 "road injury" 
+                    3 "self harm" 
+                    4 "falls" 
+                    5 "mechanical forces" 
+                    6 "all injuries", modify;
 #delimit cr
 label values cod cod_ 
-keep if cod<=11
+keep if cod<=6
 
 
 
@@ -407,11 +369,10 @@ preserve
     gen daly_int = round(daly)
     mkmat cod daly_int , matrix(col1)
     matrix list col1
-    forval x = 1(1)11 {
+    forval x = 1(1)6 {
         global daly`x' = col1[`x',2]
     }
 restore
-
 
 
 ** -----------------------------------------------------
@@ -429,11 +390,10 @@ preserve
     gen drate_int = round(drate, 0.1)
     mkmat cod drate_int , matrix(col2)
     matrix list col2
-    forval x = 1(1)11 {
+    forval x = 1(1)6 {
         global drate`x' = col2[`x',2]
     }
 restore 
-
 
 
 
@@ -449,7 +409,7 @@ preserve
     keep if region==2000
 
     ** Zero line for shading boundary 
-    gen y = 0.55 
+    gen y = 0 
 
     ** Relative Rate 
     rename arate drate 
@@ -459,12 +419,12 @@ preserve
     gen rel_drate = drate/ar2
 
     ** Women and Men combined
-    forval a = 1(1)11 { 
+    forval a = 1(1)6 { 
         #delimit ;
             gr twoway 
-                (rarea rel_drate y year if cod==`a' & sex==3 & region==2000 , sort lw(none) color("`can2'%85"))
-                (line rel_drate year if cod==`a' & sex==3 & region==2000, sort lc("`can2'") fc("`can2'") lw(6) msize(2.5))
-                ///(sc rel_drate year if cod==`a' & sex==3 & region==2000, sort m(O) mfc("gs16") mlw(1) mlc("`cvd2'") msize(3.5) )
+                (rarea rel_drate y year if cod==`a' & sex==3 & region==2000 , sort lw(none) color("`inj2'%85"))
+                (line rel_drate year if cod==`a' & sex==3 & region==2000, sort lc("`inj2'") fc("`inj2'") lw(6) msize(2.5))
+                ///(sc rel_drate year if cod==`a' & sex==3 & region==2000, sort m(O) mfc("gs16") mlw(1) mlc("`inj2'") msize(3.5) )
                 ,
                     plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin)) 
                     graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin)) 
@@ -516,13 +476,13 @@ preserve
     gen drate_pc_int = round(drate_pc)
     mkmat cod drate_pc_int , matrix(col4)
     matrix list col4
-    forval x = 1(1)11 {
+    forval x = 1(1)6 {
         global pc`x' = col4[`x',2]
     }
 
     ** GRAPHIC
     ** Different graphic according to improving or worsening mortality rate
-    forval a = 1(1)11 { 
+    forval a = 1(1)6 { 
         sort cod
 
         if change[`a'] == 1 {
@@ -584,7 +544,7 @@ restore
 
 
 ** -----------------------------------------------------
-** COLUMN 9 
+** COLUMN 10 
 ** Outputs: DALY Gender ratio
 ** sratio1 to sratio6 (1-6 are the GHE causes)
 ** -----------------------------------------------------
@@ -601,10 +561,11 @@ preserve
     gen drate_ratio_int = round(drate_ratio, 0.01)
     mkmat cod drate_ratio_int , matrix(col5)
     matrix list col5
-    forval x = 1(1)11 {
+    forval x = 1(1)6 {
         global sdaly`x' = col5[`x',2]
     }
 restore
+
 
 
 
@@ -612,268 +573,204 @@ restore
 ** AUTOMATED WORD TABLE FOR REPORT
 ** -----------------------------------------------------
 putdocx begin , pagesize(A4) font(calibri light, 9)
-** ROW / COL
-putdocx table cvd = (15 , 11) 
+putdocx table injury = (10 , 11) 
 
 ** ----------------------
 ** Formatting
 ** ----------------------
 ** All cells - vertical centering
-putdocx table cvd(.,.), valign(center) 
+putdocx table injury(.,.), valign(center) 
 
 ** ROW3 - remove left and right borders
-putdocx table cvd(3,.), border(left, single, "FFFFFF") 
-putdocx table cvd(3,.), border(right, single, "FFFFFF") 
+putdocx table injury(3,.), border(left, single, "FFFFFF") 
+putdocx table injury(3,.), border(right, single, "FFFFFF") 
 
 ** COL1 - no formatting
-putdocx table cvd(1/2,1), bold border(all, single, "FFFFFF") 
-putdocx table cvd(4/14,1), bold border(all, single, "FFFFFF") 
+putdocx table injury(1/2,1), bold border(all, single, "FFFFFF") 
+putdocx table injury(4/9,1), bold border(all, single, "FFFFFF") 
 
 ** COL2 - Add back left hand side border
-putdocx table cvd(1/2,2), border(left, single, "000000") 
-putdocx table cvd(4/14,2), border(left, single, "000000") 
+putdocx table injury(1/2,2), border(left, single, "000000") 
+putdocx table injury(4/9,2), border(left, single, "000000") 
 
 ** ROWS 1 and 2 - shading
-putdocx table cvd(1/2,2/6), bold border(all, single, "000000") shading("1f77b4")
-putdocx table cvd(1/2,7/11), bold border(all, single, "000000") shading("aec7e8")
+putdocx table injury(1/2,2/6), bold border(all, single, "000000") shading("`inj1'")
+putdocx table injury(1/2,7/11), bold border(all, single, "000000") shading("`inj2'")
 
 ** Merge FOUR top rows for headers
-putdocx table cvd(1,2),colspan(5)
-putdocx table cvd(1,3),colspan(5)
+putdocx table injury(1,2),colspan(5)
+putdocx table injury(1,3),colspan(5)
 
 ** Merge COL1 and COL2 rows 1 and 2
-putdocx table cvd(1,1),rowspan(2)
+putdocx table injury(1,1),rowspan(2)
 
-** ROW 15 as single cell for comments
-putdocx table cvd(15,2),colspan(10)
-putdocx table cvd(15,.),halign(left) font(calibri light, 8)
-putdocx table cvd(15,.),border(left, single, "FFFFFF")
-putdocx table cvd(15,.),border(right, single, "FFFFFF")
-putdocx table cvd(15,.),border(bottom, single, "FFFFFF")
+** ROW 10 as single cell for comments
+putdocx table injury(10,2),colspan(10)
+putdocx table injury(10,.),halign(left) font(calibri light, 8)
+putdocx table injury(10,.),border(left, single, "FFFFFF")
+putdocx table injury(10,.),border(right, single, "FFFFFF")
+putdocx table injury(10,.),border(bottom, single, "FFFFFF")
 
 ** ----------------------
 ** Row and Column Titles
 ** ----------------------
-putdocx table cvd(1,2) = ("Mortality Rate"), bold font(calibri light,9, "FFFFFF")
-putdocx table cvd(1,3) = ("Disease Burden"), bold 
+putdocx table injury(1,2) = ("Mortality Rate"), bold font(calibri light,9, "FFFFFF")
+putdocx table injury(1,3) = ("Disease Burden"), bold 
 
-putdocx table cvd(2,2) = ("Deaths"), bold font(calibri light,9, "FFFFFF") 
-putdocx table cvd(2,3) = ("Rate"), font(calibri light,9, "FFFFFF") linebreak bold
-putdocx table cvd(2,3) = ("2019"), font(calibri light,9, "FFFFFF") append bold
+putdocx table injury(2,2) = ("Deaths"), bold font(calibri light,9, "FFFFFF") 
+putdocx table injury(2,3) = ("Rate"), font(calibri light,9, "FFFFFF") linebreak bold
+putdocx table injury(2,3) = ("2019"), font(calibri light,9, "FFFFFF") append bold
 
-putdocx table cvd(2,4) = ("M:F"), font(calibri light,9, "FFFFFF") bold         
+putdocx table injury(2,4) = ("M:F"), font(calibri light,9, "FFFFFF") bold         
 
-putdocx table cvd(2,5) = ("Change"), font(calibri light,9, "FFFFFF") linebreak bold
-putdocx table cvd(2,5) = ("2000-2019"), font(calibri light,9, "FFFFFF") append bold
+putdocx table injury(2,5) = ("Change"), font(calibri light,9, "FFFFFF") linebreak bold
+putdocx table injury(2,5) = ("2000-2019"), font(calibri light,9, "FFFFFF") append bold
 
-putdocx table cvd(2,6) = ("Percent"), font(calibri light,9, "FFFFFF") linebreak bold    
-putdocx table cvd(2,6) = ("change"), font(calibri light,9, "FFFFFF") append bold    
+putdocx table injury(2,6) = ("Percent"), font(calibri light,9, "FFFFFF") linebreak bold    
+putdocx table injury(2,6) = ("change"), font(calibri light,9, "FFFFFF") append bold    
 
-putdocx table cvd(2,7) = ("DALYs"), bold 
+putdocx table injury(2,7) = ("DALYs"), bold 
 
-putdocx table cvd(2,8) = ("Rate"), font(calibri light,9) linebreak bold
-putdocx table cvd(2,8) = ("2019"), font(calibri light,9) append bold
+putdocx table injury(2,8) = ("Rate"), font(calibri light,9) linebreak bold
+putdocx table injury(2,8) = ("2019"), font(calibri light,9) append bold
 
-putdocx table cvd(2,9) = ("M:F"), font(calibri light,9) bold  
+putdocx table injury(2,9) = ("M:F"), font(calibri light,9) bold  
 
-putdocx table cvd(2,10) = ("Change"), font(calibri light,9) linebreak bold
-putdocx table cvd(2,10) = ("2000-2019"), font(calibri light,9) append bold
+putdocx table injury(2,10) = ("Change"), font(calibri light,9) linebreak bold
+putdocx table injury(2,10) = ("2000-2019"), font(calibri light,9) append bold
 
-putdocx table cvd(2,11) = ("Percent"), font(calibri light,9) linebreak bold    
-putdocx table cvd(2,11) = ("change"), font(calibri light,9) append bold    
+putdocx table injury(2,11) = ("Percent"), font(calibri light,9) linebreak bold    
+putdocx table injury(2,11) = ("change"), font(calibri light,9) append bold    
 
-putdocx table cvd(4,1) = ("Lung "), halign(right) bold
-putdocx table cvd(4,1) = ("1"), halign(right) script(super) append
+putdocx table injury(4,1) = ("Interpersonal violence "), halign(right) bold
+putdocx table injury(4,1) = ("x"), halign(right) script(super) append
 
-putdocx table cvd(5,1) = ("Breast"), halign(right) bold
+putdocx table injury(5,1) = ("Road injury "), halign(right) bold
 
-putdocx table cvd(6,1) = ("Prostate "), halign(right) bold
-/// putdocx table cvd(6,1) = ("2"), halign(right) script(super) append
+putdocx table injury(6,1) = ("Self harm "), halign(right) bold
+putdocx table injury(6,1) = ("x"), halign(right) script(super) append
 
-putdocx table cvd(7,1) = ("Colon/rectum "), halign(right) bold
-/// putdocx table cvd(7,1) = ("3"), halign(right) script(super) append
+putdocx table injury(7,1) = ("Falls "), halign(right) bold
+putdocx table injury(7,1) = ("x"), halign(right) script(super) append
 
-putdocx table cvd(8,1) = ("Cervix uteri "), halign(right) bold
-/// putdocx table cvd(8,1) = ("4"), halign(right) script(super) append
+putdocx table injury(8,1) = ("Mechanical forces "), halign(right) bold
+putdocx table injury(8,1) = ("x"), halign(right) script(super) append
 
-putdocx table cvd(9,1) = ("Pancreas "), halign(right) bold
-///putdocx table cvd(9,1) = ("4"), halign(right) script(super) append
-
-putdocx table cvd(10,1) = ("Lymphomas/myeloma "), halign(right) bold
-/// putdocx table cvd(10,1) = ("4"), halign(right) script(super) append
-
-putdocx table cvd(11,1) = ("Stomach "), halign(right) bold
-/// putdocx table cvd(11,1) = ("4"), halign(right) script(super) append
-
-putdocx table cvd(12,1) = ("Liver "), halign(right) bold
-/// putdocx table cvd(12,1) = ("4"), halign(right) script(super) append
-
-putdocx table cvd(13,1) = ("Leukemia "), halign(right) bold
-/// putdocx table cvd(13,1) = ("4"), halign(right) script(super) append
-
-putdocx table cvd(14,1) = ("All Cancers "), halign(right) bold
-/// putdocx table cvd(14,1) = ("5"), halign(right) script(super) append
+putdocx table injury(9,1) = ("All Injuries "), halign(right) bold
+putdocx table injury(9,1) = ("x"), halign(right) script(super) append
 
 ** ----------------------
 ** DATA
 ** ----------------------
 ** COL2. Deaths
-putdocx table cvd(4,2) = ("$deaths1") , nformat(%12.0fc) trim 
-putdocx table cvd(5,2) = ("$deaths2") , nformat(%12.0fc) trim  
-putdocx table cvd(6,2) = ("$deaths3") , nformat(%12.0fc) trim  
-putdocx table cvd(7,2) = ("$deaths4") , nformat(%12.0fc) trim  
-putdocx table cvd(8,2) = ("$deaths5") , nformat(%12.0fc) trim  
-putdocx table cvd(9,2) = ("$deaths6") , nformat(%12.0fc) trim  
-putdocx table cvd(10,2) = ("$deaths7") , nformat(%12.0fc) trim  
-putdocx table cvd(11,2) = ("$deaths8") , nformat(%12.0fc) trim  
-putdocx table cvd(12,2) = ("$deaths9") , nformat(%12.0fc) trim  
-putdocx table cvd(13,2) = ("$deaths10") , nformat(%12.0fc) trim  
-putdocx table cvd(14,2) = ("$deaths11") , nformat(%12.0fc) trim  
+putdocx table injury(4,2) = ("$deaths1") , nformat(%12.0fc) trim 
+putdocx table injury(5,2) = ("$deaths2") , nformat(%12.0fc) trim  
+putdocx table injury(6,2) = ("$deaths3") , nformat(%12.0fc) trim  
+putdocx table injury(7,2) = ("$deaths4") , nformat(%12.0fc) trim  
+putdocx table injury(8,2) = ("$deaths5") , nformat(%12.0fc) trim  
+putdocx table injury(9,2) = ("$deaths6") , nformat(%12.0fc) trim  
 
 ** COL3. Mortality Rates
-putdocx table cvd(4,3) = ("$arate1") , nformat(%9.1fc)  trim
-putdocx table cvd(5,3) = ("$arate2") , nformat(%9.1fc)  trim
-putdocx table cvd(6,3) = ("$arate3") , nformat(%9.1fc)  trim
-putdocx table cvd(7,3) = ("$arate4") , nformat(%9.1fc)  trim
-putdocx table cvd(8,3) = ("$arate5") , nformat(%9.1fc)  trim
-putdocx table cvd(9,3) = ("$arate6") , nformat(%9.1fc)  trim
-putdocx table cvd(10,3) = ("$arate7") , nformat(%9.1fc)  trim
-putdocx table cvd(11,3) = ("$arate8") , nformat(%9.1fc)  trim
-putdocx table cvd(12,3) = ("$arate9") , nformat(%9.1fc)  trim
-putdocx table cvd(13,3) = ("$arate10") , nformat(%9.1fc)  trim
-putdocx table cvd(14,3) = ("$arate11") , nformat(%9.1fc)  trim
+putdocx table injury(4,3) = ("$arate1") , nformat(%9.1fc)  trim
+putdocx table injury(5,3) = ("$arate2") , nformat(%9.1fc)  trim
+putdocx table injury(6,3) = ("$arate3") , nformat(%9.1fc)  trim
+putdocx table injury(7,3) = ("$arate4") , nformat(%9.1fc)  trim
+putdocx table injury(8,3) = ("$arate5") , nformat(%9.1fc)  trim
+putdocx table injury(9,3) = ("$arate6") , nformat(%9.1fc)  trim
 
 ** COL4. Sex ratio
-putdocx table cvd(4,4) = ("$sratio1") , nformat(%9.2fc)  trim
-putdocx table cvd(5,4) = ("$sratio2") , nformat(%9.2fc)  trim
-putdocx table cvd(6,4) = ("$sratio3") , nformat(%9.2fc)  trim
-putdocx table cvd(7,4) = ("$sratio4") , nformat(%9.2fc)  trim
-putdocx table cvd(8,4) = ("$sratio5") , nformat(%9.2fc)  trim
-putdocx table cvd(9,4) = ("$sratio6") , nformat(%9.2fc)  trim
-putdocx table cvd(10,4) = ("$sratio7") , nformat(%9.2fc)  trim
-putdocx table cvd(11,4) = ("$sratio8") , nformat(%9.2fc)  trim
-putdocx table cvd(12,4) = ("$sratio9") , nformat(%9.2fc)  trim
-putdocx table cvd(13,4) = ("$sratio10") , nformat(%9.2fc)  trim
-putdocx table cvd(14,4) = ("$sratio11") , nformat(%9.2fc)  trim
+putdocx table injury(4,4) = ("$sratio1") , nformat(%9.2fc)  trim
+putdocx table injury(5,4) = ("$sratio2") , nformat(%9.2fc)  trim
+putdocx table injury(6,4) = ("$sratio3") , nformat(%9.2fc)  trim
+putdocx table injury(7,4) = ("$sratio4") , nformat(%9.2fc)  trim
+putdocx table injury(8,4) = ("$sratio5") , nformat(%9.2fc)  trim
+putdocx table injury(9,4) = ("$sratio6") , nformat(%9.2fc)  trim
 
 ** COL5. Mortality Rate Change since 2000
-putdocx table cvd(4,5) = image("`outputpath'\graphics\spike1.png")
-putdocx table cvd(5,5) = image("`outputpath'\graphics\spike2.png")
-putdocx table cvd(6,5) = image("`outputpath'\graphics\spike3.png")
-putdocx table cvd(7,5) = image("`outputpath'\graphics\spike4.png")
-putdocx table cvd(8,5) = image("`outputpath'\graphics\spike5.png")
-putdocx table cvd(9,5) = image("`outputpath'\graphics\spike6.png")
-putdocx table cvd(10,5) = image("`outputpath'\graphics\spike7.png")
-putdocx table cvd(11,5) = image("`outputpath'\graphics\spike8.png")
-putdocx table cvd(12,5) = image("`outputpath'\graphics\spike9.png")
-putdocx table cvd(13,5) = image("`outputpath'\graphics\spike10.png")
-putdocx table cvd(14,5) = image("`outputpath'\graphics\spike11.png")
+putdocx table injury(4,5) = image("`outputpath'\graphics\spike1.png")
+putdocx table injury(5,5) = image("`outputpath'\graphics\spike2.png")
+putdocx table injury(6,5) = image("`outputpath'\graphics\spike3.png")
+putdocx table injury(7,5) = image("`outputpath'\graphics\spike4.png")
+putdocx table injury(8,5) = image("`outputpath'\graphics\spike5.png")
+putdocx table injury(9,5) = image("`outputpath'\graphics\spike6.png")
 
 ** COL6. Percent change
-putdocx table cvd(4,6) = image("`outputpath'\graphics\mrc1.png"), width(25pt)
-putdocx table cvd(5,6) = image("`outputpath'\graphics\mrc2.png"), width(25pt)
-putdocx table cvd(6,6) = image("`outputpath'\graphics\mrc3.png"), width(25pt)
-putdocx table cvd(7,6) = image("`outputpath'\graphics\mrc4.png"), width(25pt)
-putdocx table cvd(8,6) = image("`outputpath'\graphics\mrc5.png"), width(25pt)
-putdocx table cvd(9,6) = image("`outputpath'\graphics\mrc6.png"), width(25pt)
-putdocx table cvd(10,6) = image("`outputpath'\graphics\mrc7.png"), width(25pt)
-putdocx table cvd(11,6) = image("`outputpath'\graphics\mrc8.png"), width(25pt)
-putdocx table cvd(12,6) = image("`outputpath'\graphics\mrc9.png"), width(25pt)
-putdocx table cvd(13,6) = image("`outputpath'\graphics\mrc10.png"), width(25pt)
-putdocx table cvd(14,6) = image("`outputpath'\graphics\mrc11.png"), width(25pt)
+putdocx table injury(4,6) = image("`outputpath'\graphics\mrc1.png"), width(25pt)
+putdocx table injury(5,6) = image("`outputpath'\graphics\mrc2.png"), width(25pt)
+putdocx table injury(6,6) = image("`outputpath'\graphics\mrc3.png"), width(25pt)
+putdocx table injury(7,6) = image("`outputpath'\graphics\mrc4.png"), width(25pt)
+putdocx table injury(8,6) = image("`outputpath'\graphics\mrc5.png"), width(25pt)
+putdocx table injury(9,6) = image("`outputpath'\graphics\mrc6.png"), width(25pt)
+
 
 ** COL7. DALY in 2019
-putdocx table cvd(4,7) = ("$daly1") , nformat(%12.0fc)  trim
-putdocx table cvd(5,7) = ("$daly2") , nformat(%12.0fc)  trim
-putdocx table cvd(6,7) = ("$daly3") , nformat(%12.0fc)  trim
-putdocx table cvd(7,7) = ("$daly4") , nformat(%12.0fc)  trim
-putdocx table cvd(8,7) = ("$daly5") , nformat(%12.0fc)  trim
-putdocx table cvd(9,7) = ("$daly6") , nformat(%12.0fc)  trim
-putdocx table cvd(10,7) = ("$daly7") , nformat(%12.0fc)  trim
-putdocx table cvd(11,7) = ("$daly8") , nformat(%12.0fc)  trim
-putdocx table cvd(12,7) = ("$daly9") , nformat(%12.0fc)  trim
-putdocx table cvd(13,7) = ("$daly10") , nformat(%12.0fc)  trim
-putdocx table cvd(14,7) = ("$daly11") , nformat(%12.0fc)  trim
+putdocx table injury(4,7) = ("$daly1") , nformat(%12.0fc)  trim
+putdocx table injury(5,7) = ("$daly2") , nformat(%12.0fc)  trim
+putdocx table injury(6,7) = ("$daly3") , nformat(%12.0fc)  trim
+putdocx table injury(7,7) = ("$daly4") , nformat(%12.0fc)  trim
+putdocx table injury(8,7) = ("$daly5") , nformat(%12.0fc)  trim
+putdocx table injury(9,7) = ("$daly6") , nformat(%12.0fc)  trim
 
 ** COL8. DALY Rates
-putdocx table cvd(4,8) = ("$drate1") , nformat(%9.1fc)  trim
-putdocx table cvd(5,8) = ("$drate2") , nformat(%9.1fc)  trim
-putdocx table cvd(6,8) = ("$drate3") , nformat(%9.1fc)  trim
-putdocx table cvd(7,8) = ("$drate4") , nformat(%9.1fc)  trim
-putdocx table cvd(8,8) = ("$drate5") , nformat(%9.1fc)  trim
-putdocx table cvd(9,8) = ("$drate6") , nformat(%9.1fc)  trim
-putdocx table cvd(10,8) = ("$drate7") , nformat(%9.1fc)  trim
-putdocx table cvd(11,8) = ("$drate8") , nformat(%9.1fc)  trim
-putdocx table cvd(12,8) = ("$drate9") , nformat(%9.1fc)  trim
-putdocx table cvd(13,8) = ("$drate10") , nformat(%9.1fc)  trim
-putdocx table cvd(14,8) = ("$drate11") , nformat(%9.1fc)  trim
+putdocx table injury(4,8) = ("$drate1") , nformat(%9.1fc)  trim
+putdocx table injury(5,8) = ("$drate2") , nformat(%9.1fc)  trim
+putdocx table injury(6,8) = ("$drate3") , nformat(%9.1fc)  trim
+putdocx table injury(7,8) = ("$drate4") , nformat(%9.1fc)  trim
+putdocx table injury(8,8) = ("$drate5") , nformat(%9.1fc)  trim
+putdocx table injury(9,8) = ("$drate6") , nformat(%9.1fc)  trim
 
 ** COL9. Sex ratio
-putdocx table cvd(4,9) = ("$sdaly1") , nformat(%9.2fc)  trim
-putdocx table cvd(5,9) = ("$sdaly2") , nformat(%9.2fc)  trim
-putdocx table cvd(6,9) = ("$sdaly3") , nformat(%9.2fc)  trim
-putdocx table cvd(7,9) = ("$sdaly4") , nformat(%9.2fc)  trim
-putdocx table cvd(8,9) = ("$sdaly5") , nformat(%9.2fc)  trim
-putdocx table cvd(9,9) = ("$sdaly6") , nformat(%9.2fc)  trim
-putdocx table cvd(10,9) = ("$sdaly7") , nformat(%9.2fc)  trim
-putdocx table cvd(11,9) = ("$sdaly8") , nformat(%9.2fc)  trim
-putdocx table cvd(12,9) = ("$sdaly9") , nformat(%9.2fc)  trim
-putdocx table cvd(13,9) = ("$sdaly10") , nformat(%9.2fc)  trim
-putdocx table cvd(14,9) = ("$sdaly11") , nformat(%9.2fc)  trim
+putdocx table injury(4,9) = ("$sdaly1") , nformat(%9.2fc)  trim
+putdocx table injury(5,9) = ("$sdaly2") , nformat(%9.2fc)  trim
+putdocx table injury(6,9) = ("$sdaly3") , nformat(%9.2fc)  trim
+putdocx table injury(7,9) = ("$sdaly4") , nformat(%9.2fc)  trim
+putdocx table injury(8,9) = ("$sdaly5") , nformat(%9.2fc)  trim
+putdocx table injury(9,9) = ("$sdaly6") , nformat(%9.2fc)  trim
 
 ** COL9. DALY Change since 2000
-putdocx table cvd(4,10) = image("`outputpath'\graphics\spike_daly1.png")
-putdocx table cvd(5,10) = image("`outputpath'\graphics\spike_daly2.png")
-putdocx table cvd(6,10) = image("`outputpath'\graphics\spike_daly3.png")
-putdocx table cvd(7,10) = image("`outputpath'\graphics\spike_daly4.png")
-putdocx table cvd(8,10) = image("`outputpath'\graphics\spike_daly5.png")
-putdocx table cvd(9,10) = image("`outputpath'\graphics\spike_daly6.png")
-putdocx table cvd(10,10) = image("`outputpath'\graphics\spike_daly7.png")
-putdocx table cvd(11,10) = image("`outputpath'\graphics\spike_daly8.png")
-putdocx table cvd(12,10) = image("`outputpath'\graphics\spike_daly9.png")
-putdocx table cvd(13,10) = image("`outputpath'\graphics\spike_daly10.png")
-putdocx table cvd(14,10) = image("`outputpath'\graphics\spike_daly11.png")
+putdocx table injury(4,10) = image("`outputpath'\graphics\spike_daly1.png")
+putdocx table injury(5,10) = image("`outputpath'\graphics\spike_daly2.png")
+putdocx table injury(6,10) = image("`outputpath'\graphics\spike_daly3.png")
+putdocx table injury(7,10) = image("`outputpath'\graphics\spike_daly4.png")
+putdocx table injury(8,10) = image("`outputpath'\graphics\spike_daly5.png")
+putdocx table injury(9,10) = image("`outputpath'\graphics\spike_daly6.png")
 
 ** COL10. Percent change 
-putdocx table cvd(4,11) = image("`outputpath'\graphics\dalyc1.png"), width(25pt)
-putdocx table cvd(5,11) = image("`outputpath'\graphics\dalyc2.png"), width(25pt)
-putdocx table cvd(6,11) = image("`outputpath'\graphics\dalyc3.png"), width(25pt)
-putdocx table cvd(7,11) = image("`outputpath'\graphics\dalyc4.png"), width(25pt)
-putdocx table cvd(8,11) = image("`outputpath'\graphics\dalyc5.png"), width(25pt)
-putdocx table cvd(9,11) = image("`outputpath'\graphics\dalyc6.png"), width(25pt)
-putdocx table cvd(10,11) = image("`outputpath'\graphics\dalyc7.png"), width(25pt)
-putdocx table cvd(11,11) = image("`outputpath'\graphics\dalyc8.png"), width(25pt)
-putdocx table cvd(12,11) = image("`outputpath'\graphics\dalyc9.png"), width(25pt)
-putdocx table cvd(13,11) = image("`outputpath'\graphics\dalyc10.png"), width(25pt)
-putdocx table cvd(14,11) = image("`outputpath'\graphics\dalyc11.png"), width(25pt)
+putdocx table injury(4,11) = image("`outputpath'\graphics\dalyc1.png"), width(25pt)
+putdocx table injury(5,11) = image("`outputpath'\graphics\dalyc2.png"), width(25pt)
+putdocx table injury(6,11) = image("`outputpath'\graphics\dalyc3.png"), width(25pt)
+putdocx table injury(7,11) = image("`outputpath'\graphics\dalyc4.png"), width(25pt)
+putdocx table injury(8,11) = image("`outputpath'\graphics\dalyc5.png"), width(25pt)
+putdocx table injury(9,11) = image("`outputpath'\graphics\dalyc6.png"), width(25pt)
+
 
 
 ** Column alignment
-putdocx table cvd(.,1), halign(right) 
-putdocx table cvd(.,2), halign(right) 
-putdocx table cvd(.,3/6), halign(center) 
-putdocx table cvd(.,7), halign(right) 
-putdocx table cvd(.,8/10), halign(center) 
-putdocx table cvd(1,2), halign(center) 
-putdocx table cvd(1,3), halign(center) 
+putdocx table injury(.,1), halign(right) 
+putdocx table injury(.,2), halign(right) 
+putdocx table injury(.,3/6), halign(center) 
+putdocx table injury(.,7), halign(right) 
+putdocx table injury(.,8/10), halign(center) 
+putdocx table injury(1,2), halign(center) 
+putdocx table injury(1,3), halign(center) 
 
 ** FINAL TABLE NOTES
-putdocx table cvd(15,2) = ("(1) ") , script(super) font(calibri light, 8)
-putdocx table cvd(15,2) = ("Lung cancer also includes the relatively rare cancers of the windpipe (trachea) and the glands and ducts of the lung airways (bronchii).") , append font(calibri light, 8) 
+///putdocx table injury(10,2) = ("(1) ") , script(super) font(calibri light, 8)
+///putdocx table injury(10,2) = ("Ischaemic heart disease") , append font(calibri light, 8) 
 
-/// putdocx table cvd(15,2) = ("  (2) ") , script(super) font(calibri light, 8) append
-/// putdocx table cvd(15,2) = ("Hypertensive heart disease") , append font(calibri light, 8) 
+///putdocx table injury(10,2) = ("  (2) ") , script(super) font(calibri light, 8) append
+///putdocx table injury(10,2) = ("Hypertensive heart disease") , append font(calibri light, 8) 
 
-/// putdocx table cvd(15,2) = ("  (3) ") , script(super) font(calibri light, 8) append
-/// putdocx table cvd(15,2) = ("Cardiomyopathy, myocarditis, endocarditis") , append font(calibri light, 8) 
+///putdocx table injury(10,2) = ("  (3) ") , script(super) font(calibri light, 8) append
+///putdocx table injury(10,2) = ("Cardiomyopathy, myocarditis, endocarditis") , append font(calibri light, 8) 
 
-/// putdocx table cvd(15,2) = ("  (4) ") , script(super) font(calibri light, 8) append
-/// putdocx table cvd(15,2) = ("Rheumatic heart disease") , append font(calibri light, 8) 
+///putdocx table injury(10,2) = ("  (4) ") , script(super) font(calibri light, 8) append
+///putdocx table injury(10,2) = ("Rheumatic heart disease") , append font(calibri light, 8) 
 
-/// putdocx table cvd(15,2) = ("  (5) ") , script(super) font(calibri light, 8) append
-/// putdocx table cvd(15,2) = ("All CVD includes 'other' circulatory diseases. ICD codes: I00, I26-I28, I34-I37, I44-I51, I70-I99") , append font(calibri light, 8) linebreak
+putdocx table injury(10,2) = ("  (X) ") , script(super) font(calibri light, 8) append
+putdocx table injury(10,2) = ("All Injuries includes 'other' Injuries. ICD codes: XX") , append font(calibri light, 8) linebreak
 
 ** Save the Table
-putdocx save "`outputpath'\graphics\table_cancer.docx" , replace
+putdocx save "`outputpath'\graphics\table_injury.docx" , replace
 
 

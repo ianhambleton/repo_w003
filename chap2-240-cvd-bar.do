@@ -321,7 +321,7 @@ restore
            text(10 420 "`id4'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
            ///text(14 540 "Index"                     ,  place(c) size(4) color("`child'*0.75") just(center))
            text(10 540 "`id5'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
-           text(10.6 567 "`dagger'"                     ,  place(c) size(4) color("`child'*0.5") just(center))
+           text(10.6 567 "`ddagger'"                     ,  place(c) size(4) color("`child'*0.5") just(center))
            ///text(14 670 "Index"                     ,  place(c) size(4) color("`child'*0.75") just(center))
            text(10 670 "`id6'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
 
@@ -391,10 +391,11 @@ restore
            text(-12 705 "`cid6_31'",  place(w) size(3) color("`child'*0.5") just(right))
 
            /// NOTE
-           text(-21.5 0.5 "`ddagger' RED BAR is the mortaity rate for the Region of the Americas." ,  
-                                    place(e) size(2.5) color(gs8)  just(left))
-           text(-24 0.5 "`dagger' Five Caribbean countries had no cases of rheumatic heart disease in 2019: Antigua, Bahamas, Belize, Grenada, St Lucia." ,  
-                                    place(e) size(2.5) color(gs8) just(left))
+           text(-24 0.5 "`ddagger' Five Caribbean countries had no cases of rheumatic heart disease in 2019: Antigua, Bahamas, Belize, Grenada, St Lucia." ,  
+                                    place(e) size(2.5) color(gs4) just(left))           
+           text(-21.5 0.5 "`dagger' BLACK BAR is the mortality rate for the Region of the Americas." ,  
+                                    place(e) size(2.5) color(gs4)  just(left))
+
 
             legend(off)
 			name(bar1)

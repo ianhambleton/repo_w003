@@ -464,7 +464,7 @@ save `for_mr' , replace
 forval x = 2000(1)2019 {
     forval y = 1(1)2 {
         * TODO: Change next line for each disease group
-        forval z = 100(100)900 {
+        forval z = 100(100)1000 {
             use `for_mr' , clear 
             tempfile results
             keep if year==`x' 
@@ -490,7 +490,7 @@ use `f_2000_1_100' , clear
 forval x = 2000(1)2019 {
     forval y = 1(1)2 {
         * TODO: Change range of loop for each disease group
-        forval z = 100(100)900 {
+        forval z = 100(100)1000 {
             append using `f_`x'_`y'_`z''
         }
     }
@@ -944,7 +944,7 @@ save "`datapath'\from-who\chap2_equiplot_mr_byage_groupeddeath", replace
 ** 2019, Male, Communicable Disease
 forval x = 2000(1)2019 {
         * TODO: Change next line for each disease group
-        forval z = 100(100)900 {
+        forval z = 100(100)1000 {
             use `for_mr' , clear 
             tempfile results
             keep if year==`x' 
@@ -966,7 +966,7 @@ use `f_2000_100' , clear
 
 forval x = 2000(1)2019 {
         * TODO: Change range of loop for each disease group
-        forval z = 100(100)900 {
+        forval z = 100(100)1000 {
             append using `f_`x'_`z''
         }
 }
