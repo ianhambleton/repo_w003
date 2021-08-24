@@ -364,11 +364,11 @@ preserve
 			ytitle("", size(5) margin(l=2 r=5 t=2 b=2)) 
 
            /// Region Titles 
-           text(56 50 "Trachea / Lung"       ,  place(c) size(4) color(gs8) just(center))
+           text(56 50  "Lung"       ,  place(c) size(4) color(gs8) just(center))
            text(56 170 "Breast"              ,  place(c) size(4) color(gs8) just(center))
            text(56 290 "Prostate"            ,  place(c) size(4) color(gs8) just(center))
-           text(56 410 "Colon / Rectum"      ,  place(c) size(4) color(gs8) just(center))
-           text(56 530 "Cervix Uteri"        ,  place(c) size(4) color(gs8) just(center))
+           text(56 410 "Bowel"      ,  place(c) size(4) color(gs8) just(center))
+           text(56 530 "Cervical"        ,  place(c) size(4) color(gs8) just(center))
            text(56 650 "All Cancers"         ,  place(c) size(4) color(gs8) just(center))
 
             /// INDEX OF DISPARITY VALUES

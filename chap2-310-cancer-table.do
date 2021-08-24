@@ -690,11 +690,11 @@ putdocx table cvd(5,1) = ("Breast"), halign(right) bold
 putdocx table cvd(6,1) = ("Prostate "), halign(right) bold
 /// putdocx table cvd(6,1) = ("2"), halign(right) script(super) append
 
-putdocx table cvd(7,1) = ("Colon/rectum "), halign(right) bold
-/// putdocx table cvd(7,1) = ("3"), halign(right) script(super) append
+putdocx table cvd(7,1) = ("Bowel cancer "), halign(right) bold
+putdocx table cvd(7,1) = ("2"), halign(right) script(super) append
 
-putdocx table cvd(8,1) = ("Cervix uteri "), halign(right) bold
-/// putdocx table cvd(8,1) = ("4"), halign(right) script(super) append
+putdocx table cvd(8,1) = ("Cervical "), halign(right) bold
+putdocx table cvd(8,1) = ("3"), halign(right) script(super) append
 
 putdocx table cvd(9,1) = ("Pancreas "), halign(right) bold
 ///putdocx table cvd(9,1) = ("4"), halign(right) script(super) append
@@ -861,11 +861,11 @@ putdocx table cvd(1,3), halign(center)
 putdocx table cvd(15,2) = ("(1) ") , script(super) font(calibri light, 8)
 putdocx table cvd(15,2) = ("Lung cancer also includes the relatively rare cancers of the windpipe (trachea) and the glands and ducts of the lung airways (bronchii).") , append font(calibri light, 8) 
 
-/// putdocx table cvd(15,2) = ("  (2) ") , script(super) font(calibri light, 8) append
-/// putdocx table cvd(15,2) = ("Hypertensive heart disease") , append font(calibri light, 8) 
+putdocx table cvd(15,2) = ("  (2) ") , script(super) font(calibri light, 8) append
+putdocx table cvd(15,2) = ("Bowel cancer (or colorectal cancer) is also known as colon cancer or rectal cancer depending on where it starts.") , append font(calibri light, 8) 
 
-/// putdocx table cvd(15,2) = ("  (3) ") , script(super) font(calibri light, 8) append
-/// putdocx table cvd(15,2) = ("Cardiomyopathy, myocarditis, endocarditis") , append font(calibri light, 8) 
+putdocx table cvd(15,2) = ("  (3) ") , script(super) font(calibri light, 8) append
+putdocx table cvd(15,2) = ("Cervical cancer is also known as cervix uteri cancer.") , append font(calibri light, 8) 
 
 /// putdocx table cvd(15,2) = ("  (4) ") , script(super) font(calibri light, 8) append
 /// putdocx table cvd(15,2) = ("Rheumatic heart disease") , append font(calibri light, 8) 

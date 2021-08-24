@@ -320,17 +320,17 @@ order mindaly maxdaly, after(daly5)
             xmtick(0 25 75 100 120 145 170 195 220, tlc(gs8))
 
 			/// XX
-			ylab(	1 "trachea/lung" 
-                    2 "breast" 
-                    3 "prostate" 
-                    4 "colon/rectum" 
-                    5 "cervix uteri" 
-                    6 "pancreas"
-                    7 "lymphoma/myeloma"
-                    8 "stomach"
-                    9 "liver"
-                    10 "leukemia"
-                    11 "all cancers"
+			ylab(	1 "Lung" 
+                    2 "Breast" 
+                    3 "Prostate" 
+                    4 "Bowel" 
+                    5 "Cervical" 
+                    6 "Pancreas"
+                    7 "Lymphoma/myeloma"
+                    8 "Stomach"
+                    9 "Liver"
+                    10 "Leukemia"
+                    11 "All cancers"
 					,
 			labc(gs8) labs(4) tlc(gs8) nogrid notick glc(blue) angle(0) format(%9.0f) labgap(2) )
 			yscale(noline reverse range(0.5(0.5)7.5) noextend   ) 

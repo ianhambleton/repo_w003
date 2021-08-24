@@ -37,11 +37,11 @@ tempfile t1
 use "`datapath'\from-who\chap2_000_adjusted", clear
 
 ** Size of 2019 MR in Americas (women and men combined)
-keep if region==2000 & sex==3 & year==2019 & ghecause<100
+keep if region==2000 & sex==3 & year==2019 & (ghecause<=100 | ghecause==500)
 gsort -mortr
 list ghecause mortr
 
-/*
+
 **------------------------------------------------
 ** BEGIN STATISTICS FOR TEXT
 ** to accompany the CANCER METRICS TABLE
@@ -106,7 +106,7 @@ forval x = 1(1)10 {
     gen p`x'b = (dths`x'/dths12)*100
 }
 
-/*
+
 **-----------------------------------------------------------
 ** TRACHEA / LUNG (ghecause==12)
 ** Mortality rates by sex
