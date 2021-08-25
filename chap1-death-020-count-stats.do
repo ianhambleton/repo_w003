@@ -156,7 +156,7 @@ restore
 preserve
     sort ghecause year
     by ghecause : gen run = _n    
-    foreach var in afr amr emr eur sear wpr {
+    foreach var in afr amr emr eur sear wpr global {
         order run , after(ghecause) 
         gen `var'_g1 = `var'_p if run == 1
         egen `var'_g2 = min(`var'_g1) 
@@ -168,7 +168,7 @@ preserve
     ** Population growth (between 2000 and 2020)
     set linesize 120
     list year afr_p afr_g amr_p amr_g emr_p emr_g if ghecause==10 & (year==2000 | year==2005 | year==2010 | year==2015 | year==2019)
-    list year eur_p eur_g sear_p sear_g wpr_p wpr_g if ghecause==10 & (year==2000 | year==2005 | year==2010 | year==2015 | year==2019)
+    list year eur_p eur_g sear_p sear_g wpr_p wpr_g global_p global_g if ghecause==10 & (year==2000 | year==2005 | year==2010 | year==2015 | year==2019)
 restore
 
 ** Percentage increase in deaths by WHO region between 2000 and 2019
@@ -176,7 +176,7 @@ drop *_p
 collapse (sum) *_d , by(year)
 sort year
     gen run = _n    
-    foreach var in afr amr emr eur sear wpr {
+    foreach var in afr amr emr eur sear wpr global {
         order run , after(year) 
         gen `var'_g1 = `var'_d if run == 1
         egen `var'_g2 = min(`var'_g1) 
@@ -189,7 +189,7 @@ sort year
     ** Change in number of deaths (between 2000 and 2020)
     set linesize 120
     list year afr_d afr_g amr_d amr_g emr_d emr_g if (year==2000 | year==2005 | year==2010 | year==2015 | year==2019)
-    list year eur_d eur_g sear_d sear_g wpr_d wpr_g if (year==2000 | year==2005 | year==2010 | year==2015 | year==2019)
+    list year eur_d eur_g sear_d sear_g wpr_d wpr_g global_d global_g  if (year==2000 | year==2005 | year==2010 | year==2015 | year==2019)
 
 
 ** POPULATION SIZE in 2000 and 2020 (PAHO subregions)

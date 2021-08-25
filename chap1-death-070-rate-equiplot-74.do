@@ -30,15 +30,10 @@
 ** HEADER -----------------------------------------------------
 
 ** Use MR datasets
-use "`datapath'\from-who\chap1_mortrate_001", clear
-append using "`datapath'\from-who\chap1_mortrate_002"
+use "`datapath'\from-who\chap1_mortrate_001_74", clear
+append using "`datapath'\from-who\chap1_mortrate_002_74"
 
-** TEMP (26-AUG-2021)
-/// keep pop year sex ghecause region 
-/// keep if year==2000 | year==2019 
-/// collapse (sum) pop , by(year region)
-/// format pop %18.1fc
-
+/*
 ** Rates per 100,000
 replace crate = crate * 100000
 replace arate = arate * 100000
@@ -67,7 +62,7 @@ sort ghecause sex arate
 
 ** A few statistics to accompany the EQUIPLOT graphic below 
 preserve
-	use "`datapath'\from-who\chap1_mortrate_003", clear
+	use "`datapath'\from-who\chap1_mortrate_003_74", clear
 	**append using "`datapath'\from-who\chap1_mortrate_002"
 
 	** Rates per 100,000
@@ -135,7 +130,7 @@ preserve
 	sort year ghecause sex arate
 restore
 
-
+/*
 
 ** -------------------------------------------------------------------
 ** GRAPHIC

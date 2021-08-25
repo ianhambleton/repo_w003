@@ -93,8 +93,10 @@ preserve
 	gsort ghecause -diff 
 restore
 
+** STATISTICS FOR ACCOMPANYING TEXT 
 ** subregional differences, women and men combined
 ** Want % fall between 2000 and 2019 for each subregion (NCDs)
+preserve
 use "`datapath'\from-who\chap1_mortrate_001_both", clear
 	keep if year==2000 | year==2019
 	keep region ghecause year arate
@@ -105,9 +107,11 @@ use "`datapath'\from-who\chap1_mortrate_001_both", clear
 	gen diff = ((arate2000 - arate2019)/arate2000) * 100
 	gsort ghecause -diff
 	gsort ghecause arate2019
-/*
+restore
+
 ** Regional differences, women and men combined
 ** Difference between causes in 2019
+preserve
 use "`datapath'\from-who\chap1_mortrate_002_both", clear
 	keep if year==2019
 	keep region ghecause year arate
@@ -118,9 +122,11 @@ use "`datapath'\from-who\chap1_mortrate_002_both", clear
 	** 20-NCD   10-COM    30-INJ
 	gen diff10 = arate20/arate10
 	gen diff30 = arate20/arate30
+restore
 
 ** Regional differences, women and men combined
 ** Want % fall between 2000 and 2019 for each subregion (NCDs)
+preserve
 use "`datapath'\from-who\chap1_mortrate_002_both", clear
 	keep if year==2000 | year==2019
 	keep region ghecause year arate
@@ -131,10 +137,13 @@ use "`datapath'\from-who\chap1_mortrate_002_both", clear
 	** 20-NCD   10-COM    30-INJ
 	gen diff = arate2000 - arate2019 
 	gen perc = (diff/arate2000) * 100 
+restore
+
+** Turn Latin Caribbean 2010 injury rate into plottable value for visual
+replace arate1 = 700 if region==5 & ghecause==30 & year==2010 & arate1>600
+replace arate2 = 300 if region==5 & ghecause==30 & year==2010 & arate2>600
 
 
-
-/*
 #delimit ;
 	gr twoway 
 		/// North America
@@ -156,8 +165,11 @@ use "`datapath'\from-who\chap1_mortrate_002_both", clear
 		/// Latin Caribbean
 	    (rarea arate1 arate2 yr1 if ghecause==10 & region==5 , lw(none) color("`com'%15"))
 	    (rarea arate1 arate2 yr1 if ghecause==20 & region==5 , lw(none) color("`ncd'%15"))
-	    (rarea arate1 arate2 yr1 if ghecause==30 & region==5 & year<2010, lw(none) color("`inj'%15"))
-	    (rarea arate1 arate2 yr1 if ghecause==30 & region==5 & year>2010, lw(none) color("`inj'%15"))
+	    /// HIGH RATE due to Haiti earthquake in 2010
+		(rarea arate1 arate2 yr1 if ghecause==30 & region==5 & year>=2009 & year<=2011, lw(none) color("`inj'%5"))
+	    (rarea arate1 arate2 yr1 if ghecause==30 & region==5 & year<2010,  lw(none) color("`inj'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==30 & region==5 & year>2010,  lw(none) color("`inj'%15"))
+
 		/// non-Latin Caribbean
 	    (rarea arate1 arate2 yr1 if ghecause==10 & region==6 , lw(none) color("`com'%15"))
 	    (rarea arate1 arate2 yr1 if ghecause==20 & region==6 , lw(none) color("`ncd'%15"))
@@ -206,10 +218,12 @@ use "`datapath'\from-who\chap1_mortrate_002_both", clear
 		/// MEN (1). COM. LATIN CARIBBEAN
 		(line arate1 yr1 if ghecause==10 & region==5                , lw(0.2) lc("`com'%40"))
 		(line arate1 yr1 if ghecause==20 & region==5                , lw(0.2) lc("`ncd'%40"))
+		(line arate1 yr1 if ghecause==30 & region==5 & year>=2009 & year<=2011   , lw(0.2) lc("`inj'%10"))
 		(line arate1 yr1 if ghecause==30 & region==5 & year<2010    , lw(0.2) lc("`inj'%40"))
 		(line arate1 yr1 if ghecause==30 & region==5 & year>2010    , lw(0.2) lc("`inj'%40"))
 		(line arate2 yr1 if ghecause==10 & region==5                , lw(0.2) lc("`com'%40") lp("-"))
 		(line arate2 yr1 if ghecause==20 & region==5                , lw(0.2) lc("`ncd'%40") lp("-"))
+		(line arate2 yr1 if ghecause==30 & region==5 & year>=2009 & year<=2011   , lw(0.2) lc("`inj'%10"))
 		(line arate2 yr1 if ghecause==30 & region==5 & year<2010    , lw(0.2) lc("`inj'%40"))
 		(line arate2 yr1 if ghecause==30 & region==5 & year>2010    , lw(0.2) lc("`inj'%40"))
 
@@ -307,6 +321,9 @@ use "`datapath'\from-who\chap1_mortrate_002_both", clear
             text(0 2145 "2019",  place(w) size(2.5) color(gs8))
             text(0 2147 "2000",  place(e) size(2.5) color(gs8))
             text(0 2166 "2019",  place(w) size(2.5) color(gs8))
+
+			/// Text explaining the earthquake year in 2010 in the Latin caribbean
+            text(370 2096 "Haitian earthquake" " " "Injury rate (men)" "977 per 100k" " " "Injury rate (women)" "614 per 100k",  place(c) size(2.5) color(gs10) just(right))
 
 			legend(off)
 			name(mr_panel)

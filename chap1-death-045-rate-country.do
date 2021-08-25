@@ -94,7 +94,7 @@ use "`datapath'\from-who\who-ghe-deaths-001-who2", replace
     keep if who_region==2
     drop if age<0 
     drop dths_low dths_up
-
+/*
     ** Collapse from countries to subregions
     collapse (sum) dths pop, by(ghecause year iso3c iso3n paho_subregion sex age)
     save "`datapath'\from-who\chap1_mortrate_003", replace

@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap1-death-040-rate-subregion.do
+    //  algorithm name			    chap1-death-040-rate-subregion-74.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	16-Apr-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap1-death-040-rate-subregion", replace
+    log using "`logpath'\chap1-death-040-rate-subregion-74", replace
 ** HEADER -----------------------------------------------------
 
 ** ------------------------------------------
@@ -48,12 +48,12 @@ input str5 atext spop
 "60-64"	37187
 "65-69"	29590
 "70-74"	22092
-"75-79"	15195
-"80-84"	9097
-"85-89"	4398
-"90-94"	1500
-"95-99"	400
-"100+"	50
+///"75-79"	15195
+///"80-84"	9097
+///"85-89"	4398
+///"90-94"	1500
+///"95-99"	400
+///"100+"	50
 end
 ** Collapse to 18 age groups in 5 year bands, and 85+
 gen age21 = 1 if atext=="0-4"
@@ -95,7 +95,8 @@ save `who_std', replace
 use "`datapath'\from-who\who-ghe-deaths-001-who2", replace
     keep if ghecause==10 | ghecause==600 | ghecause==1510
     keep if who_region==2
-    drop if age<0 
+    /// New restriction knocking out the elderly
+    drop if age<0 | age>=75
     drop dths_low dths_up
 
     ** Collapse from countries to subregions
@@ -132,9 +133,9 @@ replace age18 = 12 if age==55
 replace age18 = 13 if age==60
 replace age18 = 14 if age==65
 replace age18 = 15 if age==70
-replace age18 = 16 if age==75
-replace age18 = 17 if age==80
-replace age18 = 18 if age==85
+///replace age18 = 16 if age==75
+///replace age18 = 17 if age==80
+///replace age18 = 18 if age==85
 collapse (sum) dths pop, by(year ghecause paho_subregion sex age18 agroup)
 
 ** Join the DEATHS dataset with the WHO STD population
@@ -252,19 +253,19 @@ label var region "WHO region / PAHO subregion"
 * subregions
 #delimit ; 
 label define region_    1 "north america"
-                        2 "southern cone"
-                        3 "central america"
-                        4 "andean" 
-                        5 "latin caribbean"
-                        6 "non-latin caribbean"
-                        7 "brazil"
-                        8 "mexico"
-                        100 "africa"
-                        200 "americas"
-                        300 "eastern mediterranean"
-                        400 "europe" 
-                        500 "south-east asia"
-                        600 "western pacific", modify;                     
+                    2 "southern cone"
+                    3 "central america"
+                    4 "andean" 
+                    5 "latin caribbean"
+                    6 "non-latin caribbean"
+                    7 "brazil"
+                    8 "mexico"
+                    100 "africa"
+                    200 "americas"
+                    300 "eastern mediterranean"
+                    400 "europe" 
+                    500 "south-east asia"
+                    600 "western pacific", modify;                     
 #delimit cr 
 label values region region_ 
 * sex
@@ -276,7 +277,7 @@ label values ghecause ghecause_
 
 ** Save the final MR dataset
 label data "Crude and Adjusted mortality rates: PAHO sub-regions"
-save "`datapath'\from-who\chap1_mortrate_001", replace
+save "`datapath'\from-who\chap1_mortrate_001_74", replace
 
 
 
@@ -292,7 +293,8 @@ save "`datapath'\from-who\chap1_mortrate_001", replace
 use "`datapath'\from-who\who-ghe-deaths-001-who2", replace
     keep if ghecause==10 | ghecause==600 | ghecause==1510
     keep if who_region==2
-    drop if age<0 
+    /// New restriction knocking out the elderly
+    drop if age<0 | age>=75
     drop dths_low dths_up
 
     ** Collapse from countries to subregions
@@ -328,9 +330,9 @@ replace age18 = 12 if age==55
 replace age18 = 13 if age==60
 replace age18 = 14 if age==65
 replace age18 = 15 if age==70
-replace age18 = 16 if age==75
-replace age18 = 17 if age==80
-replace age18 = 18 if age==85
+///replace age18 = 16 if age==75
+///replace age18 = 17 if age==80
+///replace age18 = 18 if age==85
 collapse (sum) dths pop, by(year ghecause paho_subregion age18 agroup)
 
 ** Join the DEATHS dataset with the WHO STD population
@@ -463,4 +465,4 @@ label values ghecause ghecause_
 
 ** Save the final MR dataset
 label data "Crude and Adjusted mortality rates: PAHO sub-regions"
-save "`datapath'\from-who\chap1_mortrate_001_both", replace
+save "`datapath'\from-who\chap1_mortrate_001_both_74", replace

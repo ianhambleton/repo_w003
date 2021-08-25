@@ -163,6 +163,10 @@ sort iso3c
 save "`datapath'\from-owid\who-iso3", replace
 merge 1:1 iso3c using `iso3'
 
+** 25-AUGUST 2021
+** Seven countries currently in WHO AFRICA should be in WHO EASTERN MEDITERRANEAN
+
+
 ** Code WHO region 
 rename who_region whoname
 gen who_region = .
@@ -184,25 +188,25 @@ replace un_det = "Eastern Africa" if iso3c=="SSD"
 labmask un_subregion, values(un_det)
 drop un_det whoname entity _merge 
 
-* Adding minor territories to the WHO regional classification
-replace who_region = 1 if un_region == 2     /* africa */
-replace who_region = 2 if un_region == 19     /* americas */
+** Adding minor territories to the WHO regional classification
+** replace who_region = 1 if un_region == 2     /* africa */
+** replace who_region = 2 if un_region == 19     /* americas */
 * Oceania 
-replace who_region = 6 if iso3c=="ASM"
-replace who_region = 6 if iso3c=="GUM"
-replace who_region = 6 if iso3c=="NCL"
-replace who_region = 6 if iso3c=="PYF"
-replace who_region = 6 if iso3c=="WLF"
-* Europe
-replace who_region = 4 if iso3c=="FRO"
-replace who_region = 4 if iso3c=="GIB"
-replace who_region = 4 if iso3c=="LIE"
-replace who_region = 4 if iso3c=="VAT"
-* China/Hong Kong/Macau
-replace who_region = 6 if iso3c=="HKG"
-replace who_region = 6 if iso3c=="MAC"
-* Palestine
-replace who_region = 3 if iso3c=="PSE"
+** replace who_region = 6 if iso3c=="ASM"
+** replace who_region = 6 if iso3c=="GUM"
+** replace who_region = 6 if iso3c=="NCL"
+** replace who_region = 6 if iso3c=="PYF"
+** replace who_region = 6 if iso3c=="WLF"
+** * Europe
+** replace who_region = 4 if iso3c=="FRO"
+** replace who_region = 4 if iso3c=="GIB"
+** replace who_region = 4 if iso3c=="LIE"
+** replace who_region = 4 if iso3c=="VAT"
+** * China/Hong Kong/Macau
+** replace who_region = 6 if iso3c=="HKG"
+** replace who_region = 6 if iso3c=="MAC"
+** * Palestine
+** replace who_region = 3 if iso3c=="PSE"
 
 * create PAHO sub-regions (AMERICAS only of course)
 * Source: https://www.paho.org/hq/index.php?option=com_content&view=article&id=97:2008-regional-subregional-centers-institutes-programs&Itemid=1110&lang=en
