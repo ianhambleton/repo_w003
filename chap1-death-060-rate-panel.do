@@ -30,15 +30,35 @@
 ** HEADER -----------------------------------------------------
 
 ** Use MR datasets
-use "`datapath'\from-who\chap1_mortrate_001", clear
-append using "`datapath'\from-who\chap1_mortrate_002"
+/// use "`datapath'\from-who\chap1_mortrate_001", clear
+/// append using "`datapath'\from-who\chap1_mortrate_002"
+/// ** Rates per 100,000
+/// replace crate = crate * 100000
+/// replace arate = arate * 100000
+/// replace aupp = aupp * 100000
+/// replace alow = alow * 100000
+/// format pop %15.0fc
 
-** Rates per 100,000
-replace crate = crate * 100000
-replace arate = arate * 100000
-replace aupp = aupp * 100000
-replace alow = alow * 100000
-format pop %15.0fc
+use "`datapath'\from-who\chap2_000_adjusted", clear
+** Keep sub-regional level (this will keep the 8 PAHO subregions of the Americas)
+keep if region>=100 & region <1000
+** Interested only in the THREE major disease groups
+** 200	communicable
+** 300	NCD
+** 1000 Injuries
+keep if ghecause==200 | ghecause==300 | ghecause==1000
+rename ghecause ghecause_orig 
+gen ghecause = . 
+replace ghecause = 10 if ghecause_orig==200
+replace ghecause = 20 if ghecause_orig==300
+replace ghecause = 30 if ghecause_orig==1000
+label define ghecause_ 10 "Communicable" 20 "NCDs" 30 "Injuries",modify
+label values ghecause ghecause_ 
+
+** DROP DALYs
+drop daly dalyr pop_dalyr dths
+rename mortr arate
+rename pop_mortr pop
 
 ** -------------------------------------------------------------------
 ** GRAPHIC
@@ -46,210 +66,196 @@ format pop %15.0fc
 
 ** Creating PANEL by shifting sub-regions along the x-axis
 gen yr1 = . 
-replace yr1 = year if region==1
-replace yr1 = year + 21 if region==2
-replace yr1 = year + 42 if region==3
-replace yr1 = year + 63 if region==4
-replace yr1 = year + 84 if region==5
-replace yr1 = year + 105 if region==6
-replace yr1 = year + 126 if region==7
-replace yr1 = year + 147 if region==8
+replace yr1 = year if region==100
+replace yr1 = year + 21 if region==200
+replace yr1 = year + 42 if region==300
+replace yr1 = year + 63 if region==400
+replace yr1 = year + 84 if region==500
+replace yr1 = year + 105 if region==600
+replace yr1 = year + 126 if region==700
+replace yr1 = year + 147 if region==800
 order year yr1 
 
 ** generate a local for the ColorBrewer color scheme
 colorpalette ptol, rainbow n(9)  nograph
 local list r(p) 
-** (COM --> ghecause = 10)
+** (COM --> ghecause = 200 / 10)
 local com `r(p3)'
-** (NCD --> ghecause = 600)
+** (NCD --> ghecause = 300 / 20)
 local ncd `r(p6)'
-** (INJ --> ghecause = 1510)
+** (INJ --> ghecause = 1000 / 30)
 local inj `r(p9)'
 
 ** Jitter men and woemn by a horizontal fraction to improve visual
 replace yr1 = yr1 - 0.2 if ghecause==10 
-replace yr1 = yr1 + 0.2 if ghecause==20 
-replace yr1 = yr1 + 0.4 if ghecause==30 
+replace yr1 = yr1 + 0.2 if ghecause==20
+replace yr1 = yr1 + 0.4 if ghecause==30
 
 ** Legend outer limits for graphing 
 local outer1 695 2013 730 2013 730 2018 695 2018 695 2013
 local outer2 635 2013 670 2013 670 2018 635 2018 635 2013
 local outer3 575 2013 610 2013 610 2018 575 2018 575 2013
 
-reshape wide crate arate alow aupp ase pop, i(year yr1 ghecause region) j(sex) 
+reshape wide arate pop, i(year yr1 ghecause region) j(sex) 
+
+** SAVE THE DATASET FOR GRAPHIC
+tempfile graphic
+save `graphic', replace
+
 
 ** Associated stats for text
-** NCDs in 2000 and 2019, women and men separately
-preserve
-	keep if year==2000 | year==2019
-	keep region ghecause year arate1 arate2 
-	order region ghecause year arate1 arate2 
-	sort region ghecause year  
-	keep if region<100  | region==200
-	sort ghecause year arate2
-	gen diff = arate1 - arate2 
-	gen ratio = ( (arate1-arate2) / arate1) * 100
-	keep if year==2019
-	gsort ghecause -diff 
-restore
+** COM/NCDs/INJ in 2000 and 2019, women and men separately, and women+men combined
+use "`datapath'\from-who\chap2_000_adjusted", clear
+	keep if (region>=100 & region <1000) | region==2000
+	keep if ghecause==200 | ghecause==300 | ghecause==1000
+	keep if year==2000 | year==2019 
+	** Listing of rates by subregion
+	format mortr %15.1fc 
+	sort year ghecause sex mortr 
+	list year ghecause sex region mortr , sep(9)
+	** Decline between 2000 and 2019 by SEX 
+	drop daly dalyr pop_dalyr dths pop_mortr 
+	preserve
+		reshape wide mortr , i(ghecause region sex) j(year)
+		gen diff = mortr2019 - mortr2000
+		gen ratio = ( (mortr2019 - mortr2000) / mortr2000) * 100
+		gsort ghecause sex -diff
+		list ghecause sex region diff ratio , sep(9)
+	restore
 
-** STATISTICS FOR ACCOMPANYING TEXT 
-** subregional differences, women and men combined
-** Want % fall between 2000 and 2019 for each subregion (NCDs)
-preserve
-use "`datapath'\from-who\chap1_mortrate_001_both", clear
-	keep if year==2000 | year==2019
-	keep region ghecause year arate
-	order region ghecause year arate
-	sort region ghecause year 
-	replace arate = arate * 100000
-	reshape wide arate , i(region ghecause) j(year)
-	gen diff = ((arate2000 - arate2019)/arate2000) * 100
-	gsort ghecause -diff
-	gsort ghecause arate2019
-restore
+** Associated stats for text
+** COM/NCDs/INJ --> difference between women and men in 2000 and 2019
+use "`datapath'\from-who\chap2_000_adjusted", clear
+	keep if (region>=100 & region <1000) | region==2000
+	keep if ghecause==200 | ghecause==300 | ghecause==1000
+	keep if year==2000 | year==2019 
+	** Difference between women and men by GHECAUSE 
+	drop daly dalyr pop_dalyr dths pop_mortr 
+	preserve
+		reshape wide mortr , i(ghecause region year) j(sex)
+		gen diff = mortr1 - mortr2
+		gen ratio = ( (mortr1 - mortr2) / mortr1) * 100
+		gsort ghecause year -diff
+		list ghecause year region diff ratio , sep(9)
+	restore
 
-** Regional differences, women and men combined
-** Difference between causes in 2019
-preserve
-use "`datapath'\from-who\chap1_mortrate_002_both", clear
-	keep if year==2019
-	keep region ghecause year arate
-	order region ghecause year arate
-	sort region ghecause year 
-	replace arate = arate * 100000
-	reshape wide arate , i(region year) j(ghecause)
-	** 20-NCD   10-COM    30-INJ
-	gen diff10 = arate20/arate10
-	gen diff30 = arate20/arate30
-restore
 
-** Regional differences, women and men combined
-** Want % fall between 2000 and 2019 for each subregion (NCDs)
-preserve
-use "`datapath'\from-who\chap1_mortrate_002_both", clear
-	keep if year==2000 | year==2019
-	keep region ghecause year arate
-	order region ghecause year arate
-	sort region ghecause year 
-	replace arate = arate * 100000
-	reshape wide arate , i(region ghecause) j(year)
-	** 20-NCD   10-COM    30-INJ
-	gen diff = arate2000 - arate2019 
-	gen perc = (diff/arate2000) * 100 
-restore
+/*
+** LOAD THE DATASET that was prepared above for the graphic
+use `graphic', clear
 
 ** Turn Latin Caribbean 2010 injury rate into plottable value for visual
-replace arate1 = 700 if region==5 & ghecause==30 & year==2010 & arate1>600
-replace arate2 = 300 if region==5 & ghecause==30 & year==2010 & arate2>600
+** This makes the extremely high rate for 2010 visible to reflect the Haitian earthquake
+replace arate1 = 700 if region==500 & ghecause==30 & year==2010 & arate1>600
+replace arate2 = 300 if region==500 & ghecause==30 & year==2010 & arate2>600
 
 
 #delimit ;
 	gr twoway 
 		/// North America
-	    (rarea arate1 arate2 yr1 if ghecause==10 & region==1 , lw(none) color("`com'%15"))
-	    (rarea arate1 arate2 yr1 if ghecause==20 & region==1 , lw(none) color("`ncd'%15"))
-	    (rarea arate1 arate2 yr1 if ghecause==30 & region==1 , lw(none) color("`inj'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==10 & region==100 , lw(none) color("`com'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==20 & region==100 , lw(none) color("`ncd'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==30 & region==100 , lw(none) color("`inj'%15"))
 		/// Southern Cone
-	    (rarea arate1 arate2 yr1 if ghecause==10 & region==2 , lw(none) color("`com'%15"))
-	    (rarea arate1 arate2 yr1 if ghecause==20 & region==2 , lw(none) color("`ncd'%15"))
-	    (rarea arate1 arate2 yr1 if ghecause==30 & region==2 , lw(none) color("`inj'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==10 & region==200 , lw(none) color("`com'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==20 & region==200 , lw(none) color("`ncd'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==30 & region==200 , lw(none) color("`inj'%15"))
 		/// Central America
-	    (rarea arate1 arate2 yr1 if ghecause==10 & region==3 , lw(none) color("`com'%15"))
-	    (rarea arate1 arate2 yr1 if ghecause==20 & region==3 , lw(none) color("`ncd'%15"))
-	    (rarea arate1 arate2 yr1 if ghecause==30 & region==3 , lw(none) color("`inj'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==10 & region==300 , lw(none) color("`com'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==20 & region==300 , lw(none) color("`ncd'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==30 & region==300 , lw(none) color("`inj'%15"))
 		/// Andean
-	    (rarea arate1 arate2 yr1 if ghecause==10 & region==4 , lw(none) color("`com'%15"))
-	    (rarea arate1 arate2 yr1 if ghecause==20 & region==4 , lw(none) color("`ncd'%15"))
-	    (rarea arate1 arate2 yr1 if ghecause==30 & region==4 , lw(none) color("`inj'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==10 & region==400 , lw(none) color("`com'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==20 & region==400 , lw(none) color("`ncd'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==30 & region==400 , lw(none) color("`inj'%15"))
 		/// Latin Caribbean
-	    (rarea arate1 arate2 yr1 if ghecause==10 & region==5 , lw(none) color("`com'%15"))
-	    (rarea arate1 arate2 yr1 if ghecause==20 & region==5 , lw(none) color("`ncd'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==10 & region==500 , lw(none) color("`com'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==20 & region==500 , lw(none) color("`ncd'%15"))
 	    /// HIGH RATE due to Haiti earthquake in 2010
-		(rarea arate1 arate2 yr1 if ghecause==30 & region==5 & year>=2009 & year<=2011, lw(none) color("`inj'%5"))
-	    (rarea arate1 arate2 yr1 if ghecause==30 & region==5 & year<2010,  lw(none) color("`inj'%15"))
-	    (rarea arate1 arate2 yr1 if ghecause==30 & region==5 & year>2010,  lw(none) color("`inj'%15"))
+		(rarea arate1 arate2 yr1 if ghecause==30 & region==500 & year>=2009 & year<=2011, lw(none) color("`inj'%5"))
+	    (rarea arate1 arate2 yr1 if ghecause==30 & region==500 & year<2010,  lw(none) color("`inj'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==30 & region==500 & year>2010,  lw(none) color("`inj'%15"))
 
 		/// non-Latin Caribbean
-	    (rarea arate1 arate2 yr1 if ghecause==10 & region==6 , lw(none) color("`com'%15"))
-	    (rarea arate1 arate2 yr1 if ghecause==20 & region==6 , lw(none) color("`ncd'%15"))
-	    (rarea arate1 arate2 yr1 if ghecause==30 & region==6 , lw(none) color("`inj'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==10 & region==600 , lw(none) color("`com'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==20 & region==600 , lw(none) color("`ncd'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==30 & region==600 , lw(none) color("`inj'%15"))
 		/// Brazil
-	    (rarea arate1 arate2 yr1 if ghecause==10 & region==7 , lw(none) color("`com'%15"))
-	    (rarea arate1 arate2 yr1 if ghecause==20 & region==7 , lw(none) color("`ncd'%15"))
-	    (rarea arate1 arate2 yr1 if ghecause==30 & region==7 , lw(none) color("`inj'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==10 & region==700 , lw(none) color("`com'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==20 & region==700 , lw(none) color("`ncd'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==30 & region==700 , lw(none) color("`inj'%15"))
 		/// Mexico
-	    (rarea arate1 arate2 yr1 if ghecause==10 & region==8 , lw(none) color("`com'%15"))
-	    (rarea arate1 arate2 yr1 if ghecause==20 & region==8 , lw(none) color("`ncd'%15"))
-	    (rarea arate1 arate2 yr1 if ghecause==30 & region==8 , lw(none) color("`inj'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==10 & region==800 , lw(none) color("`com'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==20 & region==800 , lw(none) color("`ncd'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==30 & region==800 , lw(none) color("`inj'%15"))
 
 		/// MEN (1). COM. NORTH AMERICA.
-        (line arate1 yr1 if ghecause==10 & region==1  , lw(0.2) lc("`com'%40"))
-		(line arate1 yr1 if ghecause==20 & region==1  , lw(0.2) lc("`ncd'%40"))
-		(line arate1 yr1 if ghecause==30 & region==1  , lw(0.2) lc("`inj'%40"))
-		(line arate2 yr1 if ghecause==10 & region==1  , lw(0.2) lc("`com'%40") lp("-"))
-		(line arate2 yr1 if ghecause==20 & region==1  , lw(0.2) lc("`ncd'%40") lp("-"))
-		(line arate2 yr1 if ghecause==30 & region==1  , lw(0.2) lc("`inj'%40") lp("-"))
-
-		/// MEN (1). COM. SOUTHERN CONE
-		(line arate1 yr1 if ghecause==10 & region==2  , lw(0.2) lc("`com'%40"))
-		(line arate1 yr1 if ghecause==20 & region==2  , lw(0.2) lc("`ncd'%40"))
-		(line arate1 yr1 if ghecause==30 & region==2  , lw(0.2) lc("`inj'%40"))
-		(line arate2 yr1 if ghecause==10 & region==2  , lw(0.2) lc("`com'%40") lp("-"))
-		(line arate2 yr1 if ghecause==20 & region==2  , lw(0.2) lc("`ncd'%40") lp("-"))
-		(line arate2 yr1 if ghecause==30 & region==2  , lw(0.2) lc("`inj'%40") lp("-"))
+        (line arate1 yr1 if ghecause==10 & region==100  , lw(0.2) lc("`com'%40"))
+		(line arate1 yr1 if ghecause==20 & region==100  , lw(0.2) lc("`ncd'%40"))
+		(line arate1 yr1 if ghecause==30 & region==100  , lw(0.2) lc("`inj'%40"))
+		(line arate2 yr1 if ghecause==10 & region==100  , lw(0.2) lc("`com'%40") lp("-"))
+		(line arate2 yr1 if ghecause==20 & region==100  , lw(0.2) lc("`ncd'%40") lp("-"))
+		(line arate2 yr1 if ghecause==30 & region==100  , lw(0.2) lc("`inj'%40") lp("-"))
 
 		/// MEN (1). COM. CENTRAL AMERICA.
-		(line arate1 yr1 if ghecause==10 & region==3  , lw(0.2) lc("`com'%40"))
-		(line arate1 yr1 if ghecause==20 & region==3  , lw(0.2) lc("`ncd'%40"))
-		(line arate1 yr1 if ghecause==30 & region==3  , lw(0.2) lc("`inj'%40"))
-		(line arate2 yr1 if ghecause==10 & region==3  , lw(0.2) lc("`com'%40") lp("-"))
-		(line arate2 yr1 if ghecause==20 & region==3  , lw(0.2) lc("`ncd'%40") lp("-"))
-		(line arate2 yr1 if ghecause==30 & region==3  , lw(0.2) lc("`inj'%40") lp("-"))
+		(line arate1 yr1 if ghecause==10 & region==200  , lw(0.2) lc("`com'%40"))
+		(line arate1 yr1 if ghecause==20 & region==200  , lw(0.2) lc("`ncd'%40"))
+		(line arate1 yr1 if ghecause==30 & region==200  , lw(0.2) lc("`inj'%40"))
+		(line arate2 yr1 if ghecause==10 & region==200  , lw(0.2) lc("`com'%40") lp("-"))
+		(line arate2 yr1 if ghecause==20 & region==200  , lw(0.2) lc("`ncd'%40") lp("-"))
+		(line arate2 yr1 if ghecause==30 & region==200  , lw(0.2) lc("`inj'%40") lp("-"))
 
 		/// MEN (1). COM. ANDEAN
-		(line arate1 yr1 if ghecause==10 & region==4  , lw(0.2) lc("`com'%40"))
-		(line arate1 yr1 if ghecause==20 & region==4  , lw(0.2) lc("`ncd'%40"))
-		(line arate1 yr1 if ghecause==30 & region==4  , lw(0.2) lc("`inj'%40"))
-		(line arate2 yr1 if ghecause==10 & region==4  , lw(0.2) lc("`com'%40") lp("-"))
-		(line arate2 yr1 if ghecause==20 & region==4  , lw(0.2) lc("`ncd'%40") lp("-"))
-		(line arate2 yr1 if ghecause==30 & region==4  , lw(0.2) lc("`inj'%40") lp("-"))
+		(line arate1 yr1 if ghecause==10 & region==300  , lw(0.2) lc("`com'%40"))
+		(line arate1 yr1 if ghecause==20 & region==300  , lw(0.2) lc("`ncd'%40"))
+		(line arate1 yr1 if ghecause==30 & region==300  , lw(0.2) lc("`inj'%40"))
+		(line arate2 yr1 if ghecause==10 & region==300  , lw(0.2) lc("`com'%40") lp("-"))
+		(line arate2 yr1 if ghecause==20 & region==300  , lw(0.2) lc("`ncd'%40") lp("-"))
+		(line arate2 yr1 if ghecause==30 & region==300  , lw(0.2) lc("`inj'%40") lp("-"))
+
+		/// MEN (1). COM. SOUTHERN CONE
+		(line arate1 yr1 if ghecause==10 & region==400  , lw(0.2) lc("`com'%40"))
+		(line arate1 yr1 if ghecause==20 & region==400  , lw(0.2) lc("`ncd'%40"))
+		(line arate1 yr1 if ghecause==30 & region==400  , lw(0.2) lc("`inj'%40"))
+		(line arate2 yr1 if ghecause==10 & region==400  , lw(0.2) lc("`com'%40") lp("-"))
+		(line arate2 yr1 if ghecause==20 & region==400  , lw(0.2) lc("`ncd'%40") lp("-"))
+		(line arate2 yr1 if ghecause==30 & region==400  , lw(0.2) lc("`inj'%40") lp("-"))
         
 		/// MEN (1). COM. LATIN CARIBBEAN
-		(line arate1 yr1 if ghecause==10 & region==5                , lw(0.2) lc("`com'%40"))
-		(line arate1 yr1 if ghecause==20 & region==5                , lw(0.2) lc("`ncd'%40"))
-		(line arate1 yr1 if ghecause==30 & region==5 & year>=2009 & year<=2011   , lw(0.2) lc("`inj'%10"))
-		(line arate1 yr1 if ghecause==30 & region==5 & year<2010    , lw(0.2) lc("`inj'%40"))
-		(line arate1 yr1 if ghecause==30 & region==5 & year>2010    , lw(0.2) lc("`inj'%40"))
-		(line arate2 yr1 if ghecause==10 & region==5                , lw(0.2) lc("`com'%40") lp("-"))
-		(line arate2 yr1 if ghecause==20 & region==5                , lw(0.2) lc("`ncd'%40") lp("-"))
-		(line arate2 yr1 if ghecause==30 & region==5 & year>=2009 & year<=2011   , lw(0.2) lc("`inj'%10"))
-		(line arate2 yr1 if ghecause==30 & region==5 & year<2010    , lw(0.2) lc("`inj'%40"))
-		(line arate2 yr1 if ghecause==30 & region==5 & year>2010    , lw(0.2) lc("`inj'%40"))
+		(line arate1 yr1 if ghecause==10 & region==500                , lw(0.2) lc("`com'%40"))
+		(line arate1 yr1 if ghecause==20 & region==500                , lw(0.2) lc("`ncd'%40"))
+		(line arate1 yr1 if ghecause==30 & region==500 & year>=2009 & year<=2011   , lw(0.2) lc("`inj'%10"))
+		(line arate1 yr1 if ghecause==30 & region==500 & year<2010    , lw(0.2) lc("`inj'%40"))
+		(line arate1 yr1 if ghecause==30 & region==500 & year>2010    , lw(0.2) lc("`inj'%40"))
+		(line arate2 yr1 if ghecause==10 & region==500                , lw(0.2) lc("`com'%40") lp("-"))
+		(line arate2 yr1 if ghecause==20 & region==500                , lw(0.2) lc("`ncd'%40") lp("-"))
+		(line arate2 yr1 if ghecause==30 & region==500 & year>=2009 & year<=2011   , lw(0.2) lc("`inj'%10"))
+		(line arate2 yr1 if ghecause==30 & region==500 & year<2010    , lw(0.2) lc("`inj'%40"))
+		(line arate2 yr1 if ghecause==30 & region==500 & year>2010    , lw(0.2) lc("`inj'%40"))
 
 		/// MEN (1). COM. NON_LATIN CARIBBEAN.
-		(line arate1 yr1 if ghecause==10 & region==6  , lw(0.2) lc("`com'%40"))
-		(line arate1 yr1 if ghecause==20 & region==6  , lw(0.2) lc("`ncd'%40"))
-		(line arate1 yr1 if ghecause==30 & region==6  , lw(0.2) lc("`inj'%40"))
-		(line arate2 yr1 if ghecause==10 & region==6  , lw(0.2) lc("`com'%40") lp("-"))
-		(line arate2 yr1 if ghecause==20 & region==6  , lw(0.2) lc("`ncd'%40") lp("-"))
-		(line arate2 yr1 if ghecause==30 & region==6  , lw(0.2) lc("`inj'%40") lp("-"))
+		(line arate1 yr1 if ghecause==10 & region==600  , lw(0.2) lc("`com'%40"))
+		(line arate1 yr1 if ghecause==20 & region==600  , lw(0.2) lc("`ncd'%40"))
+		(line arate1 yr1 if ghecause==30 & region==600  , lw(0.2) lc("`inj'%40"))
+		(line arate2 yr1 if ghecause==10 & region==600  , lw(0.2) lc("`com'%40") lp("-"))
+		(line arate2 yr1 if ghecause==20 & region==600  , lw(0.2) lc("`ncd'%40") lp("-"))
+		(line arate2 yr1 if ghecause==30 & region==600  , lw(0.2) lc("`inj'%40") lp("-"))
         
 		/// MEN (1). COM. BRAZIL.
-		(line arate1 yr1 if ghecause==10 & region==7  , lw(0.2) lc("`com'%40"))
-		(line arate1 yr1 if ghecause==20 & region==7  , lw(0.2) lc("`ncd'%40"))
-		(line arate1 yr1 if ghecause==30 & region==7  , lw(0.2) lc("`inj'%40"))
-		(line arate2 yr1 if ghecause==10 & region==7  , lw(0.2) lc("`com'%40") lp("-"))
-		(line arate2 yr1 if ghecause==20 & region==7  , lw(0.2) lc("`ncd'%40") lp("-"))
-		(line arate2 yr1 if ghecause==30 & region==7  , lw(0.2) lc("`inj'%40") lp("-"))
+		(line arate1 yr1 if ghecause==10 & region==700  , lw(0.2) lc("`com'%40"))
+		(line arate1 yr1 if ghecause==20 & region==700  , lw(0.2) lc("`ncd'%40"))
+		(line arate1 yr1 if ghecause==30 & region==700  , lw(0.2) lc("`inj'%40"))
+		(line arate2 yr1 if ghecause==10 & region==700  , lw(0.2) lc("`com'%40") lp("-"))
+		(line arate2 yr1 if ghecause==20 & region==700  , lw(0.2) lc("`ncd'%40") lp("-"))
+		(line arate2 yr1 if ghecause==30 & region==700  , lw(0.2) lc("`inj'%40") lp("-"))
 
 		/// MEN (1). COM. MEXICO.
-		(line arate1 yr1 if ghecause==10 & region==8  , lw(0.2) lc("`com'%40"))
-		(line arate1 yr1 if ghecause==20 & region==8  , lw(0.2) lc("`ncd'%40"))
-		(line arate1 yr1 if ghecause==30 & region==8  , lw(0.2) lc("`inj'%40"))
-		(line arate2 yr1 if ghecause==10 & region==8  , lw(0.2) lc("`com'%40") lp("-"))
-		(line arate2 yr1 if ghecause==20 & region==8  , lw(0.2) lc("`ncd'%40") lp("-"))
-		(line arate2 yr1 if ghecause==30 & region==8  , lw(0.2) lc("`inj'%40") lp("-"))
+		(line arate1 yr1 if ghecause==10 & region==800  , lw(0.2) lc("`com'%40"))
+		(line arate1 yr1 if ghecause==20 & region==800  , lw(0.2) lc("`ncd'%40"))
+		(line arate1 yr1 if ghecause==30 & region==800  , lw(0.2) lc("`inj'%40"))
+		(line arate2 yr1 if ghecause==10 & region==800  , lw(0.2) lc("`com'%40") lp("-"))
+		(line arate2 yr1 if ghecause==20 & region==800  , lw(0.2) lc("`ncd'%40") lp("-"))
+		(line arate2 yr1 if ghecause==30 & region==800  , lw(0.2) lc("`inj'%40") lp("-"))
         
         /// droplines
        (function y=750, range(2000 2167) lc(gs12) dropline(2020 2041 2062 2083 2104 2125 2146 2167))
@@ -289,9 +295,9 @@ replace arate2 = 300 if region==5 & ghecause==30 & year==2010 & arate2>600
 
             /// Region Titles 
             text(790 2010 "North" "America",  place(c) size(3) color(gs5))
-            text(790 2031 "Southern" "Cone",  place(c) size(3) color(gs5))
-            text(790 2053 "Central" "America",  place(c) size(3) color(gs5))
-            text(790 2074 "Andean",  place(c) size(3) color(gs5))
+            text(790 2031 "Central" "America",  place(c) size(3) color(gs5))
+            text(790 2053 "Andean",  place(c) size(3) color(gs5))
+            text(790 2074 "Southern" "Cone",  place(c) size(3) color(gs5))
             text(790 2095 "Latin" "Caribbean",  place(c) size(3) color(gs5))
             text(790 2116 "non-Latin" "Caribbean",  place(c) size(3) color(gs5))
             text(790 2137 "Brazil",  place(c) size(3) color(gs5))

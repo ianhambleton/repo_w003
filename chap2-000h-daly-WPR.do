@@ -428,9 +428,9 @@ preserve
     * subregions
     #delimit ; 
     label define region_    100 "north america"
-                            200 "southern cone"
-                            300 "central america"
-                            400 "andean" 
+                            200 "central america"
+                            300 "andean"
+                            400 "southern cone" 
                             500 "latin caribbean"
                             600 "non-latin caribbean"
                             700 "brazil"
@@ -488,9 +488,9 @@ label define region_
                     33 "Venezuela"
                     
                     100 "north america"
-                    200 "southern cone"
-                    300 "central america"
-                    400 "andean" 
+                    200 "central america"
+                    300 "andean"
+                    400 "southern cone" 
                     500 "latin caribbean"
                     600 "non-latin caribbean"
                     700 "brazil"

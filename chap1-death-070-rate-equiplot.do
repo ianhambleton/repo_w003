@@ -29,32 +29,35 @@
     log using "`logpath'\chap1-death-070-rate-equiplot", replace
 ** HEADER -----------------------------------------------------
 
-** Use MR datasets
-use "`datapath'\from-who\chap1_mortrate_001", clear
-append using "`datapath'\from-who\chap1_mortrate_002"
+use "`datapath'\from-who\chap2_000_adjusted", clear
+** Keep sub-regional level (this will keep the 8 PAHO subregions of the Americas)
+keep if region>=100 & region <1000
+** Interested only in the THREE major disease groups
+** 200	communicable
+** 300	NCD
+** 1000 Injuries
+keep if ghecause==200 | ghecause==300 | ghecause==1000
+rename ghecause ghecause_orig 
+gen ghecause = . 
+replace ghecause = 10 if ghecause_orig==200
+replace ghecause = 20 if ghecause_orig==300
+replace ghecause = 30 if ghecause_orig==1000
+label define ghecause_ 10 "Communicable" 20 "NCDs" 30 "Injuries",modify
+label values ghecause ghecause_ 
 
-** TEMP (26-AUG-2021)
-/// keep pop year sex ghecause region 
-/// keep if year==2000 | year==2019 
-/// collapse (sum) pop , by(year region)
-/// format pop %18.1fc
-
-** Rates per 100,000
-replace crate = crate * 100000
-replace arate = arate * 100000
-replace aupp = aupp * 100000
-replace alow = alow * 100000
-format pop %15.0fc
+** DROP DALYs
+drop daly dalyr pop_dalyr dths
+rename mortr arate
+rename pop_mortr pop
 
 ** Inequality in 2019 
 keep if year==2019
-keep if region<100
-drop year crate aupp alow ase pop
 sort sex ghecause
 order sex ghecause region 
+format pop %15.1fc 
 
-** There will be SIX charts, by SEX x GHECAUSE
-** Identify minimum rate for each chart
+
+** Identify minimum rate for each chart block --> sex (at 2 levels) x disease group (at 3 levels)
 sort sex ghecause arate 
 bysort sex ghecause : egen mrate = min(arate)
 gen drate = arate - mrate
@@ -64,76 +67,16 @@ bysort sex ghecause : gen oregion = _n
 decode region, gen(tregion)
 sort ghecause sex arate
 
+** SAVE THE DATASET FOR GRAPHIC
+tempfile graphic
+save `graphic', replace
 
-** A few statistics to accompany the EQUIPLOT graphic below 
-preserve
-	use "`datapath'\from-who\chap1_mortrate_003", clear
-	**append using "`datapath'\from-who\chap1_mortrate_002"
 
-	** Rates per 100,000
-	replace crate = crate * 100000
-	replace arate = arate * 100000
-	replace aupp = aupp * 100000
-	replace alow = alow * 100000
-	format pop %15.0fc
+** Associated stats for text
+** COM/NCDs/INJ in 2000 and 2019, women and men separately, and women+men combined
+list ghecause year sex region arate drate , sep(8)
 
-	** Inequality in 2019 
-	** keep if year==2019
-	keep if region<100
-	drop crate aupp alow ase pop
-	sort sex ghecause
-	order sex ghecause region 
 
-	** There will be SIX charts, by SEX x GHECAUSE
-	** Identify minimum rate for each chart
-	sort sex ghecause arate 
-	bysort sex ghecause : egen mrate = min(arate)
-	gen drate = arate - mrate
-	replace drate = 0 if drate<0.001
-	** Ordered y-axis
-	bysort sex ghecause : gen oregion = _n
-	decode region, gen(tregion)
-
-	sort ghecause sex arate
-	#delimit ; 
-	label define oregion_   
-                    1 "Antigua and Barbuda"
-                    2 "Argentina"
-                    3 "Bahamas"
-                    4 "Barbados"
-                    5 "Bolivia"
-                    6 "Brazil"
-                    7 "Belize"
-                    8 "Canada"
-                    9 "Chile"
-                    10 "Colombia"
-                    11 "Costa Rica"
-                    12 "Cuba"
-                    13 "Dominican Republic"
-                    14 "Ecuador"
-                    15 "El Salvador"
-                    16 "Grenada"
-                    17 "Guatemala"
-                    18 "Guyana"
-                    19 "Haiti"
-                    20 "Honduras"
-                    21 "Jamaica"
-                    22 "Mexico"
-                    23 "Nicaragua"
-                    24 "Panama"
-                    25 "Paraguay"
-                    26 "Peru"
-                    27 "Saint Lucia"
-                    28 "Saint Vincent and the Grenadines"
-                    29 "Suriname"
-                    30 "Trinidad and Tobago"
-                    31 "United States"
-                    32 "Uruguay"
-                    33 "Venezuela", modify;                     
-	#delimit cr 
-	label values region oregion_  
-	sort year ghecause sex arate
-restore
 
 
 
@@ -163,6 +106,8 @@ local com `r(p3)'
 local ncd `r(p6)'
 ** (INJ --> ghecause = 1510)
 local inj `r(p9)'
+
+sort sex ghecause drate 
 
 #delimit ;
 	gr twoway 
@@ -225,30 +170,30 @@ local inj `r(p9)'
 			xtitle("", axis(1)  size(2.5) color(gs8) margin(l=1 r=1 t=0 b=0)) 
 
 			/// men
-			ylab(	1 "north america"
-					2 "mexico"
-					3 "central america"
-					4 "non-latin caribbean"
-					5 "andean"
-					6 "brazil"
-					7 "southern cone"
-					8 "latin caribbean"
-					10 "central america"
-					11 "north america"
-					12 "andean"
-					13 "southern cone"
-					14 "brazil"
-					15 "mexico"
-					16 "non-latin caribbean"
-					17 "latin caribbean"
-					19 "north america"
-					20 "andean"
-					21 "mexico"
-					22 "central america"
-					23 "brazil"
-					24 "non-latin caribbean"
-					25 "latin caribbean"
-					26 "southern cone"
+			ylab(	1 	"north america"
+					2 	"mexico"
+					3 	"andean"
+					4 	"non-latin caribbean"
+					5 	"southern cone"
+					6 	"brazil"
+					7 	"central america"
+					8 	"latin caribbean"
+					10 	"andean"
+					11 	"north america"
+					12 	"southern cone"
+					13 	"central america"
+					14 	"brazil"
+					15 	"mexico"
+					16 	"non-latin caribbean"
+					17 	"latin caribbean"
+					19 	"north america"
+					20 	"southern cone"
+					21 	"mexico"
+					22 	"andean"
+					23 	"brazil"
+					24 	"non-latin caribbean"
+					25 	"latin caribbean"
+					26 	"central america"
 					,
 			axis(1) labc(gs8) labs(2.25) tlc(gs8) nogrid notick glc(blue) angle(0) format(%9.0f) labgap(0))
 			yscale(axis(1) noline reverse range(-6(0.5)29) noextend) 
@@ -259,26 +204,26 @@ local inj `r(p9)'
 					1	"north america"
 					2	"mexico"
 					3	"non-latin caribbean"
-					4	"andean"
-					5	"central america"
+					4	"southern cone"
+					5	"andean"
 					6	"brazil"
-					7	"southern cone"
+					7	"central america"
 					8	"latin caribbean"
-					10	"central america"
-					11	"andean"
+					10	"andean"
+					11	"southern cone"
 					12	"north america"
 					13	"brazil"
 					14	"mexico"
-					15	"southern cone"
+					15	"central america"
 					16	"non-latin caribbean"
 					17	"latin caribbean"
-					19	"andean"
+					19	"southern cone"
 					20	"mexico"
-					21	"central america"
+					21	"andean"
 					22	"brazil"
 					23	"north america"
 					24	"non-latin caribbean"
-					25	"southern cone"
+					25	"central america"
 					26	"latin caribbean"
 					,
 			axis(2) labc(gs8) labs(2.25) tlc(gs8) nogrid notick glc(red) angle(0) format(%9.0f) labgap(0))
@@ -292,11 +237,11 @@ local inj `r(p9)'
             text(-1 0 "0",  place(c) size(3) color(gs8))   
             text(-1 450 "0",  place(c) size(3) color(gs8))   
 			/// Values
-			text(5.4 115 "100",  place(c) size(2.5) color("`com'"))   
+			text(5.4 115 "101",  place(c) size(2.5) color("`com'"))   
 			text(5.4 342 "92",  place(c) size(2.5) color("`com'"))   
 			
 			text(14.4 214 "199",  place(c) size(2.5) color("`ncd'"))   
-			text(14.4 272 "162",  place(c) size(2.5) color("`ncd'"))   			
+			text(14.4 272 "163",  place(c) size(2.5) color("`ncd'"))   			
 			
 			text(23.4 90 "75",  place(c) size(2.5) color("`inj'"))   
 			text(23.4 411 "24",  place(c) size(2.5) color("`inj'"))   

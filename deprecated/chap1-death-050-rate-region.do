@@ -86,9 +86,6 @@ save `who_std', replace
 
 
 
-/*
-
-
 ** ------------------------------------------
 ** Loading DEATHS datasets for WHO regions 
 ** ------------------------------------------
