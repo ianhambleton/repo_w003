@@ -134,7 +134,10 @@ append using "`datapath'\from-who\chap2_000b_mr_subregion_groups_both"
 append using "`datapath'\from-who\chap2_000b_mr_subregion-groups"
 append using "`datapath'\from-who\chap2_000c_mr_country_groups_both"
 append using "`datapath'\from-who\chap2_000c_mr_country_groups"
-
+** Append the grouped information by WORLD BANK income groups - only for Americas
+** 27-Aug-2021
+append using "`datapath'\from-who\chap2_000a_mr_region_groups_both_wb"
+append using "`datapath'\from-who\chap2_000a_mr_region_groups_wb"
 
 sort year sex ghecause region
 label define sex_ 1 "men" 2 "women" 3 "both" , modify
@@ -211,7 +214,12 @@ label define region_
                     3000 "eastern mediterranean"
                     4000 "europe" 
                     5000 "south-east asia"
-                    6000 "western pacific", modify;                      
+                    6000 "western pacific"
+                    
+                    11000 "LIC"
+                    12000 "LMC"
+                    13000 "HMC" 
+                    14000 "HIC", modify;                      
 #delimit cr 
 label values region region_ 
 
@@ -220,4 +228,4 @@ order year sex ghecause region paho_subregion dths pop_dths dths_exist crate ara
 sort year sex ghecause region
 keep year sex ghecause region paho_subregion dths pop_dths dths_exist crate arate arate_new pop_new 
 label data "Crude and Adjusted mortality rates: Countries, PAHO sub-regions, WHO regions"
-save "`datapath'\from-who\chap2_000_mr", replace
+save "`datapath'\from-who\chap2_000_mr_wb", replace

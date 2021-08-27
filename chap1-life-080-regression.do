@@ -225,7 +225,6 @@ gen hrhrate10 = hrhrate/10
 
 gen pop10k = pop/10000
 
-
 ** Regression effects 
 regress metric ib4.wb if ghocode==35
 regress metric gdp1k if ghocode==35
@@ -276,6 +275,8 @@ predict zhrh_se, stdp
 gen zhrh_lo = zhrh_xb - 1.96 * zhrh_se
 gen zhrh_hi = zhrh_xb + 1.96 * zhrh_se
 
+
+** (1) GRAPH BY PAHO SUBREGION
 #delimit ;
 	gr twoway 
 		/// outer boxes 
@@ -338,6 +339,71 @@ gen zhrh_hi = zhrh_xb + 1.96 * zhrh_se
             lab(9 "brazil")
             lab(10 "mexico")
 			)
-			name(subregion2)
+			name(subregion)
 			;
 #delimit cr	
+
+
+** (1) GRAPH BY WORLD BANK INCOME GROUPS
+#delimit ;
+	gr twoway 
+		/// outer boxes 
+        /// (scatteri `outer1' , recast(area) lw(0.2) lc(gs10) fc(none)  )
+        /// (scatteri `outer2' , recast(area) lw(0.2) lc(gs10) fc(none)  )
+
+		/// country values
+        
+        /// Health Expenditure
+        (rarea zexp_lo zexp_hi zexp5     if ghocode==35 , sort fc("gs8%25") lw(none))
+        (line zexp_xb zexp5              if ghocode==35 , sort lc("gs8") lw(0.25) lp("-"))
+        (sc metric zexp5                 if wb==1 & ghocode==35 , msize(4) m(o) mlc("`le1'%75") mfc("`le1'%75") mlw(0.1))
+        (sc metric zexp5                 if wb==2 & ghocode==35 , msize(4) m(o) mlc("`le3'%75") mfc("`le3'%75") mlw(0.1))
+        (sc metric zexp5                 if wb==3 & ghocode==35 , msize(4) m(o) mlc("`le5'%75") mfc("`le5'%75") mlw(0.1))
+        (sc metric zexp5                 if wb==4 & ghocode==35 , msize(4) m(o) mlc("`le7'%75") mfc("`le7'%75") mlw(0.1))
+        /// (sc metric zexp5                 if wb==5 & ghocode==35 , msize(4) m(o) mlc("`le5'%75") mfc("`le5'%75") mlw(0.1))
+        /// (sc metric zexp5                 if wb==6 & ghocode==35 , msize(4) m(o) mlc("`le6'%75") mfc("`le6'%75") mlw(0.1))
+        /// (sc metric zexp5                 if wb==7 & ghocode==35 , msize(4) m(o) mlc("`le7'%75") mfc("`le7'%75") mlw(0.1))
+        /// (sc metric zexp5                 if wb==8 & ghocode==35 , msize(4) m(o) mlc("`le8'%75") mfc("`le8'%75") mlw(0.1))
+
+        /// HRH staffing
+        (rarea zhrh_lo zhrh_hi zhrh     if ghocode==35 , sort fc("gs8%25") lw(none))
+        (line zhrh_xb zhrh              if ghocode==35 , sort lc("gs8") lw(0.25) lp("-"))
+        (sc metric zhrh                 if wb==1 & ghocode==35 , msize(4) m(o) mlc("`le1'%75") mfc("`le1'%75") mlw(0.1))
+        (sc metric zhrh                 if wb==2 & ghocode==35 , msize(4) m(o) mlc("`le3'%75") mfc("`le3'%75") mlw(0.1))
+        (sc metric zhrh                 if wb==3 & ghocode==35 , msize(4) m(o) mlc("`le5'%75") mfc("`le5'%75") mlw(0.1))
+        (sc metric zhrh                 if wb==4 & ghocode==35 , msize(4) m(o) mlc("`le7'%75") mfc("`le7'%75") mlw(0.1))
+        /// (sc metric zhrh                 if wb==5 & ghocode==35 , msize(4) m(o) mlc("`le5'%75") mfc("`le5'%75") mlw(0.1))
+        /// (sc metric zhrh                 if wb==6 & ghocode==35 , msize(4) m(o) mlc("`le6'%75") mfc("`le6'%75") mlw(0.1))
+        /// (sc metric zhrh                 if wb==7 & ghocode==35 , msize(4) m(o) mlc("`le7'%75") mfc("`le7'%75") mlw(0.1))
+        /// (sc metric zhrh                 if wb==8 & ghocode==35 , msize(4) m(o) mlc("`le8'%75") mfc("`le8'%75") mlw(0.1))
+
+		,
+			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 		
+			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=3 t=5)) 
+			ysize(6) xsize(15)
+
+			xlab(none, notick labs(2) tlc(gs0) labc(gs0) notick nogrid glc(gs16))
+			xscale(noline ) 
+			xtitle("", size(5) color(gs0) margin(l=2 r=2 t=5 b=2)) 
+			
+			ylab(50(10)90,
+			valuelabel labc(gs8) labs(4) tstyle(major_notick) nogrid glc(gs16) angle(0) format(%9.0f))
+			yscale(noline lw(vthin) ) 
+			ytitle("Life Expectancy at birth (yrs)", size(4) color(gs8) margin(l=2 r=2 t=2 b=2)) 
+
+			/// X-Axis text
+            text(90 2.8 "Health Expenditure (% GDP)",  place(e) size(4.25) color(gs8))
+            text(90 -1.1 "Doctors and nurses (per 10,000 pop)",  place(e) size(4.25) color(gs8))
+
+			legend( size(4) position(5) ring(0) bc(gs8) color(gs8) bm(t=1 b=4 l=5 r=0) colf cols(2)
+			region(fcolor(gs16) lw(vthin) margin(l=2 r=2 t=2 b=2)) 
+			order(3 4 5 6) 
+			lab(3 "low income") 
+			lab(4 "low-middle income")
+            lab(5 "high-middle income")
+            lab(6 "high income")
+			)
+			name(worldbank)
+			;
+#delimit cr	
+

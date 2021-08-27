@@ -96,6 +96,7 @@ save `who_std', replace
 tempfile afr amr emr eur sear wpr world
 ** Africa (AFR)
 use "`datapath'\from-who\who-ghe-deaths-001-who1-allcauses", replace
+
 * TODO: Change restriction for each disease group
     #delimit ;
     keep if     

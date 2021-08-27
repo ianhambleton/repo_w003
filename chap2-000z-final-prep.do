@@ -70,3 +70,23 @@ merge 1:1 year sex ghecause region using `t1'
 drop _merge
 save "`datapath'\from-who\chap2_000_adjusted", replace
 
+
+** Need to add iso3 back into this structure
+tempfile t1 t2 t3 t4
+use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
+keep iso3c iso3n 
+decode iso3n , gen(country)
+drop iso3n 
+bysort iso3c : gen runner = _n
+mark use if runner==1
+keep if use==1
+drop runner use 
+save `t1' , replace
+
+** Join mortality rate datast with iso3c codes 
+** This allows us to subsequently join the World Bank income groups
+use "`datapath'\from-who\chap2_000_adjusted", clear
+decode region , gen(country)
+merge m:1 country using `t1'
+drop _merge
+save `t2' , replace

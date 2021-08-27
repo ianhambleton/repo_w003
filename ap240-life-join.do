@@ -47,6 +47,17 @@ foreach x of local country {
     label data "WHO GHE 2019: Life Table Global"
     save "`datapath'\from-who\lifetables\who-lifetable-2019-all", replace
  
+ ** DATASET WITH COUNTRY and World Bank income grouping
+ ** For use later in Chapter 1 - linking death data with World Bank income groups
+    keep cname country wbregion
+    bysort country : gen runner = _n
+    mark use if runner==1
+    keep if use==1
+    drop runner use 
+    drop if _n==1
+    save "`datapath'\from-who\lifetables\world_bank_groups_americas", replace
+
+/*
 ** *******************************************
 ** Prepare Life Expectancy datasets
 ** *******************************************
