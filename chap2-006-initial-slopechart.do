@@ -103,7 +103,7 @@ gen ycode2000 = 1
 gen ycode2019 = 10
 
 ** COLOR palette (GRAY, RED, BLUE)
-colorpalette d3, 10c nograph
+colorpalette d3, 10 nograph
 local list r(p) 
 ** (RED)
 local red `r(p4)'
@@ -322,7 +322,7 @@ local outer1    25 -4     -5 -4     -5 45      25 45      25 -4
 
             text(10 13 "Breast cancer",  place(e) size(5) color(gs0))
             text(11 13 "Self-harm",  place(e) size(5) color(gs0))
-            text(12 13 "Trachea, lung cancers", place(e) size(5) color(gs0))
+            text(12 13 "Lung cancer", place(e) size(5) color(gs0))
 
             text(13 13 "Falls",  place(e) size(5) color(gs0))
             text(14 13 "Alzeimers/dementias",  place(e) size(5) color(gs0))
@@ -332,9 +332,9 @@ local outer1    25 -4     -5 -4     -5 45      25 45      25 -4
             text(17 13 "Prostate cancer",  place(e) size(5) color(gs0))
             text(18 13 "Asthma",  place(e) size(5) color(gs0))
 
-            text(19 13 "Colon/rectum cancers",  place(e) size(5) color(gs0))
+            text(19 13 "Bowel cancer",  place(e) size(5) color(gs0))
             text(20 13 "Hypertensive heart disease",  place(e) size(5) color(gs0))
-            text(22 13 "Cervix uteri cancer",  place(e) size(5) color(gs0))
+            text(22 13 "Cervical cancer",  place(e) size(5) color(gs0))
 
 			legend(off)
 			name(slopechart_daly)
@@ -544,22 +544,22 @@ local outer1    25 -4     -5 -4     -5 45      25 45      25 -4
             text(4 13 "Alzeimers/dementias",  place(e) size(5) color(gs0))
             text(5 13 "Diabetes",  place(e) size(5) color(gs0))
             text(6 13 "Interpersonal violence",  place(e) size(5) color(gs0))
-            text(7 13 "Trachea, lung cancers", place(e) size(5) color(gs0))
+            text(7 13 "Lung cancers", place(e) size(5) color(gs0))
             text(8 13 "Breast cancer",  place(e) size(5) color(gs0))
             text(9 13 "Prostate cancer",  place(e) size(5) color(gs0))
             text(10 13 "Road injury",  place(e) size(5) color(gs0))
             text(11 13 "Hypertensive heart disease",  place(e) size(5) color(gs0))
-            text(12 13 "Colon/rectum cancers",  place(e) size(5) color(gs0))
+            text(12 13 "Bowel cancer",  place(e) size(5) color(gs0))
             text(13 13 "Self-harm",  place(e) size(5) color(gs0))
             text(14 13 "Drug use disorders",  place(e) size(5) color(gs0))
-            text(15 13 "Cervix uteri cancer",  place(e) size(5) color(gs0))
+            text(15 13 "Cervical cancer",  place(e) size(5) color(gs0))
             text(16 13 "Pancreas cancer",  place(e) size(5) color(gs0))
             text(17 13 "Lymphomas, myeloma",  place(e) size(5) color(gs0))
             text(18 13 "Falls",  place(e) size(5) color(gs0))
             text(19 13 "Stomach cancer",  place(e) size(5) color(gs0))
             text(20 13 "Cardiomyopathy etc.",  place(e) size(5) color(gs0))
             text(22 13 "Leukemia",  place(e) size(5) color(gs0))
-            text(23 13 "Ovary cancer",  place(e) size(5) color(gs0))
+            text(23 13 "Ovarian cancer",  place(e) size(5) color(gs0))
 
 			legend(off)
 			name(slopechart_mr)

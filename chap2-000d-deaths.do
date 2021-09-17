@@ -91,7 +91,7 @@ save `who_std', replace
 ** Loading DEATHS dataset for the Americas only 
 ** Americas (AMR)
 ** ------------------------------------------
-use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
+use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses-wb", replace
 
 * TODO: Change restriction for each disease group
     #delimit ;

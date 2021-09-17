@@ -31,6 +31,11 @@
 
 tempfile t1
 
+** 15-Sep-2021
+** NOTE
+** We don't need the final -chap2_000_adjusted- dataset as we're just using DEATHS and DALYs 
+** In this initial Chapter 2 overview.
+
 ** Mortality COUNT 
 use "`datapath'\from-who\chap2_000_mr", clear
 keep year sex ghecause region dths 
@@ -44,10 +49,12 @@ drop _merge
 format daly %15.1fc
 format dths %15.1fc
 
-** Restrict
-keep if sex<3
-keep if region==2000
+/// ** Restrict
+/// keep if sex<3
+/// keep if region==2000
 
+** 100 all-cause
+** 200 Communicable, maternal etc
 ** 400 CVD
 ** 500 Cancer
 ** 600 respiratory
@@ -56,14 +63,19 @@ keep if region==2000
 ** 900 Injuries
 
 #delimit ;
-keep if ghecause==400 |
+keep if ghecause==100 |
+        ghecause==200 |
+        ghecause==400 |
         ghecause==500 |
         ghecause==600 |
         ghecause==31  |
         ghecause==800 |
-        ghecause==900;
-recode ghecause (400=3) (500=4) (600=5) (31=6) (800=7) (900=8);
+        ghecause==900 |
+        ghecause==1000 ;
+recode ghecause (100=1) (200=2) (400=3) (500=4) (600=5) (31=6) (800 900=7) (1000=8);
 label define ghecause_ 
+                        1 "all cause"
+                        2 "communicable"
                         3 "CVD"
                         4 "Cancers"
                         5 "Chronic Respiratory Diseases"
@@ -71,7 +83,115 @@ label define ghecause_
                         7 "Mental Health / Neurological"
                         8 "External Causes", modify;
 #delimit cr
-sort ghecause sex year
+
+** Collapse to sum mental health and neurological 
+collapse (sum) dths daly, by(year sex ghecause region)
+sort region ghecause sex year
+
+
+** --------------------------
+** Associated statistics
+** --------------------------
+
+** Percentage of death / disability due to each condition
+** Women and men combined
+preserve
+    keep if sex==3 & region==2000
+    keep if year==2000 | year==2019 
+    reshape wide dths daly , i(year sex) j(ghecause) 
+    ///egen tdeath = rowtotal(dths3 dths4 dths5 dths6 dths7 dths8)
+    ///egen tdaly = rowtotal(daly3 daly4 daly5 daly6 daly7 daly8) 
+    
+    forval x = 2(1)8 {
+        gen pdths`x' = (dths`x'/dths1)*100
+        gen pdaly`x' = (daly`x'/daly1)*100
+        sort pdths`x'
+        list year pdths`x'
+        sort pdaly`x'
+        list year pdaly`x' 
+    }
+    order year pdths* pdaly*
+    gen pdths34 = pdths3 + pdths4
+    egen pdths_all = rowtotal(pdths2 pdths3 pdths4 pdths5 pdths6 pdths7 pdths8)
+    egen pdaly_all = rowtotal(pdaly2 pdaly3 pdaly4 pdaly5 pdaly6 pdaly7 pdaly8)
+    order pdths34, after(pdths4)
+    list year pdths*, linesize(120)
+    list year pdaly*, linesize(120)
+restore
+
+** Percentage of death / disability due to each condition
+** Women
+preserve
+    keep if sex==2 & region==2000
+    keep if year==2000 | year==2019 
+    reshape wide dths daly , i(year sex) j(ghecause) 
+    ///egen tdeath = rowtotal(dths3 dths4 dths5 dths6 dths7 dths8)
+    ///egen tdaly = rowtotal(daly3 daly4 daly5 daly6 daly7 daly8) 
+    
+    forval x = 2(1)8 {
+        gen pdths`x' = (dths`x'/dths1)*100
+        gen pdaly`x' = (daly`x'/daly1)*100
+        sort pdths`x'
+        list year pdths`x'
+        sort pdaly`x'
+        list year pdaly`x' 
+    }
+    order year pdths* pdaly*
+    gen pdths34 = pdths3 + pdths4
+    egen pdths_all = rowtotal(pdths2 pdths3 pdths4 pdths5 pdths6 pdths7 pdths8)
+    egen pdaly_all = rowtotal(pdaly2 pdaly3 pdaly4 pdaly5 pdaly6 pdaly7 pdaly8)
+    order pdths34, after(pdths4)
+    list year pdths*, linesize(120)
+    list year pdaly*, linesize(120)
+restore
+
+** Percentage of death / disability due to each condition
+** Men
+preserve
+    keep if sex==1 & region==2000
+    keep if year==2000 | year==2019 
+    reshape wide dths daly , i(year sex) j(ghecause) 
+    ///egen tdeath = rowtotal(dths3 dths4 dths5 dths6 dths7 dths8)
+    ///egen tdaly = rowtotal(daly3 daly4 daly5 daly6 daly7 daly8) 
+    
+    forval x = 2(1)8 {
+        gen pdths`x' = (dths`x'/dths1)*100
+        gen pdaly`x' = (daly`x'/daly1)*100
+        sort pdths`x'
+        list year pdths`x'
+        sort pdaly`x'
+        list year pdaly`x' 
+    }
+    order year pdths* pdaly*
+    gen pdths34 = pdths3 + pdths4
+    egen pdths_all = rowtotal(pdths2 pdths3 pdths4 pdths5 pdths6 pdths7 pdths8)
+    egen pdaly_all = rowtotal(pdaly2 pdaly3 pdaly4 pdaly5 pdaly6 pdaly7 pdaly8)
+    order pdths34, after(pdths4)
+    list year pdths*, linesize(120)
+    list year pdaly*, linesize(120)
+restore
+
+/*
+
+** Percentage increase 2000 to 2019
+preserve
+    keep if sex==3 & region==2000
+    keep if year==2000 | year==2019 
+    replace dths = dths * (-1) 
+    reshape wide dths daly , i(ghecause sex) j(year) 
+    gen pdths = ((dths2019-dths2000)/dths2000)*100
+    gen pdaly = ((daly2019-daly2000)/daly2000)*100
+    sort pdths
+    list ghecause pdths
+    sort pdaly
+    list ghecause pdaly 
+restore
+
+
+
+** Restrict for production of graphic
+keep if sex<3
+keep if region==2000
 
 ** -------------------------------------------------------------------
 ** GRAPHIC
@@ -121,10 +241,6 @@ local men2 `r(p4)'
 local inj1 `r(p7)'
 local inj2 `r(p8)'
 
-** Jitter men and women by a horizontal fraction to improve visual
-** replace yr1 = yr1 - 3 if sex==1 
-** replace yr1 = yr1 + 3 if sex==2 
-
 ** Legend outer boundaries 
 local outer1 695 2013 730 2013 730 2018 695 2018 695 2013
 local outer2 635 2013 670 2013 670 2018 635 2018 635 2013
@@ -133,10 +249,6 @@ local outer3 575 2013 610 2013 610 2018 575 2018 575 2013
 ** DEATHS will be NEGATIVE ON X-AXIS to give the chart
 ** a 'population-pyramid' style
 replace dths = dths * (-1) 
-
-** Reshape to wide by sex 
-** This we need to allow the egenration of horizontal area charts
-** reshape wide dths daly pop yr, i(year ghecause) j(sex) 
 
 ** Each chart runs from zero to the death or DALY value
 ** In actual fact, these zeros are above/below true zero
@@ -168,8 +280,6 @@ local yaxis 2003 490000 2016 490000
 
 #delimit ;
 	gr twoway 
-
-
 		/// Shaded bars for each Cause of Death
 	    /// CVD 
         (rarea dth_zero dths yr     if ghecause==3 & sex==1, horizontal lw(none) color("`cvd1'%50"))
@@ -203,53 +313,53 @@ local yaxis 2003 490000 2016 490000
 	    (rarea daly_zero daly2 yr   if ghecause==8 & sex==2, horizontal lw(none) color("`inj2'%50"))
 
 		/// Men (1) and Women (2) lines for each GHE-CAUSE
-        (line yr dths if ghecause==3 & sex==1,  lw(0.25) lc("`cvd1'%75"))
+        (line yr dths if ghecause==3 & sex==1,  lw(0.25) lc("`cvd1'%75") lp("l"))
 		(line yr dths if ghecause==3 & sex==2 , lw(0.25) lc("`cvd1'%75") lp("-"))
-        (line yr dths if ghecause==4 & sex==1,  lw(0.25) lc("`can1'%75"))
+        (line yr dths if ghecause==4 & sex==1,  lw(0.25) lc("`can1'%75") lp("l"))
 		(line yr dths if ghecause==4 & sex==2 , lw(0.25) lc("`can1'%75") lp("-"))
-        (line yr dths if ghecause==5 & sex==1,  lw(0.25) lc("`crd1'%75"))
+        (line yr dths if ghecause==5 & sex==1,  lw(0.25) lc("`crd1'%75") lp("l"))
 		(line yr dths if ghecause==5 & sex==2 , lw(0.25) lc("`crd1'%75") lp("-"))
-        (line yr dths if ghecause==6 & sex==1,  lw(0.25) lc("`dia1'%75"))
+        (line yr dths if ghecause==6 & sex==1,  lw(0.25) lc("`dia1'%75") lp("l"))
 		(line yr dths if ghecause==6 & sex==2 , lw(0.25) lc("`dia1'%75") lp("-"))
-        (line yr dths if ghecause==7 & sex==1,  lw(0.25) lc("`men1'%75"))
+        (line yr dths if ghecause==7 & sex==1,  lw(0.25) lc("`men1'%75") lp("l"))
 		(line yr dths if ghecause==7 & sex==2 , lw(0.25) lc("`men1'%75") lp("-"))
-        (line yr dths if ghecause==8 & sex==1,  lw(0.25) lc("`inj1'%75"))
+        (line yr dths if ghecause==8 & sex==1,  lw(0.25) lc("`inj1'%75") lp("l"))
 		(line yr dths if ghecause==8 & sex==2 , lw(0.25) lc("`inj1'%75") lp("-"))
 
-        (line yr daly2 if ghecause==3 & sex==1,  lw(0.25) lc("`cvd2'%75"))
+        (line yr daly2 if ghecause==3 & sex==1,  lw(0.25) lc("`cvd2'%75") lp("l"))
 		(line yr daly2 if ghecause==3 & sex==2 , lw(0.25) lc("`cvd2'%75") lp("-"))
-        (line yr daly2 if ghecause==4 & sex==1,  lw(0.25) lc("`can2'%75"))
+        (line yr daly2 if ghecause==4 & sex==1,  lw(0.25) lc("`can2'%75") lp("l"))
 		(line yr daly2 if ghecause==4 & sex==2 , lw(0.25) lc("`can2'%75") lp("-"))
-        (line yr daly2 if ghecause==5 & sex==1,  lw(0.25) lc("`crd2'%75"))
+        (line yr daly2 if ghecause==5 & sex==1,  lw(0.25) lc("`crd2'%75") lp("l"))
 		(line yr daly2 if ghecause==5 & sex==2 , lw(0.25) lc("`crd2'%75") lp("-"))
-        (line yr daly2 if ghecause==6 & sex==1,  lw(0.25) lc("`dia2'%75"))
+        (line yr daly2 if ghecause==6 & sex==1,  lw(0.25) lc("`dia2'%75") lp("l"))
 		(line yr daly2 if ghecause==6 & sex==2 , lw(0.25) lc("`dia2'%75") lp("-"))
-        (line yr daly2 if ghecause==7 & sex==1,  lw(0.25) lc("`men2'%75"))
+        (line yr daly2 if ghecause==7 & sex==1,  lw(0.25) lc("`men2'%75") lp("l"))
 		(line yr daly2 if ghecause==7 & sex==2 , lw(0.25) lc("`men2'%75") lp("-"))
-        (line yr daly2 if ghecause==8 & sex==1,  lw(0.25) lc("`inj2'%75"))
+        (line yr daly2 if ghecause==8 & sex==1,  lw(0.25) lc("`inj2'%75") lp("l"))
 		(line yr daly2 if ghecause==8 & sex==2 , lw(0.25) lc("`inj2'%75") lp("-"))
 
         /// PANEL Borders
-        (scatteri `outer1' , recast(area) lw(0.1) lc(gs10) fc(none) )
-        (scatteri `outer2a' , recast(line) lw(0.1) lc(gs10) fc(none) )
-        (scatteri `outer2b' , recast(line) lw(0.1) lc(gs10) fc(none) )
-        (scatteri `outer2c' , recast(line) lw(0.1) lc(gs10) fc(none) )
-        (scatteri `outer3a' , recast(line) lw(0.1) lc(gs10) fc(none) )
-        (scatteri `outer3b' , recast(line) lw(0.1) lc(gs10) fc(none) )
-        (scatteri `outer3c' , recast(line) lw(0.1) lc(gs10) fc(none) )
-        (scatteri `outer4a' , recast(line) lw(0.1) lc(gs10) fc(none) )
-        (scatteri `outer4b' , recast(line) lw(0.1) lc(gs10) fc(none) )
-        (scatteri `outer4c' , recast(line) lw(0.1) lc(gs10) fc(none) )
-        (scatteri `outer5a' , recast(line) lw(0.1) lc(gs10) fc(none) )
-        (scatteri `outer5b' , recast(line) lw(0.1) lc(gs10) fc(none) )
-        (scatteri `outer5c' , recast(line) lw(0.1) lc(gs10) fc(none) )
-        (scatteri `outer6a' , recast(line) lw(0.1) lc(gs10) fc(none) )
-        (scatteri `outer6b' , recast(line) lw(0.1) lc(gs10) fc(none) )
-        (scatteri `outer6c' , recast(line) lw(0.1) lc(gs10) fc(none) )   
+        (scatteri `outer1' , recast(area) lw(0.1) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer2a' , recast(line) lw(0.1) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer2b' , recast(line) lw(0.1) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer2c' , recast(line) lw(0.1) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer3a' , recast(line) lw(0.1) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer3b' , recast(line) lw(0.1) lc(gs10) fc(none) lp("l"))
+        (scatteri `outer3c' , recast(line) lw(0.1) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer4a' , recast(line) lw(0.1) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer4b' , recast(line) lw(0.1) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer4c' , recast(line) lw(0.1) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer5a' , recast(line) lw(0.1) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer5b' , recast(line) lw(0.1) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer5c' , recast(line) lw(0.1) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer6a' , recast(line) lw(0.1) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer6b' , recast(line) lw(0.1) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer6c' , recast(line) lw(0.1) lc(gs10) fc(none) lp("l") )   
 
-        /// Y-Axis text
+        /// Y-Axis indicator line for time between 2000 and 2019
         (scatteri `yaxis' , recast(line) lw(0.4) lc("`cvd1'") fc(none) )   
-        (scatteri `yaxis' ,              mc("`cvd1'") msize(0.75))   
+        (scatteri `yaxis' , msymbol(o) mc("`cvd1'") msize(0.9))   
 		,
 			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 		
 			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 
@@ -301,13 +411,4 @@ local yaxis 2003 490000 2016 490000
 			;
 #delimit cr	
 
-
-/*
-
-                    2145 "men"  
-                    2165 "women" 
-                    2190 "men"  
-                    2210 "women" 
-                    2235 "men"  
-                    2255 "women"
 

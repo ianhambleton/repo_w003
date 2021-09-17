@@ -33,7 +33,7 @@
 ** Load primary deaths dataset
 use "`datapath'\from-who\chap2_000_mr", clear
 ** Restrict to Americas ONLY
-keep if region==2000 & sex==3
+/*keep if region==2000 & sex==3
 keep dths year ghecause 
 reshape wide dths , i(year) j(ghecause)
 
@@ -308,6 +308,14 @@ format mperc1 mperc2 mperc3 dperc1 dperc2 dperc3 %9.1f
 gen dth_excess = dths12019-dths22019
 gen daly_excess = daly12019-daly22019
 format dths12019 dths22019 daly12019 daly22019 dth_excess daly_excess %12.0fc
+    ** Transpose
+    drop k
+    xpose , clear varname format(%15.1fc)
+    order _varname
+    dis "ALL CVD - Change between 2000 and 2019"
+    noi list _varname v1, sep(6) linesize(120)
+
+
 
 
 
@@ -353,7 +361,7 @@ gen daly_excess = daly12019-daly22019
 format dths12019 dths22019 daly12019 daly22019 dth_excess daly_excess %12.0fc
     ** Transpose
     drop k
-    xpose , clear varname format(%15.1fc)
+    xpose , clear varname format(%15.2fc)
     order _varname
     dis "IHD - Change between 2000 and 2019"
     noi list _varname v1, sep(6) linesize(120)
@@ -402,7 +410,7 @@ gen daly_excess = daly12019-daly22019
 format dths12019 dths22019 daly12019 daly22019 dth_excess daly_excess %12.0fc
     ** Transpose
     drop k
-    xpose , clear varname format(%15.1fc)
+    xpose , clear varname format(%15.2fc)
     order _varname
     dis "STROKE - Change between 2000 and 2019"
     noi list _varname v1, sep(6) linesize(120)
@@ -452,7 +460,7 @@ gen daly_excess = daly12019-daly22019
 format dths12019 dths22019 daly12019 daly22019 dth_excess daly_excess %12.0fc
     ** Transpose
     drop k
-    xpose , clear varname format(%15.1fc)
+    xpose , clear varname format(%15.2fc)
     order _varname
     dis "HHD - Change between 2000 and 2019"
     noi list _varname v1, sep(6) linesize(120)
@@ -502,7 +510,7 @@ gen daly_excess = daly12019-daly22019
 format dths12019 dths22019 daly12019 daly22019 dth_excess daly_excess %12.0fc
     ** Transpose
     drop k
-    xpose , clear varname format(%15.1fc)
+    xpose , clear varname format(%15.2fc)
     order _varname
     dis "CARDIOMYOPATHY - Change between 2000 and 2019"
     noi list _varname v1, sep(6) linesize(120)
@@ -552,7 +560,7 @@ gen daly_excess = daly12019-daly22019
 format dths12019 dths22019 daly12019 daly22019 dth_excess daly_excess %12.0fc
     ** Transpose
     drop k
-    xpose , clear varname format(%15.1fc)
+    xpose , clear varname format(%15.2fc)
     order _varname
     dis "RHEUMATIC - Change between 2000 and 2019"
     noi list _varname v1, sep(6) linesize(120)

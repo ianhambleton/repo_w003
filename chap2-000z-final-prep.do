@@ -70,23 +70,33 @@ merge 1:1 year sex ghecause region using `t1'
 drop _merge
 save "`datapath'\from-who\chap2_000_adjusted", replace
 
+** Proportion of all DALYs due to NCDs and external causes
+keep if region==2000
+keep if ghecause==100 | ghecause==200 | ghecause==300 | ghecause==1000
+keep if sex==3
+keep if year==2019
+drop dalyr mortr pop_* 
+reshape wide daly dths, i(sex) j(ghecause)
+gen pdaly = ((daly300 + daly1000)/daly100)*100
+gen pdths = ((dths300 + dths1000)/dths100)*100
 
-** Need to add iso3 back into this structure
-tempfile t1 t2 t3 t4
-use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
-keep iso3c iso3n 
-decode iso3n , gen(country)
-drop iso3n 
-bysort iso3c : gen runner = _n
-mark use if runner==1
-keep if use==1
-drop runner use 
-save `t1' , replace
 
-** Join mortality rate datast with iso3c codes 
-** This allows us to subsequently join the World Bank income groups
-use "`datapath'\from-who\chap2_000_adjusted", clear
-decode region , gen(country)
-merge m:1 country using `t1'
-drop _merge
-save `t2' , replace
+/// ** Need to add iso3 back into this structure
+/// tempfile t1 t2 t3 t4
+/// use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
+/// keep iso3c iso3n 
+/// decode iso3n , gen(country)
+/// drop iso3n 
+/// bysort iso3c : gen runner = _n
+/// mark use if runner==1
+/// keep if use==1
+/// drop runner use 
+/// save `t1' , replace
+/// 
+/// ** Join mortality rate datast with iso3c codes 
+/// ** This allows us to subsequently join the World Bank income groups
+/// use "`datapath'\from-who\chap2_000_adjusted", clear
+/// decode region , gen(country)
+/// merge m:1 country using `t1'
+/// drop _merge
+/// save `t2' , replace
