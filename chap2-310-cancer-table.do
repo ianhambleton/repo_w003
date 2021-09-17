@@ -745,10 +745,10 @@ putdocx table cvd(14,3) = ("$arate11") , nformat(%9.1fc)  trim
 
 ** COL4. Sex ratio
 putdocx table cvd(4,4) = ("$sratio1") , nformat(%9.2fc)  trim
-putdocx table cvd(5,4) = ("$sratio2") , nformat(%9.2fc)  trim
-putdocx table cvd(6,4) = ("$sratio3") , nformat(%9.2fc)  trim
+putdocx table cvd(5,4) = ("--") , nformat(%9.2fc)  trim
+putdocx table cvd(6,4) = ("--") , nformat(%9.2fc)  trim
 putdocx table cvd(7,4) = ("$sratio4") , nformat(%9.2fc)  trim
-putdocx table cvd(8,4) = ("$sratio5") , nformat(%9.2fc)  trim
+putdocx table cvd(8,4) = ("--") , nformat(%9.2fc)  trim
 putdocx table cvd(9,4) = ("$sratio6") , nformat(%9.2fc)  trim
 putdocx table cvd(10,4) = ("$sratio7") , nformat(%9.2fc)  trim
 putdocx table cvd(11,4) = ("$sratio8") , nformat(%9.2fc)  trim
@@ -810,10 +810,10 @@ putdocx table cvd(14,8) = ("$drate11") , nformat(%9.1fc)  trim
 
 ** COL9. Sex ratio
 putdocx table cvd(4,9) = ("$sdaly1") , nformat(%9.2fc)  trim
-putdocx table cvd(5,9) = ("$sdaly2") , nformat(%9.2fc)  trim
-putdocx table cvd(6,9) = ("$sdaly3") , nformat(%9.2fc)  trim
+putdocx table cvd(5,9) = ("--") , nformat(%9.2fc)  trim
+putdocx table cvd(6,9) = ("--") , nformat(%9.2fc)  trim
 putdocx table cvd(7,9) = ("$sdaly4") , nformat(%9.2fc)  trim
-putdocx table cvd(8,9) = ("$sdaly5") , nformat(%9.2fc)  trim
+putdocx table cvd(8,9) = ("--") , nformat(%9.2fc)  trim
 putdocx table cvd(9,9) = ("$sdaly6") , nformat(%9.2fc)  trim
 putdocx table cvd(10,9) = ("$sdaly7") , nformat(%9.2fc)  trim
 putdocx table cvd(11,9) = ("$sdaly8") , nformat(%9.2fc)  trim

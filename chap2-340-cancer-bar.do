@@ -151,7 +151,8 @@ forval x = 1(1)11 {
 /// •  	U+2022 (alt-08226)	BULLET = black small circle
 local dagger = uchar(8224)
 local ddagger = uchar(8225)
-
+local section = uchar(0167) 
+local teardrop = uchar(10045) 
 
 
 ** --------------------------------------------------------
@@ -318,22 +319,22 @@ preserve
 #delimit ;
 	gr twoway 
 		/// outer boxes 
-        (scatteri `outer1'  , recast(area) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `outer2a' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `outer2b' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `outer2c' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `outer3a' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `outer3b' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `outer3c' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `outer4a' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `outer4b' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `outer4c' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `outer5a' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `outer5b' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `outer5c' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `outer6a' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `outer6b' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `outer6c' , recast(line) lw(0.2) lc(gs10) fc(none) )
+        (scatteri `outer1'  , recast(area) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer2a' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer2b' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer2c' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer3a' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer3b' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer3c' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer4a' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer4b' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer4c' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer5a' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer5b' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer5c' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer6a' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer6b' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer6c' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
 
 		/// country values
         (rbar origin1 scaler1 region1 if cod==1 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`youth'") lw(0.1))       
@@ -360,7 +361,7 @@ preserve
 			
 			ylab(none,
 			labc(gs0) labs(3) tstyle(major_notick) nogrid glc(gs16) angle(0) format(%9.0f))
-			yscale(noline lw(vthin) range(-20(1)55)) 
+			yscale(noline lw(vthin) range(-24(1)55)) 
 			ytitle("", size(5) margin(l=2 r=5 t=2 b=2)) 
 
            /// Region Titles 
@@ -373,9 +374,9 @@ preserve
 
             /// INDEX OF DISPARITY VALUES
            /// text(-4.4 0.3 "ID{superscript:`ddagger'}" ,  place(c) size(7) color("`child'*0.5") just(center))
-           text(14 60 "Index"                     ,  place(c) size(4) color("`child'*0.75") just(center))
+           text(16 65 "IoD"                       ,  place(c) size(6) color("`child'*0.5") just(center))
+           text(18.5 84 "`teardrop'"                ,  place(c) size(3) color("`child'*0.5") just(center))
            text(10 60 "`id1'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
-           ///text(14 180 "Index"                     ,  place(c) size(4) color("`child'*0.75") just(center))
            text(10 180 "`id2'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
            ///text(14 300 "Index"                     ,  place(c) size(4) color("`child'*0.75") just(center))
            text(10 300 "`id3'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
@@ -452,7 +453,9 @@ preserve
            text(-12 705 "`cid6_31'",  place(w) size(3) color("`child'*0.5") just(right))
 
            /// NOTE
-           text(-22 0.5 "`ddagger' BLACK BAR is the mortaity rate for the Region of the Americas." ,  
+           text(-25 0.5 "`teardrop' IoD = Index of Disparity. Measures the average (mean) deviation of each country rate from the regional rate, as a percentage." ,  
+                                    place(e) size(2.25) color(gs8)  just(left))
+           text(-22 0.5 "`ddagger' BLACK BAR is the mortality rate for the Region of the Americas." ,  
                                     place(e) size(2.5) color(gs8)  just(left))
 			legend(off)
 			name(bar1)
@@ -464,19 +467,19 @@ preserve
 #delimit ;
 	gr twoway 
 		/// outer boxes 
-        (scatteri `touter1'  , recast(area) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `touter2a' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `touter2b' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `touter2c' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `touter3a' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `touter3b' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `touter3c' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `touter4a' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `touter4b' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `touter4c' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `touter5a' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `touter5b' , recast(line) lw(0.2) lc(gs10) fc(none) )
-        (scatteri `touter5c' , recast(line) lw(0.2) lc(gs10) fc(none) )
+        (scatteri `touter1'  , recast(area) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `touter2a' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `touter2b' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `touter2c' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `touter3a' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `touter3b' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `touter3c' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `touter4a' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `touter4b' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `touter4c' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `touter5a' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `touter5b' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `touter5c' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
         ///(scatteri `outer6a' , recast(line) lw(0.2) lc(gs10) fc(none) )
         ///(scatteri `outer6b' , recast(line) lw(0.2) lc(gs10) fc(none) )
         ///(scatteri `outer6c' , recast(line) lw(0.2) lc(gs10) fc(none) )

@@ -38,9 +38,10 @@ use "`datapath'\from-who\chap2_000_adjusted", clear
 
 ** Size of 2019 MR in Americas (women and men combined)
 keep if region==2000 & sex==3 & year==2019 & (ghecause<=100 | ghecause==500)
+** keep if region==2000 & sex==3  & (ghecause<=100 | ghecause==500)
+** keep if region==2000 & (ghecause<=100 | ghecause==500)
 gsort -mortr
 list ghecause mortr
-
 
 **------------------------------------------------
 ** BEGIN STATISTICS FOR TEXT
@@ -101,11 +102,10 @@ forval x = 1(1)12 {
 gen p500 = (dths11/dths12)*100
 
 ** TOP 10 CANCERS - as percentage of CANCERS and all-deaths
-forval x = 1(1)10 { 
+forval x = 1(1)11 { 
     gen p`x'a = (dths`x'/dths11)*100
     gen p`x'b = (dths`x'/dths12)*100
 }
-
 
 **-----------------------------------------------------------
 ** TRACHEA / LUNG (ghecause==12)
@@ -608,7 +608,7 @@ qui {
     format dths12019 dths22019 daly12019 daly22019 dth_excess daly_excess %12.0fc
     ** Transpose
     drop k
-    xpose , clear varname format(%15.1fc)
+    xpose , clear varname format(%15.2fc)
     order _varname
     dis "PROSTATE CANCERS - Change between 2000 and 2019"
     noi list _varname v1, sep(6)

@@ -340,13 +340,12 @@ order mindaly maxdaly, after(daly5)
             text(-0.3 170 "DALYs"           ,  place(c) size(5) color(gs8) just(right))
             text(12 50 "% of all Deaths"     ,  place(c) size(4) color(gs8) just(right))
             text(12 170 "% of all DALYs"     ,  place(c) size(4) color(gs8) just(right))
-            text(2  245 "young children"     ,  place(e) size(3) color(gs8) just(right))
-            text(3  245 "adolescents"     ,  place(e) size(3) color(gs8) just(right))
-            text(4  245 "young adults"     ,  place(e) size(3) color(gs8) just(right))
-            text(5  245 "older adults"    ,  place(e) size(3) color(gs8) just(right))
-            text(6  245 "elderly"            ,  place(e) size(3) color(gs8) just(right))
 
-
+            text(2  245 "Under 5s"     ,  place(e) size(4) color(gs8) just(right))
+            text(3  245 "5-19"     ,  place(e) size(4) color(gs8) just(right))
+            text(4  245 "20-39"     ,  place(e) size(4) color(gs8) just(right))
+            text(5  245 "40-64"    ,  place(e) size(4) color(gs8) just(right))
+            text(6  245 "65+"            ,  place(e) size(4) color(gs8) just(right))
 
 			legend(off size(3) color(gs8) position(3) nobox ring(0) bm(t=0 b=0 l=0 r=0) colf cols(1)
 			region(fcolor(gs16) lw(none) margin(t=0 b=1 l=0 r=0)) 
