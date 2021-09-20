@@ -34,14 +34,15 @@
 use "`datapath'\from-who\chap2_000_mr_adjusted", clear
 ** Restrict to Americas ONLY
 keep if region==2000 & sex==3
-keep dths year ghecause 
-reshape wide dths , i(year) j(ghecause)
-
 ** CODES
 **    29  "COPD"
 **    30  "Asthma"
 **    600  ALL CVD
 **    100  ALL DEATHS
+keep if ghecause==29 | ghecause==30 | ghecause==600 | ghecause==100
+keep dths year ghecause 
+format dths %15.1fc
+reshape wide dths , i(year) j(ghecause)
 
 ** RESPIRATORY as percentage of all deaths
 gen p600 = (dths600/dths100)*100
@@ -78,6 +79,7 @@ qui {
     format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
 
     noi dis "COPD" 
+    noi list year dths1 dths2 dths3 daly1 daly2 daly3, noobs ab(20) linesize(120)
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
     noi list year drate1 drate2 drate3 dratio_rate ddiff_rate ddiff_count, noobs ab(20)
 }

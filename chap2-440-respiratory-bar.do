@@ -124,7 +124,8 @@ forval x = 1(1)3 {
 /// •  	U+2022 (alt-08226)	BULLET = black small circle
 local dagger = uchar(8224)
 local ddagger = uchar(8225)
-
+local section = uchar(0167) 
+local teardrop = uchar(10045) 
 
 
 ** --------------------------------------------------------
@@ -270,7 +271,7 @@ restore
 			
 			ylab(none,
 			labc(gs0) labs(3) tstyle(major_notick) nogrid glc(gs16) angle(0) format(%9.0f))
-			yscale(noline lw(vthin) range(-20(1)55)) 
+			yscale(noline lw(vthin) range(-25(1)55)) 
 			ytitle("", size(5) margin(l=2 r=5 t=2 b=2)) 
 
            /// Region Titles 
@@ -280,7 +281,9 @@ restore
 
             /// INDEX OF DISPARITY VALUES
            /// text(-4.4 0.3 "ID{superscript:`ddagger'}" ,  place(c) size(7) color("`child'*0.5") just(center))
-           text(14 60 "Index"                     ,  place(c) size(4) color("`child'*0.75") just(center))
+           text(16 60 "IoD"                       ,  place(c) size(6) color("`child'*0.5") just(center))
+           text(18 70 "`teardrop'"                ,  place(c) size(3) color("`child'*0.5") just(center))
+           /// text(14 60 "Index"                     ,  place(c) size(4) color("`child'*0.75") just(center)) 
            text(10 60 "`id1'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
            text(10 180 "`id2'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
            text(10 300 "`id3'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
@@ -319,10 +322,61 @@ restore
            text(-12 345 "`cid3_13'",  place(w) size(3) color("`child'*0.5") just(right))
  
            /// NOTE
-           text(-22 0.5 "`ddagger' BLACK BAR is the mortality rate for the Region of the Americas." ,  
+           text(-23 0.5 "`teardrop' IoD = Index of Disparity. Measures the average (mean) deviation of each country rate from the regional rate, as a percentage." ,  
+                                    place(e) size(2.25) color(gs8)  just(left))
+           text(-26 0.5 "`ddagger' BLACK BAR is the mortality rate for the Region of the Americas." ,  
                                     place(e) size(2.5) color(gs8)  just(left))
 			legend(off)
 			name(bar1)
 			;
 #delimit cr	
+
+** Add ISO code
+gen iso = "ATG" if region==1
+replace iso= "ARG" if region==2
+replace iso= "BHS" if region==3
+replace iso= "BRB" if region==4
+replace iso= "BOL" if region==5
+replace iso= "BRA" if region==6
+replace iso= "BLZ" if region==7
+replace iso= "CAN" if region==8
+replace iso= "CHL" if region==9
+replace iso= "COL" if region==10
+
+replace iso= "CRI" if region==11
+replace iso= "CUB" if region==12
+replace iso= "DOM" if region==13
+replace iso= "ECU" if region==14
+replace iso= "SLV" if region==15
+replace iso= "GRD" if region==16
+replace iso= "GTM" if region==17
+replace iso= "GUY" if region==18
+replace iso= "HTI" if region==19
+replace iso= "HND" if region==20
+
+replace iso= "JAM" if region==21
+replace iso= "MEX" if region==22
+replace iso= "NIC" if region==23
+replace iso= "PAN" if region==24
+replace iso= "PRY" if region==25
+replace iso= "PER" if region==26
+replace iso= "LCA" if region==27
+replace iso= "VCT" if region==28
+replace iso= "SUR" if region==29
+replace iso= "TTO" if region==30
+replace iso= "USA" if region==31
+replace iso= "URY" if region==32
+replace iso= "VEN" if region==33
+order iso, after(region)
+
+** Join adult smoking prevalence
+tempfile mortality
+save `mortality', replace
+import excel using "`datapath'/from-worldbank/wb_smoking_prevalence_2018.xls", sheet("hambleton_prepared") first clear
+drop country
+merge 1:m iso using `mortality'
+keep if _merge==3 | _merge==2
+drop _merge
+
+sort cod mortr 
 

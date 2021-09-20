@@ -266,15 +266,15 @@ order mindaly maxdaly, after(daly5)
 
 			/// XX
 			xlab(0 50 100 120 "0" 170 "50" 220 "100", 
-			labc(gs8) labs(4) notick grid glc(gs16) angle(0) format(%9.0f))
+			labc(gs8) labs(4.5) notick grid glc(gs16) angle(0) format(%9.0f))
 			xscale(noline range(-5(5)100) lw(vthin)) 
 			xtitle(" ", size(3) color(gs8) margin(l=0 r=0 t=0 b=0)) 
             xmtick(0 25 75 100 120 145 170 195 220, tlc(gs8))
 
 			/// XX
-			ylab(	1 "copd" 
-                    2 "asthma" 
-                    3 "all respiratory" 
+			ylab(	1 "COPD" 
+                    2 "Asthma" 
+                    3 "All Respiratory" 
 					,
 			labc(gs8) labs(5) tlc(gs8) nogrid notick glc(blue) angle(0) format(%9.0f) labgap(2) )
 			yscale(noline reverse range(0.2(0.1)3.8) noextend   ) 
@@ -284,11 +284,11 @@ order mindaly maxdaly, after(daly5)
             text(-0.2 170 "DALYs"           ,  place(c) size(6) color(gs8) just(right))
             text(3.6 50 "% of all Deaths"     ,  place(c) size(4.5) color(gs8) just(right))
             text(3.6 170 "% of all DALYs"     ,  place(c) size(4.5) color(gs8) just(right))
-            text(1  245 "young children"     ,  place(e) size(3.5) color(gs8) just(right))
-            text(1.5  245 "adolescents"     ,  place(e) size(3.5) color(gs8) just(right))
-            text(2  245 "young adults"     ,  place(e) size(3.5) color(gs8) just(right))
-            text(2.5  245 "older adults"    ,  place(e) size(3.5) color(gs8) just(right))
-            text(3  245 "elderly"            ,  place(e) size(3.5) color(gs8) just(right))
+            text(1  247 "Under 5s"     ,  place(e) size(4.5) color(gs8) just(right))
+            text(1.5  247 "5-19"     ,  place(e) size(4.5) color(gs8) just(right))
+            text(2  247 "20-39"     ,  place(e) size(4.5) color(gs8) just(right))
+            text(2.5  247 "40-64"    ,  place(e) size(4.5) color(gs8) just(right))
+            text(3  247 "65+"            ,  place(e) size(4.5) color(gs8) just(right))
 
 
 

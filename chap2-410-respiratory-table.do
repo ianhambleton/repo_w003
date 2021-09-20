@@ -617,12 +617,12 @@ putdocx table resp(2,11) = ("Percent"), font(calibri light,9) linebreak bold
 putdocx table resp(2,11) = ("change"), font(calibri light,9) append bold    
 
 putdocx table resp(4,1) = ("COPD "), halign(right) bold
-putdocx table resp(4,1) = ("X"), halign(right) script(super) append
+putdocx table resp(4,1) = ("1"), halign(right) script(super) append
 
 putdocx table resp(5,1) = ("Asthma"), halign(right) bold
 
 putdocx table resp(6,1) = ("All Respiratory "), halign(right) bold
-putdocx table resp(6,1) = ("X"), halign(right) script(super) append
+putdocx table resp(6,1) = ("2"), halign(right) script(super) append
 
 ** ----------------------
 ** DATA
@@ -698,8 +698,12 @@ putdocx table resp(1,2), halign(center)
 putdocx table resp(1,3), halign(center) 
 
 ** FINAL TABLE NOTES
-putdocx table resp(7,2) = ("(X) ") , script(super) font(calibri light, 8)
-putdocx table resp(7,2) = ("Any notes here") , append font(calibri light, 8) 
+putdocx table resp(7,2) = ("(1) ") , script(super) font(calibri light, 8)
+putdocx table resp(7,2) = ("The two most common forms of COPD are chronic bronchitis (long term inflammation of the bronchii - the breathing passages in the lungs), ") , append font(calibri light, 8) 
+putdocx table resp(7,2) = ("and pulmonary emphysema (a chronic condition in which the lungs' air sacs are damaged, causing a decrease in respiratory function). ") , append font(calibri light, 8) 
+putdocx table resp(7,2) = ("(2) ") , script(super) font(calibri light, 8) append
+putdocx table resp(7,2) = ("Other CRDs include pulmonary hypertension (high blood pressure in the blood vessels that supply the lungs), ") , append font(calibri light, 8) 
+putdocx table resp(7,2) = ("and a range of occupational lung diseases from inhaling chemicals or dust in the workplace. ") , append font(calibri light, 8) 
 
 ** Save the Table
 putdocx save "`outputpath'\graphics\table_respiratory.docx" , replace
