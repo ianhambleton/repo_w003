@@ -116,7 +116,8 @@ drop dalyr
 /// •  	U+2022 (alt-08226)	BULLET = black small circle
 local dagger = uchar(8224)
 local ddagger = uchar(8225)
-
+local section = uchar(0167) 
+local teardrop = uchar(10045) 
 
 
 ** --------------------------------------------------------
@@ -124,7 +125,7 @@ local ddagger = uchar(8225)
 ** --------------------------------------------------------
 
 ** COLORS - PURPLES for CVD
-    colorpalette #6c6c13 #adad1f #dddd3c #e8e87d #f4f4be
+    colorpalette #6c6c13 #adad1f #dddd3c #e8e87d #f4f4be, nograph
     local list r(p) 
     ** Age groups
     local child `r(p1)'    
@@ -230,7 +231,7 @@ restore
 			
 			ylab(none,
 			labc(gs0) labs(3) tstyle(major_notick) nogrid glc(gs16) angle(0) format(%9.0f))
-			yscale(noline lw(vthin) range(-20(1)55)) 
+			yscale(noline lw(vthin) range(-25(1)55)) 
 			ytitle("", size(5) margin(l=2 r=5 t=2 b=2)) 
 
            /// Region Titles 
@@ -238,7 +239,9 @@ restore
 
             /// INDEX OF DISPARITY VALUES
            /// text(-4.4 0.3 "ID{superscript:`ddagger'}" ,  place(c) size(7) color("`child'*0.5") just(center))
-           text(14 60 "Index"                     ,  place(c) size(6) color("`child'*0.75") just(center))
+           text(15 60 "IoD"                       ,  place(c) size(9) color("`child'*0.5") just(center))
+           text(17 70 "`teardrop'"                ,  place(c) size(4) color("`child'*0.5") just(center))
+           ///text(14 60 "Index"                     ,  place(c) size(6) color("`child'*0.75") just(center))
            text(10 60 "`id1'"                     ,  place(c) size(9) color("`child'*0.5") just(center))
 
            /// Y-Axis text 
@@ -257,8 +260,12 @@ restore
            text(-12 105 "`cid1_1'",  place(w) size(4.5) color("`child'*0.5") just(right))
  
            /// NOTE
-           text(-22 0 "`ddagger' BLACK BAR, mortality rate for the Region of the Americas." ,  
-                                    place(e) size(3.5) color(gs8)  just(left))
+           text(-22 0.5 "`teardrop' IoD = Index of Disparity. Measures the average (mean) deviation of each " ,  
+                                    place(e) size(2.5) color(gs8)  just(left)) 
+           text(-23.7 0.5 "             country rate from the regional rate, as a percentage." ,  
+                                    place(e) size(2.5) color(gs8)  just(left))
+           text(-26.7 0 "`ddagger' BLACK BAR, mortality rate for the Region of the Americas." ,  
+                                    place(e) size(2.5) color(gs8)  just(left))
 			legend(off)
 			name(bar1)
 			;

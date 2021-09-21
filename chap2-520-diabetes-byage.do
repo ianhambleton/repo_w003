@@ -258,22 +258,13 @@ order mindaly maxdaly, after(daly5)
             text(-0.2 170 "DALYs"           ,  place(c) size(7) color(gs8) just(right))
             text(2.0 50 "% of all Deaths"     ,  place(c) size(6.5) color(gs8) just(right))
             text(2.0 170 "% of all DALYs"     ,  place(c) size(6.5) color(gs8) just(right))
-            text(0.2     245 "young children"     ,  place(e) size(5.5) color(gs8) just(right))
-            text(0.65    245 "adolescents"     ,  place(e) size(5.5) color(gs8) just(right))
-            text(1.1   245 "young adults"     ,  place(e) size(5.5) color(gs8) just(right))
-            text(1.55    245 "older adults"    ,  place(e) size(5.5) color(gs8) just(right))
-            text(2     245 "elderly"            ,  place(e) size(5.5) color(gs8) just(right))
+            text(0.2     245 "Under 5s"     ,  place(e) size(6) color(gs8) just(right))
+            text(0.65    245 "5-19"     ,  place(e) size(6) color(gs8) just(right))
+            text(1.1   245 "20-39"     ,  place(e) size(6) color(gs8) just(right))
+            text(1.55    245 "40-64"    ,  place(e) size(6) color(gs8) just(right))
+            text(2     245 "65+"            ,  place(e) size(6) color(gs8) just(right))
 
-
-
-			legend(off size(3) color(gs8) position(3) nobox ring(0) bm(t=0 b=0 l=0 r=0) colf cols(1)
-			region(fcolor(gs16) lw(none) margin(t=0 b=1 l=0 r=0)) 
-			order(7 8 9 10 11) textfirst
-			lab(7 "Children") 
-			lab(8 "Youth") 		
-			lab(9 "Young adults") 		
-			lab(10 "Older adults") 		
-			lab(11 "Elderly") 		
+			legend(off 		
             )
 			name(equiplot_byage)
 			;
