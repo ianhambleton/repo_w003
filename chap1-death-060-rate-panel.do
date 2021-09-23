@@ -140,7 +140,7 @@ use "`datapath'\from-who\chap2_000_adjusted", clear
 	restore
 
 
-/*
+
 ** LOAD THE DATASET that was prepared above for the graphic
 use `graphic', clear
 
@@ -190,43 +190,43 @@ replace arate2 = 300 if region==500 & ghecause==30 & year==2010 & arate2>600
 	    (rarea arate1 arate2 yr1 if ghecause==30 & region==800 , lw(none) color("`inj'%15"))
 
 		/// MEN (1). COM. NORTH AMERICA.
-        (line arate1 yr1 if ghecause==10 & region==100  , lw(0.2) lc("`com'%40"))
-		(line arate1 yr1 if ghecause==20 & region==100  , lw(0.2) lc("`ncd'%40"))
-		(line arate1 yr1 if ghecause==30 & region==100  , lw(0.2) lc("`inj'%40"))
+        (line arate1 yr1 if ghecause==10 & region==100  , lw(0.2) lc("`com'%40") lp("l"))
+		(line arate1 yr1 if ghecause==20 & region==100  , lw(0.2) lc("`ncd'%40") lp("l"))
+		(line arate1 yr1 if ghecause==30 & region==100  , lw(0.2) lc("`inj'%40") lp("l"))
 		(line arate2 yr1 if ghecause==10 & region==100  , lw(0.2) lc("`com'%40") lp("-"))
 		(line arate2 yr1 if ghecause==20 & region==100  , lw(0.2) lc("`ncd'%40") lp("-"))
 		(line arate2 yr1 if ghecause==30 & region==100  , lw(0.2) lc("`inj'%40") lp("-"))
 
 		/// MEN (1). COM. CENTRAL AMERICA.
-		(line arate1 yr1 if ghecause==10 & region==200  , lw(0.2) lc("`com'%40"))
-		(line arate1 yr1 if ghecause==20 & region==200  , lw(0.2) lc("`ncd'%40"))
-		(line arate1 yr1 if ghecause==30 & region==200  , lw(0.2) lc("`inj'%40"))
+		(line arate1 yr1 if ghecause==10 & region==200  , lw(0.2) lc("`com'%40") lp("l"))
+		(line arate1 yr1 if ghecause==20 & region==200  , lw(0.2) lc("`ncd'%40") lp("l"))
+		(line arate1 yr1 if ghecause==30 & region==200  , lw(0.2) lc("`inj'%40") lp("l"))
 		(line arate2 yr1 if ghecause==10 & region==200  , lw(0.2) lc("`com'%40") lp("-"))
 		(line arate2 yr1 if ghecause==20 & region==200  , lw(0.2) lc("`ncd'%40") lp("-"))
 		(line arate2 yr1 if ghecause==30 & region==200  , lw(0.2) lc("`inj'%40") lp("-"))
 
 		/// MEN (1). COM. ANDEAN
-		(line arate1 yr1 if ghecause==10 & region==300  , lw(0.2) lc("`com'%40"))
-		(line arate1 yr1 if ghecause==20 & region==300  , lw(0.2) lc("`ncd'%40"))
-		(line arate1 yr1 if ghecause==30 & region==300  , lw(0.2) lc("`inj'%40"))
+		(line arate1 yr1 if ghecause==10 & region==300  , lw(0.2) lc("`com'%40") lp("l"))
+		(line arate1 yr1 if ghecause==20 & region==300  , lw(0.2) lc("`ncd'%40") lp("l"))
+		(line arate1 yr1 if ghecause==30 & region==300  , lw(0.2) lc("`inj'%40") lp("l"))
 		(line arate2 yr1 if ghecause==10 & region==300  , lw(0.2) lc("`com'%40") lp("-"))
 		(line arate2 yr1 if ghecause==20 & region==300  , lw(0.2) lc("`ncd'%40") lp("-"))
 		(line arate2 yr1 if ghecause==30 & region==300  , lw(0.2) lc("`inj'%40") lp("-"))
 
 		/// MEN (1). COM. SOUTHERN CONE
-		(line arate1 yr1 if ghecause==10 & region==400  , lw(0.2) lc("`com'%40"))
-		(line arate1 yr1 if ghecause==20 & region==400  , lw(0.2) lc("`ncd'%40"))
-		(line arate1 yr1 if ghecause==30 & region==400  , lw(0.2) lc("`inj'%40"))
+		(line arate1 yr1 if ghecause==10 & region==400  , lw(0.2) lc("`com'%40") lp("l"))
+		(line arate1 yr1 if ghecause==20 & region==400  , lw(0.2) lc("`ncd'%40") lp("l"))
+		(line arate1 yr1 if ghecause==30 & region==400  , lw(0.2) lc("`inj'%40") lp("l"))
 		(line arate2 yr1 if ghecause==10 & region==400  , lw(0.2) lc("`com'%40") lp("-"))
 		(line arate2 yr1 if ghecause==20 & region==400  , lw(0.2) lc("`ncd'%40") lp("-"))
 		(line arate2 yr1 if ghecause==30 & region==400  , lw(0.2) lc("`inj'%40") lp("-"))
         
 		/// MEN (1). COM. LATIN CARIBBEAN
-		(line arate1 yr1 if ghecause==10 & region==500                , lw(0.2) lc("`com'%40"))
-		(line arate1 yr1 if ghecause==20 & region==500                , lw(0.2) lc("`ncd'%40"))
-		(line arate1 yr1 if ghecause==30 & region==500 & year>=2009 & year<=2011   , lw(0.2) lc("`inj'%10"))
-		(line arate1 yr1 if ghecause==30 & region==500 & year<2010    , lw(0.2) lc("`inj'%40"))
-		(line arate1 yr1 if ghecause==30 & region==500 & year>2010    , lw(0.2) lc("`inj'%40"))
+		(line arate1 yr1 if ghecause==10 & region==500                , lw(0.2) lc("`com'%40") lp("l"))
+		(line arate1 yr1 if ghecause==20 & region==500                , lw(0.2) lc("`ncd'%40") lp("l"))
+		(line arate1 yr1 if ghecause==30 & region==500 & year>=2009 & year<=2011   , lw(0.2) lc("`inj'%10") lp("l"))
+		(line arate1 yr1 if ghecause==30 & region==500 & year<2010    , lw(0.2) lc("`inj'%40") lp("l"))
+		(line arate1 yr1 if ghecause==30 & region==500 & year>2010    , lw(0.2) lc("`inj'%40") lp("l"))
 		(line arate2 yr1 if ghecause==10 & region==500                , lw(0.2) lc("`com'%40") lp("-"))
 		(line arate2 yr1 if ghecause==20 & region==500                , lw(0.2) lc("`ncd'%40") lp("-"))
 		(line arate2 yr1 if ghecause==30 & region==500 & year>=2009 & year<=2011   , lw(0.2) lc("`inj'%10"))
@@ -234,25 +234,25 @@ replace arate2 = 300 if region==500 & ghecause==30 & year==2010 & arate2>600
 		(line arate2 yr1 if ghecause==30 & region==500 & year>2010    , lw(0.2) lc("`inj'%40"))
 
 		/// MEN (1). COM. NON_LATIN CARIBBEAN.
-		(line arate1 yr1 if ghecause==10 & region==600  , lw(0.2) lc("`com'%40"))
-		(line arate1 yr1 if ghecause==20 & region==600  , lw(0.2) lc("`ncd'%40"))
-		(line arate1 yr1 if ghecause==30 & region==600  , lw(0.2) lc("`inj'%40"))
+		(line arate1 yr1 if ghecause==10 & region==600  , lw(0.2) lc("`com'%40") lp("l"))
+		(line arate1 yr1 if ghecause==20 & region==600  , lw(0.2) lc("`ncd'%40") lp("l"))
+		(line arate1 yr1 if ghecause==30 & region==600  , lw(0.2) lc("`inj'%40") lp("l"))
 		(line arate2 yr1 if ghecause==10 & region==600  , lw(0.2) lc("`com'%40") lp("-"))
 		(line arate2 yr1 if ghecause==20 & region==600  , lw(0.2) lc("`ncd'%40") lp("-"))
 		(line arate2 yr1 if ghecause==30 & region==600  , lw(0.2) lc("`inj'%40") lp("-"))
         
 		/// MEN (1). COM. BRAZIL.
-		(line arate1 yr1 if ghecause==10 & region==700  , lw(0.2) lc("`com'%40"))
-		(line arate1 yr1 if ghecause==20 & region==700  , lw(0.2) lc("`ncd'%40"))
-		(line arate1 yr1 if ghecause==30 & region==700  , lw(0.2) lc("`inj'%40"))
+		(line arate1 yr1 if ghecause==10 & region==700  , lw(0.2) lc("`com'%40") lp("l"))
+		(line arate1 yr1 if ghecause==20 & region==700  , lw(0.2) lc("`ncd'%40") lp("l"))
+		(line arate1 yr1 if ghecause==30 & region==700  , lw(0.2) lc("`inj'%40") lp("l"))
 		(line arate2 yr1 if ghecause==10 & region==700  , lw(0.2) lc("`com'%40") lp("-"))
 		(line arate2 yr1 if ghecause==20 & region==700  , lw(0.2) lc("`ncd'%40") lp("-"))
 		(line arate2 yr1 if ghecause==30 & region==700  , lw(0.2) lc("`inj'%40") lp("-"))
 
 		/// MEN (1). COM. MEXICO.
-		(line arate1 yr1 if ghecause==10 & region==800  , lw(0.2) lc("`com'%40"))
-		(line arate1 yr1 if ghecause==20 & region==800  , lw(0.2) lc("`ncd'%40"))
-		(line arate1 yr1 if ghecause==30 & region==800  , lw(0.2) lc("`inj'%40"))
+		(line arate1 yr1 if ghecause==10 & region==800  , lw(0.2) lc("`com'%40") lp("l"))
+		(line arate1 yr1 if ghecause==20 & region==800  , lw(0.2) lc("`ncd'%40") lp("l"))
+		(line arate1 yr1 if ghecause==30 & region==800  , lw(0.2) lc("`inj'%40") lp("l"))
 		(line arate2 yr1 if ghecause==10 & region==800  , lw(0.2) lc("`com'%40") lp("-"))
 		(line arate2 yr1 if ghecause==20 & region==800  , lw(0.2) lc("`ncd'%40") lp("-"))
 		(line arate2 yr1 if ghecause==30 & region==800  , lw(0.2) lc("`inj'%40") lp("-"))

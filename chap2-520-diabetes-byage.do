@@ -35,12 +35,13 @@
 **      chap2-000a-mr-region.do
 tempfile t1 resp1 
 use "`datapath'\from-who\chap2_equiplot_mr_byage_groupeddeath", replace
-keep if year==2019 & who_region==2 & ghecause==31 
+keep if (year==2000 | year==2019) & who_region==2 & ghecause==31 
 drop pop dths who_region year
 save `resp1' , replace
 use "`datapath'\from-who\chap2_equiplot_mr_byage", clear
-keep if year==2019 & who_region==2  
-drop pop dths who_region year
+///keep if year==2019 & who_region==2  
+keep if (year==2000 | year==2019) & who_region==2  
+drop pop dths who_region
 append using `resp1'
 
 gen age16 = 1       if age18==1
@@ -59,7 +60,7 @@ replace age16 = 13  if age18==13
 replace age16 = 14  if age18==14
 replace age16 = 15  if age18==15
 replace age16 = 16  if age18==16 | age18==17 | age18==18
-collapse (sum) deaths, by(ghecause age16 agroup)
+collapse (sum) deaths, by(ghecause age16 agroup year)
 #delimit ; 
 label define age16_     1 "0-4"
                         2 "5-9"
@@ -89,23 +90,23 @@ save `t1', replace
 **      chap2-000a-daly-region.do
 tempfile cancer2 
 use "`datapath'\from-who\chap2_equiplot_daly_byage_groupeddeath", replace
-keep if year==2019 & who_region==2 & ghecause==31 
-drop pop dalyt who_region year
+keep if (year==2000 | year==2019) & who_region==2 & ghecause==31 
+drop pop dalyt who_region 
 save `cancer2' , replace
 
 use "`datapath'\from-who\chap2_equiplot_daly_byage", clear
-keep if year==2019 & who_region==2 
-drop pop who_region year dalyt
+keep if (year==2000 | year==2019) & who_region==2 
+drop pop who_region  dalyt
 append using `cancer2'
 rename age18 age16
 sort ghecause age16
 
 ** Merge and collapse to broad age groups 
-merge 1:1 ghecause age16 using `t1' 
+merge 1:1 ghecause year age16 using `t1' 
 drop _merge age16
-collapse (sum) daly deaths , by(ghecause agroup)
+collapse (sum) daly deaths , by(ghecause agroup year)
 format deaths daly %15.0fc 
-reshape wide daly deaths , i(ghecause) j(agroup)
+reshape wide daly deaths , i(ghecause year) j(agroup)
 egen deaths_tot = rowtotal(deaths1 deaths2 deaths3 deaths4 deaths5) 
 egen daly_tot = rowtotal(daly1 daly2 daly3 daly4 daly5) 
 sort ghecause deaths* daly* 
@@ -115,8 +116,8 @@ forval x = 1(1)5 {
     gen death_perc`x' = (deaths`x' / deaths_tot) * 100 
     gen daly_perc`x' = (daly`x' / daly_tot) * 100 
 }
-keep ghecause death_perc* daly_perc*
-order ghecause death_* daly_*
+keep year ghecause death_perc* daly_perc*
+order year ghecause death_* daly_*
 
 **------------------------------------------------
 ** Create new GHE CoD order 
@@ -135,6 +136,7 @@ keep if cod<=1
 ** ------------------------------------------------------
 ** GRAPHIC
 ** ------------------------------------------------------
+keep if year==2019
 
 ** COLORS - GREENS for RESPIRATORY
     ///colorpalette hcl, yellows nograph n(14)
