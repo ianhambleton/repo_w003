@@ -29,8 +29,8 @@
     log using "`logpath'\chap1-death-070-rate-equiplot", replace
 ** HEADER -----------------------------------------------------
 
-
 /*
+
 use "`datapath'\from-who\chap2_000_adjusted", clear
 ** Keep sub-regional level (this will keep the 8 PAHO subregions of the Americas)
 keep if region>=100 & region <1000
@@ -172,30 +172,30 @@ sort sex ghecause drate
 			xtitle("", axis(1)  size(2.5) color(gs8) margin(l=1 r=1 t=0 b=0)) 
 
 			/// men
-			ylab(	1 	"north america"
-					2 	"mexico"
-					3 	"andean"
-					4 	"non-latin caribbean"
-					5 	"southern cone"
-					6 	"brazil"
-					7 	"central america"
-					8 	"latin caribbean"
-					10 	"andean"
-					11 	"north america"
-					12 	"southern cone"
-					13 	"central america"
-					14 	"brazil"
-					15 	"mexico"
-					16 	"non-latin caribbean"
-					17 	"latin caribbean"
-					19 	"north america"
-					20 	"southern cone"
-					21 	"mexico"
-					22 	"andean"
-					23 	"brazil"
-					24 	"non-latin caribbean"
-					25 	"latin caribbean"
-					26 	"central america"
+			ylab(	1 	"North America"
+					2 	"Mexico"
+					3 	"Andean"
+					4 	"non-Latin Caribbean"
+					5 	"Couthern Cone"
+					6 	"Brazil"
+					7 	"Central America"
+					8 	"Latin Caribbean"
+					10 	"Andean"
+					11 	"North America"
+					12 	"Southern Cone"
+					13 	"Central America"
+					14 	"Brazil"
+					15 	"Mexico"
+					16 	"non-Latin Caribbean"
+					17 	"Latin Caribbean"
+					19 	"North America"
+					20 	"Southern Cone"
+					21 	"Mexico"
+					22 	"Andean"
+					23 	"Brazil"
+					24 	"non-Latin Caribbean"
+					25 	"Latin Caribbean"
+					26 	"Central America"
 					,
 			axis(1) labc(gs8) labs(2.25) tlc(gs8) nogrid notick glc(blue) angle(0) format(%9.0f) labgap(0))
 			yscale(axis(1) noline reverse range(-6(0.5)29) noextend) 
@@ -203,30 +203,30 @@ sort sex ghecause drate
 
 			/// women
 			ylab(	
-					1	"north america"
-					2	"mexico"
-					3	"non-latin caribbean"
-					4	"southern cone"
-					5	"andean"
-					6	"brazil"
-					7	"central america"
-					8	"latin caribbean"
-					10	"andean"
-					11	"southern cone"
-					12	"north america"
-					13	"brazil"
-					14	"mexico"
-					15	"central america"
-					16	"non-latin caribbean"
-					17	"latin caribbean"
-					19	"southern cone"
-					20	"mexico"
-					21	"andean"
-					22	"brazil"
-					23	"north america"
-					24	"non-latin caribbean"
-					25	"central america"
-					26	"latin caribbean"
+					1	"North America"
+					2	"Mexico"
+					3	"non-Latin Caribbean"
+					4	"Southern Cone"
+					5	"Andean"
+					6	"Brazil"
+					7	"Central America"
+					8	"Latin Caribbean"
+					10	"Andean"
+					11	"Southern Cone"
+					12	"North America"
+					13	"Brazil"
+					14	"Mexico"
+					15	"Central America"
+					16	"non-Latin Caribbean"
+					17	"Latin Caribbean"
+					19	"Southern Cone"
+					20	"Mexico"
+					21	"Andean"
+					22	"Brazil"
+					23	"North America"
+					24	"non-Latin Caribbean"
+					25	"Central America"
+					26	"Latin Caribbean"
 					,
 			axis(2) labc(gs8) labs(2.25) tlc(gs8) nogrid notick glc(red) angle(0) format(%9.0f) labgap(0))
 			yscale(axis(2) noline reverse range(-6(0.5)29) noextend) 
@@ -248,10 +248,10 @@ sort sex ghecause drate
 			text(23.4 90 "75",  place(c) size(2.5) color("`inj'"))   
 			text(23.4 411 "24",  place(c) size(2.5) color("`inj'"))   
 
-			legend(size(2.5) position(12) nobox ring(0) bm(t=0 b=0 l=0 r=0) colf cols(3)
+			legend(size(3) position(12) nobox ring(0) bm(t=0 b=0 l=0 r=0) colf cols(3)
 			region(fcolor(gs16)  lw(none) margin(t=0 b=1 l=0 r=0)) 
 			order(24 26 28) 
-			lab(24 "Communicable") 
+			lab(24 "CMPN") 
 			lab(26 "NCDs") 		
 			lab(28 "Injuries") 		
             )
@@ -404,36 +404,36 @@ sort sex ghecause drate
 			xtitle("", axis(1)  size(2.5) color(gs8) margin(l=1 r=1 t=0 b=0)) 
 
 			/// men
-			ylab(	1 	"high income"
-					2 	"high-middle income"
-					3 	"low-middle income"
-					4 	"low income"
-					6 	"high income"
-					7 	"high-middle income"
-					8 	"low-middle income"
-					9 	"low income"
-					11 	"high income"
-					12 	"high-middle income"
-					13 	"low-middle income"
-					14 	"low income"
+			ylab(	1 	"High income"
+					2 	"Upper-middle income"
+					3 	"Lower-middle income"
+					4 	"Low income"
+					6 	"High income"
+					7 	"Upper-middle income"
+					8 	"Lower-middle income"
+					9 	"Low income"
+					11 	"High income"
+					12 	"Upper-middle income"
+					13 	"Lower-middle income"
+					14 	"Low income"
 					,
 			axis(1) labc(gs8) labs(2.75) tlc(gs8) nogrid notick glc(blue) angle(0) format(%9.0f) labgap(0))
 			yscale(axis(1) noline reverse range(-5(0.5)16) noextend) 
 			ytitle(" ", axis(1) color(gs8) size(3) margin(l=1 r=1 t=1 b=1)) 
 
 			/// women
-			ylab(	1 	"high income"
-					2 	"high-middle income"
-					3 	"low-middle income"
-					4 	"low income"
-					6 	"high income"
-					7 	"high-middle income"
-					8 	"low-middle income"
-					9 	"low income"
-					11 	"high-middle income"
-					12 	"high income"
-					13 	"low-middle income"
-					14 	"low income"
+			ylab(	1 	"High income"
+					2 	"Upper-middle income"
+					3 	"Lower-middle income"
+					4 	"Low income"
+					6 	"High income"
+					7 	"Upper-middle income"
+					8 	"Lower-middle income"
+					9 	"Low income"
+					11 	"Upper-middle income"
+					12 	"High income"
+					13 	"Lower-middle income"
+					14 	"Low income"
 					,
 			axis(2) labc(gs8) labs(2.75) tlc(gs8) nogrid notick glc(red) angle(0) format(%9.0f) labgap(0))
 			yscale(axis(2) noline reverse range(-5(0.5)16) noextend) 
@@ -458,10 +458,10 @@ sort sex ghecause drate
 			text(12.6 160 "77",  place(c) size(2.5) color("`inj'"))   
 			text(12.6 1020 "33",  place(c) size(2.5) color("`inj'"))   
 
-			legend(size(2.5) position(12) nobox ring(0) bm(t=0 b=0 l=0 r=0) colf cols(3)
+			legend(size(3) position(12) nobox ring(0) bm(t=0 b=0 l=0 r=0) colf cols(3)
 			region(fcolor(gs16)  lw(none) margin(t=0 b=1 l=0 r=0)) 
 			order(24 26 28) 
-			lab(24 "Communicable") 
+			lab(24 "CMPN") 
 			lab(26 "NCDs") 		
 			lab(28 "Injuries") 		
             )

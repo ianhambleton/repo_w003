@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap2-640-mental-bar.do
+    //  algorithm name			    chap2-640-neuro-bar.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	19-August-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap2-640-mental-bar", replace
+    log using "`logpath'\chap2-640-neuro-bar", replace
 ** HEADER -----------------------------------------------------
 
 tempfile t1
@@ -140,7 +140,7 @@ drop mortr
     tabdisp cod, c(id) format(%9.1f)
 
 ** ID to local macros
-forval x = 1(1)11 {
+forval x = 1(1)12 {
     preserve
         keep if cod==`x' & touse==1
         local id`x' : dis %5.0f id
@@ -204,21 +204,12 @@ local outer6a  62 590    62 710
 local outer6b  62 710   -26 710  
 local outer6c -26 590   -26 710 
 
+
 ** Countries ordered by size for COD (1-6)
 gsort cod dalyr
-gen region_new = region
-label values region_new region_
-#delimit ; 
-    label define region_    28 "St.Vincent & Gren"
-                            1 "Antigua & Barbuda"
-                            30 "Trinidad & Tobago"
-                            13 "Dominican Rep"
-                            2000 "Americas", modify;
-#delimit cr
-
-decode region_new , gen(region_lab)
+decode region , gen(region_lab)
 bysort cod : gen regiono = _n
-forval x = 1(1)11 {
+forval x = 1(1)12 {
     gen region`x' = regiono if cod==`x'
     labmask region`x' if cod==`x', values(region_lab)
 }
@@ -227,20 +218,20 @@ forval x = 1(1)11 {
 bysort cod : egen maxr = max(dalyr)
 gen scaler = (dalyr/maxr) * 100
 order maxr scaler , after(dalyr) 
-forval x = 1(1)11 {
+forval x = 1(1)12 {
     gen scaler`x' = scaler if cod==`x'
 }
-gen origin1 = 0
-gen origin2 = 120 
-replace scaler2 = scaler2 + 120
-gen origin3 = 240
-replace scaler3 = scaler3 + 240
-gen origin4 = 360 
-replace scaler4 = scaler4 + 360
-gen origin5 = 480 
-replace scaler5 = scaler5 + 480
-gen origin6 = 600 
-replace scaler6 = scaler6 + 600
+gen origin7 = 0
+gen origin8 = 120 
+replace scaler8 = scaler8 + 120
+gen origin9 = 240
+replace scaler9 = scaler9 + 240
+gen origin10 = 360 
+replace scaler10 = scaler10 + 360
+gen origin11 = 480 
+replace scaler11 = scaler11 + 480
+gen origin12 = 600 
+replace scaler12 = scaler12 + 600
 
 ** St Vincent and the Grenadines -- Too Long - Abbreviate
 replace region_lab = "St.Vincent & Gren" if region_lab == "Saint Vincent and the Grenadines"
@@ -257,28 +248,28 @@ preserve
     bysort cod : gen regiono2 = _n
     order include regiono2, after(dalyr)
     ** Drug use disorders
-    forval x = 1(1)10 {
-        local cid1_`x' = region_lab[`x'] 
+    forval x = 61(1)70 {
+        local cid7_`x' = region_lab[`x'] 
     }
     ** depressive disorders
-    forval x = 11(1)20 {
-        local cid2_`x' = region_lab[`x'] 
+    forval x = 71(1)80 {
+        local cid8_`x' = region_lab[`x'] 
     }
     ** anxiety disorders
-    forval x = 21(1)30 {
-        local cid3_`x' = region_lab[`x'] 
+    forval x = 81(1)90 {
+        local cid9_`x' = region_lab[`x'] 
     }
     ** alcohol use disorders
-    forval x = 31(1)40 {
-        local cid4_`x' = region_lab[`x'] 
+    forval x = 91(1)100 {
+        local cid10_`x' = region_lab[`x'] 
     }
     ** schizophrenia
-    forval x = 41(1)50 {
-        local cid5_`x' = region_lab[`x'] 
+    forval x = 101(1)110 {
+        local cid11_`x' = region_lab[`x'] 
     }
     ** All mental health
-    forval x = 51(1)60 {
-        local cid6_`x' = region_lab[`x'] 
+    forval x = 111(1)120 {
+        local cid12_`x' = region_lab[`x'] 
     }
 restore
 
@@ -303,19 +294,19 @@ restore
         (scatteri `outer6c' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l"))
 
 		/// country values
-        (rbar origin1 scaler1 region1 if cod==1 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`youth'") lw(0.1))       
-        (rbar origin2 scaler2 region2 if cod==2 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`youth'") lw(0.1))           
-        (rbar origin3 scaler3 region3 if cod==3 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`youth'") lw(0.1))           
-        (rbar origin4 scaler4 region4 if cod==4 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`youth'") lw(0.1))           
-        (rbar origin5 scaler5 region5 if cod==5 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`youth'") lw(0.1))           
-        (rbar origin6 scaler6 region6 if cod==6 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`youth'") lw(0.1))           
+        (rbar origin7  scaler7   region7  if cod==7  & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`youth'") lw(0.1))       
+        (rbar origin8  scaler8   region8  if cod==8  & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`youth'") lw(0.1))           
+        (rbar origin9  scaler9   region9  if cod==9  & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`youth'") lw(0.1))           
+        (rbar origin10 scaler10  region10 if cod==10 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`youth'") lw(0.1))           
+        (rbar origin11 scaler11  region11 if cod==11 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`youth'") lw(0.1))           
+        (rbar origin12 scaler12  region12 if cod==12 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`youth'") lw(0.1))           
 
-        (rbar origin1 scaler1 region1 if cod==1 & region==2000, horizontal barw(0.6) fcol("gs0") lcol("gs0") lw(0.1))       
-        (rbar origin2 scaler2 region2 if cod==2 & region==2000, horizontal barw(0.6) fcol("gs0") lcol("gs0") lw(0.1))           
-        (rbar origin3 scaler3 region3 if cod==3 & region==2000, horizontal barw(0.6) fcol("gs0") lcol("gs0") lw(0.1))           
-        (rbar origin4 scaler4 region4 if cod==4 & region==2000, horizontal barw(0.6) fcol("gs0") lcol("gs0") lw(0.1))           
-        (rbar origin5 scaler5 region5 if cod==5 & region==2000, horizontal barw(0.6) fcol("gs0") lcol("gs0") lw(0.1))           
-        (rbar origin6 scaler6 region6 if cod==6 & region==2000, horizontal barw(0.6) fcol("gs0") lcol("gs0") lw(0.1))           
+        (rbar origin7  scaler7  region7  if cod==7  & region==2000, horizontal barw(0.6) fcol("gs0") lcol("gs0") lw(0.1))       
+        (rbar origin8  scaler8  region8  if cod==8  & region==2000, horizontal barw(0.6) fcol("gs0") lcol("gs0") lw(0.1))           
+        (rbar origin9  scaler9  region9  if cod==9  & region==2000, horizontal barw(0.6) fcol("gs0") lcol("gs0") lw(0.1))           
+        (rbar origin10 scaler10 region10 if cod==10 & region==2000, horizontal barw(0.6) fcol("gs0") lcol("gs0") lw(0.1))           
+        (rbar origin11 scaler11 region11 if cod==11 & region==2000, horizontal barw(0.6) fcol("gs0") lcol("gs0") lw(0.1))           
+        (rbar origin12 scaler12 region12 if cod==12 & region==2000, horizontal barw(0.6) fcol("gs0") lcol("gs0") lw(0.1))           
                 		,
 			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin)) 		
 			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin)) 
@@ -331,111 +322,100 @@ restore
 			ytitle("", size(5) margin(l=2 r=5 t=2 b=2)) 
 
            /// Region Titles 
-           text(67 50 "Drug use" "disorders"          ,  place(c) size(3.5) color(gs8) just(center))
-           text(67 170 "Depressive" "disorders"       ,  place(c) size(3.5) color(gs8) just(center))
-           text(67 290 "Anxiety" "disorders"          ,  place(c) size(3.5) color(gs8) just(center))
-           text(67 410 "Alcohol use" "disorders"      ,  place(c) size(3.5) color(gs8) just(center))
-           text(67 530 "Schizophrenia"                ,  place(c) size(3.5) color(gs8) just(center))
-           text(67 650 "All" "mental health"          ,  place(c) size(3.5) color(gs8) just(center))
+           text(67 50 "Alzheimer /" "dementias"          ,  place(c) size(3.5) color(gs8) just(center))
+           text(67 170 "Migraine"       ,  place(c) size(3.5) color(gs8) just(center))
+           text(67 290 "Epilepsy"          ,  place(c) size(3.5) color(gs8) just(center))
+           text(67 410 "Non-migraine" "headache"      ,  place(c) size(3.5) color(gs8) just(center))
+           text(67 530 "Parkinson" "disease"                ,  place(c) size(3.5) color(gs8) just(center))
+           text(67 650 "All" "neurological"          ,  place(c) size(3.5) color(gs8) just(center))
 
             /// INDEX OF DISPARITY VALUES
            /// text(-4.4 0.3 "ID{superscript:`ddagger'}" ,  place(c) size(7) color("`child'*0.5") just(center))
-           text(16 65 "IoD"                        ,  place(c) size(6) color("`child'*0.5") just(center))
-           text(18.5 84 "`teardrop'"               ,  place(c) size(2.5) color("`child'*0.5") just(center))
-           text(10 60 "`id1'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
-           text(10 195 "`id2'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
-           text(10 315 "`id3'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
-           text(10 420 "`id4'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
-           text(10 555 "`id5'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
-           text(10 670 "`id6'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
+           text(16.5 70 "IoD"                        ,  place(c) size(6) color("`child'*0.5") just(center))
+           text(19   89 "`teardrop'"               ,  place(c) size(2.5) color("`child'*0.5") just(center))
+           text(10   75 "`id7'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
+           text(10   205 "`id8'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
+           text(10   320 "`id9'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
+           text(10   440 "`id10'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
+           text(10   555 "`id11'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
+           text(10   680 "`id12'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
 
            /// Y-Axis text 
            text(-29.5 340 "DALY rate (per 100,000)" ,  
                                     place(c) size(3.5) color("gs8") just(center))
 
            /// High Rate Countries
-           /// Drug use disorders
-           text(59 0 "Highest Rates:",  place(e) size(3.5) color("`child'*0.80") just(right))
-           text(55 105 "`cid1_10' (1)",  place(w) size(3) color("`child'*0.5") just(right))
-           text(51 105 "`cid1_9' (2)",  place(w) size(3) color("`child'*0.5") just(right))
-           text(47 105 "`cid1_8' (3)",  place(w) size(3) color("`child'*0.5") just(right))
-           text(43 105 "`cid1_7' (4)",  place(w) size(3) color("`child'*0.5") just(right))
-           text(39 105 "`cid1_6' (5)",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-3 0 "Lowest Rates:",  place(e) size(3.5) color("`child'*0.80") just(right))
-           text(-7 105 "`cid1_5' (5)",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-11 105 "`cid1_4' (4)",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-15 105 "`cid1_3' (3)",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-19 105 "`cid1_2' (2)",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-23 105 "`cid1_1' (1)",  place(w) size(3) color("`child'*0.5") just(right))
+           /// Alzheimer / dementias
+           text(55 105  "`cid7_70' (1)",  place(w) size(3) color("`child'*0.5") just(right))
+           text(51 105  "`cid7_69' (2)",  place(w) size(3) color("`child'*0.5") just(right))
+           text(47 105  "`cid7_68' (3)",  place(w) size(3) color("`child'*0.5") just(right))
+           text(43 105  "`cid7_67' (4)",  place(w) size(3) color("`child'*0.5") just(right))
+           text(39 105  "`cid7_66' (5)",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-7 105  "`cid7_65' (5)",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-11 105 "`cid7_64' (4)",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-15 105 "`cid7_63' (3)",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-19 105 "`cid7_62' (2)",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-23 105 "`cid7_61' (1)",  place(w) size(3) color("`child'*0.5") just(right))
 
-           /// /// Depressive disorders
-           /// ///text(48 0 "Highest Rates:",  place(e) size(3.5) color("`child'*0.80") just(right))
-           text(55 225 "`cid2_20'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(51 225 "`cid2_19'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(47 225 "`cid2_18'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(43 225 "`cid2_17'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(39 225 "`cid2_16'",  place(w) size(3) color("`child'*0.5") just(right))
-           /// ///text(-3 0 "Lowest Rates:",  place(e) size(3.5) color("`child'*0.80") just(right))
-           text(-7 225 "`cid2_15'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-11 225 "`cid2_14'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-15 225 "`cid2_13'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-19 225 "`cid2_12'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-23 225 "`cid2_11'",  place(w) size(3) color("`child'*0.5") just(right))
+           /// Migraine
+           text(55 225  "`cid8_80'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(51 225  "`cid8_79'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(47 225  "`cid8_78'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(43 225  "`cid8_77'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(39 225  "`cid8_76'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-7 225  "`cid8_75'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-11 225 "`cid8_74'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-15 225 "`cid8_73'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-19 225 "`cid8_72'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-23 225 "`cid8_71'",  place(w) size(3) color("`child'*0.5") just(right))
            
-           /// Anxiety disorders
-           /// ///text(48 0 "Highest Rates:",  place(e) size(3.5) color("`child'*0.80") just(right))
-           text(55 345 "`cid3_30'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(51 345 "`cid3_29'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(47 345 "`cid3_28'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(43 345 "`cid3_27'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(39 345 "`cid3_26'",  place(w) size(3) color("`child'*0.5") just(right))
-           /// ///text(-3 0 "Lowest Rates:",  place(e) size(3.5) color("`child'*0.80") just(right))
-           text(-7 345 "`cid3_25'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-11 345 "`cid3_24'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-15 345 "`cid3_23'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-19 345 "`cid3_22'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-23 345 "`cid3_21'",  place(w) size(3) color("`child'*0.5") just(right))
+           /// Epilepsy
+           text(55 345  "`cid9_90'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(51 345  "`cid9_89'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(47 345  "`cid9_88'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(43 345  "`cid9_87'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(39 345  "`cid9_86'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-7 345  "`cid9_85'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-11 345 "`cid9_84'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-15 345 "`cid9_83'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-19 345 "`cid9_82'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-23 345 "`cid9_81'",  place(w) size(3) color("`child'*0.5") just(right))
  
-           /// Alcohol use disorders
-           text(55 465 "`cid4_40'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(51 465 "`cid4_39'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(47 465 "`cid4_38'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(43 465 "`cid4_37'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(39 465 "`cid4_36'",  place(w) size(3) color("`child'*0.5") just(right))
-           /// ///text(-3 0 "Lowest Rates:",  place(e) size(3.5) color("`child'*0.80") just(right))
-           text(-7 465 "`cid4_35'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-11 465 "`cid4_34'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-15 465 "`cid4_33'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-19 465 "`cid4_32'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-23 465 "`cid4_31'",  place(w) size(3) color("`child'*0.5") just(right))
+           /// Non-migraine headache
+           text(55 465  "`cid10_100'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(51 465  "`cid10_99'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(47 465  "`cid10_98'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(43 465  "`cid10_97'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(39 465  "`cid10_96'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-7 465  "`cid10_95'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-11 465 "`cid10_94'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-15 465 "`cid10_93'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-19 465 "`cid10_92'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-23 465 "`cid10_91'",  place(w) size(3) color("`child'*0.5") just(right))
  
-           /// Schizophrenia
-           /// ///text(48 0 "Highest Rates:",  place(e) size(3.5) color("`child'*0.80") just(right))
-           text(55 585 "`cid5_50'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(51 585 "`cid5_49'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(47 585 "`cid5_48'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(43 585 "`cid5_47'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(39 585 "`cid5_46'",  place(w) size(3) color("`child'*0.5") just(right))
-           /// ///text(-3 0 "Lowest Rates:",  place(e) size(3.5) color("`child'*0.80") just(right))
-           text(-7 585 "`cid5_45'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-11 585 "`cid5_44'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-15 585 "`cid5_43'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-19 585 "`cid5_42'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-23 585 "`cid5_41'",  place(w) size(3) color("`child'*0.5") just(right))
+           /// parkinson disease
+           text(55 585  "`cid11_110'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(51 585  "`cid11_109'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(47 585  "`cid11_108'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(43 585  "`cid11_107'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(39 585  "`cid11_106'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-7 585  "`cid11_105'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-11 585 "`cid11_104'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-15 585 "`cid11_103'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-19 585 "`cid11_102'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-23 585 "`cid11_101'",  place(w) size(3) color("`child'*0.5") just(right))
  
-           /// All mental health
-           ///text(48 0 "Highest Rates:",  place(e) size(3.5) color("`child'*0.80") just(right))
-           text(55 705 "`cid6_60'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(51 705 "`cid6_59'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(47 705 "`cid6_58'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(43 705 "`cid6_57'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(39 705 "`cid6_56'",  place(w) size(3) color("`child'*0.5") just(right))
-           /// ///text(-3 0 "Lowest Rates:",  place(e) size(3.5) color("`child'*0.80") just(right))
-           text(-7 705 "`cid6_55'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-11 705 "`cid6_54'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-15 705 "`cid6_53'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-19 705 "`cid6_52'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-23 705 "`cid6_51'",  place(w) size(3) color("`child'*0.5") just(right))
+           /// All neurological
+           text(55 705  "`cid12_120'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(51 705  "`cid12_119'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(47 705  "`cid12_118'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(43 705  "`cid12_117'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(39 705  "`cid12_116'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-7 705  "`cid12_115'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-11 705 "`cid12_114'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-15 705 "`cid12_113'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-19 705 "`cid12_112'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-23 705 "`cid12_111'",  place(w) size(3) color("`child'*0.5") just(right))
 
            /// NOTE
            text(-34.5 0.5 "`teardrop' IoD = Index of Disparity. Measures the average (mean) deviation of each country rate from the regional rate, as a percentage." , 
@@ -446,6 +426,7 @@ restore
 			name(bar1)
 			;
 #delimit cr	
+
 
 
 
@@ -516,32 +497,21 @@ drop year sex
 ** (100)  13  "all cause"  
 ** -----------------------------------------------
 gen cod = .
-replace cod = 1 if ghecause==36
-replace cod = 2 if ghecause==32
-replace cod = 3 if ghecause==37
-replace cod = 4 if ghecause==35
-replace cod = 5 if ghecause==34
-replace cod = 6 if ghecause==800
+replace cod = 1 if ghecause==42
+replace cod = 2 if ghecause==46
+replace cod = 3 if ghecause==44
+replace cod = 4 if ghecause==47
+replace cod = 5 if ghecause==43
+replace cod = 6 if ghecause==900
 
-replace cod = 7 if ghecause==42
-replace cod = 8 if ghecause==46
-replace cod = 9 if ghecause==44
-replace cod = 10 if ghecause==47
-replace cod = 11 if ghecause==43
-replace cod = 12 if ghecause==900
 #delimit ;
-label define cod_   1   "Drug use disorders" 
-                    2   "Depressive disorders" 
-                    3   "Anxiety disorders" 
-                    4   "Alcohol use disorders" 
-                    5   "Schizophrenia" 
-                    6  "all mental"
-                    7   "Alzheimer/dementias"
-                    8   "Migraine"
-                    9   "Epilepsy"
-                    10   "Non-migraine headache"
-                    11  "Parkinson disease"
-                    12  "all neurological", modify;
+label define cod_  
+                    1   "Alzheimer/dementias"
+                    2   "Migraine"
+                    3   "Epilepsy"
+                    4   "Non-migraine headache"
+                    5  "Parkinson disease"
+                    6  "all neurological", modify;
 #delimit cr
 label values cod cod_    
 keep if cod<=6
@@ -766,32 +736,21 @@ drop year sex
 ** (100)  13  "all cause"  
 ** -----------------------------------------------
 gen cod = .
-replace cod = 1 if ghecause==36
-replace cod = 2 if ghecause==32
-replace cod = 3 if ghecause==37
-replace cod = 4 if ghecause==35
-replace cod = 5 if ghecause==34
-replace cod = 6 if ghecause==800
+replace cod = 1 if ghecause==42
+replace cod = 2 if ghecause==46
+replace cod = 3 if ghecause==44
+replace cod = 4 if ghecause==47
+replace cod = 5 if ghecause==43
+replace cod = 6 if ghecause==900
 
-replace cod = 7 if ghecause==42
-replace cod = 8 if ghecause==46
-replace cod = 9 if ghecause==44
-replace cod = 10 if ghecause==47
-replace cod = 11 if ghecause==43
-replace cod = 12 if ghecause==900
 #delimit ;
-label define cod_   1   "Drug use disorders" 
-                    2   "Depressive disorders" 
-                    3   "Anxiety disorders" 
-                    4   "Alcohol use disorders" 
-                    5   "Schizophrenia" 
-                    6  "all mental"
-                    7   "Alzheimer/dementias"
-                    8   "Migraine"
-                    9   "Epilepsy"
-                    10   "Non-migraine headache"
-                    11  "Parkinson disease"
-                    12  "all neurological", modify;
+label define cod_  
+                    1   "Alzheimer/dementias"
+                    2   "Migraine"
+                    3   "Epilepsy"
+                    4   "Non-migraine headache"
+                    5  "Parkinson disease"
+                    6  "all neurological", modify;
 #delimit cr
 label values cod cod_    
 keep if cod<=6
@@ -1014,32 +973,21 @@ drop year sex
 ** (100)  13  "all cause"  
 ** -----------------------------------------------
 gen cod = .
-replace cod = 1 if ghecause==36
-replace cod = 2 if ghecause==32
-replace cod = 3 if ghecause==37
-replace cod = 4 if ghecause==35
-replace cod = 5 if ghecause==34
-replace cod = 6 if ghecause==800
+replace cod = 1 if ghecause==42
+replace cod = 2 if ghecause==46
+replace cod = 3 if ghecause==44
+replace cod = 4 if ghecause==47
+replace cod = 5 if ghecause==43
+replace cod = 6 if ghecause==900
 
-replace cod = 7 if ghecause==42
-replace cod = 8 if ghecause==46
-replace cod = 9 if ghecause==44
-replace cod = 10 if ghecause==47
-replace cod = 11 if ghecause==43
-replace cod = 12 if ghecause==900
 #delimit ;
-label define cod_   1   "Drug use disorders" 
-                    2   "Depressive disorders" 
-                    3   "Anxiety disorders" 
-                    4   "Alcohol use disorders" 
-                    5   "Schizophrenia" 
-                    6  "all mental"
-                    7   "Alzheimer/dementias"
-                    8   "Migraine"
-                    9   "Epilepsy"
-                    10   "Non-migraine headache"
-                    11  "Parkinson disease"
-                    12  "all neurological", modify;
+label define cod_  
+                    1   "Alzheimer/dementias"
+                    2   "Migraine"
+                    3   "Epilepsy"
+                    4   "Non-migraine headache"
+                    5  "Parkinson disease"
+                    6  "all neurological", modify;
 #delimit cr
 label values cod cod_    
 keep if cod<=6
@@ -1252,32 +1200,21 @@ drop year sex
 ** (100)  13  "all cause"  
 ** -----------------------------------------------
 gen cod = .
-replace cod = 1 if ghecause==36
-replace cod = 2 if ghecause==32
-replace cod = 3 if ghecause==37
-replace cod = 4 if ghecause==35
-replace cod = 5 if ghecause==34
-replace cod = 6 if ghecause==800
+replace cod = 1 if ghecause==42
+replace cod = 2 if ghecause==46
+replace cod = 3 if ghecause==44
+replace cod = 4 if ghecause==47
+replace cod = 5 if ghecause==43
+replace cod = 6 if ghecause==900
 
-replace cod = 7 if ghecause==42
-replace cod = 8 if ghecause==46
-replace cod = 9 if ghecause==44
-replace cod = 10 if ghecause==47
-replace cod = 11 if ghecause==43
-replace cod = 12 if ghecause==900
 #delimit ;
-label define cod_   1   "Drug use disorders" 
-                    2   "Depressive disorders" 
-                    3   "Anxiety disorders" 
-                    4   "Alcohol use disorders" 
-                    5   "Schizophrenia" 
-                    6  "all mental"
-                    7   "Alzheimer/dementias"
-                    8   "Migraine"
-                    9   "Epilepsy"
-                    10   "Non-migraine headache"
-                    11  "Parkinson disease"
-                    12  "all neurological", modify;
+label define cod_  
+                    1   "Alzheimer/dementias"
+                    2   "Migraine"
+                    3   "Epilepsy"
+                    4   "Non-migraine headache"
+                    5  "Parkinson disease"
+                    6  "all neurological", modify;
 #delimit cr
 label values cod cod_    
 keep if cod<=6

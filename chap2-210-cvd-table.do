@@ -43,7 +43,7 @@
     local improve `r(p7)'
     local worsen `r(p12)'
 
-    ** generate a local for the ColorBrewer color scheme
+    ** generate a local for the D3 color scheme
     colorpalette d3, 20 n(20) nograph
     local list r(p) 
     ** CVD

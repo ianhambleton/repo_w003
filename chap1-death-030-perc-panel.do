@@ -166,16 +166,16 @@ local outer3 72 2001 77 2001 77 2006 72 2006 72 2001
 			ytitle("Percentage of all deaths", color(gs8) size(3) margin(l=1 r=1 t=1 b=1)) 
 
             /// Region Titles 
-            text(105 2010 "Young" "Children",  place(c) size(3) color(gs5))
-            text(105 2030 "Youth",  place(c) size(3) color(gs5))
-            text(105 2050 "Young" "Adults",  place(c) size(3) color(gs5))   
-            text(105 2070 "Older" "Adults",  place(c) size(3) color(gs5))
-            text(105 2090 "The" "Elderly",  place(c) size(3) color(gs5))
+            text(105 2010 "Under 5s",  place(c) size(4) color(gs5))
+            text(105 2030 "5-19 yrs",  place(c) size(4) color(gs5))
+            text(105 2050 "20-39 yrs",  place(c) size(4) color(gs5))   
+            text(105 2070 "40-64 yrs",  place(c) size(4) color(gs5))
+            text(105 2090 "65 and older",  place(c) size(4) color(gs5))
 
             /// Legend Text
-            text(92.5   2007 "Communicable",  place(e) size(3) color(gs8))   
-            text(83.5   2007 "NCDs",  place(e) size(3) color(gs8))   
-            text(74.5   2007 "Injuries",  place(e) size(3) color(gs8))   
+            text(92.5   2007 "CMPN",  place(e) size(3) color(gs4))   
+            text(83.5   2007 "NCDs",  place(e) size(3) color(gs4))   
+            text(74.5   2007 "Injuries",  place(e) size(3) color(gs4))   
 
 			/// X-Axis text
             text(-3 2001 "2000",  place(e) size(3) color(gs8))

@@ -32,8 +32,9 @@
 
 ** Load primary deaths dataset
 use "`datapath'\from-who\chap2_000_mr", clear
+
 ** Restrict to Americas ONLY
-/*keep if region==2000 & sex==3
+keep if region==2000 & sex==3
 keep dths year ghecause 
 reshape wide dths , i(year) j(ghecause)
 

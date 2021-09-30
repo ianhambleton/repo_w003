@@ -211,7 +211,7 @@ local outer3 10800 2001 11400 2001 11400 2006 10800 2006 10800 2001
             text(15000 2110 "South-East" "Asia",  place(c) size(3) color(gs5))
 
             /// Legend Text
-            text(13100   2007 "Communicable",  place(e) size(3) color(gs8))   
+            text(13100   2007 "CMPN",  place(e) size(3) color(gs8))   
             text(12100   2007 "NCDs",  place(e) size(3) color(gs8))   
             text(11100   2007 "Injuries",  place(e) size(3) color(gs8))   
 

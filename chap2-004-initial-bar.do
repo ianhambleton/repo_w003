@@ -171,7 +171,6 @@ preserve
     list year pdaly*, linesize(120)
 restore
 
-/*
 
 ** Percentage increase 2000 to 2019
 preserve
@@ -276,7 +275,8 @@ local outer6a 1998 -1750000 2042 -1750000
 local outer6b 1998 -1750000 1998 3700000  
 local outer6c 2042 3700000 1998 3700000 
 
-local yaxis 2003 490000 2016 490000 
+local yaxis 2003 3900000 2034 3900000 
+local yaxis_sym 2034 3900000 
 
 #delimit ;
 	gr twoway 
@@ -358,16 +358,16 @@ local yaxis 2003 490000 2016 490000
         (scatteri `outer6c' , recast(line) lw(0.1) lc(gs10) fc(none) lp("l") )   
 
         /// Y-Axis indicator line for time between 2000 and 2019
-        (scatteri `yaxis' , recast(line) lw(0.4) lc("`cvd1'") fc(none) )   
-        (scatteri `yaxis' , msymbol(o) mc("`cvd1'") msize(0.9))   
+        (scatteri `yaxis' , recast(line) lw(0.5) lc("gs12") fc(none) )   
+        (scatteri `yaxis_sym' , msymbol(A) mc("gs12") msize(2.5) msangle(180))   
 		,
 			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 		
 			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 
-			ysize(16) xsize(14)
+			ysize(16) xsize(15)
 
 			xlab(-1000000 "1m" -500000 "500k" 1000000 "10m" 2000000 "20m" 3000000 "30m" , 
 			valuelabel labc(gs0) labs(2.5) notick nogrid glc(gs16) angle(0) format(%9.0f))
-			xscale(noline lw(vthin) range(-1100000(100000)1000000) ) 
+			xscale(noline lw(vthin) range(-1100000(100000)4440000) ) 
 			xtitle(" ", size(3) color(gs0) margin(l=0 r=0 t=0 b=0)) 
             xmtick(-1000000 -500000 1000000 2000000 3000000, tlc(gs10))
 			
@@ -377,12 +377,12 @@ local yaxis 2003 490000 2016 490000
 			ytitle("", color(gs8) size(3) margin(l=1 r=1 t=1 b=1)) 
 
             /// Region Titles 
-           text(2020 3500000 "Cardiovascular" "Disease"         ,  place(w) size(2.5) color(gs8) just(right))
-           text(2065 3500000 "Cancers"                          ,  place(w) size(2.5) color(gs8) just(right))
-           text(2110 3500000 "Chronic Respiratory" "Diseases"   ,  place(w) size(2.5) color(gs8) just(right))
-           text(2155 3500000 "Diabetes"                         ,  place(w) size(2.5) color(gs8) just(right))
-           text(2200 3500000 "Mental Health /" "Neurological"   ,  place(w) size(2.5) color(gs8) just(right))
-           text(2245 3500000 "External" "Causes"                ,  place(w) size(2.5) color(gs8) just(right))
+           text(2020 3600000 "Cardiovascular" "Disease"         ,  place(w) size(2.5) color(gs8) just(right))
+           text(2065 3600000 "Cancers"                          ,  place(w) size(2.5) color(gs8) just(right))
+           text(2110 3600000 "Chronic Respiratory" "Diseases"   ,  place(w) size(2.5) color(gs8) just(right))
+           text(2155 3600000 "Diabetes"                         ,  place(w) size(2.5) color(gs8) just(right))
+           text(2200 3600000 "Mental Health /" "Neurological"   ,  place(w) size(2.5) color(gs8) just(right))
+           text(2245 3600000 "External" "Causes"                ,  place(w) size(2.5) color(gs8) just(right))
 
             /// Gender text 
            text(2010 -1700000 "Men"    ,  place(e) size(2.5) color(gs8) just(right))
@@ -403,8 +403,8 @@ local yaxis 2003 490000 2016 490000
             text(1992  1000000 "DALYs",  place(w) size(3.3) color(gs8))   
 
 			/// Y-Axis text
-            text(2004 100000 "2000",  place(e) size(2.5) color(`cvd1'))
-            text(2015 560000 "2019",  place(e) size(2.5) color(`cvd1'))
+            text(2004 4000000 "2000",  place(e) size(3.5) color(gs10))
+            text(2037 4000000 "2019",  place(e) size(3.5) color(gs10))
 
 			legend(off)
 			name(chap2_intro)

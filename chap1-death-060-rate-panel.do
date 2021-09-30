@@ -139,6 +139,19 @@ use "`datapath'\from-who\chap2_000_adjusted", clear
 		list ghecause year region diff ratio , sep(9)
 	restore
 
+** Associated stats for Table 1.3
+** COM/NCDs/INJ in 2019, women and men separately
+use "`datapath'\from-who\chap2_000_adjusted", clear
+	keep if (region>=100 & region <1000) | (region>=1000 & region<=6000)
+	keep if ghecause==200 | ghecause==300 | ghecause==1000
+	keep if sex<3
+	keep if year==2019 
+	** Listing of rates by subregion
+	format mortr %15.1fc 
+	gsort ghecause -sex region 
+	list year ghecause sex region mortr if region>=1000, sep(6)
+	list year ghecause sex region mortr if region<1000, sep(8)
+
 
 
 ** LOAD THE DATASET that was prepared above for the graphic
@@ -306,7 +319,7 @@ replace arate2 = 300 if region==500 & ghecause==30 & year==2010 & arate2>600
             /// Legend Text
             text(708 2034 "Men",  place(w) size(3) color(gs8))   
             text(648 2034 "Women",  place(w) size(3) color(gs8))   
-            text(712 2012 "Communicable",  place(w) size(3) color(gs8))   
+            text(712 2012 "CMPN",  place(w) size(3) color(gs8))   
             text(652 2012   "NCDs",  place(w) size(3) color(gs8))   
             text(592 2012   "Injuries",  place(w) size(3) color(gs8))   
 
