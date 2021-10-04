@@ -31,12 +31,12 @@
 
 
 ** Load primary deaths dataset
-use "`datapath'\from-who\chap2_000_mr", clear
+use "`datapath'\from-who\chap2_000_adjusted", clear
 
 ** Restrict to Americas ONLY
 keep if region==2000 & sex==3
-keep dths year ghecause 
-reshape wide dths , i(year) j(ghecause)
+keep dths daly year ghecause 
+reshape wide dths daly, i(year) j(ghecause)
 
 ** CODES
 **    1  "Rheumatic heart disease"
@@ -49,7 +49,8 @@ reshape wide dths , i(year) j(ghecause)
 
 ** CVD as percentage of all deaths
 gen p400 = (dths400/dths100)*100
-
+gen ddrat400 = daly400 / dths400
+gen ddrat_all = daly100 / dths100
 ** Ischaemic as percentage of CVD and all-deaths
 gen p3a = (dths3/dths400)*100
 gen p3b = (dths3/dths100)*100

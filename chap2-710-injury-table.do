@@ -91,14 +91,14 @@ gen cod = 1 if ghecause==56
 replace cod = 2 if ghecause==48
 replace cod = 3 if ghecause==55
 replace cod = 4 if ghecause==50
-replace cod = 5 if ghecause==53
+replace cod = 5 if ghecause==52
 replace cod = 6 if ghecause==1000
 #delimit ; 
 label define cod_   1 "interpersonal violence" 
                     2 "road injury" 
                     3 "self harm" 
                     4 "falls" 
-                    5 "mechanical forces" 
+                    5 "drowning" 
                     6 "all injuries", modify;
 #delimit cr
 label values cod cod_ 
@@ -339,14 +339,14 @@ gen cod = 1 if ghecause==56
 replace cod = 2 if ghecause==48
 replace cod = 3 if ghecause==55
 replace cod = 4 if ghecause==50
-replace cod = 5 if ghecause==53
+replace cod = 5 if ghecause==52
 replace cod = 6 if ghecause==1000
 #delimit ; 
 label define cod_   1 "interpersonal violence" 
                     2 "road injury" 
                     3 "self harm" 
                     4 "falls" 
-                    5 "mechanical forces" 
+                    5 "drowning" 
                     6 "all injuries", modify;
 #delimit cr
 label values cod cod_ 
@@ -653,7 +653,7 @@ putdocx table injury(6,1) = ("x"), halign(right) script(super) append
 putdocx table injury(7,1) = ("Falls "), halign(right) bold
 putdocx table injury(7,1) = ("x"), halign(right) script(super) append
 
-putdocx table injury(8,1) = ("Mechanical forces "), halign(right) bold
+putdocx table injury(8,1) = ("Drowning "), halign(right) bold
 putdocx table injury(8,1) = ("x"), halign(right) script(super) append
 
 putdocx table injury(9,1) = ("All Injuries "), halign(right) bold

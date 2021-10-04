@@ -37,7 +37,7 @@ tempfile t1
 use "`datapath'\from-who\chap2_000_adjusted", clear
 
 ** Size of 2019 MR in Americas (women and men combined)
-keep if region==2000 & sex==3 & year==2019 & (ghecause<=100 | ghecause==500)
+keep if region==2000 & sex==3  & (ghecause<=100 | ghecause==500)
 ** keep if region==2000 & sex==3  & (ghecause<=100 | ghecause==500)
 ** keep if region==2000 & (ghecause<=100 | ghecause==500)
 gsort -mortr
@@ -93,13 +93,15 @@ keep if cod<=12
 ** Women and men combined, all Americas
 keep if sex==3 & region==2000
 drop sex region
-collapse (sum) dths, by(year cod)
-reshape wide dths , i(year) j(cod)
+collapse (sum) dths daly, by(year cod)
+reshape wide dths daly, i(year) j(cod)
 forval x = 1(1)12 {
     format dths`x' %15.1fc
 }
 ** ALL CANCER as percentage of all deaths
 gen p500 = (dths11/dths12)*100
+gen ddrat500 = daly11 / dths11
+gen ddrat_all = daly12 / dths12
 
 ** TOP 10 CANCERS - as percentage of CANCERS and all-deaths
 forval x = 1(1)11 { 

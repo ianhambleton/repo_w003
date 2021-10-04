@@ -112,7 +112,7 @@ sort type top5 ghecause year sex region
 save "`datapath'\from-who\chap2_000_adjusted_mentalhealthonly", replace
 
 
-/*
+
 
 **------------------------------------------------
 ** Ordered version of ghecause 
@@ -182,6 +182,11 @@ preserve
     gen p800 = (dths11/dths13)*100
     gen p900 = (dths12/dths13)*100
     gen p800900 = ((dths11+dths12)/dths13)*100
+
+    gen ddrat800 = daly11 / dths11
+    gen ddrat900 = daly12 / dths12
+    gen ddrat800900 = (daly11 + daly12) / (dths11 + dths12)
+    gen ddrat_all = daly13 / dths13
 
     ** ALL MENTAL / NEUROLOGICAL as percentage of all DALYs
     gen pd800 = (daly11/daly13)*100

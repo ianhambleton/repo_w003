@@ -31,7 +31,7 @@
 
 
 ** Load primary deaths dataset
-use "`datapath'\from-who\chap2_000_mr_adjusted", clear
+use "`datapath'\from-who\chap2_000_adjusted", clear
 ** Restrict to Americas ONLY
 keep if region==2000 & sex==3
 ** CODES
@@ -40,12 +40,14 @@ keep if region==2000 & sex==3
 **    600  ALL CVD
 **    100  ALL DEATHS
 keep if ghecause==29 | ghecause==30 | ghecause==600 | ghecause==100
-keep dths year ghecause 
+keep dths daly year ghecause 
 format dths %15.1fc
-reshape wide dths , i(year) j(ghecause)
+reshape wide dths daly, i(year) j(ghecause)
 
 ** RESPIRATORY as percentage of all deaths
 gen p600 = (dths600/dths100)*100
+gen ddrat600 = daly600 / dths600
+gen ddrat_all = daly100 / dths100
 
 ** COPD as percentage of RESP and all-deaths
 gen p29a = (dths29/dths600)*100

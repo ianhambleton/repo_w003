@@ -73,7 +73,7 @@ keep if ghecause==48 |
         ghecause==57; 
 #delimit cr
 keep if year==2019 & sex==3 & region==2000
-gsort -dalyr
+gsort -mortr
 gen top5 = _n
 keep ghecause top5
 tempfile keepme
@@ -93,7 +93,6 @@ sort top5 ghecause year sex region
 ** Save the dataset for use in Table command
 save "`datapath'\from-who\chap2_000_adjusted_injuriesonly", replace
 
-
 **------------------------------------------------
 ** BEGIN STATISTICS FOR TEXT
 ** to accompany the CANCER METRICS TABLE
@@ -101,7 +100,7 @@ save "`datapath'\from-who\chap2_000_adjusted_injuriesonly", replace
 ** (2) 48   "road injury" 
 ** (3) 55   "self harm" 
 ** (4) 50   "falls" 
-** (5) 53   "mechanical forces" 
+** (5) 52   "drowning" 
 ** 1000     "all injuries"
 ** 100      "all cause", modif    
 ** -----------------------------------------------
@@ -110,7 +109,7 @@ replace cod = 1 if ghecause==56
 replace cod = 2 if ghecause==48
 replace cod = 3 if ghecause==55
 replace cod = 4 if ghecause==50
-replace cod = 5 if ghecause==53
+replace cod = 5 if ghecause==52
 replace cod = 6 if ghecause==1000
 replace cod = 7 if ghecause==100
 #delimit ;
@@ -118,7 +117,7 @@ label define cod_   1   "interpersonal violence"
                     2   "road injury" 
                     3   "self harm" 
                     4   "falls" 
-                    5   "mechanical forces" 
+                    5   "drowning" 
                     6  "all injuries"
                     7  "all cause", modify;
 #delimit cr
@@ -129,20 +128,25 @@ keep if cod<=7
 ** Women and men combined, all Americas
 keep if sex==3 & region==2000
 drop sex region
-collapse (sum) dths, by(year cod)
-reshape wide dths , i(year) j(cod)
+collapse (sum) dths daly, by(year cod)
+reshape wide dths daly, i(year) j(cod)
 forval x = 1(1)7 {
     format dths`x' %15.1fc
+    format daly`x' %15.1fc
 }
 ** ALL INJURIES as percentage of all deaths
 gen p1000 = (dths6/dths7)*100
+gen p1000daly = (daly6/daly7)*100
+gen ddrat1000 = daly6 / dths6
+gen ddrat_all = daly7 / dths7
 
 ** TOP 5 INJURIES - as percentage of INJURIES and all-deaths
 forval x = 1(1)5 { 
     gen p`x'a = (dths`x'/dths6)*100
     gen p`x'b = (dths`x'/dths7)*100
+    ** DTH to DALY ratio
+    gen ddrat`x' = daly`x' / dths`x'
 }
-
 
 **-----------------------------------------------------------
 ** INTERPERSONAL VIOLENCE (ghecause==56)
@@ -316,7 +320,7 @@ qui {
 
     noi dis "ALL INJURIES" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
-    noi list year drate1 drate2 drate3 dratio_rate ddiff_rate ddiff_count, noobs ab(20)
+    noi list year drate1 drate2 drate3 dratio_rate ddiff_rate ddiff_count, noobs ab(20) linesize(120)
 }
 
 
@@ -555,7 +559,7 @@ qui {
 
 
 **-----------------------------------------------------------
-** MECHANICAL FORCES (53)
+** DROWNING (52)
 ** Percent Improvement
 ** Death excess (men vs women)
 **-----------------------------------------------------------

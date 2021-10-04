@@ -31,17 +31,19 @@
 
 
 ** Load primary deaths dataset
-use "`datapath'\from-who\chap2_000_mr_adjusted", clear
+use "`datapath'\from-who\chap2_000_adjusted", clear
 ** Restrict to Americas ONLY
 keep if region==2000 & sex==3
-keep dths year ghecause 
-reshape wide dths , i(year) j(ghecause)
+keep dths daly year ghecause 
+reshape wide dths daly, i(year) j(ghecause)
 
 ** CODES
 **    31  "Diabetes"
 
 ** DIABETES as percentage of all deaths
 gen p31 = (dths31/dths100)*100
+gen ddrat31 = daly31 / dths31
+gen ddrat_all = daly100 / dths100
 
 **-----------------------------------------------------------
 ** Diabetes (31)
