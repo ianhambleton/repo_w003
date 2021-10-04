@@ -110,7 +110,7 @@ egen deaths_tot = rowtotal(deaths1 deaths2 deaths3 deaths4 deaths5)
 egen daly_tot = rowtotal(daly1 daly2 daly3 daly4 daly5) 
 sort ghecause deaths* daly* 
 format deaths* daly* deaths_tot daly_tot %15.0fc 
-
+/*
 ** 1-5 here refers to the 5 broad age groups
 forval x = 1(1)5 {
     gen death_perc`x' = (deaths`x' / deaths_tot) * 100 
@@ -202,10 +202,10 @@ local outer1    -1 -20       15 -20    15 280    -1 280
 local outer2    0   110      14.9 110 
 local outer3    0   223      14.9 223 
 local legend1   2     233
-local legend2   3     233
-local legend3   4     233
-local legend4   5     233
-local legend5   6     233
+local legend2   3.5     233
+local legend3   5     233
+local legend4   6.5     233
+local legend5   8     233
 
 ** Y-axis recode
 rename death_perc1 p11 
@@ -283,17 +283,17 @@ order mindaly maxdaly, after(daly5)
         (function y=7, range(-20 223) lc(gs10) lw(0.25) fc(none) lp("l") )
 
         /// DEATH horizontal lines
-        (rbar mind maxd cod2 if type==1, horizontal fc("`elderly'")   barw(0.75) lw(none))
+        (rbar mind maxd cod2 if type==1 & cod2!=2 & cod2!=3 & cod2!=9, horizontal fc("`elderly'")   barw(0.75) lw(none))
 
         /// DALY horizontal lines
         (rbar mindaly maxdaly cod2 if type==2, horizontal fc("`elderly'")   barw(0.75) lw(none))
 
 		/// DEATH Points
-        (sc cod2 p1 if type==1,  msize(5.5) m(o) mlc(gs10) mfc("`child'%75") mlw(0.1))
-        (sc cod2 p2 if type==1 , msize(5.5) m(o) mlc(gs10) mfc("`youth'%75") mlw(0.1))
-        (sc cod2 p3 if type==1 , msize(5.5) m(o) mlc(gs10) mfc("`young'%75") mlw(0.1))
-        (sc cod2 p4 if type==1 , msize(5.5) m(o) mlc(gs7) mfc("`older'%75") mlw(0.1))
-        (sc cod2 p5 if type==1 , msize(5.5) m(o) mlc(gs7) mfc("`elderly'%75") mlw(0.1))
+        (sc cod2 p1 if type==1 & cod2!=2 & cod2!=3 & cod2!=9,  msize(5.5) m(o) mlc(gs10) mfc("`child'%75") mlw(0.1))
+        (sc cod2 p2 if type==1 & cod2!=2 & cod2!=3 & cod2!=9 , msize(5.5) m(o) mlc(gs10) mfc("`youth'%75") mlw(0.1))
+        (sc cod2 p3 if type==1 & cod2!=2 & cod2!=3 & cod2!=9 , msize(5.5) m(o) mlc(gs10) mfc("`young'%75") mlw(0.1))
+        (sc cod2 p4 if type==1 & cod2!=2 & cod2!=3 & cod2!=9 , msize(5.5) m(o) mlc(gs7) mfc("`older'%75") mlw(0.1))
+        (sc cod2 p5 if type==1 & cod2!=2 & cod2!=3 & cod2!=9 , msize(5.5) m(o) mlc(gs7) mfc("`elderly'%75") mlw(0.1))
 		/// DALY Points
         (sc cod2 daly1 , msize(5.5) m(o) mlc(gs10) mfc("`child'%75") mlw(0.1))
         (sc cod2 daly2 , msize(5.5) m(o) mlc(gs10) mfc("`youth'%75") mlw(0.1))
@@ -334,22 +334,15 @@ order mindaly maxdaly, after(daly5)
             text(-0.5 170 "DALYs"           ,  place(c) size(4.5) color(gs8) just(right))
             text(14.5 50 "% of all Deaths"     ,  place(c) size(4) color(gs8) just(right))
             text(14.5 170 "% of all DALYs"     ,  place(c) size(4) color(gs8) just(right))
-            text(2  238 "young children"     ,  place(e) size(2.5) color(gs8) just(right))
-            text(3  238 "adolescents"     ,     place(e) size(2.5) color(gs8) just(right))
-            text(4  238 "young adults"     ,    place(e) size(2.5) color(gs8) just(right))
-            text(5  238 "older adults"    ,     place(e) size(2.5) color(gs8) just(right))
-            text(6  238 "elderly"            ,  place(e) size(2.5) color(gs8) just(right))
-
-
+            text(2  238 "Under 5s"     ,    place(e) size(3.5) color(gs8) just(right))
+            text(3.5  238 "5-19"     ,        place(e) size(3.5) color(gs8) just(right))
+            text(5  238 "20-39"     ,       place(e) size(3.5) color(gs8) just(right))
+            text(6.5  238 "40-64"    ,        place(e) size(3.5) color(gs8) just(right))
+            text(8  238 "65+"            ,  place(e) size(3.5) color(gs8) just(right))
 
 			legend(off size(3) color(gs8) position(3) nobox ring(0) bm(t=0 b=0 l=0 r=0) colf cols(1)
 			region(fcolor(gs16) lw(none) margin(t=0 b=1 l=0 r=0)) 
-			order(7 8 9 10 11) textfirst
-			lab(7 "Children") 
-			lab(8 "Youth") 		
-			lab(9 "Young adults") 		
-			lab(10 "Older adults") 		
-			lab(11 "Elderly") 		
+			order(7 8 9 10 11) textfirst		
             )
 			name(equiplot_byage)
 			;

@@ -180,7 +180,7 @@ restore
 ** improve{1-6}.png or worsen{1-6}.png (1-6 are the GHE causes)
 ** -----------------------------------------------------
 ** Graphic of Absolute or Relative Change between 2000 and 2019
-preserve
+**preserve
     keep if sex==3 & region==2000 & (year==2000 | year==2019)
     keep year cod arate 
     reshape wide arate, i(cod) j(year)

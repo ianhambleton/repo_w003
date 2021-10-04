@@ -116,12 +116,12 @@ label define cod_   1   "Drug use disorders"
                     3   "Anxiety disorders" 
                     4   "Alcohol use disorders" 
                     5   "Schizophrenia" 
-                    6   "All mental"
-                    7   "Alzheimer/dementias"
-                    8   "Migraine"
-                    9   "Epilepsy"
-                    10  "Non-migraine headache"
-                    11  "Parkinson disease"
+                    6   "Alzheimer/dementias"
+                    7   "Migraine"
+                    8   "Epilepsy"
+                    9  "Non-migraine headache"
+                    10 "Parkinson disease"
+                    11   "All mental"
                     12  "All neurological", modify;
 #delimit cr
 label values cod cod_    
@@ -162,7 +162,7 @@ preserve
     ** replace arate = arate_new if arate_new<. 
     keep if region==2000 & year==2019 & sex==3
     ** Women and Men combined  
-    tabdisp cod , cell(arate) format(%6.1fc) 
+    tabdisp cod , cell(arate) format(%6.4fc) 
     sort cod 
     gen arate_int = round(arate, 0.1)
     mkmat cod arate_int , matrix(col2)
@@ -274,7 +274,7 @@ preserve
                         ylab(,nogrid)
 
                         text(1.4 1.17 "{&dArr}", place(w) size(75) color("`improve'%75") just(center) margin(l=2 r=2 t=2 b=2))
-                        text(0.9 1.175 "${pc`a'}", place(e) size(60) color("`improve'%75") just(center) margin(l=2 r=2 t=2 b=2))
+                        text(0.9 1.175 "${pc`a'}", place(e) size(40) color("`improve'%75") just(center) margin(l=2 r=2 t=2 b=2))
                         
                         legend(off)
                         name(improve`a')
@@ -301,7 +301,7 @@ preserve
                         ylab(,nogrid)
 
                         text(0.9 1.17 "{&uArr}", place(w) size(75) color("`worsen'%75") just(center) margin(l=2 r=2 t=2 b=2))
-                        text(0.9 1.175 "${pc`a'}", place(e) size(60) color("`worsen'%75") just(center) margin(l=2 r=2 t=2 b=2))
+                        text(0.9 1.175 "${pc`a'}", place(e) size(40) color("`worsen'%75") just(center) margin(l=2 r=2 t=2 b=2))
                         
                         legend(off)
                         name(worsen`a')
@@ -311,8 +311,6 @@ preserve
         }
     }
 restore
-
-
 
 ** -----------------------------------------------------
 ** COLUMN 5 
@@ -554,7 +552,7 @@ preserve
                         ylab(,nogrid)
 
                         text(1.4 1.17 "{&dArr}", place(w) size(75) color("`improve'%75") just(center) margin(l=2 r=2 t=2 b=2))
-                        text(0.9 1.175 "${pc`a'}", place(e) size(60) color("`improve'%75") just(center) margin(l=2 r=2 t=2 b=2))
+                        text(0.9 1.175 "${pc`a'}", place(e) size(40) color("`improve'%75") just(center) margin(l=2 r=2 t=2 b=2))
                         
                         legend(off)
                         name(dimprove`a')
@@ -581,7 +579,7 @@ preserve
                         ylab(,nogrid)
 
                         text(0.9 1.17 "{&uArr}", place(w) size(75) color("`worsen'%75") just(center) margin(l=2 r=2 t=2 b=2))
-                        text(0.9 1.175 "${pc`a'}", place(e) size(60) color("`worsen'%75") just(center) margin(l=2 r=2 t=2 b=2))
+                        text(0.9 1.175 "${pc`a'}", place(e) size(40) color("`worsen'%75") just(center) margin(l=2 r=2 t=2 b=2))
                         
                         legend(off)
                         name(dworsen`a')
@@ -699,7 +697,7 @@ putdocx table cvd(2,11) = ("Percent"), font(calibri light,9) linebreak bold
 putdocx table cvd(2,11) = ("change"), font(calibri light,9) append bold    
 
 putdocx table cvd(4,1) = ("Drug Use Disorders"), halign(right) bold
-putdocx table cvd(4,1) = ("X"), halign(right) script(super) append
+///putdocx table cvd(4,1) = ("1"), halign(right) script(super) append
 
 putdocx table cvd(5,1) = ("Depressive Disorders"), halign(right) bold
 
@@ -713,7 +711,7 @@ putdocx table cvd(8,1) = ("Schizophrenia"), halign(right) bold
 /// putdocx table cvd(8,1) = ("4"), halign(right) script(super) append
 
 putdocx table cvd(9,1) = ("All Mental Health"), halign(right) bold
-putdocx table cvd(9,1) = ("4"), halign(right) script(super) append
+putdocx table cvd(9,1) = (" 1"), halign(right) script(super) append
 
 putdocx table cvd(11,1) = ("Alzheimer/Dementias"), halign(right) bold
 /// putdocx table cvd(10,1) = ("4"), halign(right) script(super) append
@@ -731,7 +729,7 @@ putdocx table cvd(15,1) = ("Parkinson disease"), halign(right) bold
 /// putdocx table cvd(14,1) = ("5"), halign(right) script(super) append
 
 putdocx table cvd(16,1) = ("All neurological"), halign(right) bold
-/// putdocx table cvd(14,1) = ("5"), halign(right) script(super) append
+putdocx table cvd(16,1) = (" 2"), halign(right) script(super) append
 
 
 ** ----------------------
@@ -754,12 +752,12 @@ putdocx table cvd(16,2) = ("$deaths12") , nformat(%12.0fc) trim
 ** COL3. Mortality Rates
 putdocx table cvd(4,3) = ("$arate1") , nformat(%9.1fc)  trim
 putdocx table cvd(5,3) = ("$arate2") , nformat(%9.1fc)  trim
-putdocx table cvd(6,3) = ("$arate3") , nformat(%9.1fc)  trim
+putdocx table cvd(6,3) = ("<0.1") , nformat(%9.1fc)  trim
 putdocx table cvd(7,3) = ("$arate4") , nformat(%9.1fc)  trim
 putdocx table cvd(8,3) = ("$arate5") , nformat(%9.1fc)  trim
 putdocx table cvd(9,3) = ("$arate11") , nformat(%9.1fc)  trim
 putdocx table cvd(11,3) = ("$arate6") , nformat(%9.1fc)  trim
-putdocx table cvd(12,3) = ("$arate7") , nformat(%9.1fc)  trim
+putdocx table cvd(12,3) = ("<0.1") , nformat(%9.1fc)  trim
 putdocx table cvd(13,3) = ("$arate8") , nformat(%9.1fc)  trim
 putdocx table cvd(14,3) = ("$arate9") , nformat(%9.1fc)  trim
 putdocx table cvd(15,3) = ("$arate10") , nformat(%9.1fc)  trim
@@ -888,11 +886,13 @@ putdocx table cvd(1,2), halign(center)
 putdocx table cvd(1,3), halign(center) 
 
 ** FINAL TABLE NOTES
-putdocx table cvd(17,2) = ("(X) ") , script(super) font(calibri light, 8)
-putdocx table cvd(17,2) = ("Individual Disease clarifications will be in these notes") , append font(calibri light, 8) 
-
-/// putdocx table cvd(15,2) = ("  (2) ") , script(super) font(calibri light, 8) append
-/// putdocx table cvd(15,2) = ("Hypertensive heart disease") , append font(calibri light, 8) 
+putdocx table cvd(17,2) = ("(1) ") , script(super) font(calibri light, 8)
+putdocx table cvd(17,2) = ("Includes all mental and substance-use disorders. Other conditions not listed include ") , append font(calibri light, 8) 
+putdocx table cvd(17,2) = ("bipolar disorders, eating disorders, autism and asperger syndrome, childhood ") , append font(calibri light, 8) 
+putdocx table cvd(17,2) = ("behavioral disorders, and idiopathic intellectual disability. ") , append font(calibri light, 8) 
+putdocx table cvd(17,2) = ("  (2) ") , script(super) font(calibri light, 8) append
+putdocx table cvd(17,2) = ("Includes all neurological conditions. Other conditions not listed include ") , append font(calibri light, 8) 
+putdocx table cvd(17,2) = ("Multiple sclerosis, cerebral palsy, motor neuron disease. ") , append font(calibri light, 8) 
 
 /// putdocx table cvd(15,2) = ("  (3) ") , script(super) font(calibri light, 8) append
 /// putdocx table cvd(15,2) = ("Cardiomyopathy, myocarditis, endocarditis") , append font(calibri light, 8) 

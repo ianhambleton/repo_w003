@@ -112,6 +112,8 @@ sort type top5 ghecause year sex region
 save "`datapath'\from-who\chap2_000_adjusted_mentalhealthonly", replace
 
 
+/*
+
 **------------------------------------------------
 ** Ordered version of ghecause 
 ** MENTAL HEALTH
@@ -154,7 +156,7 @@ label define cod_   1   "Drug use disorders"
                     7   "Migraine"
                     8   "Epilepsy"
                     9   "Non-migraine headache"
-                    10  "Parkinson disease"
+                    10  "Parkinson's disease"
                     11  "all mental"
                     12  "all neurological"
                     13  "all cause", modify;
@@ -179,6 +181,12 @@ preserve
     ** ALL MENTAL / NEUROLOGICAL as percentage of all deaths
     gen p800 = (dths11/dths13)*100
     gen p900 = (dths12/dths13)*100
+    gen p800900 = ((dths11+dths12)/dths13)*100
+
+    ** ALL MENTAL / NEUROLOGICAL as percentage of all DALYs
+    gen pd800 = (daly11/daly13)*100
+    gen pd900 = (daly12/daly13)*100
+    gen pd800900 = ((daly11+daly12)/daly13)*100
 
     ** TOP 5 MENTAL HEALTH CONDITIONS - as percentage of mental health and all-deaths
     forval x = 1(1)5 { 
@@ -188,6 +196,21 @@ preserve
         /// daly
         gen pdaly_`x'a = (daly`x'/daly11)*100
         gen pdaly_`x'b = (daly`x'/daly13)*100
+        if `x'==1 {
+            dis "Drug use disorders"
+        }
+        if `x'==2 {
+            dis "Depressive disorders"
+        }
+        if `x'==3 {
+            dis "Anxiety disorders"
+        }
+        if `x'==4 {
+            dis "Alcohol-use disorders"
+        }
+        if `x'==5 {
+            dis "Schizophrenia"
+        }
         list year pdth_`x'a pdth_`x'b pdaly_`x'a pdaly_`x'b 
     }
     ** TOP 5 NEUROLOGICAL CONDITIONS - as percentage of all neurological and all-deaths
@@ -198,6 +221,21 @@ preserve
         /// daly
         gen pdaly_`x'a = (daly`x'/daly12)*100
         gen pdaly_`x'b = (daly`x'/daly13)*100
+        if `x'==6 {
+            dis "Alzheimer/dementias"
+        }
+        if `x'==7 {
+            dis "Migraine"
+        }
+        if `x'==8 {
+            dis "Epilepsy"
+        }
+        if `x'==9 {
+            dis "Non-migraine headache"
+        }
+        if `x'==10 {
+            dis "Parkinson's disease"
+        }
         list year pdth_`x'a pdth_`x'b pdaly_`x'a pdaly_`x'b 
     }
 restore

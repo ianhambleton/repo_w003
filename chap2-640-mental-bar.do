@@ -44,7 +44,7 @@ drop _merge
 
 ** Restrict
 keep if sex==3
-keep if year==2019 
+keep if year==2019
 drop year sex 
 
 **------------------------------------------------
@@ -449,7 +449,7 @@ restore
 
 
 
-
+/*
 
     ** generate a local for the D3 color scheme
     colorpalette d3, 20 n(20) nograph
