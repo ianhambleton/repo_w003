@@ -55,7 +55,7 @@ drop year sex
 ** (2) 48   "road injury" 
 ** (3) 55   "self harm" 
 ** (4) 50   "falls" 
-** (5) 53   "mechanical forces" 
+** (5) 53   "Drowning" 
 ** 1000     "all injuries"
 ** 100      "all cause", modif    
 ** -----------------------------------------------
@@ -63,14 +63,14 @@ gen cod = 1 if ghecause==56
 replace cod = 2 if ghecause==48
 replace cod = 3 if ghecause==55
 replace cod = 4 if ghecause==50
-replace cod = 5 if ghecause==53
+replace cod = 5 if ghecause==52
 replace cod = 6 if ghecause==1000
 #delimit ; 
 label define cod_   1 "interpersonal violence" 
                     2 "road injury" 
                     3 "self harm" 
                     4 "falls" 
-                    5 "mechanical forces" 
+                    5 "Drowning" 
                     6 "all injuries", modify;
 #delimit cr
 label values cod cod_ 
@@ -317,7 +317,7 @@ restore
            text(67 170 "Road" "Injury"                  ,  place(c) size(3) color(gs8) just(center))
            text(67 290 "Self" "Harm"                    ,  place(c) size(3) color(gs8) just(center))
            text(67 410 "Falls"                          ,  place(c) size(3) color(gs8) just(center))
-           text(67 530 "Mechanical" "Forces"            ,  place(c) size(3) color(gs8) just(center))
+           text(67 530 "Drowning"                       ,  place(c) size(3) color(gs8) just(center))
            text(67 650 "All" "Injury"                   ,  place(c) size(3) color(gs8) just(center))
 
 
@@ -433,7 +433,7 @@ restore
 #delimit cr	
 
 
-
+/*
 
 ** ----------------------------------------
 ** ----------------------------------------
@@ -1015,7 +1015,7 @@ drop year sex
 ** (2) 48   "road injury" 
 ** (3) 55   "self harm" 
 ** (4) 50   "falls" 
-** (5) 53   "mechanical forces" 
+** (5) 52   "drowning" 
 ** 1000     "all injuries"
 ** 100      "all cause", modif    
 ** -----------------------------------------------
@@ -1023,15 +1023,15 @@ gen cod = 1 if ghecause==56
 replace cod = 2 if ghecause==48
 replace cod = 3 if ghecause==55
 replace cod = 4 if ghecause==50
-replace cod = 5 if ghecause==53
+replace cod = 5 if ghecause==52
 replace cod = 6 if ghecause==1000
 #delimit ; 
-label define cod_   1 "interpersonal violence" 
-                    2 "road injury" 
-                    3 "self harm" 
-                    4 "falls" 
-                    5 "mechanical forces" 
-                    6 "all injuries", modify;
+label define cod_   1 "Interpersonal violence" 
+                    2 "Road injury" 
+                    3 "Self harm" 
+                    4 "Falls" 
+                    5 "Drowning" 
+                    6 "All injuries", modify;
 #delimit cr
 label values cod cod_ 
 keep if cod<=6
@@ -1048,7 +1048,7 @@ keep if region < 100 | region==2000
 ** Simple absolute measure of inequality : Difference (D)
 ** Simple relative measure of inequality : Index of Disparity (ID) 
 ** ---------------------------------------------------
-drop mortr 
+drop dalyr 
 
 ** BASED ON ADJUSTED MORTALITY RATE 
 ** (R) Simple - relative

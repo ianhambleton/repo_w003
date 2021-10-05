@@ -266,14 +266,14 @@ qui {
 }
 
 **-----------------------------------------------------------
-** MECHANICAL FORCES  (ghecause==53)
+** DROWNING  (ghecause==52)
 ** Mortality rates by sex
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
     rename mortr mrate
     rename dalyr drate
-    keep if ghecause == 53 & region==2000
+    keep if ghecause == 52 & region==2000
     drop pop*
     ** 1=men 2=women 3=both
     reshape wide mrate dths drate daly, i(year) j(sex)
@@ -289,7 +289,7 @@ qui {
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
     format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
 
-    noi dis "MECHANICAL FORCES" 
+    noi dis "DROWNING" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
     noi list year drate1 drate2 drate3 dratio_rate ddiff_rate ddiff_count, noobs ab(20)
 }
@@ -466,6 +466,47 @@ qui {
     noi list _varname v1, sep(6)
 }
 
+** Change between 2010 and 2019
+qui {
+    use "`datapath'\from-who\chap2_000_daly_adjusted", clear
+    keep if ghecause == 48 & region==2000
+    rename dalyr drate
+    tempfile daly 
+    save `daly', replace
+    use "`datapath'\from-who\chap2_000_mr_adjusted", clear
+    keep if ghecause == 48 & region==2000
+    rename mortr mrate
+    merge 1:1 year sex using `daly'
+    drop _merge pop*
+    ** 1=men 2=women 3=both
+    reshape wide mrate drate dths daly, i(year) j(sex)
+    order year mrate* drate* dths* daly* 
+    ** Restrict to 2000 and 2019, and reshape to wide
+    ** drop daly* dths* 
+    keep if year==2010 | year==2019
+    gen k=1
+    reshape wide dths1 dths2 dths3 daly1 daly2 daly3 mrate1 mrate2 mrate3 drate1 drate2 drate3, i(k) j(year)
+    order k mrate1* mrate2* mrate3* drate1* drate2* drate3* dths1* dths2* dths3* daly1* daly2* daly3*
+    ** percentage improvement
+    gen mperc1 = ((mrate12019 - mrate12010)/mrate12010) * 100
+    gen mperc2 = ((mrate22019 - mrate22010)/mrate22010) * 100
+    gen mperc3 = ((mrate32019 - mrate32010)/mrate32010) * 100
+    gen dperc1 = ((drate12019 - drate12010)/drate12010) * 100
+    gen dperc2 = ((drate22019 - drate22010)/drate22010) * 100
+    gen dperc3 = ((drate32019 - drate32010)/drate32010) * 100
+    format mperc1 mperc2 mperc3 dperc1 dperc2 dperc3 %9.1f
+    ** death excess (women and men combined)
+    gen dth_excess = dths12019-dths22019
+    gen daly_excess = daly12019-daly22019
+    format dths12019 dths22019 daly12019 daly22019 dth_excess daly_excess %12.0fc
+    ** Transpose
+    drop k
+    xpose , clear varname format(%15.1fc)
+    order _varname
+    dis "ROAD INJURY - Change between 2000 and 2019"
+    noi list _varname v1, sep(6)
+}
+
 
 **-----------------------------------------------------------
 ** SELF HARM (55)
@@ -565,12 +606,12 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_daly_adjusted", clear
-    keep if ghecause == 53 & region==2000
+    keep if ghecause == 52 & region==2000
     rename dalyr drate
     tempfile daly 
     save `daly', replace
     use "`datapath'\from-who\chap2_000_mr_adjusted", clear
-    keep if ghecause == 53 & region==2000
+    keep if ghecause == 52 & region==2000
     rename mortr mrate
     merge 1:1 year sex using `daly'
     drop _merge pop*
@@ -599,7 +640,7 @@ qui {
     drop k
     xpose , clear varname format(%15.1fc)
     order _varname
-    dis "MECHANICAL FORCES - Change between 2000 and 2019"
+    dis "DROWNING - Change between 2000 and 2019"
     noi list _varname v1, sep(6)
 }
 

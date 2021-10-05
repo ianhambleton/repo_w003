@@ -126,7 +126,7 @@ order ghecause death_* daly_*
 ** (2) 48   "road injury" 
 ** (3) 55   "self harm" 
 ** (4) 50   "falls" 
-** (5) 53   "mechanical forces" 
+** (5) 52   "Drowning" 
 ** 1000     "all injuries"
 ** 100      "all cause", modif    
 ** -----------------------------------------------
@@ -134,15 +134,15 @@ gen cod = 1 if ghecause==56
 replace cod = 2 if ghecause==48
 replace cod = 3 if ghecause==55
 replace cod = 4 if ghecause==50
-replace cod = 5 if ghecause==53
+replace cod = 5 if ghecause==52
 replace cod = 6 if ghecause==1000
 #delimit ; 
-label define cod_   1 "interpersonal violence" 
-                    2 "road injury" 
-                    3 "self harm" 
-                    4 "falls" 
-                    5 "mechanical forces" 
-                    6 "all injuries", modify;
+label define cod_   1 "Interpersonal violence" 
+                    2 "Road injury" 
+                    3 "Self harm" 
+                    4 "Falls" 
+                    5 "Drowning" 
+                    6 "All injuries", modify;
 #delimit cr
 label values cod cod_ 
 keep if cod<=6
@@ -277,35 +277,35 @@ order mindaly maxdaly, after(daly5)
             xmtick(0 25 75 100 120 145 170 195 220, tlc(gs8))
 
 			/// Y-axis
-			ylab(	1 "interpersonal violence" 
-                    2 "road injury" 
-                    3 "self harm" 
-                    4 "falls" 
-                    5 "mechanical forces" 
-                    6 "all injuries"
+			ylab(	1 "Interpersonal violence" 
+                    2 "Road injury" 
+                    3 "Self harm" 
+                    4 "Falls" 
+                    5 "Drowning" 
+                    6 "All injuries"
 					,
 			labc(gs8) labs(4) tlc(gs8) nogrid notick glc(blue) angle(0) format(%9.0f) labgap(2) )
 			yscale(noline reverse range(0.5(0.5)7.5) noextend   ) 
 			ytitle("", color(gs8) size(3) margin(l=1 r=1 t=1 b=1)) 
 
-            text(-0.3 50 "Deaths"           ,  place(c) size(5) color(gs8) just(right))
-            text(-0.3 170 "DALYs"           ,  place(c) size(5) color(gs8) just(right))
+            text(-0.3 50 "Deaths"           ,  place(c) size(4.5) color(gs8) just(right))
+            text(-0.3 170 "DALYs"           ,  place(c) size(4.5) color(gs8) just(right))
             text(7 50 "% of all Deaths"     ,  place(c) size(4) color(gs8) just(right))
             text(7 170 "% of all DALYs"     ,  place(c) size(4) color(gs8) just(right))
-            text(2  245 "young children"     ,  place(e) size(3) color(gs8) just(right))
-            text(2.75  245 "adolescents"     ,  place(e) size(3) color(gs8) just(right))
-            text(3.5   245 "young adults"     ,  place(e) size(3) color(gs8) just(right))
-            text(4.25  245 "older adults"    ,  place(e) size(3) color(gs8) just(right))
-            text(5     245 "elderly"            ,  place(e) size(3) color(gs8) just(right))
+            text(2  245 "Under 5s"     ,  place(e) size(3.5) color(gs8) just(right))
+            text(2.75  245 "5-19"     ,  place(e) size(3.5) color(gs8) just(right))
+            text(3.5   245 "20-39"     ,  place(e) size(3.5) color(gs8) just(right))
+            text(4.25  245 "40-64"    ,  place(e) size(3.5) color(gs8) just(right))
+            text(5     245 "65+"            ,  place(e) size(3.5) color(gs8) just(right))
 
 			legend(off size(3) color(gs8) position(3) nobox ring(0) bm(t=0 b=0 l=0 r=0) colf cols(1)
 			region(fcolor(gs16) lw(none) margin(t=0 b=1 l=0 r=0)) 
 			order(7 8 9 10 11) textfirst
-			lab(7 "Children") 
-			lab(8 "Youth") 		
-			lab(9 "Young adults") 		
-			lab(10 "Older adults") 		
-			lab(11 "Elderly") 		
+			lab(7 "Under 5s") 
+			lab(8 "5-19") 		
+			lab(9 "20-39") 		
+			lab(10 "40-64") 		
+			lab(11 "65+") 		
             )
 			name(equiplot_byage)
 			;

@@ -643,21 +643,21 @@ putdocx table injury(2,11) = ("Percent"), font(calibri light,9) linebreak bold
 putdocx table injury(2,11) = ("change"), font(calibri light,9) append bold    
 
 putdocx table injury(4,1) = ("Interpersonal violence "), halign(right) bold
-putdocx table injury(4,1) = ("x"), halign(right) script(super) append
+///putdocx table injury(4,1) = ("x"), halign(right) script(super) append
 
 putdocx table injury(5,1) = ("Road injury "), halign(right) bold
 
 putdocx table injury(6,1) = ("Self harm "), halign(right) bold
-putdocx table injury(6,1) = ("x"), halign(right) script(super) append
+///putdocx table injury(6,1) = ("x"), halign(right) script(super) append
 
 putdocx table injury(7,1) = ("Falls "), halign(right) bold
-putdocx table injury(7,1) = ("x"), halign(right) script(super) append
+///putdocx table injury(7,1) = ("x"), halign(right) script(super) append
 
 putdocx table injury(8,1) = ("Drowning "), halign(right) bold
-putdocx table injury(8,1) = ("x"), halign(right) script(super) append
+///putdocx table injury(8,1) = ("x"), halign(right) script(super) append
 
 putdocx table injury(9,1) = ("All Injuries "), halign(right) bold
-putdocx table injury(9,1) = ("x"), halign(right) script(super) append
+putdocx table injury(9,1) = ("1"), halign(right) script(super) append
 
 ** ----------------------
 ** DATA
@@ -767,8 +767,11 @@ putdocx table injury(1,3), halign(center)
 ///putdocx table injury(10,2) = ("  (4) ") , script(super) font(calibri light, 8) append
 ///putdocx table injury(10,2) = ("Rheumatic heart disease") , append font(calibri light, 8) 
 
-putdocx table injury(10,2) = ("  (X) ") , script(super) font(calibri light, 8) append
-putdocx table injury(10,2) = ("All Injuries includes 'other' Injuries. ICD codes: XX") , append font(calibri light, 8) linebreak
+/// Rest of V, W39, W44, W53-W64, W77-W99, X20-X32, X50-
+/// X59, Y40-Y86, Y88, Y89
+putdocx table injury(10,2) = ("  (1) ") , script(super) font(calibri light, 8) append halign(left)
+putdocx table injury(10,2) = ("All Injuries includes 'other' injuries, such as: ICD codes: ") , append font(calibri light, 8) 
+putdocx table injury(10,2) = ("poisonings, fire & heat, exposure to mechanical forces, natural disasters, and collective violence & legal intervention.") , append font(calibri light, 8) 
 
 ** Save the Table
 putdocx save "`outputpath'\graphics\table_injury.docx" , replace
