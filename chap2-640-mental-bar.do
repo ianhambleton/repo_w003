@@ -448,8 +448,8 @@ restore
 #delimit cr	
 
 
-
 /*
+
 
     ** generate a local for the D3 color scheme
     colorpalette d3, 20 n(20) nograph
@@ -966,7 +966,6 @@ order cod region dalyr dalyr_str region6 scaler6 value6
 			name(bar_daly2019)
 			;
 #delimit cr	
-
 
 
 

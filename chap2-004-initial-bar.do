@@ -65,6 +65,7 @@ format dths %15.1fc
 #delimit ;
 keep if ghecause==100 |
         ghecause==200 |
+        ghecause==300 |
         ghecause==400 |
         ghecause==500 |
         ghecause==600 |
@@ -72,7 +73,7 @@ keep if ghecause==100 |
         ghecause==800 |
         ghecause==900 |
         ghecause==1000 ;
-recode ghecause (100=1) (200=2) (400=3) (500=4) (600=5) (31=6) (800 900=7) (1000=8);
+recode ghecause (100=1) (200=2) (300=9) (400=3) (500=4) (600=5) (31=6) (800 900=7) (1000=8);
 label define ghecause_ 
                         1 "all cause"
                         2 "communicable"
@@ -81,14 +82,15 @@ label define ghecause_
                         5 "Chronic Respiratory Diseases"
                         6 "Diabetes"
                         7 "Mental Health / Neurological"
-                        8 "External Causes", modify;
+                        8 "External Causes"
+                        9 "NCDs", modify;
 #delimit cr
 
 ** Collapse to sum mental health and neurological 
 collapse (sum) dths daly, by(year sex ghecause region)
 sort region ghecause sex year
 
-
+/*
 ** --------------------------
 ** Associated statistics
 ** --------------------------
@@ -102,7 +104,7 @@ preserve
     ///egen tdeath = rowtotal(dths3 dths4 dths5 dths6 dths7 dths8)
     ///egen tdaly = rowtotal(daly3 daly4 daly5 daly6 daly7 daly8) 
     
-    forval x = 2(1)8 {
+    forval x = 2(1)9 {
         gen pdths`x' = (dths`x'/dths1)*100
         gen pdaly`x' = (daly`x'/daly1)*100
         sort pdths`x'
@@ -115,8 +117,25 @@ preserve
     egen pdths_all = rowtotal(pdths2 pdths3 pdths4 pdths5 pdths6 pdths7 pdths8)
     egen pdaly_all = rowtotal(pdaly2 pdaly3 pdaly4 pdaly5 pdaly6 pdaly7 pdaly8)
     order pdths34, after(pdths4)
-    list year pdths*, linesize(120)
-    list year pdaly*, linesize(120)
+    list year pdths*, linesize(150)
+    list year pdaly*, linesize(150)
+restore
+
+** Percentage of death / disability due to NCDs and External Causes
+** Women and men combined
+preserve
+    keep if sex==3 & region==2000
+    keep if year==2000 | year==2019 
+    reshape wide dths daly , i(year sex) j(ghecause) 
+    gen ncd_inj1 = dths8 + dths9
+    gen ncd_inj2 = daly8 + daly9
+    
+    gen pdths = (ncd_inj1/dths1)*100
+    gen pdaly = (ncd_inj2/daly1)*100
+    sort pdths
+    list year pdths
+    sort pdaly
+    list year pdaly 
 restore
 
 ** Percentage of death / disability due to each condition
@@ -128,7 +147,7 @@ preserve
     ///egen tdeath = rowtotal(dths3 dths4 dths5 dths6 dths7 dths8)
     ///egen tdaly = rowtotal(daly3 daly4 daly5 daly6 daly7 daly8) 
     
-    forval x = 2(1)8 {
+    forval x = 2(1)9 {
         gen pdths`x' = (dths`x'/dths1)*100
         gen pdaly`x' = (daly`x'/daly1)*100
         sort pdths`x'
@@ -141,8 +160,8 @@ preserve
     egen pdths_all = rowtotal(pdths2 pdths3 pdths4 pdths5 pdths6 pdths7 pdths8)
     egen pdaly_all = rowtotal(pdaly2 pdaly3 pdaly4 pdaly5 pdaly6 pdaly7 pdaly8)
     order pdths34, after(pdths4)
-    list year pdths*, linesize(120)
-    list year pdaly*, linesize(120)
+    list year pdths*, linesize(150)
+    list year pdaly*, linesize(150)
 restore
 
 ** Percentage of death / disability due to each condition
@@ -154,7 +173,7 @@ preserve
     ///egen tdeath = rowtotal(dths3 dths4 dths5 dths6 dths7 dths8)
     ///egen tdaly = rowtotal(daly3 daly4 daly5 daly6 daly7 daly8) 
     
-    forval x = 2(1)8 {
+    forval x = 2(1)9 {
         gen pdths`x' = (dths`x'/dths1)*100
         gen pdaly`x' = (daly`x'/daly1)*100
         sort pdths`x'
@@ -167,8 +186,8 @@ preserve
     egen pdths_all = rowtotal(pdths2 pdths3 pdths4 pdths5 pdths6 pdths7 pdths8)
     egen pdaly_all = rowtotal(pdaly2 pdaly3 pdaly4 pdaly5 pdaly6 pdaly7 pdaly8)
     order pdths34, after(pdths4)
-    list year pdths*, linesize(120)
-    list year pdaly*, linesize(120)
+    list year pdths*, linesize(150)
+    list year pdaly*, linesize(150)
 restore
 
 
@@ -186,7 +205,7 @@ preserve
     list ghecause pdaly 
 restore
 
-
+/*
 
 ** Restrict for production of graphic
 keep if sex<3

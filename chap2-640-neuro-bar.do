@@ -44,7 +44,7 @@ drop _merge
 
 ** Restrict
 keep if sex==3
-keep if year==2019 
+keep if year==2019
 drop year sex 
 
 **------------------------------------------------
@@ -428,7 +428,7 @@ restore
 #delimit cr	
 
 
-
+/*
 
 
 
@@ -925,8 +925,6 @@ order cod region dalyr dalyr_str region6 scaler6 value6
 			name(bar_daly2019)
 			;
 #delimit cr	
-
-
 
 
 

@@ -108,7 +108,7 @@ forval x = 1(1)11 {
     gen p`x'a = (dths`x'/dths11)*100
     gen p`x'b = (dths`x'/dths12)*100
 }
-
+/*
 **-----------------------------------------------------------
 ** TRACHEA / LUNG (ghecause==12)
 ** Mortality rates by sex

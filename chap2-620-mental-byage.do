@@ -110,7 +110,7 @@ egen deaths_tot = rowtotal(deaths1 deaths2 deaths3 deaths4 deaths5)
 egen daly_tot = rowtotal(daly1 daly2 daly3 daly4 daly5) 
 sort ghecause deaths* daly* 
 format deaths* daly* deaths_tot daly_tot %15.0fc 
-/*
+
 ** 1-5 here refers to the 5 broad age groups
 forval x = 1(1)5 {
     gen death_perc`x' = (deaths`x' / deaths_tot) * 100 
@@ -313,20 +313,20 @@ order mindaly maxdaly, after(daly5)
             xmtick(0 25 75 100 120 145 170 195 220, tlc(gs8))
 
 			/// XX
-			ylab(	1 "drug use disorders" 
-                    2 "depressive disorders" 
-                    3 "anxiety disorders" 
-                    4 "alcohol use disorders" 
-                    5 "schizophrenia" 
-                    6 "all mental health"
-                    8 "alzheimer / dementias"
-                    9 "migraine"
-                    10 "epilepsy"
-                    11 "non-migraine headache"
-                    12 "parkinson disease"
-                    13 "all neurological"
+			ylab(	1 "Drug use disorders" 
+                    2 "Depressive disorders" 
+                    3 "Anxiety disorders" 
+                    4 "Alcohol use disorders" 
+                    5 "Schizophrenia" 
+                    6 "All mental health"
+                    8 "Alzheimer's / dementias"
+                    9 "Migraine"
+                    10 "Epilepsy"
+                    11 "Non-migraine headache"
+                    12 "Parkinson disease"
+                    13 "All neurological"
 					,
-			labc(gs8) labs(3.5) tlc(gs8) nogrid notick glc(blue) angle(0) format(%9.0f) labgap(2) )
+			labc(gs8) labs(3.5) tlc(gs8) nogrid notick glc(blue) angle(0) format(%9.0f) labgap(0) )
 			yscale(noline reverse range(0.5(0.5)14) noextend   ) 
 			ytitle("", color(gs8) size(3) margin(l=1 r=1 t=1 b=1)) 
 

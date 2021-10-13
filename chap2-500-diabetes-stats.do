@@ -44,7 +44,7 @@ reshape wide dths daly, i(year) j(ghecause)
 gen p31 = (dths31/dths100)*100
 gen ddrat31 = daly31 / dths31
 gen ddrat_all = daly100 / dths100
-
+/*
 **-----------------------------------------------------------
 ** Diabetes (31)
 **-----------------------------------------------------------

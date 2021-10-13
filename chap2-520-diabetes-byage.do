@@ -250,7 +250,7 @@ order mindaly maxdaly, after(daly5)
             xmtick(0 25 75 100 120 145 170 195 220, tlc(gs8))
 
 			/// XX
-			ylab(	1 "diabetes" 
+			ylab(	1 "Diabetes" 
 					,
 			labc(gs8) labs(7) tlc(gs8) nogrid notick glc(blue) angle(0) format(%9.0f) labgap(2) )
 			yscale(noline reverse range(0.2(0.1)2.2) noextend   ) 

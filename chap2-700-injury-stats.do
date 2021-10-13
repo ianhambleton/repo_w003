@@ -148,6 +148,8 @@ forval x = 1(1)5 {
     gen ddrat`x' = daly`x' / dths`x'
 }
 
+
+
 **-----------------------------------------------------------
 ** INTERPERSONAL VIOLENCE (ghecause==56)
 ** Mortality rates by sex

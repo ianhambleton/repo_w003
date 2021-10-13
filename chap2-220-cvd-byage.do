@@ -268,12 +268,12 @@ sort type cod
             xmtick(0 25 75 100 120 145 170 195 220, tlc(gs8))
 
 			/// XX
-			ylab(	1 "ischaemic" 
-                    2 "stroke" 
-                    3 "hypertensive" 
-                    4 "cardiomyopathy etc" 
-                    5 "rheumatic" 
-                    6 "all cvd"
+			ylab(	1 "Ischaemic heart disease" 
+                    2 "Stroke" 
+                    3 "Hypertensive" 
+                    4 "Cardiomyopathy etc" 
+                    5 "Rheumatic " 
+                    6 "All cvd"
 					,
 			labc(gs8) labs(4) tlc(gs8) nogrid notick glc(blue) angle(0) format(%9.0f) labgap(2) )
 			yscale(noline reverse range(0.5(0.5)7.5) noextend   ) 
@@ -356,12 +356,15 @@ order mindaly maxdaly, after(daly5)
             xmtick(0 25 75 100 120 145 170 195 220, tlc(gs8))
 
 			/// Y-axis
-			ylab(	1 "ischaemic" 
-                    2 "stroke" 
-                    3 "hypertensive" 
-                    4 "cardiomyopathy etc" 
-                    5 "rheumatic" 
-                    6 "all cvd"
+			ylab(	0.8 "Ischaemic" 
+                    1.2 "heart disease" 
+                    2 "Stroke" 
+                    2.8 "Hypertensive" 
+                    3.2 "heart disease" 
+                    4 "Cardiomyopathy etc" 
+                    4.8 "Rheumatic" 
+                    5.2 "heart disease" 
+                    6 "All CVD"
 					,
 			labc(gs8) labs(4) tlc(gs8) nogrid notick glc(blue) angle(0) format(%9.0f) labgap(2) )
 			yscale(noline reverse range(0.5(0.5)7.5) noextend   ) 
