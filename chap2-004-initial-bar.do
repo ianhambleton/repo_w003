@@ -90,7 +90,7 @@ label define ghecause_
 collapse (sum) dths daly, by(year sex ghecause region)
 sort region ghecause sex year
 
-/*
+
 ** --------------------------
 ** Associated statistics
 ** --------------------------
@@ -205,7 +205,7 @@ preserve
     list ghecause pdaly 
 restore
 
-/*
+
 
 ** Restrict for production of graphic
 keep if sex<3
