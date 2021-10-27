@@ -172,7 +172,7 @@ qui {
     gen ddiff_count = daly1 - daly2 
 
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
-    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
+    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.2fc
 
     noi dis "INTERPERSONAL VIOLENCE" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
@@ -202,7 +202,7 @@ qui {
     gen ddiff_count = daly1 - daly2 
 
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
-    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
+    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.2fc
 
     noi dis "ROAD INJURY" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
@@ -231,7 +231,7 @@ qui {
     gen ddiff_count = daly1 - daly2 
 
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
-    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
+    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.2fc
 
     noi dis "SELF HARM" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
@@ -260,7 +260,7 @@ qui {
     gen ddiff_count = daly1 - daly2 
 
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
-    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
+    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.2fc
 
     noi dis "FALLS" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
@@ -289,7 +289,7 @@ qui {
     gen ddiff_count = daly1 - daly2 
 
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
-    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
+    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.2fc
 
     noi dis "DROWNING" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
@@ -318,7 +318,7 @@ qui {
     gen ddiff_count = daly1 - daly2 
 
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
-    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
+    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.2fc
 
     noi dis "ALL INJURIES" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)

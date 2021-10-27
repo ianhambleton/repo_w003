@@ -1071,7 +1071,9 @@ label values ghecause ghecause_
 tempfile for_mr
 save `for_mr' , replace
 
-
+** Use in Chapter 3. Population change
+** 18 age groups
+save "`datapath'\from-who\chap3_byage_malefemale", replace
 
 ** 2019, Male, Communicable Disease
 forval x = 2000(1)2019 {
@@ -2213,6 +2215,9 @@ save `for_mr' , replace
 ** 18 age groups
 save "`datapath'\from-who\chap2_equiplot_mr_byage", replace
 
+** Use in Chapter 3. Population change
+** 18 age groups
+save "`datapath'\from-who\chap3_byage_both", replace
 
 ** 2019, Male, Communicable Disease
 forval x = 2000(1)2019 {

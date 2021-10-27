@@ -56,7 +56,7 @@ gen p29b = (dths29/dths100)*100
 ** Asthma as percentage of CVD and all-deaths
 gen p30a = (dths30/dths600)*100
 gen p30b = (dths30/dths100)*100
-/*
+
 **-----------------------------------------------------------
 ** COPD (29)
 **-----------------------------------------------------------
@@ -78,7 +78,7 @@ qui {
     gen ddiff_count = daly1 - daly2 
 
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
-    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
+    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.2fc
 
     noi dis "COPD" 
     noi list year dths1 dths2 dths3 daly1 daly2 daly3, noobs ab(20) linesize(120)
@@ -108,7 +108,7 @@ qui {
     gen ddiff_count = daly1 - daly2 
 
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
-    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
+    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.2fc
 
     noi dis "ASTHMA" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)

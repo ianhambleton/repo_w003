@@ -459,7 +459,9 @@ label values ghecause ghecause_
 tempfile for_mr
 save `for_mr' , replace
 
-
+** Use in Chapter 3. Population change
+** 18 age groups
+save "`datapath'\from-who\chap3_byage_groups_malefemale", replace
 
 ** MOrtality rates
 forval x = 2000(1)2019 {
@@ -573,6 +575,7 @@ save "`datapath'\from-who\chap2_000a_mr_region-groups", replace
 tempfile afr amr emr eur sear wpr world
 ** Africa (AFR)
 use "`datapath'\from-who\who-ghe-deaths-001-who1-allcauses", replace
+
 * TODO: Change restriction for each disease group
    #delimit ;
     keep if     
@@ -941,6 +944,9 @@ save `for_mr' , replace
 save "`datapath'\from-who\chap2_equiplot_mr_byage_allcvd", replace
 save "`datapath'\from-who\chap2_equiplot_mr_byage_groupeddeath", replace
 
+** Use in Chapter 3. Population change
+** 18 age groups
+save "`datapath'\from-who\chap3_byage_groups_both", replace
 
 ** 2019, Male, Communicable Disease
 forval x = 2000(1)2019 {

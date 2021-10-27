@@ -108,7 +108,7 @@ forval x = 1(1)11 {
     gen p`x'a = (dths`x'/dths11)*100
     gen p`x'b = (dths`x'/dths12)*100
 }
-/*
+
 **-----------------------------------------------------------
 ** TRACHEA / LUNG (ghecause==12)
 ** Mortality rates by sex
@@ -131,7 +131,7 @@ qui {
     gen ddiff_count = daly1 - daly2 
 
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
-    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
+    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.2fc
 
     noi dis "TRACHEA / LUNG" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
@@ -219,7 +219,7 @@ qui {
     gen ddiff_count = daly1 - daly2 
 
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
-    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
+    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.2fc
 
     noi dis "COLON / RECTAL" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
@@ -248,7 +248,7 @@ qui {
     gen ddiff_count = daly1 - daly2 
 
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
-    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
+    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.2fc
 
     noi dis "CERVIX UTERI" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
@@ -277,7 +277,7 @@ qui {
     gen ddiff_count = daly1 - daly2 
 
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
-    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
+    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.2fc
 
     noi dis "PANCREAS" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
@@ -306,7 +306,7 @@ qui {
     gen ddiff_count = daly1 - daly2 
 
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
-    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
+    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.2fc
 
     noi dis "LYMPHOMAS / MYELOMAS" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
@@ -334,7 +334,7 @@ qui {
     gen ddiff_count = daly1 - daly2 
 
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
-    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
+    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.2fc
 
     noi dis "STOMACH" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
@@ -362,7 +362,7 @@ qui {
     gen ddiff_count = daly1 - daly2 
 
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
-    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
+    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.2fc
 
     noi dis "LIVER" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
@@ -391,7 +391,7 @@ qui {
     gen ddiff_count = daly1 - daly2 
 
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
-    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
+    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.2fc
 
     noi dis "LEUKEMIA" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20)
@@ -420,7 +420,7 @@ qui {
     gen ddiff_count = daly1 - daly2 
 
     order year dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff* 
-    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.1fc
+    format dths* daly* mrate* drate* mratio* mdiff* dratio* ddiff*   %12.2fc
 
     noi dis "ALL CANCERS" 
     noi list year mrate1 mrate2 mrate3 mratio_rate mdiff_rate mdiff_count, noobs ab(20) linesize(120)
