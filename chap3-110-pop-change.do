@@ -177,9 +177,17 @@ order origin3a pchange3a origin3b pchange3b , after(pchange2)
 
 ** Outer lines
 local line1 18 36.5 1 36.5
-local outer1   19 -11   0 -11   0 10   19 10   19 -11 
-local outer2   19 10.5   0 10.5   0 31   19 31   19 10.5
+local outer1a   19 -11   -1 -11   
+local outer1b   -1 -11   -1 10   
+local outer1c   19 -11   19 10 
 
+local outer2a   19 10  19 31  
+local outer2b   -1 10  -1 31
+local outer2c   -1 31    19 31
+
+local triangle1 13.7 9.25 16 10.25 13.7 11.25 13.7 9.25
+local triangle2 13.3 9.25 11 10.25 13.3 11.25 13.3 9.25
+local line2 13.5 -10 13.5 30
 
 ** FIGURE 1
 ** To have different panels we need to convert from -bar- to -rbar-
@@ -187,48 +195,76 @@ local outer2   19 10.5   0 10.5   0 31   19 31   19 10.5
 		graph twoway 
         /// Outer Lines
         (scatteri `line1' , recast(line) lw(0.2) lc("gs8") fc("gs8") lp("-") )
-        (scatteri `outer1'  , recast(area) lw(0.2) lc(gs10) fc(none) lp("l"))
-        (scatteri `outer2'  , recast(area) lw(0.2) lc(gs10) fc(none) lp("l"))
+        (scatteri `line2' , recast(line) lw(0.1) lc("gs12") fc("gs12") lp("-") )
+        (scatteri `outer1a'  , recast(line) lw(0.2) lc(gs10) fc(none) lp("l"))
+        (scatteri `outer1b'  , recast(line) lw(0.2) lc(gs10) fc(none) lp("l"))
+        (scatteri `outer1c'  , recast(line) lw(0.2) lc(gs10) fc(none) lp("l"))
+        (scatteri `outer2a'  , recast(line) lw(0.2) lc(gs10) fc(none) lp("l"))
+        (scatteri `outer2b'  , recast(line) lw(0.2) lc(gs10) fc(none) lp("l"))
+        (scatteri `outer2c'  , recast(line) lw(0.2) lc(gs10) fc(none) lp("l"))
+        (scatteri `triangle1'  , recast(area) lw(0.2) lc("`red2'") fc("`red2'") lp("l"))
+        (scatteri `triangle2'  , recast(area) lw(0.2) lc(gs10) fc(gs10) lp("l"))
 
 		/// 2000
-		/// Men 65 years and younger
+		/// Men 60 years and younger
         (rbar origin1a pmale age_start1 if age_start<=13 & year==2000, horizontal barw(0.8) fcol("`blu1'") lcol("`blu1'") lw(0.1))           
-		/// Men 70 years and older
-        (rbar origin1a pmale age_start1 if age_start>=14 & year==2000, horizontal barw(0.8) fcol("`blu2'") lcol("`blu2'") lw(0.1))           
-		/// Women 65 years and younger
+		/// Men 56 years and older
+        (rbar origin1a pmale age_start1 if age_start>=14 & year==2000, horizontal barw(0.8) fcol("`blu3'") lcol("`blu3'") lw(0.1))           
+		/// Women 60 years and younger
         (rbar origin1b pfemale age_start1 if age_start<=13 & year==2000, horizontal barw(0.8) fcol("`pur1'") lcol("`pur1'") lw(0.1))           
-		/// Women 70 years and older
-        (rbar origin1b pfemale age_start1 if age_start>=14 & year==2000, horizontal barw(0.8) fcol("`pur2'") lcol("`pur2'") lw(0.1))           
+		/// Women 65 years and older
+        (rbar origin1b pfemale age_start1 if age_start>=14 & year==2000, horizontal barw(0.8) fcol("`pur3'") lcol("`pur3'") lw(0.1))           
 
 		/// 2019
-		/// Men 65 years and younger
+		/// Men 60 years and younger
         (rbar origin2a pmale age_start1 if age_start<=13 & year==2019, horizontal barw(0.8) fcol("`blu1'") lcol("`blu1'") lw(0.1))           
-		/// Men 70 years and older
-        (rbar origin2a pmale age_start1 if age_start>=14 & year==2019, horizontal barw(0.8) fcol("`blu2'") lcol("`blu2'") lw(0.1))           
-		/// Women 65 years and younger
+		/// Men 65 years and older
+        (rbar origin2a pmale age_start1 if age_start>=14 & year==2019, horizontal barw(0.8) fcol("`blu3'") lcol("`blu3'") lw(0.1))           
+		/// Women 60 years and younger
         (rbar origin2b pfemale age_start1 if age_start<=13 & year==2019, horizontal barw(0.8) fcol("`pur1'") lcol("`pur1'") lw(0.1))           
-		/// Women 70 years and older
-        (rbar origin2b pfemale age_start1 if age_start>=14 & year==2019, horizontal barw(0.8) fcol("`pur2'") lcol("`pur2'") lw(0.1))           
+		/// Women 65 years and older
+        (rbar origin2b pfemale age_start1 if age_start>=14 & year==2019, horizontal barw(0.8) fcol("`pur3'") lcol("`pur3'") lw(0.1))           
 
         /// PERCENTAGE POINT CHANGE
         (rbar origin3a pchange3a age_start1 if pchange<=0 & age_start<=13 & year==2019, horizontal barw(0.8) fcol("gs10") lcol("gs10") lw(0.1))           
         (rbar origin3b pchange3b age_start1 if pchange> 0 & age_start<=13 & year==2019 , horizontal barw(0.8) fcol("gs10") lcol("gs10") lw(0.1))           
         (rbar origin3b pchange3b age_start1 if pchange> 0 & age_start>=14 & year==2019 , horizontal barw(0.8) fcol("`red2'") lcol("`red2'") lw(0.1))           
-
                 ,
 
 		subtitle(, nobox size(4))
 		///text(80  -1500 "percent 70+" , place(e)) 
 		ysize(6) xsize(14)
 		
-		ytitle("Age in 5-year groups", size(3.5)) 
+		ytitle("Age in 5-year groups", color(gs8) size(3.5)) 
 		yscale(noline) 			
 		ylabel(none, angle(0) nogrid labsize(3.5)) 
 
-		xtitle("Population size", size(3.5)) 
+		xtitle(" ", size(3.5)) 
 		xscale(noline) 
-		xlabel(-8 "8%" -4 "4%" 4 "5%" 8 "8%" 13 "8%" 17 "4%" 25 "4%" 29 "8%" , noticks nogrid labsize(3.5))
+		xlabel(none , noticks nogrid labsize(3.5))
 		
+        /// 2000 x-axis text 
+        text(0 -8 "8%", place(c) size(3.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
+        text(0 -4 "4%", place(c) size(3.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
+        text(0  4 "4%", place(c) size(3.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
+        text(0  8 "8%", place(c) size(3.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
+        /// 2019 x-axis text 
+        text(0 13 "8%", place(c) size(3.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
+        text(0 17 "4%", place(c) size(3.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
+        text(0 25 "4%", place(c) size(3.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
+        text(0 29 "8%", place(c) size(3.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
+        /// x-axis title
+        text(-2 10.5 "Population percentage", place(c) size(4) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
+        /// panel header
+        text(20 0 "2000", place(c) size(5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
+        text(20 21 "2019", place(c) size(5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
+        text(20 36.5 "Change", place(c) size(5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
+        /// age text
+        text(17 10.25 "65 and older", place(c) size(4) color("`red1'") just(center) margin(l=2 r=2 t=4 b=2))
+        text(10.5 10.25 "Under 65", place(c) size(4) color("gs6") just(center) margin(l=2 r=2 t=4 b=2))
+
+
+
 		legend(off size(2.5) colf cols(2) colgap(8)
 		region(fcolor(gs16) lw(none) margin(l=2 r=2 t=4 b=2)) order(2 1 4 3)
 		label(1 "Males 64 and younger") 
@@ -239,3 +275,30 @@ local outer2   19 10.5   0 10.5   0 31   19 31   19 10.5
 		name(pyramid2000)
 		;
 #delimit cr		
+
+
+** Pchange by age group
+gen agegr1 = 1 if age_start1 <= 13 
+replace agegr1 = 2 if age_start1 >= 14 
+label define agegr1_ 1 "le64" 2 "ge65"
+label values agegr1 agegr1_
+
+gen agegr2 = 1 if age_start1==1
+replace agegr2 = 1 if age_start1>=2 & age_start1<=4
+replace agegr2 = 1 if age_start1>=5 & age_start1<=8
+replace agegr2 = 4 if age_start1>=9 & age_start1<=13
+replace agegr2 = 5 if age_start1>=14
+label define agegr2_ 1 "under5" 2 "5-19" 3 "20-39" 4 "40-64" 5 "65+"
+label values agegr2 agegr2_
+
+bysort agegr1 year : egen ag_change = sum(pchange)
+bysort agegr1 year : egen pyear2000s = sum(pyear2000)
+bysort agegr1 year : egen pyear2019s = sum(pyear2019)
+
+bysort agegr2 year : egen ag_change2 = sum(pchange)
+bysort agegr2 year : egen pyear2000s2 = sum(pyear2000)
+bysort agegr2 year : egen pyear2019s2 = sum(pyear2019)
+
+
+order agegr1 agegr2 pyear2000s pyear2019s ag_change pyear2000s2 pyear2019s2 ag_change2, after(pchange) 
+sort year age_start1

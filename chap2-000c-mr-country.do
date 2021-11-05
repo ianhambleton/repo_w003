@@ -457,6 +457,11 @@ label values ghecause ghecause_
 tempfile for_mr
 save `for_mr' , replace
 
+** Use in Chapter 3. Population change
+** 18 age groups
+save "`datapath'\from-who\chap3_byage_country_malefemale", replace
+
+
 ** Standardised MR values
 forval x = 2000(1)2019 {
     forval y = 1(1)2 {
@@ -935,6 +940,10 @@ label values ghecause ghecause_
 ** Save dataset ready for direct standardization 
 tempfile for_mr
 save `for_mr' , replace
+
+** Use in Chapter 3. Population change
+** 18 age groups
+save "`datapath'\from-who\chap3_byage_country_both", replace
 
 ** Standardised MR values
 forval x = 2000(1)2019 {

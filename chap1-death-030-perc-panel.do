@@ -200,3 +200,91 @@ local outer3 72 2001 77 2001 77 2006 72 2006 72 2001
 #delimit cr	
 
 
+** Version 2 - legend outside
+
+
+** Legend outer limits for graphing 
+local outer1 112 2030 117 2030 117 2034 112 2034 112 2030 
+local outer2 112 2045 117 2045 117 2049 112 2049 112 2045 
+local outer3 112 2060 117 2060 117 2064 112 2064 112 2060 
+
+#delimit ;
+	gr twoway 
+		/// Young children
+        (rarea zero inj yr1 if agroup==1 , lw(none) color("`inj'%25"))
+        (rarea inj ncd yr1 if  agroup==1 , lw(none) color("`ncd'%25"))
+        (rarea ncd com yr1 if  agroup==1 , lw(none) color("`com'%25"))
+		/// youth
+        (rarea zero inj yr1 if agroup==2 , lw(none) color("`inj'%25"))
+        (rarea inj ncd yr1 if  agroup==2 , lw(none) color("`ncd'%25"))
+        (rarea ncd com yr1 if  agroup==2 , lw(none) color("`com'%25"))
+		/// Young adults
+        (rarea zero inj yr1 if agroup==3 , lw(none) color("`inj'%25"))
+        (rarea inj ncd yr1 if  agroup==3 , lw(none) color("`ncd'%25"))
+        (rarea ncd com yr1 if  agroup==3 , lw(none) color("`com'%25"))
+		/// Older adults
+        (rarea zero inj yr1 if agroup==4 , lw(none) color("`inj'%25"))
+        (rarea inj ncd yr1 if  agroup==4 , lw(none) color("`ncd'%25"))
+        (rarea ncd com yr1 if  agroup==4 , lw(none) color("`com'%25"))
+		/// Elderly
+        (rarea zero inj yr1 if agroup==5 , lw(none) color("`inj'%25"))
+        (rarea inj ncd yr1 if  agroup==5 , lw(none) color("`ncd'%25"))
+        (rarea ncd com yr1 if  agroup==5 , lw(none) color("`com'%25"))
+
+        /// droplines
+        (function y=101, range(2000 2100) lc(gs12) dropline(2019.5 2039.5 2059.5 2079.5 2099.5))
+
+        /// Legend
+        (scatteri `outer1' , recast(area) lw(none) lc("`com'%25") fc("`com'%25")  )
+        (scatteri `outer2' , recast(area) lw(none) lc("`ncd'%25") fc("`ncd'%25")  )
+        (scatteri `outer3' , recast(area) lw(none) lc("`inj'%25") fc("`inj'%25")  )
+        (function y=110, range(2030 2070) lp("l") lc(gs14) lw(0.4))
+
+		,
+			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 		
+			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 
+			ysize(8) xsize(18)
+
+			xlab(none, 
+			valuelabel labc(gs0) labs(2.5) notick nogrid glc(gs16) angle(45) format(%9.0f))
+			xscale(noline lw(vthin)) 
+			xtitle(" ", size(3) color(gs0) margin(l=1 r=1 t=1 b=1)) 
+	
+			ylab(0(20)100,
+			valuelabel labc(gs8) labs(3) tlc(gs8) nogrid glc(gs16) angle(0) format(%9.0f))
+			yscale(lw(vthin) lc(gs8) range(0(10)120) noextend) 
+			ytitle("Percentage of all deaths", color(gs8) size(3) margin(l=1 r=1 t=1 b=1)) 
+
+            /// Region Titles 
+            text(105 2010 "Under 5s",  place(c) size(3.5) color(gs5))
+            text(105 2030 "5-19 yrs",  place(c) size(3.5) color(gs5))
+            text(105 2050 "20-39 yrs",  place(c) size(3.5) color(gs5))   
+            text(105 2070 "40-64 yrs",  place(c) size(3.5) color(gs5))
+            text(105 2090 "65 and older",  place(c) size(3.5) color(gs5))
+
+            /// Legend Text
+            text(115   2035 "CMPN",  place(e) size(3) color(gs4))   
+            text(115   2050 "NCDs",  place(e) size(3) color(gs4))   
+            text(115   2065 "Injuries",  place(e) size(3) color(gs4))   
+
+			/// X-Axis text
+            text(-3 2001 "2000",  place(e) size(3) color(gs8))
+            text(-3 2018 "2019",  place(w) size(3) color(gs8))
+            text(-3 2021 "2000",  place(e) size(3) color(gs8))
+            text(-3 2038 "2019",  place(w) size(3) color(gs8))
+            text(-3 2041 "2000",  place(e) size(3) color(gs8))
+            text(-3 2058 "2019",  place(w) size(3) color(gs8))
+            text(-3 2061 "2000",  place(e) size(3) color(gs8))
+            text(-3 2078 "2019",  place(w) size(3) color(gs8))
+            text(-3 2081 "2000",  place(e) size(3) color(gs8))
+            text(-3 2098 "2019",  place(w) size(3) color(gs8))
+
+			legend(off size(2.5) position(9) nobox ring(0) bm(t=1 b=4 l=5 r=0) colf cols(1)
+			region(fcolor(gs16)  lw(none) margin(zero)) 
+			order(2 1) 
+			lab(1 "xx") 
+			lab(2 "xx") 		
+            )
+			name(deaths_age_panel2)
+			;
+#delimit cr	

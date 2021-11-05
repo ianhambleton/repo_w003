@@ -349,3 +349,200 @@ replace arate2 = 300 if region==500 & ghecause==30 & year==2010 & arate2>600
 			;
 #delimit cr	
 
+** -----------------------------------------------------
+** Version 2 - legend outside
+** -----------------------------------------------------
+
+** Legend outer limits for graphing 
+local outer1 860 2077 890 2077 890 2082 860 2082 860 2077
+
+local outer2 860 2092 890 2092 890 2097 860 2097 860 2092
+
+local outer3 860 2106 890 2106 890 2111 860 2111 860 2106
+
+#delimit ;
+	gr twoway 
+		/// North America
+	    (rarea arate1 arate2 yr1 if ghecause==10 & region==100 , lw(none) color("`com'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==20 & region==100 , lw(none) color("`ncd'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==30 & region==100 , lw(none) color("`inj'%15"))
+		/// Southern Cone
+	    (rarea arate1 arate2 yr1 if ghecause==10 & region==200 , lw(none) color("`com'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==20 & region==200 , lw(none) color("`ncd'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==30 & region==200 , lw(none) color("`inj'%15"))
+		/// Central America
+	    (rarea arate1 arate2 yr1 if ghecause==10 & region==300 , lw(none) color("`com'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==20 & region==300 , lw(none) color("`ncd'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==30 & region==300 , lw(none) color("`inj'%15"))
+		/// Andean
+	    (rarea arate1 arate2 yr1 if ghecause==10 & region==400 , lw(none) color("`com'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==20 & region==400 , lw(none) color("`ncd'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==30 & region==400 , lw(none) color("`inj'%15"))
+		/// Latin Caribbean
+	    (rarea arate1 arate2 yr1 if ghecause==10 & region==500 , lw(none) color("`com'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==20 & region==500 , lw(none) color("`ncd'%15"))
+	    /// HIGH RATE due to Haiti earthquake in 2010
+		(rarea arate1 arate2 yr1 if ghecause==30 & region==500 & year>=2009 & year<=2011, lw(none) color("`inj'%5"))
+	    (rarea arate1 arate2 yr1 if ghecause==30 & region==500 & year<2010,  lw(none) color("`inj'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==30 & region==500 & year>2010,  lw(none) color("`inj'%15"))
+
+		/// non-Latin Caribbean
+	    (rarea arate1 arate2 yr1 if ghecause==10 & region==600 , lw(none) color("`com'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==20 & region==600 , lw(none) color("`ncd'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==30 & region==600 , lw(none) color("`inj'%15"))
+		/// Brazil
+	    (rarea arate1 arate2 yr1 if ghecause==10 & region==700 , lw(none) color("`com'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==20 & region==700 , lw(none) color("`ncd'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==30 & region==700 , lw(none) color("`inj'%15"))
+		/// Mexico
+	    (rarea arate1 arate2 yr1 if ghecause==10 & region==800 , lw(none) color("`com'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==20 & region==800 , lw(none) color("`ncd'%15"))
+	    (rarea arate1 arate2 yr1 if ghecause==30 & region==800 , lw(none) color("`inj'%15"))
+
+		/// MEN (1). COM. NORTH AMERICA.
+        (line arate1 yr1 if ghecause==10 & region==100  , lw(0.2) lc("`com'%40") lp("l"))
+		(line arate1 yr1 if ghecause==20 & region==100  , lw(0.2) lc("`ncd'%40") lp("l"))
+		(line arate1 yr1 if ghecause==30 & region==100  , lw(0.2) lc("`inj'%40") lp("l"))
+		(line arate2 yr1 if ghecause==10 & region==100  , lw(0.2) lc("`com'%40") lp("-"))
+		(line arate2 yr1 if ghecause==20 & region==100  , lw(0.2) lc("`ncd'%40") lp("-"))
+		(line arate2 yr1 if ghecause==30 & region==100  , lw(0.2) lc("`inj'%40") lp("-"))
+
+		/// MEN (1). COM. CENTRAL AMERICA.
+		(line arate1 yr1 if ghecause==10 & region==200  , lw(0.2) lc("`com'%40") lp("l"))
+		(line arate1 yr1 if ghecause==20 & region==200  , lw(0.2) lc("`ncd'%40") lp("l"))
+		(line arate1 yr1 if ghecause==30 & region==200  , lw(0.2) lc("`inj'%40") lp("l"))
+		(line arate2 yr1 if ghecause==10 & region==200  , lw(0.2) lc("`com'%40") lp("-"))
+		(line arate2 yr1 if ghecause==20 & region==200  , lw(0.2) lc("`ncd'%40") lp("-"))
+		(line arate2 yr1 if ghecause==30 & region==200  , lw(0.2) lc("`inj'%40") lp("-"))
+
+		/// MEN (1). COM. ANDEAN
+		(line arate1 yr1 if ghecause==10 & region==300  , lw(0.2) lc("`com'%40") lp("l"))
+		(line arate1 yr1 if ghecause==20 & region==300  , lw(0.2) lc("`ncd'%40") lp("l"))
+		(line arate1 yr1 if ghecause==30 & region==300  , lw(0.2) lc("`inj'%40") lp("l"))
+		(line arate2 yr1 if ghecause==10 & region==300  , lw(0.2) lc("`com'%40") lp("-"))
+		(line arate2 yr1 if ghecause==20 & region==300  , lw(0.2) lc("`ncd'%40") lp("-"))
+		(line arate2 yr1 if ghecause==30 & region==300  , lw(0.2) lc("`inj'%40") lp("-"))
+
+		/// MEN (1). COM. SOUTHERN CONE
+		(line arate1 yr1 if ghecause==10 & region==400  , lw(0.2) lc("`com'%40") lp("l"))
+		(line arate1 yr1 if ghecause==20 & region==400  , lw(0.2) lc("`ncd'%40") lp("l"))
+		(line arate1 yr1 if ghecause==30 & region==400  , lw(0.2) lc("`inj'%40") lp("l"))
+		(line arate2 yr1 if ghecause==10 & region==400  , lw(0.2) lc("`com'%40") lp("-"))
+		(line arate2 yr1 if ghecause==20 & region==400  , lw(0.2) lc("`ncd'%40") lp("-"))
+		(line arate2 yr1 if ghecause==30 & region==400  , lw(0.2) lc("`inj'%40") lp("-"))
+        
+		/// MEN (1). COM. LATIN CARIBBEAN
+		(line arate1 yr1 if ghecause==10 & region==500                , lw(0.2) lc("`com'%40") lp("l"))
+		(line arate1 yr1 if ghecause==20 & region==500                , lw(0.2) lc("`ncd'%40") lp("l"))
+		(line arate1 yr1 if ghecause==30 & region==500 & year>=2009 & year<=2011   , lw(0.2) lc("`inj'%10") lp("l"))
+		(line arate1 yr1 if ghecause==30 & region==500 & year<2010    , lw(0.2) lc("`inj'%40") lp("l"))
+		(line arate1 yr1 if ghecause==30 & region==500 & year>2010    , lw(0.2) lc("`inj'%40") lp("l"))
+		(line arate2 yr1 if ghecause==10 & region==500                , lw(0.2) lc("`com'%40") lp("-"))
+		(line arate2 yr1 if ghecause==20 & region==500                , lw(0.2) lc("`ncd'%40") lp("-"))
+		(line arate2 yr1 if ghecause==30 & region==500 & year>=2009 & year<=2011   , lw(0.2) lc("`inj'%10"))
+		(line arate2 yr1 if ghecause==30 & region==500 & year<2010    , lw(0.2) lc("`inj'%40"))
+		(line arate2 yr1 if ghecause==30 & region==500 & year>2010    , lw(0.2) lc("`inj'%40"))
+
+		/// MEN (1). COM. NON_LATIN CARIBBEAN.
+		(line arate1 yr1 if ghecause==10 & region==600  , lw(0.2) lc("`com'%40") lp("l"))
+		(line arate1 yr1 if ghecause==20 & region==600  , lw(0.2) lc("`ncd'%40") lp("l"))
+		(line arate1 yr1 if ghecause==30 & region==600  , lw(0.2) lc("`inj'%40") lp("l"))
+		(line arate2 yr1 if ghecause==10 & region==600  , lw(0.2) lc("`com'%40") lp("-"))
+		(line arate2 yr1 if ghecause==20 & region==600  , lw(0.2) lc("`ncd'%40") lp("-"))
+		(line arate2 yr1 if ghecause==30 & region==600  , lw(0.2) lc("`inj'%40") lp("-"))
+        
+		/// MEN (1). COM. BRAZIL.
+		(line arate1 yr1 if ghecause==10 & region==700  , lw(0.2) lc("`com'%40") lp("l"))
+		(line arate1 yr1 if ghecause==20 & region==700  , lw(0.2) lc("`ncd'%40") lp("l"))
+		(line arate1 yr1 if ghecause==30 & region==700  , lw(0.2) lc("`inj'%40") lp("l"))
+		(line arate2 yr1 if ghecause==10 & region==700  , lw(0.2) lc("`com'%40") lp("-"))
+		(line arate2 yr1 if ghecause==20 & region==700  , lw(0.2) lc("`ncd'%40") lp("-"))
+		(line arate2 yr1 if ghecause==30 & region==700  , lw(0.2) lc("`inj'%40") lp("-"))
+
+		/// MEN (1). COM. MEXICO.
+		(line arate1 yr1 if ghecause==10 & region==800  , lw(0.2) lc("`com'%40") lp("l"))
+		(line arate1 yr1 if ghecause==20 & region==800  , lw(0.2) lc("`ncd'%40") lp("l"))
+		(line arate1 yr1 if ghecause==30 & region==800  , lw(0.2) lc("`inj'%40") lp("l"))
+		(line arate2 yr1 if ghecause==10 & region==800  , lw(0.2) lc("`com'%40") lp("-"))
+		(line arate2 yr1 if ghecause==20 & region==800  , lw(0.2) lc("`ncd'%40") lp("-"))
+		(line arate2 yr1 if ghecause==30 & region==800  , lw(0.2) lc("`inj'%40") lp("-"))
+        
+        /// droplines
+       (function y=750, range(2000 2167) lc(gs12) dropline(2020 2041 2062 2083 2104 2125 2146 2167))
+
+        /// Legend
+        (function y=875, range(2047 2052) lp("l") lc(gs10) lw(0.4))
+        (function y=875, range(2060 2065) lp("-") lc(gs10) lw(0.4))
+        (scatteri `outer1' , recast(area) lw(none) lc("`com'%35") fc("`com'%35")  )
+        (scatteri `outer2' , recast(area) lw(none) lc("`ncd'%35") fc("`ncd'%35")  )
+        (scatteri `outer3' , recast(area) lw(none) lc("`inj'%35") fc("`inj'%35")  )
+        (function y=850, range(2041 2125) lp("l") lc(gs14) lw(0.4))
+
+		/// X-Axis lines
+        (function y=-17, range(2000 2019) lc(gs12) lw(0.2))
+        (function y=-17, range(2021 2040) lc(gs12) lw(0.2))
+        (function y=-17, range(2042 2061) lc(gs12) lw(0.2))
+        (function y=-17, range(2063 2082) lc(gs12) lw(0.2))
+        (function y=-17, range(2084 2103) lc(gs12) lw(0.2))
+        (function y=-17, range(2105 2124) lc(gs12) lw(0.2))
+        (function y=-17, range(2126 2145) lc(gs12) lw(0.2))
+        (function y=-17, range(2147 2166) lc(gs12) lw(0.2))
+
+		,
+			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 		
+			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 
+			ysize(6) xsize(15)
+
+			xlab(none, 
+			valuelabel labc(gs0) labs(2.5) notick nogrid glc(gs16) angle(45) format(%9.0f))
+			xscale(noline lw(vthin)) 
+			xtitle(" ", size(3) color(gs0) margin(l=1 r=1 t=1 b=1)) 
+			
+			ylab(0(100)700,
+			valuelabel labc(gs8) labs(2.5) tlc(gs8) nogrid glc(gs16) angle(0) format(%9.0f))
+			yscale(lw(vthin) lc(gs8) range(-20(20)960) noextend) 
+			ytitle("Mortality rate (per 100,000)", color(gs8) size(3) margin(l=1 r=1 t=1 b=1)) 
+            ymtick(0(50)750)
+
+            /// Region Titles 
+            text(790 2010 "North" "America",  place(c) size(2.5) color(gs5))
+            text(790 2031 "Central" "America",  place(c) size(2.5) color(gs5))
+            text(790 2053 "Andean",  place(c) size(2.5) color(gs5))
+            text(790 2074 "Southern" "Cone",  place(c) size(2.5) color(gs5))
+            text(790 2095 "Latin" "Caribbean",  place(c) size(2.5) color(gs5))
+            text(790 2116 "non-Latin" "Caribbean",  place(c) size(2.5) color(gs5))
+            text(790 2137 "Brazil",  place(c) size(2.5) color(gs5))
+            text(790 2158 "Mexico",  place(c) size(2.5) color(gs5))
+
+            /// Legend Text
+            text(875 2057 "Men",  place(w) size(2.5) color(gs8))   
+            text(875 2072 "Women",  place(w) size(2.5) color(gs8))   
+            text(875 2087 "CMPN",  place(w) size(2.5) color(gs8))   
+            text(875 2102 "NCDs",  place(w) size(2.5) color(gs8))   
+            text(875 2117 "Injuries",  place(w) size(2.5) color(gs8))   
+
+			/// X-Axis text
+            text(0 2000 "2000",  place(e) size(2.5) color(gs8))
+            text(0 2019 "2019",  place(w) size(2.5) color(gs8))
+            text(0 2021 "2000",  place(e) size(2.5) color(gs8))
+            text(0 2040 "2019",  place(w) size(2.5) color(gs8))
+            text(0 2042 "2000",  place(e) size(2.5) color(gs8))
+            text(0 2061 "2019",  place(w) size(2.5) color(gs8))
+            text(0 2063 "2000",  place(e) size(2.5) color(gs8))
+            text(0 2082 "2019",  place(w) size(2.5) color(gs8))
+            text(0 2084 "2000",  place(e) size(2.5) color(gs8))
+            text(0 2103 "2019",  place(w) size(2.5) color(gs8))
+            text(0 2105 "2000",  place(e) size(2.5) color(gs8))
+            text(0 2124 "2019",  place(w) size(2.5) color(gs8))
+            text(0 2126 "2000",  place(e) size(2.5) color(gs8))
+            text(0 2145 "2019",  place(w) size(2.5) color(gs8))
+            text(0 2147 "2000",  place(e) size(2.5) color(gs8))
+            text(0 2166 "2019",  place(w) size(2.5) color(gs8))
+
+			/// Text explaining the earthquake year in 2010 in the Latin caribbean
+            text(370 2095 "Haitian earthquake" " " "Injury rate (men)" "977 per 100k" " " "Injury rate (women)" "614 per 100k",  place(c) size(2.5) color(gs10) just(right))
+
+			legend(off)
+			name(mr_panel2)
+			;
+#delimit cr	

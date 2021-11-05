@@ -236,3 +236,150 @@ local outer4 20.6 0.7 21.4 0.7 21.4 2.1 20.6 2.1 20.6 0.7
 #delimit cr	
 
 
+** Version 2 - legend outside
+
+** Legend outer limits for graphing 
+local outer3 28.6 16.5 	29.4 16.5 	29.4 17.9 	28.6 17.9 	28.6 16.5 
+local outer4 27.6 16.5 	28.4 16.5 	28.4 17.9 	27.6 17.9 	27.6 16.5 
+
+#delimit ;
+	gr twoway 
+
+		/// Shaded region represents difference between HALE (lower) and LE (upper) 
+	    (rarea metric35 metric100 yr1 if region=="AFR" & sex==1 & agroup==14 , lw(none) color("`women'%25"))
+		(rarea metric35 metric100 yr1 if region=="AFR" & sex==2 & agroup==14 , lw(none) color("`men'%25"))
+		
+	    (rarea metric35 metric100 yr1 if region=="AMR" & sex==1 & agroup==14 , lw(none) color("`women'%25"))
+		(rarea metric35 metric100 yr1 if region=="AMR" & sex==2 & agroup==14 , lw(none) color("`men'%25"))
+
+	    (rarea metric35 metric100 yr1 if region=="EMR" & sex==1 & agroup==14 , lw(none) color("`women'%25"))
+		(rarea metric35 metric100 yr1 if region=="EMR" & sex==2 & agroup==14 , lw(none) color("`men'%25"))
+
+	    (rarea metric35 metric100 yr1 if region=="EUR" & sex==1 & agroup==14 , lw(none) color("`women'%25"))
+		(rarea metric35 metric100 yr1 if region=="EUR" & sex==2 & agroup==14 , lw(none) color("`men'%25"))
+
+	    (rarea metric35 metric100 yr1 if region=="SEAR" & sex==1 & agroup==14 , lw(none) color("`women'%25"))
+		(rarea metric35 metric100 yr1 if region=="SEAR" & sex==2 & agroup==14 , lw(none) color("`men'%25"))
+
+	    (rarea metric35 metric100 yr1 if region=="WPR" & sex==1 & agroup==14 , lw(none) color("`women'%25"))
+		(rarea metric35 metric100 yr1 if region=="WPR" & sex==2 & agroup==14 , lw(none) color("`men'%25"))
+
+	    (rarea metric35 metric100 yr1 if region=="GLOBAL" & sex==1 & agroup==14 , lw(none) color("`women'%25"))
+		(rarea metric35 metric100 yr1 if region=="GLOBAL" & sex==2 & agroup==14 , lw(none) color("`men'%25"))
+
+		/// Africa
+		(line metric35 yr1 if region=="AFR" & sex==2 & agroup==14 , lp("l") lw(0.4) lc("`men'%25"))
+		(line metric35 yr1 if region=="AFR" & sex==1 & agroup==14 , lp("l") lw(0.4) lc("`women'%25"))
+		(line metric100 yr1 if region=="AFR" & sex==2 & agroup==14 , lp("-") lw(0.4) lc("`men'%25"))
+		(line metric100 yr1 if region=="AFR" & sex==1 & agroup==14 , lp("-") lw(0.4) lc("`women'%25"))
+
+		/// The Americas
+		(line metric35 yr1 if region=="AMR" & sex==2 & agroup==14 , lp("l") lw(0.4) lc("`men'%25"))
+		(line metric35 yr1 if region=="AMR" & sex==1 & agroup==14 , lp("l") lw(0.4) lc("`women'%25"))
+		(line metric100 yr1 if region=="AMR" & sex==2 & agroup==14 , lp("-") lw(0.4) lc("`men'%25"))
+		(line metric100 yr1 if region=="AMR" & sex==1 & agroup==14 , lp("-") lw(0.4) lc("`women'%25"))
+
+
+		/// Eastern Mediterranean
+		(line metric35 yr1 if region=="EMR" & sex==2 & agroup==14 , lp("l") lw(0.4) lc("`men'%25"))
+		(line metric35 yr1 if region=="EMR" & sex==1 & agroup==14 , lp("l") lw(0.4) lc("`women'%25"))
+		(line metric100 yr1 if region=="EMR" & sex==2 & agroup==14 , lp("-") lw(0.4) lc("`men'%25"))
+		(line metric100 yr1 if region=="EMR" & sex==1 & agroup==14 , lp("-") lw(0.4) lc("`women'%25"))
+
+
+		/// Europe
+		(line metric35 yr1 if region=="EUR" & sex==2 & agroup==14 , lp("l") lw(0.4) lc("`men'%25"))
+		(line metric35 yr1 if region=="EUR" & sex==1 & agroup==14 , lp("l") lw(0.4) lc("`women'%25"))
+		(line metric100 yr1 if region=="EUR" & sex==2 & agroup==14 , lp("-") lw(0.4) lc("`men'%25"))
+		(line metric100 yr1 if region=="EUR" & sex==1 & agroup==14 , lp("-") lw(0.4) lc("`women'%25"))
+
+		/// South-East Asia
+		(line metric35 yr1 if region=="SEAR" & sex==2 & agroup==14 , lp("l") lw(0.4) lc("`men'%25"))
+		(line metric35 yr1 if region=="SEAR" & sex==1 & agroup==14 , lp("l") lw(0.4) lc("`women'%25"))
+		(line metric100 yr1 if region=="SEAR" & sex==2 & agroup==14 , lp("-") lw(0.4) lc("`men'%25"))
+		(line metric100 yr1 if region=="SEAR" & sex==1 & agroup==14 , lp("-") lw(0.4) lc("`women'%25"))
+
+		/// Western Pacific
+		(line metric35 yr1 if region=="WPR" & sex==2 & agroup==14 , lp("l") lw(0.4) lc("`men'%25"))
+		(line metric35 yr1 if region=="WPR" & sex==1 & agroup==14 , lp("l") lw(0.4) lc("`women'%25"))
+		(line metric100 yr1 if region=="WPR" & sex==2 & agroup==14 , lp("-") lw(0.4) lc("`men'%25"))
+		(line metric100 yr1 if region=="WPR" & sex==1 & agroup==14 , lp("-") lw(0.4) lc("`women'%25"))
+
+		/// World
+		(line metric35 yr1 if region=="GLOBAL" & sex==2 & agroup==14 , lp("l") lw(0.4) lc("`men'%25"))
+		(line metric35 yr1 if region=="GLOBAL" & sex==1 & agroup==14 , lp("l") lw(0.4) lc("`women'%25"))
+		(line metric100 yr1 if region=="GLOBAL" & sex==2 & agroup==14 , lp("-") lw(0.4) lc("`men'%25"))
+		(line metric100 yr1 if region=="GLOBAL" & sex==1 & agroup==14 , lp("-") lw(0.4) lc("`women'%25"))
+
+        /// droplines
+        (function y=25, range(1 35.5) lc(gs12) dropline(5.5 10.5 15.5 20.5 25.5 30.5 35.5))
+
+        /// Legend
+        (function y=29, range(11.5 12.9) lp("l") lc(gs10) lw(0.4))
+        (function y=28, range(11.5 12.9) lp("-") lc(gs10) lw(0.4))
+        (function y=27, range(10.5 20.5) lp("l") lc(gs14) lw(0.4))
+        (scatteri `outer3' , recast(area) lw(none) lc("`women'%35") fc("`women'%35")  )
+        (scatteri `outer4' , recast(area) lw(none) lc("`men'%35") fc("`men'%35")  )
+
+
+		/// X-Axis lines
+        (function y=9, range(1 5) lc(gs8) lw(0.2))
+        (function y=9, range(6 10) lc(gs8) lw(0.2))
+        (function y=9, range(11 15) lc(gs8) lw(0.2))
+        (function y=9, range(16 20) lc(gs8) lw(0.2))
+        (function y=9, range(21 25) lc(gs8) lw(0.2))
+        (function y=9, range(26 30) lc(gs8) lw(0.2))
+        (function y=9, range(31 35) lc(gs8) lw(0.2))
+		,
+			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 		
+			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 
+			ysize(8) xsize(16)
+
+			xlab(none, 
+			valuelabel labc(gs0) labs(2.5) notick nogrid glc(gs16) angle(45) format(%9.0f))
+			xscale(noline lw(vthin)) 
+			xtitle(" ", size(3) color(gs0) margin(l=1 r=1 t=1 b=1)) 
+			
+			ylab(10(5)25,
+			valuelabel labc(gs8) labs(2.5) tlc(gs8) nogrid glc(gs16) angle(0) format(%9.0f))
+			yscale(lw(vthin) lc(gs8) range(10(1)30) noextend) 
+			ytitle("Life Expectancy at 60 (yrs)", color(gs8) size(3) margin(l=1 r=1 t=1 b=1)) 
+
+            /// Region Titles 
+            text(26 3 "Africa",  place(c) size(2.5) color(gs5))
+            text(26 8 "Eastern" "Mediterranean",  place(c) size(2.5) color(gs5))
+            text(26 13 "South-East" "Asia",  place(c) size(2.5) color(gs5))
+            text(26 18 "World",  place(c) size(2.5) color(gs5))
+            text(26 23 "The" "Americas",  place(c) size(2.5) color(gs5))
+            text(26 28 "Western" "Pacific",  place(c) size(2.5) color(gs5))
+            text(26 33 "Europe",  place(c) size(2.5) color(gs5))   
+            /// Legend Text
+            text(29 13.2 "LE",  place(e) size(2.5) color(gs8))   
+            text(28 13.2   "HALE",  place(e) size(2.5) color(gs8))   
+            text(29 18.5 "Women",  place(e) size(2.5) color(gs8))   
+            text(28 18.5   "Men",  place(e) size(2.5) color(gs8))   
+			/// X-Axis text
+            text(9.5 1 "2000",  place(e) size(2.5) color(gs8))
+            text(9.5 5 "2019",  place(w) size(2.5) color(gs8))
+            text(9.5 6 "2000",  place(e) size(2.5) color(gs8))
+            text(9.5 10 "2019",  place(w) size(2.5) color(gs8))
+            text(9.5 11 "2000",  place(e) size(2.5) color(gs8))
+            text(9.5 15 "2019",  place(w) size(2.5) color(gs8))
+            text(9.5 16 "2000",  place(e) size(2.5) color(gs8))
+            text(9.5 20 "2019",  place(w) size(2.5) color(gs8))
+            text(9.5 21 "2000",  place(e) size(2.5) color(gs8))
+            text(9.5 25 "2019",  place(w) size(2.5) color(gs8))
+            text(9.5 26 "2000",  place(e) size(2.5) color(gs8))
+            text(9.5 30 "2019",  place(w) size(2.5) color(gs8))
+            text(9.5 31 "2000",  place(e) size(2.5) color(gs8))
+            text(9.5 35 "2019",  place(w) size(2.5) color(gs8))
+
+			legend(off size(2.5) position(9) nobox ring(0) bm(t=1 b=4 l=5 r=0) colf cols(1)
+			region(fcolor(gs16)  lw(none) margin(zero)) 
+			order(2 1) 
+			lab(1 "xx") 
+			lab(2 "xx") 		
+            )
+			name(le_panel2)
+			;
+#delimit cr	
