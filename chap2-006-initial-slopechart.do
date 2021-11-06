@@ -539,7 +539,7 @@ local outer1    25 -4     -5 -4     -5 45      25 45      25 -4
 
             /// Disease coding 
             text(1 13 "Ischemic heart disease",  place(e) size(5) color(gs0))
-            text(2 13 "stroke",  place(e) size(5) color(gs0))
+            text(2 13 "Stroke",  place(e) size(5) color(gs0))
             text(3 13 "COPD",  place(e) size(5) color(gs0))
             text(4 13 "Alzeimers/dementias",  place(e) size(5) color(gs0))
             text(5 13 "Diabetes",  place(e) size(5) color(gs0))

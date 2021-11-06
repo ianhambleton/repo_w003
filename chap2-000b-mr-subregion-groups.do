@@ -29,6 +29,8 @@
     log using "`logpath'\chap2-000b-mr-subregion", replace
 ** HEADER -----------------------------------------------------
 
+
+/*
 ** ------------------------------------------
 ** Load and save the WHO standard population
 ** ------------------------------------------
@@ -351,8 +353,21 @@ label values ghecause ghecause_
 label data "Crude and Adjusted mortality rates: PAHO sub-regions"
 save "`datapath'\from-who\chap2_000b_mr_subregion-groups", replace
 
+*/
+
+** List for TABLE 1.3
+preserve
+    use "`datapath'\from-who\chap2_000b_mr_subregion-groups", clear
+    gen mortr = arate * 100000
+    keep if year==2019
+    keep if ghecause==100 | ghecause==200 | ghecause==300 | ghecause==1000
+    gsort ghecause -sex region 
+    list year ghecause sex region mortr, sep(3)
+restore
 
 
+
+/*
 ** REPEAT FOR WOMEN AND MEN COMBINED
 
 ** ------------------------------------------

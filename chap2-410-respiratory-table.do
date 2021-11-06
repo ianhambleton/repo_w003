@@ -588,10 +588,13 @@ putdocx table resp(7,.),border(bottom, single, "FFFFFF")
 ** ----------------------
 ** Row and Column Titles
 ** ----------------------
-putdocx table resp(1,2) = ("Mortality Rate"), bold font(calibri light,9, "FFFFFF")
-putdocx table resp(1,3) = ("Disease Burden"), bold 
+putdocx table resp(1,2) = ("Mortality "), bold font(calibri light,9, "FFFFFF")
+putdocx table resp(1,2) = ("1"), bold halign(right) font(calibri light,9, "FFFFFF") script(super) append
+putdocx table resp(1,3) = ("Disease Burden "), bold 
+putdocx table resp(1,3) = ("1"), bold halign(right) script(super) append
 
-putdocx table resp(2,2) = ("Deaths"), bold font(calibri light,9, "FFFFFF") 
+putdocx table resp(2,2) = ("Number of "), bold font(calibri light,9, "FFFFFF") 
+putdocx table resp(2,2) = ("Deaths"), bold font(calibri light,9, "FFFFFF") append
 putdocx table resp(2,3) = ("Rate"), font(calibri light,9, "FFFFFF") linebreak bold
 putdocx table resp(2,3) = ("2019"), font(calibri light,9, "FFFFFF") append bold
 
@@ -603,7 +606,8 @@ putdocx table resp(2,5) = ("2000-2019"), font(calibri light,9, "FFFFFF") append 
 putdocx table resp(2,6) = ("Percent"), font(calibri light,9, "FFFFFF") linebreak bold    
 putdocx table resp(2,6) = ("change"), font(calibri light,9, "FFFFFF") append bold    
 
-putdocx table resp(2,7) = ("DALYs"), bold 
+putdocx table resp(2,7) = ("Number of "), bold 
+putdocx table resp(2,7) = ("DALYs"), bold append
 
 putdocx table resp(2,8) = ("Rate"), font(calibri light,9) linebreak bold
 putdocx table resp(2,8) = ("2019"), font(calibri light,9) append bold
@@ -617,12 +621,11 @@ putdocx table resp(2,11) = ("Percent"), font(calibri light,9) linebreak bold
 putdocx table resp(2,11) = ("change"), font(calibri light,9) append bold    
 
 putdocx table resp(4,1) = ("COPD "), halign(right) bold
-putdocx table resp(4,1) = ("1"), halign(right) script(super) append
 
 putdocx table resp(5,1) = ("Asthma"), halign(right) bold
 
 putdocx table resp(6,1) = ("All Respiratory "), halign(right) bold
-putdocx table resp(6,1) = ("2"), halign(right) script(super) append
+putdocx table resp(6,1) = ("2"), bold halign(right) script(super) append
 
 ** ----------------------
 ** DATA
@@ -699,11 +702,13 @@ putdocx table resp(1,3), halign(center)
 
 ** FINAL TABLE NOTES
 putdocx table resp(7,2) = ("(1) ") , script(super) font(calibri light, 8)
-putdocx table resp(7,2) = ("The two most common forms of COPD are chronic bronchitis (long term inflammation of the bronchii - the breathing passages in the lungs), ") , append font(calibri light, 8) 
-putdocx table resp(7,2) = ("and pulmonary emphysema (a chronic condition in which the lungs' air sacs are damaged, causing a decrease in respiratory function). ") , append font(calibri light, 8) 
+putdocx table resp(7,2) = ("Mortality is described using the age-standardized mortality rate. Disease Burden is described using the age-standardized DALY rate. Both rates presented per 100,000 population.") , append font(calibri light, 8) 
+
 putdocx table resp(7,2) = ("(2) ") , script(super) font(calibri light, 8) append
-putdocx table resp(7,2) = ("Other CRDs include pulmonary hypertension (high blood pressure in the blood vessels that supply the lungs), ") , append font(calibri light, 8) 
-putdocx table resp(7,2) = ("and a range of occupational lung diseases from inhaling chemicals or dust in the workplace. ") , append font(calibri light, 8) 
+putdocx table resp(7,2) = ("Other RDs include ") , append font(calibri light, 8) 
+putdocx table resp(7,2) = ("a range of occupational lung diseases from inhaling chemicals or dust in the workplace. (All RDs ICD codes: J30-J98. Other RDs ICD codes: J30-J39, J47-J98)") , append font(calibri light, 8) 
+
+
 
 ** Save the Table
 putdocx save "`outputpath'\graphics\table_respiratory.docx" , replace

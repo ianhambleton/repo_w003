@@ -654,10 +654,13 @@ putdocx table cvd(15,.),border(bottom, single, "FFFFFF")
 ** ----------------------
 ** Row and Column Titles
 ** ----------------------
-putdocx table cvd(1,2) = ("Mortality Rate"), bold font(calibri light,9, "FFFFFF")
-putdocx table cvd(1,3) = ("Disease Burden"), bold 
+putdocx table cvd(1,2) = ("Mortality "), bold font(calibri light,9, "FFFFFF")
+putdocx table cvd(1,2) = ("1"), bold halign(right) font(calibri light,9, "FFFFFF") script(super) append
+putdocx table cvd(1,3) = ("Disease Burden "), bold 
+putdocx table cvd(1,3) = ("1"), bold halign(right) script(super) append
 
-putdocx table cvd(2,2) = ("Deaths"), bold font(calibri light,9, "FFFFFF") 
+putdocx table cvd(2,2) = ("Number of "), bold font(calibri light,9, "FFFFFF") 
+putdocx table cvd(2,2) = ("Deaths"), bold font(calibri light,9, "FFFFFF") append
 putdocx table cvd(2,3) = ("Rate"), font(calibri light,9, "FFFFFF") linebreak bold
 putdocx table cvd(2,3) = ("2019"), font(calibri light,9, "FFFFFF") append bold
 
@@ -669,7 +672,8 @@ putdocx table cvd(2,5) = ("2000-2019"), font(calibri light,9, "FFFFFF") append b
 putdocx table cvd(2,6) = ("Percent"), font(calibri light,9, "FFFFFF") linebreak bold    
 putdocx table cvd(2,6) = ("change"), font(calibri light,9, "FFFFFF") append bold    
 
-putdocx table cvd(2,7) = ("DALYs"), bold 
+putdocx table cvd(2,7) = ("Number of "), bold 
+putdocx table cvd(2,7) = ("DALYs"), bold append 
 
 putdocx table cvd(2,8) = ("Rate"), font(calibri light,9) linebreak bold
 putdocx table cvd(2,8) = ("2019"), font(calibri light,9) append bold
@@ -683,43 +687,38 @@ putdocx table cvd(2,11) = ("Percent"), font(calibri light,9) linebreak bold
 putdocx table cvd(2,11) = ("change"), font(calibri light,9) append bold    
 
 putdocx table cvd(4,1) = ("Lung "), halign(right) bold
-putdocx table cvd(4,1) = ("1"), halign(right) script(super) append
+putdocx table cvd(4,1) = ("2"), bold halign(right) script(super) append
 
 putdocx table cvd(5,1) = ("Breast"), halign(right) bold
+putdocx table cvd(4,1) = ("3"), bold halign(right) script(super) append
 
 putdocx table cvd(6,1) = ("Prostate "), halign(right) bold
-/// putdocx table cvd(6,1) = ("2"), halign(right) script(super) append
 
 putdocx table cvd(7,1) = ("Bowel cancer "), halign(right) bold
-putdocx table cvd(7,1) = ("2"), halign(right) script(super) append
+putdocx table cvd(7,1) = ("4"), bold halign(right) script(super) append
 
 putdocx table cvd(8,1) = ("Cervical "), halign(right) bold
-putdocx table cvd(8,1) = ("3"), halign(right) script(super) append
+putdocx table cvd(8,1) = ("5"), bold halign(right) script(super) append
 
 putdocx table cvd(9,1) = ("Pancreas "), halign(right) bold
-///putdocx table cvd(9,1) = ("4"), halign(right) script(super) append
 
 putdocx table cvd(10,1) = ("Lymphomas/myeloma "), halign(right) bold
-/// putdocx table cvd(10,1) = ("4"), halign(right) script(super) append
 
 putdocx table cvd(11,1) = ("Stomach "), halign(right) bold
-/// putdocx table cvd(11,1) = ("4"), halign(right) script(super) append
 
 putdocx table cvd(12,1) = ("Liver "), halign(right) bold
-/// putdocx table cvd(12,1) = ("4"), halign(right) script(super) append
 
 putdocx table cvd(13,1) = ("Leukemia "), halign(right) bold
-/// putdocx table cvd(13,1) = ("4"), halign(right) script(super) append
 
 putdocx table cvd(14,1) = ("All Cancers "), halign(right) bold
-/// putdocx table cvd(14,1) = ("5"), halign(right) script(super) append
+putdocx table cvd(14,1) = ("6"), bold halign(right) script(super) append
 
 ** ----------------------
 ** DATA
 ** ----------------------
 ** COL2. Deaths
 putdocx table cvd(4,2) = ("$deaths1") , nformat(%12.0fc) trim 
-putdocx table cvd(5,2) = ("$deaths2") , nformat(%12.0fc) trim  
+putdocx table cvd(5,2) = ("108,411") , nformat(%12.0fc) trim  
 putdocx table cvd(6,2) = ("$deaths3") , nformat(%12.0fc) trim  
 putdocx table cvd(7,2) = ("$deaths4") , nformat(%12.0fc) trim  
 putdocx table cvd(8,2) = ("$deaths5") , nformat(%12.0fc) trim  
@@ -784,7 +783,7 @@ putdocx table cvd(14,6) = image("`outputpath'\graphics\mrc11.png"), width(25pt)
 
 ** COL7. DALY in 2019
 putdocx table cvd(4,7) = ("$daly1") , nformat(%12.0fc)  trim
-putdocx table cvd(5,7) = ("$daly2") , nformat(%12.0fc)  trim
+putdocx table cvd(5,7) = ("3,069,567") , nformat(%12.0fc)  trim
 putdocx table cvd(6,7) = ("$daly3") , nformat(%12.0fc)  trim
 putdocx table cvd(7,7) = ("$daly4") , nformat(%12.0fc)  trim
 putdocx table cvd(8,7) = ("$daly5") , nformat(%12.0fc)  trim
@@ -859,19 +858,22 @@ putdocx table cvd(1,3), halign(center)
 
 ** FINAL TABLE NOTES
 putdocx table cvd(15,2) = ("(1) ") , script(super) font(calibri light, 8)
+putdocx table cvd(15,2) = ("Mortality is described using the age-standardized mortality rate. Disease Burden is described using the age-standardized DALY rate. Both rates presented per 100,000 population.") , append font(calibri light, 8) 
+
+putdocx table cvd(15,2) = ("(2) ") , script(super) font(calibri light, 8) append
 putdocx table cvd(15,2) = ("Lung cancer also includes the relatively rare cancers of the windpipe (trachea) and the glands and ducts of the lung airways (bronchii).") , append font(calibri light, 8) 
 
-putdocx table cvd(15,2) = ("  (2) ") , script(super) font(calibri light, 8) append
+putdocx table cvd(15,2) = ("(3) ") , script(super) font(calibri light, 8) append
+putdocx table cvd(15,2) = ("Breast Cancer is presented for women only. There were a small numbers of breast cancer deaths among men: 813 deaths in 2000, rising to 1,050 deaths in 2019. ") , append font(calibri light, 8) 
+
+putdocx table cvd(15,2) = ("  (4) ") , script(super) font(calibri light, 8) append
 putdocx table cvd(15,2) = ("Bowel cancer (or colorectal cancer) is also known as colon cancer or rectal cancer depending on where it starts.") , append font(calibri light, 8) 
 
-putdocx table cvd(15,2) = ("  (3) ") , script(super) font(calibri light, 8) append
+putdocx table cvd(15,2) = ("  (5) ") , script(super) font(calibri light, 8) append
 putdocx table cvd(15,2) = ("Cervical cancer is also known as cervix uteri cancer.") , append font(calibri light, 8) 
 
-/// putdocx table cvd(15,2) = ("  (4) ") , script(super) font(calibri light, 8) append
-/// putdocx table cvd(15,2) = ("Rheumatic heart disease") , append font(calibri light, 8) 
-
-/// putdocx table cvd(15,2) = ("  (5) ") , script(super) font(calibri light, 8) append
-/// putdocx table cvd(15,2) = ("All CVD includes 'other' circulatory diseases. ICD codes: I00, I26-I28, I34-I37, I44-I51, I70-I99") , append font(calibri light, 8) linebreak
+putdocx table cvd(15,2) = ("  (6) ") , script(super) font(calibri light, 8) append
+putdocx table cvd(15,2) = ("All Cancers include 'other' cancers (All Cancers ICD codes: C00-C97. Other Cancers ICD codes: C17, C26-C31, C37-C41, C46-C49, C51, C52, C57-C60, C63, C68, C69, C74-C75, C77-C79).") , append font(calibri light, 8) linebreak
 
 ** Save the Table
 putdocx save "`outputpath'\graphics\table_cancer.docx" , replace

@@ -241,7 +241,7 @@ restore
 			
 			ylab(none,
 			labc(gs0) labs(3) tstyle(major_notick) nogrid glc(gs16) angle(0) format(%9.0f))
-			yscale(noline lw(vthin) range(-36(2)65)) 
+			yscale(noline lw(vthin) range(-44(2)65)) 
 			ytitle("", size(5) margin(l=2 r=5 t=2 b=2)) 
 
            /// Region Titles 
@@ -255,7 +255,7 @@ restore
            text(7 60 "`id1'"                     ,  place(c) size(9) color("`child'*0.5") just(center))
 
            /// Y-Axis text 
-           text(-29 40 "Mortality rate (per 100,000)" ,  
+           text(-31 40 "Age-standardized" "mortality rate (per 100,000)" ,  
                                     place(c) size(5) color(gs8) just(center))
 
            /// High Rate Countries
@@ -274,11 +274,11 @@ restore
            text(-23 105 "`cid1_1' (1)",  place(w) size(4.5) color("`child'*0.5") just(right))
  
            /// NOTE
-           text(-34 0.5 "`teardrop' IoD = Index of Disparity. Measures the average (mean) deviation of each " ,  
+           text(-38 0.5 "`teardrop' IoD = Index of Disparity. Measures the average (mean) deviation of each " ,  
                                     place(e) size(2.5) color(gs8)  just(left)) 
-           text(-36.2 0.75 "             country rate from the regional rate, as a percentage." ,  
+           text(-40.2 0.75 "             country rate from the regional rate, as a percentage." ,  
                                     place(e) size(2.5) color(gs8)  just(left))
-           text(-39.7 0 "`ddagger' BLACK BAR, mortality rate for the Region of the Americas." ,  
+           text(-43.7 0 "`ddagger' BLACK BAR, mortality rate for the Region of the Americas." ,  
                                     place(e) size(2.5) color(gs8)  just(left))
 			legend(off)
 			name(bar1)

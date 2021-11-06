@@ -614,10 +614,13 @@ putdocx table injury(10,.),border(bottom, single, "FFFFFF")
 ** ----------------------
 ** Row and Column Titles
 ** ----------------------
-putdocx table injury(1,2) = ("Mortality Rate"), bold font(calibri light,9, "FFFFFF")
-putdocx table injury(1,3) = ("Disease Burden"), bold 
+putdocx table injury(1,2) = ("Mortality "), bold font(calibri light,9, "FFFFFF")
+putdocx table injury(1,2) = ("1"), bold halign(right) font(calibri light,9, "FFFFFF") script(super) append
+putdocx table injury(1,3) = ("Disease Burden "), bold 
+putdocx table injury(1,3) = ("1"), bold halign(right) script(super) append
 
-putdocx table injury(2,2) = ("Deaths"), bold font(calibri light,9, "FFFFFF") 
+putdocx table injury(2,2) = ("Number of "), bold font(calibri light,9, "FFFFFF") 
+putdocx table injury(2,2) = ("Deaths"), append bold font(calibri light,9, "FFFFFF") 
 putdocx table injury(2,3) = ("Rate"), font(calibri light,9, "FFFFFF") linebreak bold
 putdocx table injury(2,3) = ("2019"), font(calibri light,9, "FFFFFF") append bold
 
@@ -629,7 +632,8 @@ putdocx table injury(2,5) = ("2000-2019"), font(calibri light,9, "FFFFFF") appen
 putdocx table injury(2,6) = ("Percent"), font(calibri light,9, "FFFFFF") linebreak bold    
 putdocx table injury(2,6) = ("change"), font(calibri light,9, "FFFFFF") append bold    
 
-putdocx table injury(2,7) = ("DALYs"), bold 
+putdocx table injury(2,7) = ("Number of "), bold 
+putdocx table injury(2,7) = ("DALYs"), append bold 
 
 putdocx table injury(2,8) = ("Rate"), font(calibri light,9) linebreak bold
 putdocx table injury(2,8) = ("2019"), font(calibri light,9) append bold
@@ -657,7 +661,7 @@ putdocx table injury(8,1) = ("Drowning "), halign(right) bold
 ///putdocx table injury(8,1) = ("x"), halign(right) script(super) append
 
 putdocx table injury(9,1) = ("All Injuries "), halign(right) bold
-putdocx table injury(9,1) = ("1"), halign(right) script(super) append
+putdocx table injury(9,1) = ("2"), bold halign(right) script(super) append
 
 ** ----------------------
 ** DATA
@@ -769,9 +773,13 @@ putdocx table injury(1,3), halign(center)
 
 /// Rest of V, W39, W44, W53-W64, W77-W99, X20-X32, X50-
 /// X59, Y40-Y86, Y88, Y89
-putdocx table injury(10,2) = ("  (1) ") , script(super) font(calibri light, 8) append halign(left)
-putdocx table injury(10,2) = ("All Injuries includes 'other' injuries, such as: ICD codes: ") , append font(calibri light, 8) 
+putdocx table injury(10,2) = ("(1) ") , script(super) font(calibri light, 8)
+putdocx table injury(10,2) = ("Mortality is described using the age-standardized mortality rate. Disease Burden is described using the age-standardized DALY rate. Both rates presented per 100,000 population.") , append font(calibri light, 8) 
+
+putdocx table injury(10,2) = ("  (2) ") , script(super) font(calibri light, 8) append halign(left)
+putdocx table injury(10,2) = ("All Injuries includes other injuries, such as ") , append font(calibri light, 8) 
 putdocx table injury(10,2) = ("poisonings, fire & heat, exposure to mechanical forces, natural disasters, and collective violence & legal intervention.") , append font(calibri light, 8) 
+putdocx table injury(10,2) = ("(All injuries ICD codes: V01-Y89, minus X41-X42, X44 and X45). ") , append font(calibri light, 8) 
 
 ** Save the Table
 putdocx save "`outputpath'\graphics\table_injury.docx" , replace

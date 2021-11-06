@@ -350,7 +350,7 @@ restore
            text(10 670 "`id6'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
 
            /// Y-Axis text 
-           text(-29.5 340 "DALY rate (per 100,000)" ,  
+           text(-29.5 340 "Age-standardized DALY rate (per 100,000)" ,  
                                     place(c) size(3.5) color("gs8") just(center))
 
            /// High Rate Countries

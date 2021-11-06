@@ -398,7 +398,7 @@ local yaxis_sym 2034 3900000
             /// Region Titles 
            text(2020 3600000 "Cardiovascular" "Disease"         ,  place(w) size(2.5) color(gs8) just(right))
            text(2065 3600000 "Cancers"                          ,  place(w) size(2.5) color(gs8) just(right))
-           text(2110 3600000 "Chronic Respiratory" "Diseases"   ,  place(w) size(2.5) color(gs8) just(right))
+           text(2110 3600000 "Respiratory" "Diseases"   ,  place(w) size(2.5) color(gs8) just(right))
            text(2155 3600000 "Diabetes"                         ,  place(w) size(2.5) color(gs8) just(right))
            text(2200 3600000 "Mental Health /" "Neurological"   ,  place(w) size(2.5) color(gs8) just(right))
            text(2245 3600000 "External" "Causes"                ,  place(w) size(2.5) color(gs8) just(right))

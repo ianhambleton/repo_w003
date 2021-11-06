@@ -356,7 +356,7 @@ order mindaly maxdaly, after(daly5)
             xmtick(0 25 75 100 120 145 170 195 220, tlc(gs8))
 
 			/// Y-axis
-			ylab(	0.8 "Ischaemic" 
+			ylab(	0.8 "Ischemic" 
                     1.2 "heart disease" 
                     2 "Stroke" 
                     2.8 "Hypertensive" 

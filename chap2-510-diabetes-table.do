@@ -180,7 +180,7 @@ restore
 ** improve{1-6}.png or worsen{1-6}.png (1-6 are the GHE causes)
 ** -----------------------------------------------------
 ** Graphic of Absolute or Relative Change between 2000 and 2019
-**preserve
+preserve
     keep if sex==3 & region==2000 & (year==2000 | year==2019)
     keep year cod arate 
     reshape wide arate, i(cod) j(year)
@@ -578,10 +578,13 @@ putdocx table resp(5,.),border(bottom, single, "FFFFFF")
 ** ----------------------
 ** Row and Column Titles
 ** ----------------------
-putdocx table resp(1,2) = ("Mortality Rate"), bold font(calibri light,9, "FFFFFF")
-putdocx table resp(1,3) = ("Disease Burden"), bold 
+putdocx table resp(1,2) = ("Mortality "), bold font(calibri light,9, "FFFFFF")
+putdocx table resp(1,2) = ("1"), bold halign(right) font(calibri light,9, "FFFFFF") script(super) append
+putdocx table resp(1,3) = ("Disease Burden "), bold 
+putdocx table resp(1,3) = ("1"), bold halign(right) script(super) append
 
-putdocx table resp(2,2) = ("Deaths"), bold font(calibri light,9, "FFFFFF") 
+putdocx table resp(2,2) = ("Number of "), bold font(calibri light,9, "FFFFFF")
+putdocx table resp(2,2) = ("Deaths"), bold font(calibri light,9, "FFFFFF") append
 putdocx table resp(2,3) = ("Rate"), font(calibri light,9, "FFFFFF") linebreak bold
 putdocx table resp(2,3) = ("2019"), font(calibri light,9, "FFFFFF") append bold
 
@@ -593,7 +596,8 @@ putdocx table resp(2,5) = ("2000-2019"), font(calibri light,9, "FFFFFF") append 
 putdocx table resp(2,6) = ("Percent"), font(calibri light,9, "FFFFFF") linebreak bold    
 putdocx table resp(2,6) = ("change"), font(calibri light,9, "FFFFFF") append bold    
 
-putdocx table resp(2,7) = ("DALYs"), bold 
+putdocx table resp(2,7) = ("Number of "), bold 
+putdocx table resp(2,7) = ("DALYs"), bold append
 
 putdocx table resp(2,8) = ("Rate"), font(calibri light,9) linebreak bold
 putdocx table resp(2,8) = ("2019"), font(calibri light,9) append bold
@@ -607,7 +611,7 @@ putdocx table resp(2,11) = ("Percent"), font(calibri light,9) linebreak bold
 putdocx table resp(2,11) = ("change"), font(calibri light,9) append bold    
 
 putdocx table resp(4,1) = ("Diabetes "), halign(right) bold
-putdocx table resp(4,1) = ("1"), halign(right) script(super) append
+putdocx table resp(4,1) = ("2"), bold halign(right) script(super) append
 
 ** ----------------------
 ** DATA
@@ -653,7 +657,10 @@ putdocx table resp(1,3), halign(center)
 
 ** FINAL TABLE NOTES
 putdocx table resp(5,2) = ("(1) ") , script(super) font(calibri light, 8)
-putdocx table resp(5,2) = ("Includes type 1 diabetes, and type 2 diabetes. Does not include gestational diabetes.") , append font(calibri light, 8) 
+putdocx table resp(5,2) = ("Mortality is described using the age-standardized mortality rate. Disease Burden is described using the age-standardized DALY rate. Both rates presented per 100,000 population.") , append font(calibri light, 8) 
+
+putdocx table resp(5,2) = ("(2) ") , script(super) font(calibri light, 8) append
+putdocx table resp(5,2) = ("Throughout this report, diabetes is defined as ICD10 codes E10 to E14 (minus E10.2, E11.2, E12.2, E13.2, E14.2). This classification includes insulin-dependent diabetes, non-insulin dependent diabetes, malnutrition-related diabetes. It does not include diabetes arising in pregnancy (gestational diabetes) or diabetes related renal complications (these are included in a separate categorization of kidney diseases).") , append font(calibri light, 8) 
 
 ** Save the Table
 putdocx save "`outputpath'\graphics\table_diabetes.docx" , replace

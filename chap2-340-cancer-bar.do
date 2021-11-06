@@ -398,7 +398,7 @@ preserve
            text(10 670 "`id6'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
 
            /// Y-Axis text 
-           text(-29 340 "Mortality rate (per 100,000)" ,  
+           text(-29 340 "Age-standardized mortality rate (per 100,000)" ,  
                                     place(c) size(4) color(gs8) just(center))
 
            /// High Rate Countries
@@ -495,6 +495,163 @@ preserve
 			;
 #delimit cr	
 
+** Large version of BAR CHART for Top 6-10 cancers
+#delimit ;
+	gr twoway 
+		/// outer boxes 
+        (scatteri `outer1'  , recast(area) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer2a' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer2b' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer2c' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer3a' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer3b' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer3c' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer4a' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer4b' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer4c' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer5a' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer5b' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer5c' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer6a' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer6b' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+        (scatteri `outer6c' , recast(line) lw(0.2) lc(gs10) fc(none) lp("l") )
+
+		/// country values
+        (rbar origin7 scaler7 region7 if cod==7 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`youth'") lw(0.1))       
+        (rbar origin8 scaler8 region8 if cod==8 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`youth'") lw(0.1))           
+        (rbar origin9 scaler9 region9 if cod==9 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`youth'") lw(0.1))           
+        (rbar origin10 scaler10 region10 if cod==10 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`youth'") lw(0.1))           
+        (rbar origin11 scaler11 region11 if cod==11 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`youth'") lw(0.1))           
+        (rbar origin6 scaler6 region6 if cod==6 & region!=2000, horizontal barw(0.6) fcol("`youth'") lcol("`youth'") lw(0.1))           
+
+        (rbar origin7 scaler7 region7 if cod==7 & region==2000, horizontal barw(0.6) fcol(gs0) lcol(gs0) lw(0.1))       
+        (rbar origin8 scaler8 region8 if cod==8 & region==2000, horizontal barw(0.6) fcol(gs0) lcol(gs0) lw(0.1))           
+        (rbar origin9 scaler9 region9 if cod==9 & region==2000, horizontal barw(0.6) fcol(gs0) lcol(gs0) lw(0.1))           
+        (rbar origin10 scaler10 region10 if cod==10 & region==2000, horizontal barw(0.6) fcol(gs0) lcol(gs0) lw(0.1))           
+        (rbar origin11 scaler11 region11 if cod==11 & region==2000, horizontal barw(0.6) fcol(gs0) lcol(gs0) lw(0.1))           
+        (rbar origin6 scaler6 region6 if cod==6 & region==2000, horizontal barw(0.6) fcol(gs0) lcol(gs0) lw(0.1))           
+                		,
+			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin)) 		
+			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin)) 
+			ysize(9) xsize(18)
+
+			xlab(none, notick labs(7) tlc(gs0) labc(gs0) notick nogrid glc(gs16))
+			xscale(noline ) 
+			xtitle("", size(5) color(gs0) margin(l=2 r=2 t=5 b=2)) 
+			
+			ylab(none,
+			labc(gs0) labs(3) tstyle(major_notick) nogrid glc(gs16) angle(0) format(%9.0f))
+			yscale(noline lw(vthin) range(-36(2)65)) 
+			ytitle("", size(5) margin(l=2 r=5 t=2 b=2)) 
+
+           /// Region Titles 
+           text(66 50 "Pancreas"            ,  place(c) size(3) color(gs8) just(center))
+           text(66 170 "Lymphoma/Myeloma"   ,  place(c) size(3) color(gs8) just(center))
+           text(66 290 "Stomach"            ,  place(c) size(3) color(gs8) just(center))
+           text(66 410 "Liver"              ,  place(c) size(3) color(gs8) just(center))
+           text(66 530 "Leukemia"           ,  place(c) size(3) color(gs8) just(center))
+           text(66 650 "All Cancers"         ,  place(c) size(3) color(gs8) just(center))
+
+
+            /// INDEX OF DISPARITY VALUES
+           /// text(-4.4 0.3 "ID{superscript:`ddagger'}" ,  place(c) size(7) color("`child'*0.5") just(center))
+           text(16 65 "IoD"                        ,  place(c) size(6) color("`child'*0.5") just(center))
+           text(18.5 84 "`teardrop'"               ,  place(c) size(2.5) color("`child'*0.5") just(center))
+           text(10 60 "`id7'"                      ,  place(c) size(7) color("`child'*0.5") just(center))
+           text(10 180 "`id8'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
+           text(10 300 "`id9'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
+           text(10 420 "`id10'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
+           text(10 560 "`id11'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
+           text(10 670 "`id6'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
+
+           /// Y-Axis text 
+           text(-29 340 "Age-standardized mortality rate (per 100,000)" ,  
+                                    place(c) size(4) color(gs8) just(center))
+
+           /// High Rate Countries
+           /// Pancreas
+           text(59 0 "Highest Rates:",  place(e) size(3.5) color("`child'*0.80") just(right))
+           text(55 105 "`cid7_70' (1)",  place(w) size(3) color("`child'*0.5") just(right))
+           text(51 105 "`cid7_69' (2)",  place(w) size(3) color("`child'*0.5") just(right))
+           text(47 105 "`cid7_68' (3)",  place(w) size(3) color("`child'*0.5") just(right))
+           text(43 105 "`cid7_67' (4)",  place(w) size(3) color("`child'*0.5") just(right))
+           text(39 105 "`cid7_66' (5)",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-3 0 "Lowest Rates:",  place(e) size(3.5) color("`child'*0.80") just(right))
+           text(-7 105  "`cid7_65' (5)",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-11 105 "`cid7_64' (4)",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-15 105 "`cid7_63' (3)",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-19 105 "`cid7_62' (2)",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-23 105 "`cid7_61' (1)",  place(w) size(3) color("`child'*0.5") just(right))
+
+           /// /// Lymphoma
+           text(55 225  "`cid8_80'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(51 225  "`cid8_79'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(47 225  "`cid8_78'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(43 225  "`cid8_77'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(39 225  "`cid8_76'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-7 225  "`cid8_75'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-11 225 "`cid8_74'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-15 225 "`cid8_73'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-19 225 "`cid8_72'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-23 225 "`cid8_71'",  place(w) size(3) color("`child'*0.5") just(right))
+           
+           /// Stomach
+           text(55 345  "`cid9_90'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(51 345  "`cid9_89'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(47 345  "`cid9_88'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(43 345  "`cid9_87'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(39 345  "`cid9_86'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-7 345  "`cid9_85'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-11 345 "`cid9_84'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-15 345 "`cid9_83'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-19 345 "`cid9_82'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-23 345 "`cid9_81'",  place(w) size(3) color("`child'*0.5") just(right))
+ 
+           /// Liver
+           text(55 465  "`cid10_100'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(51 465  "`cid10_99'" ,  place(w) size(3) color("`child'*0.5") just(right))
+           text(47 465  "`cid10_98'" ,  place(w) size(3) color("`child'*0.5") just(right))
+           text(43 465  "`cid10_97'" ,  place(w) size(3) color("`child'*0.5") just(right))
+           text(39 465  "`cid10_96'" ,  place(w) size(3) color("`child'*0.5") just(right))
+           text(-7 465  "`cid10_95'" ,  place(w) size(3) color("`child'*0.5") just(right))
+           text(-11 465 "`cid10_94'" ,  place(w) size(3) color("`child'*0.5") just(right))
+           text(-15 465 "`cid10_93'" ,  place(w) size(3) color("`child'*0.5") just(right))
+           text(-19 465 "`cid10_92'" ,  place(w) size(3) color("`child'*0.5") just(right))
+           text(-23 465 "`cid10_91'" ,  place(w) size(3) color("`child'*0.5") just(right))
+ 
+           /// Leukemia
+           text(55 585  "`cid11_110'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(51 585  "`cid11_109'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(47 585  "`cid11_108'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(43 585  "`cid11_107'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(39 585  "`cid11_106'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-7 585  "`cid11_105'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-11 585 "`cid11_104'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-15 585 "`cid11_103'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-19 585 "`cid11_102'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-23 585 "`cid11_101'",  place(w) size(3) color("`child'*0.5") just(right))
+ 
+           /// All cancers
+           text(55 705  "`cid6_60'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(51 705  "`cid6_59'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(47 705  "`cid6_58'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(43 705  "`cid6_57'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(39 705  "`cid6_56'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-7 705  "`cid6_55'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-11 705 "`cid6_54'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-15 705 "`cid6_53'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-19 705 "`cid6_52'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-23 705 "`cid6_51'",  place(w) size(3) color("`child'*0.5") just(right))
+
+           /// NOTE
+           text(-35 0.5 "`teardrop' IoD = Index of Disparity. Measures the average (mean) deviation of each country rate from the regional rate, as a percentage." ,  
+                                    place(e) size(2.25) color(gs10)  just(left))
+           text(-39 0.5 "`ddagger' BLACK BAR is the mortality rate for the Region of the Americas." ,  
+                                    place(e) size(2.5) color(gs10)  just(left))
+			legend(off)
+			name(bar2)
+			;
+#delimit cr	
 
 
 ** Smaller version of BAR CHART for Top 6-10 cancers
@@ -562,7 +719,7 @@ preserve
            text(33 495 "`id11'"                     ,  place(c) size(14) color("`child'*0.75") just(center))
 
            /// Y-Axis text 
-           text(-5 290 "Mortality rate (per 100,000)" ,  
+           text(-5 290 "Age-standardized mortality rate (per 100,000)" ,  
                                     place(c) size(4.5) color(gs8) just(center))
 
            /// High Rate Countries
@@ -606,15 +763,15 @@ preserve
  
            /// Colon / Rectum
            text(55 465 "`cid10_100'",  place(w) size(4) color("`child'*0.5") just(right))
-           text(51 465 "`cid10_99'",  place(w) size(4) color("`child'*0.5") just(right))
-           text(47 465 "`cid10_98'",  place(w) size(4) color("`child'*0.5") just(right))
-           text(43 465 "`cid10_97'",  place(w) size(4) color("`child'*0.5") just(right))
-           text(39 465 "`cid10_96'",  place(w) size(4) color("`child'*0.5") just(right))
-           text(19 465 "`cid10_95'",  place(w) size(4) color("`child'*0.5") just(right))
-           text(15 465 "`cid10_94'",  place(w) size(4) color("`child'*0.5") just(right))
-           text(11 465 "`cid10_93'",  place(w) size(4) color("`child'*0.5") just(right))
-           text(7  465 "`cid10_92'",  place(w) size(4) color("`child'*0.5") just(right))
-           text(3  465 "`cid10_91'",  place(w) size(4) color("`child'*0.5") just(right))
+           text(51 465 "`cid10_99'" ,  place(w) size(4) color("`child'*0.5") just(right))
+           text(47 465 "`cid10_98'" ,  place(w) size(4) color("`child'*0.5") just(right))
+           text(43 465 "`cid10_97'" ,  place(w) size(4) color("`child'*0.5") just(right))
+           text(39 465 "`cid10_96'" ,  place(w) size(4) color("`child'*0.5") just(right))
+           text(19 465 "`cid10_95'" ,  place(w) size(4) color("`child'*0.5") just(right))
+           text(15 465 "`cid10_94'" ,  place(w) size(4) color("`child'*0.5") just(right))
+           text(11 465 "`cid10_93'" ,  place(w) size(4) color("`child'*0.5") just(right))
+           text(7  465 "`cid10_92'" ,  place(w) size(4) color("`child'*0.5") just(right))
+           text(3  465 "`cid10_91'" ,  place(w) size(4) color("`child'*0.5") just(right))
  
            /// Cervix Uteri
            text(55  585 "`cid11_110'",  place(w) size(4) color("`child'*0.5") just(right))
@@ -629,7 +786,7 @@ preserve
            text(3   585 "`cid11_101'",  place(w) size(4) color("`child'*0.5") just(right))
 
 			legend(off)
-			name(bar2)
+			name(bar3)
 			;
 #delimit cr	
 

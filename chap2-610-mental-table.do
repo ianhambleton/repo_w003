@@ -668,10 +668,13 @@ putdocx table cvd(17,.),border(bottom, single, "FFFFFF")
 ** ----------------------
 ** Row and Column Titles
 ** ----------------------
-putdocx table cvd(1,2) = ("Mortality Rate"), bold font(calibri light,9, "FFFFFF")
-putdocx table cvd(1,3) = ("Disease Burden"), bold 
+putdocx table cvd(1,2) = ("Mortality "), bold font(calibri light,9, "FFFFFF")
+putdocx table cvd(1,2) = ("1"), bold halign(right) font(calibri light,9, "FFFFFF") script(super) append
+putdocx table cvd(1,3) = ("Disease Burden "), bold 
+putdocx table cvd(1,3) = ("1"), bold halign(right) script(super) append
 
-putdocx table cvd(2,2) = ("Deaths"), bold font(calibri light,9, "FFFFFF") 
+putdocx table cvd(2,2) = ("Number of "), bold font(calibri light,9, "FFFFFF") 
+putdocx table cvd(2,2) = ("Deaths"), append bold font(calibri light,9, "FFFFFF") 
 putdocx table cvd(2,3) = ("Rate"), font(calibri light,9, "FFFFFF") linebreak bold
 putdocx table cvd(2,3) = ("2019"), font(calibri light,9, "FFFFFF") append bold
 
@@ -683,7 +686,8 @@ putdocx table cvd(2,5) = ("2000-2019"), font(calibri light,9, "FFFFFF") append b
 putdocx table cvd(2,6) = ("Percent"), font(calibri light,9, "FFFFFF") linebreak bold    
 putdocx table cvd(2,6) = ("change"), font(calibri light,9, "FFFFFF") append bold    
 
-putdocx table cvd(2,7) = ("DALYs"), bold 
+putdocx table cvd(2,7) = ("Number of "), bold 
+putdocx table cvd(2,7) = ("DALYs"), append bold 
 
 putdocx table cvd(2,8) = ("Rate"), font(calibri light,9) linebreak bold
 putdocx table cvd(2,8) = ("2019"), font(calibri light,9) append bold
@@ -711,7 +715,7 @@ putdocx table cvd(8,1) = ("Schizophrenia"), halign(right) bold
 /// putdocx table cvd(8,1) = ("4"), halign(right) script(super) append
 
 putdocx table cvd(9,1) = ("All Mental Health"), halign(right) bold
-putdocx table cvd(9,1) = (" 1"), halign(right) script(super) append
+putdocx table cvd(9,1) = (" 2"), bold halign(right) script(super) append
 
 putdocx table cvd(11,1) = ("Alzheimer/Dementias"), halign(right) bold
 /// putdocx table cvd(10,1) = ("4"), halign(right) script(super) append
@@ -729,7 +733,7 @@ putdocx table cvd(15,1) = ("Parkinson disease"), halign(right) bold
 /// putdocx table cvd(14,1) = ("5"), halign(right) script(super) append
 
 putdocx table cvd(16,1) = ("All neurological"), halign(right) bold
-putdocx table cvd(16,1) = (" 2"), halign(right) script(super) append
+putdocx table cvd(16,1) = (" 3"), bold halign(right) script(super) append
 
 
 ** ----------------------
@@ -887,12 +891,18 @@ putdocx table cvd(1,3), halign(center)
 
 ** FINAL TABLE NOTES
 putdocx table cvd(17,2) = ("(1) ") , script(super) font(calibri light, 8)
+putdocx table cvd(17,2) = ("Mortality is described using the age-standardized mortality rate. Disease Burden is described using the age-standardized DALY rate. Both rates presented per 100,000 population.") , append font(calibri light, 8) 
+
+putdocx table cvd(17,2) = ("(2) ") , script(super) font(calibri light, 8) append
 putdocx table cvd(17,2) = ("Includes all mental and substance-use disorders. Other conditions not listed include ") , append font(calibri light, 8) 
 putdocx table cvd(17,2) = ("bipolar disorders, eating disorders, autism and asperger syndrome, childhood ") , append font(calibri light, 8) 
 putdocx table cvd(17,2) = ("behavioral disorders, and idiopathic intellectual disability. ") , append font(calibri light, 8) 
-putdocx table cvd(17,2) = ("  (2) ") , script(super) font(calibri light, 8) append
+putdocx table cvd(17,2) = ("(All Mental and substance use disorders ICD codes: F04-F99, G72.1, Q86.0, X41-X42, X44, X45). ") , append font(calibri light, 8) 
+
+putdocx table cvd(17,2) = ("  (3) ") , script(super) font(calibri light, 8) append
 putdocx table cvd(17,2) = ("Includes all neurological conditions. Other conditions not listed include ") , append font(calibri light, 8) 
 putdocx table cvd(17,2) = ("Multiple sclerosis, cerebral palsy, motor neuron disease. ") , append font(calibri light, 8) 
+putdocx table cvd(17,2) = ("(All neurological conditions ICD codes: F01-F03, G06-G98, minus G14 and G72.1). ") , append font(calibri light, 8) 
 
 /// putdocx table cvd(15,2) = ("  (3) ") , script(super) font(calibri light, 8) append
 /// putdocx table cvd(15,2) = ("Cardiomyopathy, myocarditis, endocarditis") , append font(calibri light, 8) 

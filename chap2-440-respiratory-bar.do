@@ -281,7 +281,7 @@ restore
            text(10 300 "`id3'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
 
            /// Y-Axis text 
-           text(-29 160 "Mortality rate (per 100,000)" ,  
+           text(-29 160 "Age-standardized mortality rate (per 100,000)" ,  
                                     place(c) size(4) color(gs8) just(center))
 
            /// High Rate Countries
