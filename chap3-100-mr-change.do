@@ -365,14 +365,14 @@ label define yorder_
         10 "Stomach cancer (19)"
         11 "Lymphomas, myelomas (17)"
         12 "Cervical cancer (15)"
-        13 "Leukaemia (22)"
+        13 "Leukemia (22)"
         14 "Diabetes (5)"
         15 "Asthma (27)"
         16 "Drowning (25)"
         17 "RHD (28)"
         18 "IPV (6)"
         19 "Alcohol use disorders (24)"
-        20 "Pancreas cancer (16)"
+        20 "Pancreatic cancer (16)"
         21 "Schizophrenia (29)"
         22 "Epilepsy (26)"
         23 "Liver cancer (21)"
@@ -400,7 +400,7 @@ replace mr_ac_gr2 = mr_ac_gr2 + 0.5 if cod!=23
 
 local line1 29 0 1 0
 local line2 20.5 -40 20.5 0
-
+local line3 29.5 -60 29.5 -40
 ** Triangles & associated text
 local outer1 15 -35 20 -32 15 -29 15 -35
 local outer2 26 -35 21 -32 26 -29 26 -35
@@ -416,17 +416,16 @@ global sch_more = schange4
 		/// country values
         (rbar origin1 mr_ac_gr1 yorder if mr_pc<0, horizontal barw(0.6) fcol("`improve'") lcol("`improve'") lw(0.1))           
         (rbar origin2 mr_ac_gr2 yorder if mr_pc>=0, horizontal barw(0.6) fcol("`worsen'") lcol("`worsen'") lw(0.1))           
-        (sc yorder xlocation1, msymbol(i) mlabel(mr_aci) mlabsize(2) mlabcol(gs8) mlabp(0))
+        (sc yorder xlocation1, msymbol(i) mlabel(mr_aci) mlabsize(2.5) mlabcol(gs8) mlabp(0))
         (scatteri `line1' , recast(line) lw(0.2) lc("`gry1'%50") fc("`gry1'%50") lp("-") )
         (scatteri `line2' , recast(line) lw(0.2) lc("`gry2'%25") fc("`gry2'%25") lp("l") )
-        (scatteri -0.5 -25 "Absolute change (2000 to 2019)" , msymbol(i) mlabpos(0) mlabcol(gs8) mlabsize(2.5) mlabangle(0))
+        (scatteri -0.5 -25 "Absolute change (2000 to 2019)" , msymbol(i) mlabpos(0) mlabcol(gs8) mlabsize(3) mlabangle(0))
         (scatteri `outer1' , recast(area) lw(none) lc("`improve'%25") fc("`improve'%25")  )
         (scatteri `outer2' , recast(area) lw(none) lc("`worsen'%25") fc("`worsen'%25")  )
-
                 		,
 			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin)) 		
 			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin)) 
-			ysize(10) xsize(10)
+			ysize(12) xsize(10)
 
 			xlab(none, 
             notick labs(2.5) tlc(gs0) labc(gs8) notick nogrid glc(gs16))
@@ -434,12 +433,15 @@ global sch_more = schange4
 			xtitle("", size(2) color(gs0) margin(l=0 r=0 t=0 b=0)) 
 			
 			ylab(1(1)29, valuelabel
-			labc(gs8) labs(2) tstyle(major_notick) nogrid glc(gs16) angle(0) format(%9.0f) labgap(2))
-			yscale(reverse noline lw(vthin) ) 
+			labc(gs8) labs(2.5) tstyle(major_notick) nogrid glc(gs16) angle(0) format(%9.0f) labgap(2))
+			yscale(reverse noline lw(vthin) range(1(1)31)) 
 			ytitle("", size(2) margin(l=0 r=0 t=0 b=0)) 
 
             text(17 -30 "$sch_fewer fewer deaths" "per 100,000", place(e) size(2.5) color("`improve'%85") just(center) margin(l=2 r=2 t=2 b=2))
             text(23 -30 "$sch_more more deaths" "per 100,000", place(e) size(2.5) color("`worsen'%85") just(center) margin(l=2 r=2 t=2 b=2))
+
+            text(31 -64 "Abbreviations: IHD=Ischemic Heart Disease, COPD=Chronic Obstructive Pulmonary Disease", place(e) size(2) color(gs8) ) 
+            text(31.75 -54 "RHD=Rheumatic Heart Disease, IPV=Interpersonal Violence, HHD=Hypertensive Heart Disease", place(e) size(2) color(gs8) ) 
 
             legend(off)
 			name(mr_change57)

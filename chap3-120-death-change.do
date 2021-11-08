@@ -57,26 +57,36 @@ use "`datapath'\from-who\chap3_byage_country_groups_both", clear
 **  R = Crude Rate 
 **  D = Deaths
 
-** METRIC 1. The Age-Structure in 2000, rescaled for the population in 2019  
+** METRIC 1. Population given the Age-Structure in 2000, rescaled for the population in 2019  
 gen as2000_p2019 = (pop2000 / tpop2000) * tpop2019
+format as2000_p2019 %15.1fc
 
-** METRIC 2. Age-specific Rates in each year 
-
-
-** METRIC 3. Deaths, assuming:  
-**	(a) age-structure in 2000 / population in 2019
-**	(b) age-structure in 2019 / population in 2019
-
-
+** METRIC 2. Age-specific Mortality Rates in each year 
 gen r2000 = death2000 / pop2000
 gen r2019 = death2019 / pop2019
-gen d_p2019_as2000 = as2000_p2019 * (r2000)
-gen d_p2019_as2019 = pop2019 * (r2000) 
 
+** METRIC 3. DEATHS, assuming:  
+**	(a) age-stratified DEATHS assuming (POP in 2019 given AS in 2000) and (mortality rate in 2000)
+gen d_p2019_as2000 = as2000_p2019 * (r2000)
+**	(b) age-stratified DEATHS (POP in 2019 given AS in 2019) and (mortality rate in 2000)
+gen d_p2019_as2019 = pop2019 * (r2000) 
+format d_p2019_as2000 d_p2019_as2019 %15.1fc
+
+** COLLAPSE OUT AGE - keeping 4 statistics
+**		- d_p2019_as2000	Deaths | POP2019 and AS2000 and MR2000
+**		- d_p2019_as2019	Deaths | POP2019 and AS2019 and MR2000
+**		- deaths2000		Deaths | POP2000 and AS2000 and MR2000
+**		- deaths2019		Deaths | POP2019 and AS2019 and MR2019
 collapse (sum) d_* death2000 death2019, by(iso3c iso3n)
+format d_* death2000 death2019 %15.1fc
+
+** Percentage change in deaths between 2000 and 2019
 gen ch_d = ((death2019 - death2000) / death2000) * 100
 
+
 ** Combined metrics of interest
+
+** Percentage change due to population growth
 gen ch_gr    = ((d_p2019_as2000 - death2000) / death2000) * 100
 gen ch_as    = ((d_p2019_as2019 - d_p2019_as2000) / death2000) * 100
 gen ch_epi   = (ch_d - ch_as - ch_gr) 
@@ -95,7 +105,7 @@ replace addage = ch_epi if ch_epi > 0 & ch_as < 0
 gen addpop = addage + ch_gr
 
 format death* %15.0fc
-/*
+
 ** Country names
 drop if iso3c=="LAC"
 gsort -ch_d
@@ -156,7 +166,7 @@ local box2 0.5 230 33.5 230 33.5 290 0.5 290
 		/// Vertical Zero Line
 		(line y1 realzero, lcolor(gs10) lp(l) lc(gs0%25)) 
 		/// Overall Change point
-		(scatter y1 ch_d, msymbol(O) mlcolor(gs10) mfcolor(gs16%80) msize(2))
+		(scatter y1 , msymbol(O) mlcolor(gs10) mfcolor(gs16%80) msize(2))
 
 		/// Percentage change in deaths
 		(sc y1 xloc2, msymbol(i) mlabel(pd) mlabsize(2.5) mlabcol(gs8) mlabp(0))
