@@ -81,7 +81,7 @@ preserve
     gen wchange = ((metric2019 - metric2000) / 19) * 52.1429
     keep if sex==3 
     sort wchange
-    tabdisp region sex, c(wchange) format(%9.1f)
+    tabdisp region sex, c(wchange) format(%9.2f)
 restore
 
 ** -----------------------------------
@@ -213,7 +213,7 @@ preserve
     gen wchange = ((metric2019 - metric2000) / 19) * 52.1429
     keep if sex==3 
     sort wchange
-    tabdisp region sex, c(wchange) format(%9.1f)
+    tabdisp region sex, c(wchange) format(%9.2f)
 restore
 
 ** -----------------------------------

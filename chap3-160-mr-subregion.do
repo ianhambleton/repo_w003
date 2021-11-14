@@ -105,6 +105,8 @@ replace subr3 = 2 if paho_subregion==2
 label define subr3_ 1 "Caribbean" 2 "Central America" 3 "The rest of the Americas"
 label values subr3 subr3_
 
+order drate, after(region)
+gsort cod -drate 
 
 ** -----------------------------------------------------
 ** GRAPHIC - BOX PLOT
@@ -156,7 +158,7 @@ preserve
         text(5 96 "Caribbean" , place(w) size(5) color("gs8") just(left) margin(l=0 r=1 t=4 b=2))
         text(5 85 "Rest of the Americas" , place(w) size(5) color("gs8") just(left) margin(l=0 r=1 t=4 b=2))
 
-        text(8600 97  "Guyana" , place(e) size(5) color("`cvd2'") just(left) margin(l=0 r=1 t=4 b=2))
+        text(8900 97  "Guyana" , place(e) size(5) color("`cvd2'") just(left) margin(l=0 r=1 t=4 b=2))
         text(10000 87  "Haiti" , place(e) size(5) color("`cvd2'") just(left) margin(l=0 r=1 t=4 b=2))
         text(4100 46  "Uruguay" , place(e) size(5) color("`can2'") just(left) margin(l=0 r=1 t=4 b=2))
         text(2800 8  "Mexico" , place(e) size(5) color("`dia2'") just(left) margin(l=0 r=1 t=4 b=2))
@@ -174,7 +176,7 @@ preserve
     #delimit cr
 restore
 
-
+/*
 
 ** Second plot NOW also seprating central america
 

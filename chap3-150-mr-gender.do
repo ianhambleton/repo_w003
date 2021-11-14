@@ -337,7 +337,7 @@ label define yorder_
     10    "Lung cancer"
     11    "Leukemia"
     12    "Pancreatic cancer"
-    13    "Bowel cancer"
+    13    "Colorectal cancer"
 
     15    "COPD"
     16    "Asthma"
@@ -355,7 +355,7 @@ label define yorder_
     28    "Depressive disorders"
     29    "Migraine"
 
-    33    "IPD"
+    33    "IPV"
     34    "Drowning"
     35    "Self-harm"
     36    "Road injury"
@@ -404,7 +404,7 @@ local box2 32 0   30.75 0   30.75 3.25   32 3.25  32 0
 
 gen xlocation = -0.15
 gen drat2019i = drat2019 
-
+order drat2019, after(cod)
 ** 2019 only
 #delimit ;  
 	gr twoway 

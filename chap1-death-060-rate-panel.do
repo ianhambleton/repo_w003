@@ -151,8 +151,22 @@ use "`datapath'\from-who\chap2_000_adjusted", clear
 	gsort ghecause -sex region 
 	list year ghecause sex region mortr if region>=1000, sep(6)
 	list year ghecause sex region mortr if region<1000, sep(8)
+/*
+** Associated stats for Table 1.3
+** ALL-CAUSE in 2019, women and men separately
+use "`datapath'\from-who\chap2_000_adjusted", clear
+	keep if (region>=100 & region <1000) | (region>=1000 & region<=6000)
+	keep if ghecause==100
+	keep if sex<3
+	keep if year==2019 
+	** Listing of rates by subregion
+	format mortr %15.1fc 
+	gsort ghecause -sex region 
+	list year ghecause sex region mortr if region>=1000, sep(6)
+	list year ghecause sex region mortr if region<1000, sep(8)
 
 
+/*
 
 ** LOAD THE DATASET that was prepared above for the graphic
 use `graphic', clear

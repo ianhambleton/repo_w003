@@ -35,20 +35,6 @@
 ** DEATHS METRICS
 ** -----------------------------------------------------
 
-tempfile kcancer region_mr12 region_mr3 region_daly12 region_daly3
-
-** Mortality Rate statistics first
-** use "`datapath'\from-who\chap2_000_mr", clear
-use "`datapath'\from-who\chap2_000_adjusted", clear
-rename mortr arate
-rename dalyr drate
-
-keep if sex==3 & year==2019 & region==2000
-keep ghecause daly dths pop_mortr
-rename pop_mortr pop
-format dths daly %15.0fc
-
-** Proportion of ALL DTHS are from our SIX grouped causes
 ** 100 all causes
 ** 200 communicable
 ** 300 NCD
@@ -59,10 +45,33 @@ format dths daly %15.0fc
 ** 800 mental
 ** 900 neurological
 ** 1000 injuries
+
+** Mortality Rate statistics first
+use "`datapath'\from-who\chap2_000_adjusted", clear
+rename mortr arate
+rename dalyr drate
+
+keep if sex==3 & (year==2000 | year==2019) & region==2000
+keep ghecause year daly dths pop_mortr
+rename pop_mortr pop
+
+** The 6 grouped causes
+mark groups if ghecause==400 | ghecause==500 | ghecause==600 | ghecause==31 | ghecause==800 | ghecause==900 | ghecause==1000
+bysort year groups : egen dtot = sum(dths)
+format dths daly pop dtot %15.0fc
+
+
+
+
+
+
+/*
+
 drop pop 
 keep if ghecause==31 | ghecause>=100
 gen k=1
 reshape wide daly dths, i(k) j(ghecause)
+
 
 ** -----------------------------------------------------
 ** Proportion of deaths / DALYs
@@ -79,7 +88,10 @@ gen p800 = (dths800/dths100) * 100
 gen p900 = (dths900/dths100) * 100
 ** % ALL grouped causes of ALL-Cause
 gen pgrouped = ( (dths400 + dths500 + dths600 + dths31 + dths800 + dths900 + dths1000) / dths100 ) * 100
+gen grouped = dths400 + dths500 + dths600 + dths31 + dths800 + dths900 + dths1000
+format grouped %15.1fc
 
+/*
 ** % NCDs / % Injuries of ALL-cause
 gen pd300 = (daly300/daly100) * 100
 gen pd1000 = (daly1000/daly100) * 100

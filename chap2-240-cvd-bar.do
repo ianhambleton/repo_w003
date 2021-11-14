@@ -350,7 +350,7 @@ restore
            text(10 300 "`id3'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
            text(10 420 "`id4'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
            text(10 540 "`id5'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
-           text(13 567 "`ddagger'"               ,  place(c) size(4) color("`child'*0.5") just(center))
+           /// text(13 567 "`ddagger'"               ,  place(c) size(4) color("`child'*0.5") just(center))
            text(10 670 "`id6'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
 
            /// Y-Axis text 
@@ -447,8 +447,8 @@ restore
                                     place(e) size(2.25) color(gs10) just(left) )
            text(-37.75 0.5 "`dagger' BLACK BAR is the mortality rate for the Region of the Americas." ,  
                                     place(e) size(2.25) color(gs10)  just(left))
-           text(-41 0.5 "`ddagger' Five Caribbean countries had no cases of rheumatic heart disease in 2019: Antigua, Bahamas, Belize, Grenada, St Lucia." ,  
-                                    place(e) size(2.25) color(gs10) just(left))           
+           /// text(-41 0.5 "`ddagger' Five Caribbean countries had no cases of rheumatic heart disease in 2019: Antigua, Bahamas, Belize, Grenada, St Lucia." ,  
+           ///                          place(e) size(2.25) color(gs10) just(left))           
 
             legend(off)
 			name(bar1)
@@ -457,7 +457,6 @@ restore
 
 
 
-/*
 
     ** generate a local for the D3 color scheme
     colorpalette d3, 20 n(20) nograph

@@ -332,7 +332,7 @@ local outer1    25 -4     -5 -4     -5 45      25 45      25 -4
             text(17 13 "Prostate cancer",  place(e) size(5) color(gs0))
             text(18 13 "Asthma",  place(e) size(5) color(gs0))
 
-            text(19 13 "Bowel cancer",  place(e) size(5) color(gs0))
+            text(19 13 "Colorectal cancer",  place(e) size(5) color(gs0))
             text(20 13 "Hypertensive heart disease",  place(e) size(5) color(gs0))
             text(22 13 "Cervical cancer",  place(e) size(5) color(gs0))
 
@@ -549,7 +549,7 @@ local outer1    25 -4     -5 -4     -5 45      25 45      25 -4
             text(9 13 "Prostate cancer",  place(e) size(5) color(gs0))
             text(10 13 "Road injury",  place(e) size(5) color(gs0))
             text(11 13 "Hypertensive heart disease",  place(e) size(5) color(gs0))
-            text(12 13 "Bowel cancer",  place(e) size(5) color(gs0))
+            text(12 13 "Colorectal cancer",  place(e) size(5) color(gs0))
             text(13 13 "Self-harm",  place(e) size(5) color(gs0))
             text(14 13 "Drug use disorders",  place(e) size(5) color(gs0))
             text(15 13 "Cervical cancer",  place(e) size(5) color(gs0))

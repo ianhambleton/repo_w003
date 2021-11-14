@@ -36,11 +36,13 @@
 tempfile t1 mental1 
 use "`datapath'\from-who\chap2_equiplot_mr_byage_groupeddeath", replace
 keep if year==2019 & who_region==2 & (ghecause==800 | ghecause==900) 
-drop pop dths who_region year
+drop pop who_region year
+rename dths deaths 
 save `mental1' , replace
 use "`datapath'\from-who\chap2_equiplot_mr_byage", clear
 keep if year==2019 & who_region==2  
-drop pop dths who_region year
+drop pop who_region year
+rename dths deaths 
 append using `mental1'
 
 gen age16 = 1       if age18==1
@@ -90,12 +92,12 @@ save `t1', replace
 tempfile mental2 
 use "`datapath'\from-who\chap2_equiplot_daly_byage_groupeddeath", replace
 keep if year==2019 & who_region==2 & (ghecause==800 | ghecause==900) 
-drop pop dalyt who_region year
+drop pop who_region year
 save `mental2' , replace
 
 use "`datapath'\from-who\chap2_equiplot_daly_byage", clear
 keep if year==2019 & who_region==2 
-drop pop who_region year dalyt
+drop pop who_region year
 append using `mental2'
 rename age18 age16
 sort ghecause age16
@@ -116,7 +118,7 @@ forval x = 1(1)5 {
     gen death_perc`x' = (deaths`x' / deaths_tot) * 100 
     gen daly_perc`x' = (daly`x' / daly_tot) * 100 
 }
-keep ghecause death_perc* daly_perc*
+/*keep ghecause death_perc* daly_perc*
 order ghecause death_* daly_*
 
 **------------------------------------------------

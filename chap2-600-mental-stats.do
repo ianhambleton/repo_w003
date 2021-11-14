@@ -168,7 +168,7 @@ keep if cod<=13
 
 ** COD as proportion of ALL MENTAL/NEUROLOGICAL and ALL DEATHS
 ** Women and men combined, all Americas
-preserve
+**preserve
     keep if sex==3 & region==2000
     drop sex region
     collapse (sum) dths daly, by(year cod)
@@ -192,6 +192,15 @@ preserve
     gen pd800 = (daly11/daly13)*100
     gen pd900 = (daly12/daly13)*100
     gen pd800900 = ((daly11+daly12)/daly13)*100
+
+    ** Dths due to MHN
+    gen dths1112 = dths11 + dths12
+    gen pmhn = (dths1112/dths13)*100
+
+    ** Dths due to MHN
+    gen daly1112 = daly11 + daly12
+    gen pdalymhn = (daly1112/daly13)*100
+    format daly1112 %15.1fc
 
     ** TOP 5 MENTAL HEALTH CONDITIONS - as percentage of mental health and all-deaths
     forval x = 1(1)5 { 
@@ -243,7 +252,7 @@ preserve
         }
         list year pdth_`x'a pdth_`x'b pdaly_`x'a pdaly_`x'b 
     }
-restore
+/*restore
 
 
 

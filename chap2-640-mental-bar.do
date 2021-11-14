@@ -448,8 +448,6 @@ restore
 #delimit cr	
 
 
-/*
-
 
     ** generate a local for the D3 color scheme
     colorpalette d3, 20 n(20) nograph
@@ -898,6 +896,7 @@ gen origin5 = 480
 replace scaler5 = scaler5 + 480
 gen origin6 = 600 
 replace scaler6 = scaler6 + 600
+
 
 ** --------------------------------------------------------------
 ** APPENDIX: BAR CHART ORDERED by COUNTRY (ALL CVDs)

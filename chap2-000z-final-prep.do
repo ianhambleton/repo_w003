@@ -70,6 +70,10 @@ merge 1:1 year sex ghecause region using `t1'
 drop _merge
 save "`datapath'\from-who\chap2_000_adjusted", replace
 
+
+
+
+/*
 ** Proportion of all DALYs due to NCDs and external causes
 keep if region==2000
 keep if ghecause==100 | ghecause==200 | ghecause==300 | ghecause==1000

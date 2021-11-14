@@ -689,12 +689,12 @@ putdocx table cvd(2,11) = ("change"), font(calibri light,9) append bold
 putdocx table cvd(4,1) = ("Lung "), halign(right) bold
 putdocx table cvd(4,1) = ("2"), bold halign(right) script(super) append
 
-putdocx table cvd(5,1) = ("Breast"), halign(right) bold
-putdocx table cvd(4,1) = ("3"), bold halign(right) script(super) append
+putdocx table cvd(5,1) = ("Breast "), halign(right) bold
+putdocx table cvd(5,1) = ("3"), bold halign(right) script(super) append
 
 putdocx table cvd(6,1) = ("Prostate "), halign(right) bold
 
-putdocx table cvd(7,1) = ("Bowel cancer "), halign(right) bold
+putdocx table cvd(7,1) = ("Colorectal cancer "), halign(right) bold
 putdocx table cvd(7,1) = ("4"), bold halign(right) script(super) append
 
 putdocx table cvd(8,1) = ("Cervical "), halign(right) bold
@@ -867,7 +867,7 @@ putdocx table cvd(15,2) = ("(3) ") , script(super) font(calibri light, 8) append
 putdocx table cvd(15,2) = ("Breast Cancer is presented for women only. There were a small numbers of breast cancer deaths among men: 813 deaths in 2000, rising to 1,050 deaths in 2019. ") , append font(calibri light, 8) 
 
 putdocx table cvd(15,2) = ("  (4) ") , script(super) font(calibri light, 8) append
-putdocx table cvd(15,2) = ("Bowel cancer (or colorectal cancer) is also known as colon cancer or rectal cancer depending on where it starts.") , append font(calibri light, 8) 
+putdocx table cvd(15,2) = ("Colorectal cancer is known as colon cancer or rectal cancer depending on where it starts.") , append font(calibri light, 8) 
 
 putdocx table cvd(15,2) = ("  (5) ") , script(super) font(calibri light, 8) append
 putdocx table cvd(15,2) = ("Cervical cancer is also known as cervix uteri cancer.") , append font(calibri light, 8) 

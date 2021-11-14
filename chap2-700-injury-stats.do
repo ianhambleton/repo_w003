@@ -149,7 +149,6 @@ forval x = 1(1)5 {
 }
 
 
-
 **-----------------------------------------------------------
 ** INTERPERSONAL VIOLENCE (ghecause==56)
 ** Mortality rates by sex

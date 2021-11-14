@@ -76,11 +76,12 @@ label values ghecause ghecause_
 ** Limit the dataset - we only need one instance of the population count
 ** All-cause deaths
 keep if ghecause==100 & who_region==2
+
 drop dths ghecause who_region agroup
 rename age18 age
 
 ** Reshape to wide by sex
-reshape wide pop deaths, i(year age) j(sex)
+reshape wide pop , i(year age) j(sex)
 rename age age_start1
 rename pop1 popmale
 rename pop2 popfemale
@@ -302,3 +303,10 @@ bysort agegr2 year : egen pyear2019s2 = sum(pyear2019)
 
 order agegr1 agegr2 pyear2000s pyear2019s ag_change pyear2000s2 pyear2019s2 ag_change2, after(pchange) 
 sort year age_start1
+
+
+** Population aged 70 and older in 2000 and 2019
+gen ge70 = 0
+replace ge70 = 1 if age_start1>=15
+bysort year ge70 : egen ge70pop = sum(popboth)
+format popmale popfemale popboth ge70pop %19.1fc

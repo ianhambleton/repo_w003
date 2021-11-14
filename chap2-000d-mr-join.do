@@ -42,6 +42,22 @@ tempfile region_f region_m subregion_f subregion_m country_f country_m
 **  19  Testicular
 ** ----------------------------------------------------
 
+** CORRECT DEATHS AND POPULATION NUMBERS
+** This is necessary because of the deaths and Population multiplication used to 
+** avoid MR rounding errors
+** Load each save file and replace with DEATHS and POP from 
+**      --> "`datapath'\from-who\chap2_000d_dths"
+**      --> "`datapath'\from-who\chap2_000d_dths_both"
+
+** FROM --> chap2-000a-mr-region-groups.do
+        ** Used for Equiplot by age 
+        use "`datapath'\from-who\chap2_equiplot_mr_byage_allcvd", clear
+        use "`datapath'\from-who\chap2_equiplot_mr_byage_groupeddeath", clear
+        ** Use in Chapter 3. Population change
+        use "`datapath'\from-who\chap3_byage_groups_both", clear
+
+
+
 ** REGION
 ** Female cancers -> bring in the female rates
 use "`datapath'\from-who\chap2_000a_mr_region", clear
@@ -150,6 +166,17 @@ append using "`datapath'\from-who\chap2_000d_dths_both"
 rename pop pop_dths 
 label define sex_ 1 "men" 2 "women" 3 "both" , modify
 label values sex sex_ 
+
+** ISO3c and region for later merging
+preserve
+    keep iso3c region
+    sort region
+    egen  tag = tag(region)
+    keep if tag==1
+    keep if iso3c!=""
+    drop tag
+    save "`datapath'/from-who/iso3c_merge", replace
+restore
 keep year ghecause sex region paho_subregion dths pop_dths
 sort year sex ghecause region 
 merge 1:1 year sex ghecause region using `mr1' 

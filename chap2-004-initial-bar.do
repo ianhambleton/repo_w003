@@ -89,11 +89,32 @@ label define ghecause_
 ** Collapse to sum mental health and neurological 
 collapse (sum) dths daly, by(year sex ghecause region)
 sort region ghecause sex year
-
+/*
 
 ** --------------------------
 ** Associated statistics
 ** --------------------------
+** Percentage of death / disability due to ALL 6 GROUPS
+** Women and men combined
+preserve
+    keep if sex==3 & region==2000
+    keep if year==2000 | year==2019 
+    reshape wide dths daly , i(year sex) j(ghecause) 
+    
+    forval x = 2(1)9 {
+        gen pdths`x' = (dths`x'/dths1)*100
+        gen pdaly`x' = (daly`x'/daly1)*100
+        sort pdths`x'
+        list year pdths`x'
+        sort pdaly`x'
+        list year pdaly`x' 
+    }
+    order year pdths* pdaly*
+    egen pdths_groups = rowtotal( pdths3 pdths4 pdths5 pdths6 pdths7 pdths8)
+    egen pdaly_groups = rowtotal( pdaly3 pdaly4 pdaly5 pdaly6 pdaly7 pdaly8)
+    list year pdths_*, linesize(150)
+    list year pdaly_*, linesize(150)
+restore
 
 ** Percentage of death / disability due to each condition
 ** Women and men combined

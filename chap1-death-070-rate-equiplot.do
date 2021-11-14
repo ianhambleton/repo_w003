@@ -29,7 +29,7 @@
     log using "`logpath'\chap1-death-070-rate-equiplot", replace
 ** HEADER -----------------------------------------------------
 
-/*
+
 
 use "`datapath'\from-who\chap2_000_adjusted", clear
 ** Keep sub-regional level (this will keep the 8 PAHO subregions of the Americas)
@@ -76,7 +76,7 @@ save `graphic', replace
 
 ** Associated stats for text
 ** COM/NCDs/INJ in 2000 and 2019, women and men separately, and women+men combined
-list ghecause year sex region arate drate , sep(8)
+list ghecause year sex region arate drate , sep(8) linesize(150)
 
 
 
@@ -255,11 +255,11 @@ sort sex ghecause drate
 			lab(26 "NCDs") 		
 			lab(28 "Injuries") 		
             )
-			name(excess_death2)
+			name(excess_death)
 			;
 #delimit cr	
 
-*/
+
 
 ** REPEAT, BY WORLD BANK INCOME GROUPS
 ** 27-AUG-2021
@@ -310,8 +310,8 @@ save `graphic', replace
 
 ** Associated stats for text
 ** COM/NCDs/INJ in 2000 and 2019, women and men separately, and women+men combined
-sort sex ghecause drate 
-list ghecause year sex region arate mrate drate , sep(8)
+sort  ghecause sex drate 
+list ghecause year sex region arate mrate drate , sep(8) linesize(150)
 
 ** -------------------------------------------------------------------
 ** GRAPHIC

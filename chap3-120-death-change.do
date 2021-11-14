@@ -44,7 +44,7 @@ use "`datapath'\from-who\chap3_byage_country_groups_both", clear
 	** keep if ghecause==100
 	keep if ghecause==300 | ghecause==1000
 	keep if year==2000 | year==2019
-	drop paho_subregion agroup deaths
+	drop paho_subregion agroup 
 	rename pop pop_orig
 	collapse (sum) death (mean) pop = pop_orig , by(iso3c iso3n year age) 
 	order iso3c iso3n year  
@@ -105,7 +105,7 @@ replace addage = ch_epi if ch_epi > 0 & ch_as < 0
 gen addpop = addage + ch_gr
 
 format death* %15.0fc
-
+/*
 ** Country names
 drop if iso3c=="LAC"
 gsort -ch_d
@@ -166,7 +166,7 @@ local box2 0.5 230 33.5 230 33.5 290 0.5 290
 		/// Vertical Zero Line
 		(line y1 realzero, lcolor(gs10) lp(l) lc(gs0%25)) 
 		/// Overall Change point
-		(scatter y1 , msymbol(O) mlcolor(gs10) mfcolor(gs16%80) msize(2))
+		(scatter y1 ch_d, msymbol(O) mlcolor(gs10) mfcolor(gs16%80) msize(2))
 
 		/// Percentage change in deaths
 		(sc y1 xloc2, msymbol(i) mlabel(pd) mlabsize(2.5) mlabcol(gs8) mlabp(0))

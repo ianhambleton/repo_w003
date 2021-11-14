@@ -84,9 +84,7 @@ collapse (sum) spop , by(age18)
 rename spop pop 
 tempfile who_std
 save `who_std', replace
-
-
-
+save "`datapath'\from-who\who_std", replace
 
 
 ** ------------------------------------------
@@ -214,13 +212,6 @@ label var pop "PAHO subregional populations"
 format pop %12.0fc 
 ** label var spop "WHO Standard population: sums to 1 million"
 
-** Direct standardization 
-** Two methods (-dstdize- and -distrate-)
-gen deaths = round(dths) 
-label var deaths "dths round to nearest integer" 
-replace pop = round(pop) 
-
-
 ** Looped creation of Mortality Rates
 ** YEAR (2000 to 2019)
 ** SEX (1=male, 2=female)
@@ -243,14 +234,20 @@ label define ghecause_
 #delimit cr
 label values ghecause ghecause_ 
 
-** Save dataset ready for direct standardization 
-tempfile for_mr
-save `for_mr' , replace
 
 ** Use in Chapter 3. Population change
 ** 18 age groups
 save "`datapath'\from-who\chap3_byage_country_groups_malefemale", replace
 
+
+** Direct standardization 
+        ** Two methods (-dstdize- and -distrate-)
+        gen deaths = round(dths*1000000) 
+        label var deaths "dths round to nearest integer" 
+        replace pop = round(pop*1000000) 
+        ** Save dataset ready for direct standardization 
+        tempfile for_mr
+        save `for_mr' , replace
 ** Standardised MR values
 forval x = 2000(1)2019 {
     forval y = 1(1)2 {
@@ -374,6 +371,8 @@ label define ghecause_
 label values ghecause ghecause_ 
 
 ** Save the final MR dataset
+drop aupp alow ase 
+replace pop = pop/1000000
 label data "Crude and Adjusted mortality rates: PAHO sub-regions"
 save "`datapath'\from-who\chap2_000c_mr_country_groups", replace
 
@@ -508,13 +507,6 @@ label var pop "PAHO subregional populations"
 format pop %12.0fc 
 ** label var spop "WHO Standard population: sums to 1 million"
 
-** Direct standardization 
-** Two methods (-dstdize- and -distrate-)
-gen deaths = round(dths) 
-label var deaths "dths round to nearest integer" 
-replace pop = round(pop) 
-
-
 ** Looped creation of Mortality Rates
 ** YEAR (2000 to 2019)
 ** SEX (1=male, 2=female)
@@ -537,15 +529,19 @@ label define ghecause_
 #delimit cr
 label values ghecause ghecause_ 
 
-** Save dataset ready for direct standardization 
-tempfile for_mr
-save `for_mr' , replace
-
 ** Use in Chapter 3. Population change
 ** 18 age groups
 save "`datapath'\from-who\chap3_byage_country_groups_both", replace
 
 
+** Direct standardization 
+        ** Two methods (-dstdize- and -distrate-)
+        gen deaths = round(dths*1000000) 
+        label var deaths "dths round to nearest integer" 
+        replace pop = round(pop*1000000) 
+        ** Save dataset ready for direct standardization 
+        tempfile for_mr
+        save `for_mr' , replace
 ** Standardised MR values
 forval x = 2000(1)2019 {
         * TODO: Change loop range for each disease group
@@ -660,5 +656,7 @@ label values ghecause ghecause_
 
 ** Save the final MR dataset
 gen sex = 3
+drop aupp alow ase 
+replace pop = pop/1000000
 label data "Crude and Adjusted mortality rates: PAHO sub-regions"
 save "`datapath'\from-who\chap2_000c_mr_country_groups_both", replace

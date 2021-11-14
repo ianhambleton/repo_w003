@@ -36,11 +36,13 @@
 tempfile t1 cvd1 
 use "`datapath'\from-who\chap2_equiplot_mr_byage_allcvd", replace
 keep if year==2019 & who_region==2 & ghecause==400 
-drop pop dths who_region year
+drop pop who_region year
+rename dths deaths
 save `cvd1' , replace
 use "`datapath'\from-who\chap2_equiplot_mr_byage", clear
 keep if year==2019 & who_region==2  
-drop pop dths who_region year
+drop pop who_region year
+rename dths deaths
 append using `cvd1'
 
 gen age16 = 1       if age18==1
@@ -90,12 +92,12 @@ save `t1', replace
 tempfile cvd2 
 use "`datapath'\from-who\chap2_equiplot_daly_byage_allcvd", replace
 keep if year==2019 & who_region==2 & ghecause==400 
-drop pop dalyt who_region year
+drop pop who_region year
 save `cvd2' , replace
 
 use "`datapath'\from-who\chap2_equiplot_daly_byage", clear
 keep if year==2019 & who_region==2 
-drop pop who_region year dalyt
+drop pop who_region year
 append using `cvd2'
 rename age18 age16
 sort ghecause age16

@@ -220,12 +220,6 @@ label var pop "PAHO subregional populations"
 format pop %12.0fc 
 ** label var spop "WHO Standard population: sums to 1 million"
 
-** Direct standardization 
-** Two methods (-dstdize- and -distrate-)
-rename daly dalyt
-gen daly = round(dalyt) 
-label var daly "DALY rounded to nearest integer" 
-replace pop = round(pop) 
 
 
 ** Looped creation of Mortality Rates
@@ -250,11 +244,15 @@ label define ghecause_
 #delimit cr
 label values ghecause ghecause_ 
 
-** Save dataset ready for direct standardization 
-drop if ghecause<400
-tempfile for_mr
-save `for_mr' , replace
-
+** Direct standardization 
+        rename daly dalyt
+        gen daly = round(dalyt*1000000) 
+        label var daly "dalys rounded to nearest integer" 
+        replace pop = round(pop*1000000) 
+        * Save dataset ready for direct standardization 
+        drop if ghecause<400
+        tempfile for_mr
+        save `for_mr' , replace
 ** Standardised MR values
 forval x = 2000(1)2019 {
     forval y = 1(1)2 {
@@ -359,6 +357,8 @@ label define ghecause_
 label values ghecause ghecause_ 
 
 ** Save the final MR dataset
+drop aupp alow ase 
+replace pop = pop/1000000
 label data "Crude and Adjusted DALY rates: PAHO sub-regions"
 save "`datapath'\from-who\chap2_000f_daly_subregion_groups", replace
 
@@ -501,13 +501,6 @@ label var pop "PAHO subregional populations"
 format pop %12.0fc 
 ** label var spop "WHO Standard population: sums to 1 million"
 
-** Direct standardization 
-** Two methods (-dstdize- and -distrate-)
-rename daly dalyt
-gen daly = round(dalyt) 
-label var daly "daly rounded to nearest integer" 
-replace pop = round(pop) 
-
 
 ** Looped creation of Mortality Rates
 ** YEAR (2000 to 2019)
@@ -531,11 +524,16 @@ label define ghecause_
 #delimit cr
 label values ghecause ghecause_ 
 
-** Save dataset ready for direct standardization 
-drop if ghecause<400
-tempfile for_mr
-save `for_mr' , replace
 
+** Direct standardization 
+        rename daly dalyt
+        gen daly = round(dalyt*1000000) 
+        label var daly "dalys rounded to nearest integer" 
+        replace pop = round(pop*1000000) 
+        * Save dataset ready for direct standardization 
+        drop if ghecause<400
+        tempfile for_mr
+        save `for_mr' , replace
 ** Standardised MR values
 forval x = 2000(1)2019 {
         * TODO: Change loop range for each disease group
@@ -628,6 +626,8 @@ label values ghecause ghecause_
 
 ** Save the final MR dataset
 gen sex = 3 
+drop aupp alow ase 
+replace pop = pop/1000000
 label data "Crude and Adjusted DALY rates: PAHO sub-regions"
 save "`datapath'\from-who\chap2_000f_daly_subregion_groups_both", replace
 

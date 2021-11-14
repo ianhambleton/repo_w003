@@ -304,7 +304,6 @@ restore
 
 
 
-/*
 ** -----------------------------------------------------
 ** GRAPHICS COLOR SCHEME
 ** -----------------------------------------------------
@@ -409,7 +408,7 @@ label define yorder_
     11    "Breast cancer"
     12    "Liver cancer"
     13    "Pancreas cancer"
-    14    "Bowel cancer"
+    14    "Colorectal cancer"
     15    "Lymphomas, myelomas"
     16    "Leukaemia"
 

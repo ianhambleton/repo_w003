@@ -433,7 +433,6 @@ restore
 #delimit cr	
 
 
-/*
 
 ** ----------------------------------------
 ** ----------------------------------------
@@ -1048,7 +1047,7 @@ keep if region < 100 | region==2000
 ** Simple absolute measure of inequality : Difference (D)
 ** Simple relative measure of inequality : Index of Disparity (ID) 
 ** ---------------------------------------------------
-drop dalyr 
+drop mortr 
 
 ** BASED ON ADJUSTED MORTALITY RATE 
 ** (R) Simple - relative

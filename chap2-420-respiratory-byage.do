@@ -36,11 +36,13 @@
 tempfile t1 resp1 
 use "`datapath'\from-who\chap2_equiplot_mr_byage_groupeddeath", replace
 keep if year==2019 & who_region==2 & ghecause==600 
-drop pop dths who_region year
+drop pop who_region year
+rename dths deaths
 save `resp1' , replace
 use "`datapath'\from-who\chap2_equiplot_mr_byage", clear
 keep if year==2019 & who_region==2  
-drop pop dths who_region year
+drop pop who_region year
+rename dths deaths
 append using `resp1'
 
 gen age16 = 1       if age18==1
@@ -90,12 +92,12 @@ save `t1', replace
 tempfile cancer2 
 use "`datapath'\from-who\chap2_equiplot_daly_byage_groupeddeath", replace
 keep if year==2019 & who_region==2 & ghecause==600 
-drop pop dalyt who_region year
+drop pop who_region year
 save `cancer2' , replace
 
 use "`datapath'\from-who\chap2_equiplot_daly_byage", clear
 keep if year==2019 & who_region==2 
-drop pop who_region year dalyt
+drop pop who_region year 
 append using `cancer2'
 rename age18 age16
 sort ghecause age16
