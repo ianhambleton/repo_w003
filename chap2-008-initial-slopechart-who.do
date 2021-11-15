@@ -29,149 +29,25 @@
     log using "`logpath'\chap2-008-initial-slopechart-who", replace
 ** HEADER -----------------------------------------------------
 
-input type order str50 cod cnum
-1  1	"IHD"	1091 
-1  2	"Stroke"	478 
-1  3	"Dementias"	390 
-1  4	"COPD"	378 
-1  5	"Lower respiratory infections"	317 
-1  6	"Diabetes"	284 
-1  7	"Lung cancers"	256 
-1  8	"Kidney diseases"	254 
-1  9	"Interpersonal violence"	194 
-1  10	"HHD"	157 
-1  11	"Road injury"	155 
-1  12	"Cirrhosis of the liver"	143 
-1  13	"Colorectal cancers"	134 
-1  14	"Breast cancer"	109 
-1  15	"Prostate cancer"	98 
-1  16	"Self-harm"	97 
-1   17  "Neonatal conditions"  86
-1  18	"Drug use disorders"	86 
-1  19	"Pancreas cancer"	82 
-1  20	"Falls"	81 
-2  1	"IHD"	 19943 
-2  2	"Diabetes"	 13430 
-2  3	"Interpersonal violence"	 11157 
-2  4	"Stroke"	 10330 
-2  5	"Neonatal conditions"	 10076 
-2  6	"Road injury"	 8756 
-2  7	"COPD"	 8675 
-2  8	"Back and neck pain" 8218 
-2  9	"Drug use disorders"	 7990 
-2  10	"Kidney diseases"	 6929 
-2  11	"Depressive disorders"	 6904 
-2  12	"Lower respiratory infections"	 6847 
-2  13	"Dementias"	 5854 
-2  14	"Other hearing loss"	 5531 
-2  15	"Anxiety disorders"	 5530 
-2  16	"Lung cancers"	 5471 
-2  17	"Congenital anomalies"	 5417 
-2  18	"Falls"	 4961 
-2  19	"Self-harm"	 4527 
-2  20	"Cirrhosis of the liver"	 4368 
-end
-label define type_ 1 "mortality" 2 "daly",modify
-label values type type_
-reshape wide cod cnum, i(order) j(type)
+import excel using "X:\OneDrive - The University of the West Indies\Writing\w003\outputs\reports\comments/Leading causes .xlsx", first sheet("Sheet1") clear
 
-gen position1 = .
-gen position2 = .
+** Quintiles
+gen q1 = .
+replace q1 = 1 if morder<=4
+replace q1 = 2 if morder>=5 & morder<=8 
+replace q1 = 3 if morder>=9 & morder<=12 
+replace q1 = 4 if morder>=13 & morder<=16
+replace q1 = 5 if morder>=17 & morder<=20 
+gen q2 = .
+replace q2 = 1 if dorder<=4
+replace q2 = 2 if dorder>=5 & dorder<=8 
+replace q2 = 3 if dorder>=9 & dorder<=12 
+replace q2 = 4 if dorder>=13 & dorder<=16
+replace q2 = 5 if dorder>=17 & dorder<=20 
 
-** We want 1 row per COD - mortality
-
-** IHD
-replace position1 = 1  if  cod1=="IHD"	
-replace position2 = 1  if  cod2=="IHD"	
-
-** Stroke
-replace position1 = 2  if  cod1=="Stroke"	
-replace position2 = 4  if  cod2=="Stroke"	
-
-** Dementias
-replace position1 = 3  if  cod1=="Dementias"
-replace position2 = 13  if  cod2=="Dementias"
-
-** COPD
-replace position1 = 4  if  cod1=="COPD"	 
-replace position2 = 7  if  cod2=="COPD"	 
-
-** LRI
-replace position1 = 5  if  cod1=="Lower respiratory infections"	 
-replace position2 = 12  if  cod2=="Lower respiratory infections"	 
-
-** Diabetes
-replace position1 = 6  if  cod1=="Diabetes"	 
-replace position2 = 2  if  cod2=="Diabetes"	 
-
-** Lung cancers
-replace position1 = 7  if  cod1=="Lung cancers"	 
-replace position2 = 16  if  cod2=="Lung cancers"	 
-
-** Kidney diseases
-replace position1 = 8  if  cod1=="Kidney diseases"	 
-replace position2 = 10  if  cod2=="Kidney diseases"	 
-
-** IPV
-replace position1 = 9  if  cod1=="Interpersonal violence"	 
-replace position2 = 3  if  cod2=="Interpersonal violence"	 
-
-** HHD
-replace position1 = 10 if  cod1=="HHD"	 
-
-** Road injury
-replace position1 = 11 if  cod1=="Road injury"	 
-replace position2 = 6 if  cod2=="Road injury"	 
-
-** Liver cirrhosis
-replace position1 = 12 if  cod1=="Cirrhosis of the liver"	 
-replace position2 = 20 if  cod2=="Cirrhosis of the liver"	 
-
-** Colorectal cancer
-replace position1 = 13 if  cod1=="Colorectal cancers"	 
-
-** breast cancer
-replace position1 = 14 if  cod1=="Breast cancer"	 
-
-** prostate cancer
-replace position1 = 15 if  cod1=="Prostate cancer"	 
-
-** self harm
-replace position1 = 16 if  cod1=="Self-harm"	 
-replace position2 = 19 if  cod2=="Self-harm"	 
-
-** neonatal conditions
-replace position1 = 17 if  cod1=="Neonatal conditions"  
-replace position2 = 5 if  cod2=="Neonatal conditions"  
-
-** drug use disorders
-replace position1 = 18 if  cod1=="Drug use disorders"	 
-replace position2 = 9 if  cod2=="Drug use disorders"	 
-
-** pancreas cancer
-replace position1 = 19 if  cod1=="Pancreas cancer"	 
-
-** Falls
-replace position1 = 20 if  cod1=="Falls"	 
-replace position2 = 18 if  cod2=="Falls"	 
-
-
-** Back pain
-replace position2 = 8  if  cod2=="Back and neck pain"	 
-
-** depressive disorders
-replace position2 = 11  if  cod2=="Depressive disorders"	 
-
-** hearing loss
-replace position2 = 14 if  cod2=="Other hearing loss"
-
-** anxiety disorders
-replace position2 = 15  if  cod2=="Anxiety disorders"	 
-
-** congenital anomalies
-replace position2 = 17  if  cod2=="Congenital anomalies"	 
-
-/*
+** ------------------------------------------------
+** GRAPH PREPARATION
+** ------------------------------------------------
 ** COLOR palette (GRAY, RED, BLUE)
 colorpalette d3, 10 nograph
 local list r(p) 
@@ -181,129 +57,275 @@ local red `r(p4)'
 local blu `r(p1)'
 ** (Grey)
 local gry `r(p8)'
+** COLOR for quintiles (groups of FOUR)
+colorpalette RdYlBu , n(9) nogr
+local list r(p) 
+* Red / Orange / Yellow / Blue1 / Blue2
+local q1 `r(p1)'
+local q2 `r(p3)'
+local q3 `r(p5)'
+local q4 `r(p7)'
+local q5 `r(p9)'
 
-/// local outer1    25 -4     -5 -4     -5 45      25 45      25 -4 
+** Does cause exist in top-20 deaths and disability
+gen twice = 0
+replace twice = 1 if morder<. & dorder<.
 
+** Vertical position of rank columns
 gen circle1 = 10
 gen circle2 = 20
+sort morder
+#delimit ;
+	gr twoway 
 
+		/// Header line
+        (function y = 0, range(4 26) lc("`gry'")) 
 
+        /// THE CONNECTING LINES
+        (pcspike morder circle1 dorder circle2  , lw(1.25) lc("gs0%20")) 
 
+		/// IHD. 1-(2000) 1-(2019)
+        (sc morder circle1 if q1==1 & twice==0, msize(5) m(o) mlc("`q1'*0.7") mfc("gs5") mlw(2))
+        (sc morder circle1 if q1==2 & twice==0, msize(5) m(o) mlc("`q2'*0.7") mfc("gs5") mlw(2))
+        (sc morder circle1 if q1==3 & twice==0, msize(5) m(o) mlc("`q3'*0.7") mfc("gs5") mlw(2))
+        (sc morder circle1 if q1==4 & twice==0, msize(5) m(o) mlc("`q4'*0.7") mfc("gs5") mlw(2))
+        (sc morder circle1 if q1==5 & twice==0, msize(5) m(o) mlc("`q5'*0.7") mfc("gs5") mlw(2))
+        (sc dorder circle2 if q2==1 & twice==0, msize(5) m(o) mlc("`q1'*0.7") mfc("gs5") mlw(2))
+        (sc dorder circle2 if q2==2 & twice==0, msize(5) m(o) mlc("`q2'*0.7") mfc("gs5") mlw(2))
+        (sc dorder circle2 if q2==3 & twice==0, msize(5) m(o) mlc("`q3'*0.7") mfc("gs5") mlw(2))
+        (sc dorder circle2 if q2==4 & twice==0, msize(5) m(o) mlc("`q4'*0.7") mfc("gs5") mlw(2))
+        (sc dorder circle2 if q2==5 & twice==0, msize(5) m(o) mlc("`q5'*0.7") mfc("gs5") mlw(2))
+
+        (sc morder circle1 if q1==1 & twice==1, msize(8) m(o) mlc("gs0") mfc("`q1'*0.7") mlw(0.2))
+        (sc morder circle1 if q1==2 & twice==1, msize(8) m(o) mlc("gs0") mfc("`q2'*0.7") mlw(0.2))
+        (sc morder circle1 if q1==3 & twice==1, msize(8) m(o) mlc("gs0") mfc("`q3'*0.7") mlw(0.2))
+        (sc morder circle1 if q1==4 & twice==1, msize(8) m(o) mlc("gs0") mfc("`q4'*0.7") mlw(0.2))
+        (sc morder circle1 if q1==5 & twice==1, msize(8) m(o) mlc("gs0") mfc("`q5'*0.7") mlw(0.2))
+
+        (sc dorder circle2 if q2==1 & twice==1, msize(8) m(o) mlc("gs0") mfc("`q1'*0.7") mlw(0.2))
+        (sc dorder circle2 if q2==2 & twice==1, msize(8) m(o) mlc("gs0") mfc("`q2'*0.7") mlw(0.2))
+        (sc dorder circle2 if q2==3 & twice==1, msize(8) m(o) mlc("gs0") mfc("`q3'*0.7") mlw(0.2))
+        (sc dorder circle2 if q2==4 & twice==1, msize(8) m(o) mlc("gs0") mfc("`q4'*0.7") mlw(0.2))
+        (sc dorder circle2 if q2==5 & twice==1, msize(8) m(o) mlc("gs0") mfc("`q5'*0.7") mlw(0.2))
+        		,
+			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin)) 		
+			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin)) 
+			ysize(12) xsize(7)
+
+			xlab(none, 
+            notick tlc(gs0) labc(gs0) notick nogrid glc(gs16))
+			xscale(noline range(-12(1)42)) 
+			xtitle(" ", size(5) color(gs0) margin(l=0 r=0 t=0 b=0)) 
+			
+			ylab(none,
+			valuelabel labc(gs0) labs(6) tstyle(major_notick) nogrid glc(gs16) angle(0) format(%9.0f))
+			yscale(reverse noline lw(vthin) range(19(-1)-2)) 
+			ytitle("", size(5) margin(l=0 r=0 t=0 b=0)) 
+
+            /// title("Disease burden", size(7) color(gs0) position(11))
+
+            /// Header
+            text(-1 5 "Disease" "Deaths"         ,  place(c) size(4.5) color(gs5))
+            text(-1 25 "Disease" "Burden"  ,  place(c) size(4.5) color(gs5))
+
+            /// Circle numbering 
+            /// text(1 1 "1",  place(c) size(5) color(gs0))
+            /// text(1 10 "1",  place(c) size(5) color(gs0))
+
+            /// Disease coding 
+            text(1 7  "Ischemic heart disease"  ,  place(w) size(3.75) color(gs10) just(right))
+            text(1 23 "Ischemic heart disease"  ,  place(e) size(3.75) color(gs10) just(left))
+
+            text(2 7  "Stroke"  ,  place(w) size(3.75) color(gs10) just(right))
+            text(4 23 "Stroke"  ,  place(e) size(3.75) color(gs10) just(left))
+
+            text(3 7   "Alzeimers/dementias"  ,  place(w) size(3.75) color(gs10) just(right))
+            text(13 23 "Alzeimers/dementias"  ,  place(e) size(3.75) color(gs10) just(left))
+
+            text(4 7  "COPD"    ,  place(w) size(3.75) color(gs10) just(right))
+            text(7 23 "COPD"    ,  place(e) size(3.75) color(gs10) just(left))
+
+            text(5 7   "Lower Resp.Inf"    ,  place(w) size(3.75) color(gs10) just(right))
+            text(12 23 "Lower Resp.Inf"    ,  place(e) size(3.75) color(gs10) just(left))
+
+            text(6 7  "Diabetes"    ,  place(w) size(3.75) color(gs10) just(right))
+            text(2 23 "Diabetes"    ,  place(e) size(3.75) color(gs10) just(left))
+
+            text(7 7   "Lung cancer"    ,  place(w) size(3.75) color(gs10) just(right))
+            text(16 23 "Lung cancer"    ,  place(e) size(3.75) color(gs10) just(left))
+
+            text(8 7   "Kidney diseases"    ,  place(w) size(3.75) color(gs10) just(right))
+            text(10 23 "Kidney diseases"    ,  place(e) size(3.75) color(gs10) just(left))
+
+            text(9 7   "IPV"    ,  place(w) size(3.75) color(gs10) just(right))
+            text(3 23  "IPV"    ,  place(e) size(3.75) color(gs10) just(left))
+
+            text(10 7   "HHD"    ,  place(w) size(3.75) color(gs10) just(right))
+
+            text(11 7   "Road injury"    ,  place(w) size(3.75) color(gs10) just(right))
+            text(6 23   "Road injury"    ,  place(e) size(3.75) color(gs10) just(left))
+
+            text(12 7   "Liver cirrhosis"    ,  place(w) size(3.75) color(gs10) just(right))
+            text(20 23  "Liver cirrhosis"    ,  place(e) size(3.75) color(gs10) just(left))
+
+            text(13 7   "Colorectal cancer"    ,  place(w) size(3.75) color(gs10) just(right))
+
+            text(14 7   "Breast cancer"    ,  place(w) size(3.75) color(gs10) just(right))
+
+            text(15 7   "Prostate cancer"    ,  place(w) size(3.75) color(gs10) just(right))
+
+            text(16 7    "Self harm"    ,  place(w) size(3.75) color(gs10) just(right))
+            text(19 23   "Self harm"    ,  place(e) size(3.75) color(gs10) just(left))
+
+            text(17 7   "Neonatal conditions"    ,  place(w) size(3.75) color(gs10) just(right))
+            text(5 23   "Neonatal conditions"    ,  place(e) size(3.75) color(gs10) just(left))
+
+            text(18 7   "Drug use disorders"    ,  place(w) size(3.75) color(gs10) just(right))
+            text(9 23   "Drug use disorders"    ,  place(e) size(3.75) color(gs10) just(left))
+
+            text(19 7   "Pancreas cancer"    ,  place(w) size(3.75) color(gs10) just(right))
+
+            text(20 7   "Falls"    ,  place(w) size(3.75) color(gs10) just(right))
+            text(18 23  "Falls"    ,  place(e) size(3.75) color(gs10) just(left))
+
+            text(8 23    "Back and neck pain"    ,  place(e) size(3.75) color(gs10) just(left))
+            text(17 23   "Congenital anomolies"    ,  place(e) size(3.75) color(gs10) just(left))
+            text(15 23   "Anxiety disorders"    ,  place(e) size(3.75) color(gs10) just(left))
+            text(11 23   "Depressive disorders"    ,  place(e) size(3.75) color(gs10) just(left))
+            text(14 23   "Other hearing loss"    ,  place(e) size(3.75) color(gs10) just(left))
+
+			legend(off)
+			name(slopechart1)
+			;
+#delimit cr	
 
 
 /*
 #delimit ;
 	gr twoway 
 
-		/// outer boxes 
-        /// (scatteri `outer1' , recast(area) lw(0.2) lc(gs10) fc(none)  )
-
 		/// Header line
-        (function y = 0.5, range(-2 24) lc("`gry'")) 
-        /// (function y = -5, horizontal range(0 23) lc("`gry'")) 
+        (function y = 0, range(4 26) lc("`gry'")) 
 
-        /// THE LINES
-        (pcspike order1 circle1 order2 circle2    if metric==2 & order2019==1 , lw(1.5) lc("`gry'%50")) 
+        /// THE CONNECTING LINES
+        (pcspike morder circle1 dorder circle2 if q1==1 , lw(1) lc("gs0%20")) 
+        (pcspike morder circle1 dorder circle2 if q1==2 , lw(1) lc("gs0%20")) 
+        (pcspike morder circle1 dorder circle2 if q1==3 , lw(1) lc("gs0%20")) 
+        (pcspike morder circle1 dorder circle2 if q1==4 , lw(1) lc("gs0%20")) 
+        (pcspike morder circle1 dorder circle2 if q1==5 , lw(1) lc("gs0%20")) 
 
 		/// IHD. 1-(2000) 1-(2019)
-        (sc order2000 ycode2000                             if metric==2 & order2000==1 , msize(10) m(o) mlc("`gry'*0.75") mfc("`gry'*0.5") mlw(0.2))
+        (sc morder circle1 if q1==1 & twice==0, msize(5) m(o) mlc("`q1'*0.7") mfc("gs0") mlw(2))
+        (sc morder circle1 if q1==2 & twice==0, msize(5) m(o) mlc("`q2'*0.7") mfc("gs0") mlw(2))
+        (sc morder circle1 if q1==3 & twice==0, msize(5) m(o) mlc("`q3'*0.7") mfc("gs0") mlw(2))
+        (sc morder circle1 if q1==4 & twice==0, msize(5) m(o) mlc("`q4'*0.7") mfc("gs0") mlw(2))
+        (sc morder circle1 if q1==5 & twice==0, msize(5) m(o) mlc("`q5'*0.7") mfc("gs0") mlw(2))
+
+        (sc dorder circle2 if q1==1 & twice==0, msize(5) m(o) mlc("`q1'*0.7") mfc("gs0") mlw(2))
+        (sc dorder circle2 if q1==2 & twice==0, msize(5) m(o) mlc("`q2'*0.7") mfc("gs0") mlw(2))
+        (sc dorder circle2 if q1==3 & twice==0, msize(5) m(o) mlc("`q3'*0.7") mfc("gs0") mlw(2))
+        (sc dorder circle2 if q1==4 & twice==0, msize(5) m(o) mlc("`q4'*0.7") mfc("gs0") mlw(2))
+        (sc dorder circle2 if q1==5 & twice==0, msize(5) m(o) mlc("`q5'*0.7") mfc("gs0") mlw(2))
+
+        (sc morder circle1 if q1==1 & twice==1, msize(8) m(o) mlc("gs0") mfc("`q1'*0.7") mlw(0.2))
+        (sc morder circle1 if q1==2 & twice==1, msize(8) m(o) mlc("gs0") mfc("`q2'*0.7") mlw(0.2))
+        (sc morder circle1 if q1==3 & twice==1, msize(8) m(o) mlc("gs0") mfc("`q3'*0.7") mlw(0.2))
+        (sc morder circle1 if q1==4 & twice==1, msize(8) m(o) mlc("gs0") mfc("`q4'*0.7") mlw(0.2))
+        (sc morder circle1 if q1==5 & twice==1, msize(8) m(o) mlc("gs0") mfc("`q5'*0.7") mlw(0.2))
+        
+        (sc dorder circle2 if q1==1 & twice==1, msize(8) m(o) mlc("gs0") mfc("`q1'*0.7") mlw(0.2))
+        (sc dorder circle2 if q1==2 & twice==1, msize(8) m(o) mlc("gs0") mfc("`q2'*0.7") mlw(0.2))
+        (sc dorder circle2 if q1==3 & twice==1, msize(8) m(o) mlc("gs0") mfc("`q3'*0.7") mlw(0.2))
+        (sc dorder circle2 if q1==4 & twice==1, msize(8) m(o) mlc("gs0") mfc("`q4'*0.7") mlw(0.2))
+        (sc dorder circle2 if q1==5 & twice==1, msize(8) m(o) mlc("gs0") mfc("`q5'*0.7") mlw(0.2))
         		,
 			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin)) 		
 			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin)) 
-			ysize(12) xsize(4.75)
+			ysize(12) xsize(7)
 
 			xlab(none, 
             notick tlc(gs0) labc(gs0) notick nogrid glc(gs16))
-			xscale(noline range(-7(1)40)) 
+			xscale(noline range(-12(1)42)) 
 			xtitle(" ", size(5) color(gs0) margin(l=0 r=0 t=0 b=0)) 
 			
 			ylab(none,
 			valuelabel labc(gs0) labs(6) tstyle(major_notick) nogrid glc(gs16) angle(0) format(%9.0f))
-			yscale(reverse noline lw(vthin) range(0(0.5)23)) 
+			yscale(reverse noline lw(vthin) range(22(-1)-2)) 
 			ytitle("", size(5) margin(l=0 r=0 t=0 b=0)) 
 
-            title("Disease burden", size(7) color(gs0) position(11))
+            /// title("Disease burden", size(7) color(gs0) position(11))
 
             /// Header
-            text(0.2 1 "2000",  place(c) size(6) color("127 127 127*0.5"))
-            text(0.2 10 "2019",  place(c) size(6) color("127 127 127*0.5"))
+            text(-1 5 "Disease" "Deaths"         ,  place(c) size(4.5) color(gs5))
+            text(-1 25 "Disease" "Burden"  ,  place(c) size(4.5) color(gs5))
 
             /// Circle numbering 
-            text(1 1 "1",  place(c) size(5) color(gs0))
-            text(1 10 "1",  place(c) size(5) color(gs0))
-            text(2 1 "2",  place(c) size(5) color(gs0))
-            text(2 10 "2",  place(c) size(5) color(gs0))
-            text(3 1 "3",  place(c) size(5) color(gs0))
-            text(3 10 "3",  place(c) size(5) color(gs0))
-            text(4 1 "4",  place(c) size(5) color(gs0))
-            text(4 10 "4",  place(c) size(5) color(gs0))
-            text(5 1 "5",  place(c) size(5) color(gs0))
-            text(5 10 "5",  place(c) size(5) color(gs0))
-            text(6 1 "6",  place(c) size(5) color(gs0))
-            text(6 10 "6",  place(c) size(5) color(gs0))
-            text(7 1 "7",  place(c) size(5) color(gs0))
-            text(7 10 "7",  place(c) size(5) color(gs0))
-            text(8 1 "8",  place(c) size(5) color(gs0))
-            text(8 10 "8",  place(c) size(5) color(gs0))
-            text(9 1 "9",  place(c) size(5) color(gs0))
-            text(9 10 "9",  place(c) size(5) color(gs0))
-            text(10 1 "10",  place(c) size(5) color(gs0))
-            text(10 10 "10",  place(c) size(5) color(gs0))
-            text(11 1 "11",  place(c) size(5) color(gs0))
-            text(11 10 "11",  place(c) size(5) color(gs0))
-            text(12 1 "12",  place(c) size(5) color(gs0))
-            text(12 10 "12",  place(c) size(5) color(gs0))
-            text(13 1 "13",  place(c) size(5) color(gs0))
-            text(13 10 "13",  place(c) size(5) color(gs0))
-            text(14 1 "14",  place(c) size(5) color(gs0))
-            text(14 10 "14",  place(c) size(5) color(gs0))
-            text(15 1 "15",  place(c) size(5) color(gs0))
-            text(15 10 "15",  place(c) size(5) color(gs0))
-            text(16 1 "16",  place(c) size(5) color(gs0))
-            text(16 10 "16",  place(c) size(5) color(gs0))
-            text(17 1 "17",  place(c) size(5) color(gs0))
-            text(17 10 "17",  place(c) size(5) color(gs0))
-            text(18 1 "18",  place(c) size(5) color(gs0))
-            text(18 10 "18",  place(c) size(5) color(gs0))
-            text(19 1 "19",  place(c) size(5) color(gs0))
-            text(19 10 "19",  place(c) size(5) color(gs0))
-            text(20 1 "20",  place(c) size(5) color(gs0))
-            text(20 10 "20",  place(c) size(5) color(gs0))
-            text(22 1 "23",  place(c) size(5) color(gs0))
-            text(22 10 "22",  place(c) size(5) color(gs0))
-
+            /// text(1 1 "1",  place(c) size(5) color(gs0))
+            /// text(1 10 "1",  place(c) size(5) color(gs0))
 
             /// Disease coding 
-            text(1 13 "Ischemic heart disease",  place(e) size(5) color(gs0))
-            text(2 13 "Interpersonal violence",  place(e) size(5) color(gs0))
-            text(3 13 "Diabetes",  place(e) size(5) color(gs0))
+            text(1 7  "Ischemic heart disease"  ,  place(w) size(3.75) color(gs10) just(right))
+            text(1 23 "Ischemic heart disease"  ,  place(e) size(3.75) color(gs10) just(left))
 
-            text(4 13 "Road injury",  place(e) size(5) color(gs0))
-            text(5 13 "Stroke",  place(e) size(5) color(gs0))
-            text(6 13 "Drug use disorders",  place(e) size(5) color(gs0))
+            text(2 7  "Stroke"  ,  place(w) size(3.75) color(gs10) just(right))
+            text(4 23 "Stroke"  ,  place(e) size(3.75) color(gs10) just(left))
 
-            text(7 13 "Depressive disorders",  place(e) size(5) color(gs0))
-            text(8 13 "COPD",  place(e) size(5) color(gs0))
-            text(9 13 "Anxiety disorders",  place(e) size(5) color(gs0))
+            text(3 7   "Alzeimers/dementias"  ,  place(w) size(3.75) color(gs10) just(right))
+            text(13 23 "Alzeimers/dementias"  ,  place(e) size(3.75) color(gs10) just(left))
 
-            text(10 13 "Breast cancer",  place(e) size(5) color(gs0))
-            text(11 13 "Self-harm",  place(e) size(5) color(gs0))
-            text(12 13 "Lung cancer", place(e) size(5) color(gs0))
+            text(4 7  "COPD"    ,  place(w) size(3.75) color(gs10) just(right))
+            text(7 23 "COPD"    ,  place(e) size(3.75) color(gs10) just(left))
 
-            text(13 13 "Falls",  place(e) size(5) color(gs0))
-            text(14 13 "Alzeimers/dementias",  place(e) size(5) color(gs0))
-            text(15 13 "Alcohol use disorders",  place(e) size(5) color(gs0))
+            text(5 7   "Lower Resp.Inf"    ,  place(w) size(3.75) color(gs10) just(right))
+            text(12 23 "Lower Resp.Inf"    ,  place(e) size(3.75) color(gs10) just(left))
 
-            text(16 13 "Migraine",  place(e) size(5) color(gs0))
-            text(17 13 "Prostate cancer",  place(e) size(5) color(gs0))
-            text(18 13 "Asthma",  place(e) size(5) color(gs0))
+            text(6 7  "Diabetes"    ,  place(w) size(3.75) color(gs10) just(right))
+            text(2 23 "Diabetes"    ,  place(e) size(3.75) color(gs10) just(left))
 
-            text(19 13 "Colorectal cancer",  place(e) size(5) color(gs0))
-            text(20 13 "Hypertensive heart disease",  place(e) size(5) color(gs0))
-            text(22 13 "Cervical cancer",  place(e) size(5) color(gs0))
+            text(7 7   "Lung cancer"    ,  place(w) size(3.75) color(gs10) just(right))
+            text(16 23 "Lung cancer"    ,  place(e) size(3.75) color(gs10) just(left))
+
+            text(8 7   "Kidney diseases"    ,  place(w) size(3.75) color(gs10) just(right))
+            text(10 23 "Kidney diseases"    ,  place(e) size(3.75) color(gs10) just(left))
+
+            text(9 7   "IPV"    ,  place(w) size(3.75) color(gs10) just(right))
+            text(3 23  "IPV"    ,  place(e) size(3.75) color(gs10) just(left))
+
+            text(10 7   "HHD"    ,  place(w) size(3.75) color(gs10) just(right))
+
+            text(11 7   "Road injury"    ,  place(w) size(3.75) color(gs10) just(right))
+            text(6 23   "Road injury"    ,  place(e) size(3.75) color(gs10) just(left))
+
+            text(12 7   "Liver cirrhosis"    ,  place(w) size(3.75) color(gs10) just(right))
+            text(20 23  "Liver cirrhosis"    ,  place(e) size(3.75) color(gs10) just(left))
+
+            text(13 7   "Colorectal cancer"    ,  place(w) size(3.75) color(gs10) just(right))
+
+            text(14 7   "Breast cancer"    ,  place(w) size(3.75) color(gs10) just(right))
+
+            text(15 7   "Prostate cancer"    ,  place(w) size(3.75) color(gs10) just(right))
+
+            text(16 7    "Self harm"    ,  place(w) size(3.75) color(gs10) just(right))
+            text(19 23   "Self harm"    ,  place(e) size(3.75) color(gs10) just(left))
+
+            text(17 7   "Neonatal conditions"    ,  place(w) size(3.75) color(gs10) just(right))
+            text(5 23   "Neonatal conditions"    ,  place(e) size(3.75) color(gs10) just(left))
+
+            text(18 7   "Drug use disorders"    ,  place(w) size(3.75) color(gs10) just(right))
+            text(9 23   "Drug use disorders"    ,  place(e) size(3.75) color(gs10) just(left))
+
+            text(19 7   "Pancreas cancer"    ,  place(w) size(3.75) color(gs10) just(right))
+
+            text(20 7   "Falls"    ,  place(w) size(3.75) color(gs10) just(right))
+            text(18 23  "Falls"    ,  place(e) size(3.75) color(gs10) just(left))
+
+            text(8 23    "Back and neck pain"    ,  place(e) size(3.75) color(gs10) just(left))
+            text(17 23   "Congenital anomolies"    ,  place(e) size(3.75) color(gs10) just(left))
+            text(15 23   "Anxiety disorders"    ,  place(e) size(3.75) color(gs10) just(left))
+            text(11 23   "Depressive disorders"    ,  place(e) size(3.75) color(gs10) just(left))
+            text(14 23   "Other hearing loss"    ,  place(e) size(3.75) color(gs10) just(left))
 
 			legend(off)
-			name(slopechart_daly)
+			name(slopechart2)
 			;
 #delimit cr	
-
