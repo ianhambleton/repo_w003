@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap3-120-death-change.do
+    //  algorithm name			    paper1-170-health-figure3B.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	26-OCT-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap3-120-death-change", replace
+    log using "`logpath'\paper1-170-health-figure3B", replace
 ** HEADER -----------------------------------------------------
 
 ** Load the country-level death and population data
@@ -40,7 +40,7 @@ use "`datapath'\from-who\chap3_byage_country_groups_both", clear
 
 	rename age18 age
 	rename dths death
-	
+
 	** keep if ghecause==100
 	keep if ghecause==300 | ghecause==1000
 	keep if year==2000 | year==2019
@@ -105,7 +105,7 @@ replace addage = ch_epi if ch_epi > 0 & ch_as < 0
 gen addpop = addage + ch_gr
 
 format death* %15.0fc
-/*
+
 ** Country names
 drop if iso3c=="LAC"
 gsort -ch_d
