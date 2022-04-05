@@ -89,7 +89,7 @@ label define ghecause_
 ** Collapse to sum mental health and neurological 
 collapse (sum) dths daly, by(year sex ghecause region)
 sort region ghecause sex year
-/*
+
 
 ** --------------------------
 ** Associated statistics

@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap3-120-death-change.do
+    //  algorithm name			    paper1-160-health-figure3A.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	26-OCT-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap3-120-death-change", replace
+    log using "`logpath'\paper1-160-health-figure3A", replace
 ** HEADER -----------------------------------------------------
 
 ** Load the country-level death and population data
