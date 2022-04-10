@@ -271,7 +271,7 @@ twoway
         162 "Brazil"
         187 "Mexico"
         ,
-	valuelabel labc(gs0) labs(4) tlc(gs0) notick nogrid glc(gs16) angle(0) format(%9.0f))
+	valuelabel labc(gs0) labs(3.5) tlc(gs0) notick nogrid glc(gs16) angle(0) format(%9.0f))
 	yscale(noline lw(none) lc(gs16) noextend range(-20(10)210)) 
 	ytitle("", color(gs8) size(3) margin(l=1 r=1 t=1 b=1)) 
 
@@ -279,14 +279,13 @@ twoway
 	valuelabel labc(gs0) labs(2.5) notick nogrid glc(gs16) angle(0) format(%9.0f))
 	xscale(noline lw(vthin) range(0(10)100) ) 
 	xtitle(" ", size(3) color(gs0) margin(l=0 r=0 t=0 b=0)) 
-    /// xmtick(-1000000 -500000 1000000 2000000 3000000, tlc(gs10))
 
     xtitle("") xscale(noline) xlabel(, nogrid)
 
     /// Column headings
-    text(203 11 "1980" ,  place(c) size(5) color(gs0) just(right))
-    text(203 36 "2020" ,  place(c) size(5) color(gs0) just(right))
-    text(203 61 "2060" ,  place(c) size(5) color(gs0) just(right))
+    text(203 11 "1980" ,  place(c) size(4) color(gs0) just(right))
+    text(203 36 "2020" ,  place(c) size(4) color(gs0) just(right))
+    text(203 61 "2060" ,  place(c) size(4) color(gs0) just(right))
 
     /// RHS text
     text(191 73 "1980: $a70_8_1980%" ,   place(e) size(3.25) color(gs8) just(right))
