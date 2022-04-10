@@ -38,11 +38,13 @@ tempfile t1
 
 ** Mortality COUNT 
 use "`datapath'\from-who\chap2_000_mr", clear
+rename cases dths
 keep year sex ghecause region dths 
 save `t1', replace 
 
 ** DALY COUNT
 use "`datapath'\from-who\chap2_000_daly", clear
+rename cases daly
 keep year sex ghecause region daly 
 merge 1:1 year sex ghecause region using `t1' 
 drop _merge
@@ -150,6 +152,7 @@ preserve
     reshape wide dths daly , i(year sex) j(ghecause) 
     gen ncd_inj1 = dths8 + dths9
     gen ncd_inj2 = daly8 + daly9
+    format ncd_inj1 %12.1fc
     
     gen pdths = (ncd_inj1/dths1)*100
     gen pdaly = (ncd_inj2/daly1)*100

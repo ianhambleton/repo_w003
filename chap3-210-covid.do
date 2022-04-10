@@ -3,7 +3,7 @@
     //  algorithm name			    chap3_210_covid.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
-    // 	date last modified	    	31-MAr-2021
+    // 	date last modified	    	31-MAr-2022
     //  algorithm task			    Reading the WHO GHE dataset - disease burden, YLL and DALY
 
     ** General algorithm set-up
@@ -124,7 +124,7 @@ order iso iso_num countryregion cgroup date total_cases total_deaths pop
 sort iso date 
 keep if date == d(31dec2020) | iso_num!=iso_num[_n+1]
 gen year = 2020 if date == d(31dec2020)
-replace year = 2021 if date == d(3nov2021)
+replace year = 2022 if date == d(8apr2022)
 sort year cgroup iso_num 
 ** Reshape to wide by date 
 rename total_deaths cdeath 
@@ -137,16 +137,16 @@ preserve
     reshape wide ccase cdeath pop , i(cgroup iso_num) j(year) 
     ** Crude Mortality Rate
     gen mrate2020 = (cdeath2020/pop2020) * 100000
-    gen mrate2021 = (cdeath2021/pop2021) * 100000
-    gen mrate = (cdeath2021/pop2021) * 100000
+    gen mrate2022 = (cdeath2022/pop2022) * 100000
+    gen mrate = (cdeath2022/pop2022) * 100000
     ** Case-Fatality rate (deaths per 100 confirmed cases)
     gen cfat2020 = (cdeath2020/ccase2020) * 100
-    gen cfat2021 = (cdeath2021/ccase2021) * 100
-    gen cfat = (cdeath2021/ccase2021) * 100
+    gen cfat2022 = (cdeath2022/ccase2022) * 100
+    gen cfat = (cdeath2022/ccase2022) * 100
 
-    format mrate2020 mrate2021 mrate cfat2020 cfat2021 cfat %9.1f
-    format ccase2021 cdeath2021 %15.0fc 
-    list countryregion ccase2021 cdeath2021 mrate2021 cfat2021, sepby(cgroup) linesize(150)
+    format mrate2020 mrate2022 mrate cfat2020 cfat2022 cfat %9.1f
+    format ccase2022 cdeath2022 %15.0fc 
+    list countryregion ccase2022 cdeath2022 mrate2022 cfat2022, sepby(cgroup) linesize(150)
 restore
 
 ** SUBREGIONS
@@ -155,16 +155,16 @@ preserve
     reshape wide ccase cdeath pop , i(cgroup) j(year) 
     ** Crude Mortality Rate
     gen mrate2020 = (cdeath2020/pop2020) * 100000 * (12/9) 
-    gen mrate2021 = (cdeath2021/pop2021) * 100000 * (12/10)
-    gen mrate = (cdeath2021/pop2021) * 100000
+    gen mrate2022 = (cdeath2022/pop2022) * 100000 * (12/10)
+    gen mrate = (cdeath2022/pop2022) * 100000
     ** Case-Fatality rate (deaths per 100 confirmed cases)
     gen cfat2020 = (cdeath2020/ccase2020) * 100
-    gen cfat2021 = (cdeath2021/ccase2021) * 100
-    gen cfat = (cdeath2021/ccase2021) * 100    
+    gen cfat2022 = (cdeath2022/ccase2022) * 100
+    gen cfat = (cdeath2022/ccase2022) * 100    
 
-    format mrate2020 mrate2021 mrate cfat2020 cfat2021 cfat %9.1f
-    format ccase2021 cdeath2021 %15.0fc 
-    list ccase2021 cdeath2021 cgroup mrate2021 cfat2021, linesize(150)
+    format mrate2020 mrate2022 mrate cfat2020 cfat2022 cfat %9.1f
+    format ccase2022 cdeath2022 %15.0fc 
+    list ccase2022 cdeath2022 cgroup mrate2022 cfat2022, linesize(150)
 restore
 
 ** AMERICAS
@@ -174,14 +174,14 @@ preserve
     reshape wide ccase cdeath pop , i(americas) j(year) 
     ** Crude Mortality Rate
     gen mrate2020 = (cdeath2020/pop2020) * 100000 * (12/9) 
-    gen mrate2021 = (cdeath2021/pop2021) * 100000 * (12/10)
-    gen mrate = (cdeath2021/pop2021) * 100000
+    gen mrate2022 = (cdeath2022/pop2022) * 100000 * (12/10)
+    gen mrate = (cdeath2022/pop2022) * 100000
     ** Case-Fatality rate (deaths per 100 confirmed cases)
     gen cfat2020 = (cdeath2020/ccase2020) * 100
-    gen cfat2021 = (cdeath2021/ccase2021) * 100
-    gen cfat = (cdeath2021/ccase2021) * 100
+    gen cfat2022 = (cdeath2022/ccase2022) * 100
+    gen cfat = (cdeath2022/ccase2022) * 100
 
-    format mrate2020 mrate2021 mrate cfat2020 cfat2021 cfat %9.1f
-    format ccase2021 cdeath2021 %15.0fc 
-    list americas ccase2021 cdeath2021 mrate2021 cfat2021, linesize(150)
+    format mrate2020 mrate2022 mrate cfat2020 cfat2022 cfat %9.1f
+    format ccase2022 cdeath2022 %15.0fc 
+    list americas ccase2022 cdeath2022 mrate2022 cfat2022, linesize(150)
 restore

@@ -67,8 +67,9 @@ drop if ghecause>=100
 
 ** Reshape to wide for each year
 ** Order CoDs by metric size 
-drop arate arate_new pop_new daly pop_daly dths pop_dths dths_exist daly_exist
+drop arate arate_new pop_new cases pop
 rename arate_final arate
+
 reshape wide arate, i(metric ghecause) j(year)
 gsort metric -arate2000 
 by metric : gen order2000 = _n 
@@ -145,11 +146,11 @@ local outer1    25 -4     -5 -4     -5 45      25 45      25 -4
         (pcspike order2000 ycode2000 order2019 ycode2019    if metric==2 & order2019==11 , lw(1.5) lc("`red'%50")) 
         (pcspike order2000 ycode2000 order2019 ycode2019    if metric==2 & order2019==12 , lw(1.5) lc("`blu'%50")) 
         
-        (pcspike order2000 ycode2000 order2019 ycode2019    if metric==2 & order2019==13 , lw(1.5) lc("`gry'%50")) 
-        (pcspike order2000 ycode2000 order2019 ycode2019    if metric==2 & order2019==14 , lw(1.5) lc("`red'%50")) 
-        (pcspike order2000 ycode2000 order2019 ycode2019    if metric==2 & order2019==15 , lw(1.5) lc("`blu'%50")) 
+        (pcspike order2000 ycode2000 order2019 ycode2019    if metric==2 & order2019==13 , lw(1.5) lc("`red'%50")) 
+        (pcspike order2000 ycode2000 order2019 ycode2019    if metric==2 & order2019==14 , lw(1.5) lc("`blu'%50")) 
+        (pcspike order2000 ycode2000 order2019 ycode2019    if metric==2 & order2019==15 , lw(1.5) lc("`gry'%50")) 
         
-        (pcspike order2000 ycode2000 order2019 ycode2019    if metric==2 & order2019==16 , lw(1.5) lc("`blu'%50")) 
+        (pcspike order2000 ycode2000 order2019 ycode2019    if metric==2 & order2019==16 , lw(1.5) lc("`red'%50")) 
         (pcspike order2000 ycode2000 order2019 ycode2019    if metric==2 & order2019==17 , lw(1.5) lc("`blu'%50")) 
         (pcspike order2000 ycode2000 order2019 ycode2019    if metric==2 & order2019==18 , lw(1.5) lc("`gry'%50")) 
         
@@ -161,35 +162,35 @@ local outer1    25 -4     -5 -4     -5 45      25 45      25 -4
         (sc order2000 ycode2000                             if metric==2 & order2000==1 , msize(10) m(o) mlc("`gry'*0.75") mfc("`gry'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==2 & order2019==1 , msize(10) m(o) mlc("`gry'*0.75") mfc("`gry'*0.5") mlw(0.2))
 
-		/// STROKE. 2-(2000) 2-(2019)
+		/// IPV. 3-(2000) 2-(2019)
         (sc order2000 ycode2000                             if metric==2 & order2000==3 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==2 & order2019==2 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
 
-		/// COPD. 3-(2000) 3-(2019)
+		/// DIABETES. 5-(2000) 3-(2019)
         (sc order2000 ycode2000                             if metric==2 & order2000==5 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==2 & order2019==3 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
         
-		/// LUNG CANCER. 4-(2000) 7-(2019)
+		/// ROAD INJURY. 4-(2000) 4-(2019)
         (sc order2000 ycode2000                             if metric==2 & order2000==4 , msize(10) m(o) mlc("`gry'*0.75") mfc("`gry'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==2 & order2019==4 , msize(10) m(o) mlc("`gry'*0.75") mfc("`gry'*0.5") mlw(0.2))
         
-		/// DIABETES. 5-(2000) 5-(2019)
+		/// STROKE. 2-(2000) 5-(2019)
         (sc order2000 ycode2000                             if metric==2 & order2000==2 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==2 & order2019==5 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))        
         
-		/// IPV. 6-(2000) 6-(2019)
+		/// DRUG USE. 12-(2000) 6-(2019)
         (sc order2000 ycode2000                             if metric==2 & order2000==12 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==2 & order2019==6 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))        
         
-		/// ROAD INJURIES. 7-(2000) 8-(2019)
+		/// DEPRESSIVE. 7-(2000) 7-(2019)
         (sc order2000 ycode2000                             if metric==2 & order2000==7 , msize(10) m(o) mlc("`gry'*0.75") mfc("`gry'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==2 & order2019==7 , msize(10) m(o) mlc("`gry'*0.75") mfc("`gry'*0.5") mlw(0.2))
         
-		/// COLON/RECTUM CANCER. 8-(2000) 10-(2019)
+		/// COPD. 6-(2000) 8-(2019)
         (sc order2000 ycode2000                             if metric==2 & order2000==6 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==2 & order2019==8 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
 
-		/// ALZHEIMERS/DEMENTIAS. 9-(2000) 4-(2019)
+		/// ANXIETY. 10-(2000) 9-(2019)
         (sc order2000 ycode2000                             if metric==2 & order2000==10 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==2 & order2019==9 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
 
@@ -197,47 +198,47 @@ local outer1    25 -4     -5 -4     -5 45      25 45      25 -4
         (sc order2000 ycode2000                             if metric==2 & order2000==9 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==2 & order2019==10 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
 
-		/// HHD. 11-(2000) 9-(2019)
+		/// SELF HARM. 16-(2000) 11-(2019)
         (sc order2000 ycode2000                             if metric==2 & order2000==16 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==2 & order2019==11 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
 
-		/// PROSTATE CANCER. 12-(2000) 14-(2019)
+		/// LUNG CANCER. 8-(2000) 12-(2019)
         (sc order2000 ycode2000                             if metric==2 & order2000==8 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==2 & order2019==12 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
 
-		/// CARDIOMYOPATHY etc. 13-(2000) 19-(2019)
-        (sc order2000 ycode2000                             if metric==2 & order2000==13 , msize(10) m(o) mlc("`gry'*0.75") mfc("`gry'*0.5") mlw(0.2))
-        (sc order2019 ycode2019                             if metric==2 & order2019==13 , msize(10) m(o) mlc("`gry'*0.75") mfc("`gry'*0.5") mlw(0.2))
+		/// FALLS. 14-(2000) 13-(2019)
+        (sc order2000 ycode2000                             if metric==2 & order2000==14 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
+        (sc order2019 ycode2019                             if metric==2 & order2019==13 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
 
-		/// SELF-HARM. 14-(2000) 11-(2019)
-        (sc order2000 ycode2000                             if metric==2 & order2000==20 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
-        (sc order2019 ycode2019                             if metric==2 & order2019==14 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
-
-		/// STOMACH CANCER. 15-(2000) 18-(2019)
+		/// ALCOHOL USE. 14-(2000) 11-(2019)
         (sc order2000 ycode2000                             if metric==2 & order2000==11 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
-        (sc order2019 ycode2019                             if metric==2 & order2019==15 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
+        (sc order2019 ycode2019                             if metric==2 & order2019==14 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
 
-		/// Lymphomas, multiple myeloma 16-(2000) 16-(2019)
-        (sc order2000 ycode2000                             if metric==2 & order2000==15 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
-        (sc order2019 ycode2019                             if metric==2 & order2019==16 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
+		/// MIGRAINE. 15-(2000) 15-(2019)
+        (sc order2000 ycode2000                             if metric==2 & order2000==15 , msize(10) m(o) mlc("`gry'*0.75") mfc("`gry'*0.5") mlw(0.2))
+        (sc order2019 ycode2019                             if metric==2 & order2019==15 , msize(10) m(o) mlc("`gry'*0.75") mfc("`gry'*0.5") mlw(0.2))
 
-		/// PANCREAS CANCER. 17-(2000) 15-(2019)
-        (sc order2000 ycode2000                             if metric==2 & order2000==14 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
+		/// ALZHEIMER 20-(2000) 16-(2019)
+        (sc order2000 ycode2000                             if metric==2 & order2000==20 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
+        (sc order2019 ycode2019                             if metric==2 & order2019==16 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
+
+		/// PROSTATE CANCER. 13-(2000) 17-(2019)
+        (sc order2000 ycode2000                             if metric==2 & order2000==13 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==2 & order2019==17 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
 
-		/// LEUKEMIA. 18-(2000) 21-(2019)
+		/// ASTHMA. 18-(2000) 18-(2019)
         (sc order2000 ycode2000                             if metric==2 & order2000==18 , msize(10) m(o) mlc("`gry'*0.75") mfc("`gry'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==2 & order2019==18 , msize(10) m(o) mlc("`gry'*0.75") mfc("`gry'*0.5") mlw(0.2))
 
-		/// LIVER CANCER. 19-(2000) 20-(2019)
+		/// COLON CANCER. 17-(2000) 19-(2019)
         (sc order2000 ycode2000                             if metric==2 & order2000==17 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==2 & order2019==19 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
 
-		/// LIVER CANCER. 20-(2000) 22-(2019)
+		/// HHD. 22-(2000) 20-(2019)
         (sc order2000 ycode2000                             if metric==2 & order2000==22 , mlc("`red'*0.75") msize(10) m(o) mfc("`red'*0.15") mlw(0.2))
         (sc order2019 ycode2019                             if metric==2 & order2019==20 , mlc("`red'*0.75") msize(10) m(o) mfc("`red'*0.5") mlw(0.2))
 
-		/// FALLS. 21-(2000) 17-(2019)
+		/// CERVICAL. 19-(2000) 22-(2019)
         (sc order2000 ycode2000                             if metric==2 & order2000==19 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==2 & order2019==22 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.15") mlw(0.2))
 
@@ -325,10 +326,10 @@ local outer1    25 -4     -5 -4     -5 45      25 45      25 -4
             text(12 13 "Lung cancer", place(e) size(5) color(gs0))
 
             text(13 13 "Falls",  place(e) size(5) color(gs0))
-            text(14 13 "Alzeimers/dementias",  place(e) size(5) color(gs0))
-            text(15 13 "Alcohol use disorders",  place(e) size(5) color(gs0))
+            text(14 13 "Alcohol use disorders",  place(e) size(5) color(gs0))
+            text(15 13 "Migraine",  place(e) size(5) color(gs0))
 
-            text(16 13 "Migraine",  place(e) size(5) color(gs0))
+            text(16 13 "Alzeimers/dementias",  place(e) size(5) color(gs0))
             text(17 13 "Prostate cancer",  place(e) size(5) color(gs0))
             text(18 13 "Asthma",  place(e) size(5) color(gs0))
 
@@ -401,71 +402,71 @@ local outer1    25 -4     -5 -4     -5 45      25 45      25 -4
         (sc order2000 ycode2000                             if metric==1 & order2000==5 , msize(10) m(o) mlc("`gry'*0.75") mfc("`gry'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==1 & order2019==5 , msize(10) m(o) mlc("`gry'*0.75") mfc("`gry'*0.5") mlw(0.2))        
         
-		/// IPV. 6-(2000) 6-(2019)
+		/// PROSTATE. 6-(2000) 9-(2019)
         (sc order2000 ycode2000                             if metric==1 & order2000==6 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==1 & order2019==9 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))        
         
-		/// ROAD INJURIES. 7-(2000) 8-(2019)
+		/// IPV. 7-(2000) 6-(2019)
         (sc order2000 ycode2000                             if metric==1 & order2000==7 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==1 & order2019==6 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
         
-		/// COLON/RECTUM CANCER. 8-(2000) 10-(2019)
+		/// BREAST CANCER. 8-(2000) 8-(2019)
         (sc order2000 ycode2000                             if metric==1 & order2000==8 , msize(10) m(o) mlc("`gry'*0.75") mfc("`gry'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==1 & order2019==8 , msize(10) m(o) mlc("`gry'*0.75") mfc("`gry'*0.5") mlw(0.2))
 
-		/// ALZHEIMERS/DEMENTIAS. 9-(2000) 4-(2019)
+		/// ROAD INJURY. 9-(2000) 10-(2019)
         (sc order2000 ycode2000                             if metric==1 & order2000==9 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==1 & order2019==10 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
 
-		/// BREAST CANCER. 10-(2000) 12-(2019)
+		/// COLON CANCER. 10-(2000) 12-(2019)
         (sc order2000 ycode2000                             if metric==1 & order2000==10 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==1 & order2019==12 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
 
-		/// HHD. 11-(2000) 9-(2019)
+		/// ALXHEIMERS. 11-(2000) 4-(2019)
         (sc order2000 ycode2000                             if metric==1 & order2000==11 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==1 & order2019==4 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
 
-		/// PROSTATE CANCER. 12-(2000) 14-(2019)
+		/// HHD. 12-(2000) 1-(2019)
         (sc order2000 ycode2000                             if metric==1 & order2000==12 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==1 & order2019==11 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
 
-		/// CARDIOMYOPATHY etc. 13-(2000) 19-(2019)
+		/// CERVICAL CANCER etc. 13-(2000) 15-(2019)
         (sc order2000 ycode2000                             if metric==1 & order2000==13 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==1 & order2019==15 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
 
-		/// SELF-HARM. 14-(2000) 11-(2019)
+		/// CARDIOMYOPATHY. 14-(2000) 20-(2019)
         (sc order2000 ycode2000                             if metric==1 & order2000==14 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==1 & order2019==20 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
 
-		/// STOMACH CANCER. 15-(2000) 18-(2019)
+		/// SELF HARM. 15-(2000) 13-(2019)
         (sc order2000 ycode2000                             if metric==1 & order2000==15 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==1 & order2019==13 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
 
-		/// Lymphomas, multiple myeloma 16-(2000) 16-(2019)
+		/// STOMACH CANCER. 16-(2000) 19-(2019)
         (sc order2000 ycode2000                             if metric==1 & order2000==16 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==1 & order2019==19 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
 
-		/// PANCREAS CANCER. 17-(2000) 15-(2019)
+		/// LYMPHOMA. 17-(2000) 17-(2019)
         (sc order2000 ycode2000                             if metric==1 & order2000==17 , msize(10) m(o) mlc("`gry'*0.75") mfc("`gry'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==1 & order2019==17 , msize(10) m(o) mlc("`gry'*0.75") mfc("`gry'*0.5") mlw(0.2))
 
-		/// LEUKEMIA. 18-(2000) 21-(2019)
+		/// PANCREAS CANCER. 18-(2000) 16-(2019)
         (sc order2000 ycode2000                             if metric==1 & order2000==18 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==1 & order2019==16 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
 
-		/// LIVER CANCER. 19-(2000) 20-(2019)
+		/// LEUKEMIA. 19-(2000) 22-(2019)
         (sc order2000 ycode2000                             if metric==1 & order2000==19 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==1 & order2019==22 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.15") mlw(0.2))
 
-		/// LIVER CANCER. 20-(2000) 22-(2019)
+		/// OVARY CANCER. 20-(2000) 23-(2019)
         (sc order2000 ycode2000                             if metric==1 & order2000==20 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.5") mlw(0.2))
         (sc order2019 ycode2019                             if metric==1 & order2019==23 , msize(10) m(o) mlc("`blu'*0.75") mfc("`blu'*0.15") mlw(0.2))
 
-		/// FALLS. 21-(2000) 17-(2019)
+		/// FALLS. 22-(2000) 18-(2019)
         (sc order2000 ycode2000                             if metric==1 & order2000==22 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.15") mlw(0.2))
         (sc order2019 ycode2019                             if metric==1 & order2019==18 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
         
-		/// DRUG USE DISORDERS. 22-(2000) 13-(2019)
+		/// DRUG USE DISORDERS. 23-(2000) 14-(2019)
         (sc order2000 ycode2000                             if metric==1 & order2000==23 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.15") mlw(0.2))
         (sc order2019 ycode2019                             if metric==1 & order2019==14 , msize(10) m(o) mlc("`red'*0.75") mfc("`red'*0.5") mlw(0.2))
 

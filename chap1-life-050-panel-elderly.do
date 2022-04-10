@@ -312,7 +312,7 @@ local outer4 27.6 16.5 	28.4 16.5 	28.4 17.9 	27.6 17.9 	27.6 16.5
 		(line metric100 yr1 if region=="GLOBAL" & sex==1 & agroup==14 , lp("-") lw(0.4) lc("`women'%25"))
 
         /// droplines
-        (function y=25, range(1 35.5) lc(gs12) dropline(5.5 10.5 15.5 20.5 25.5 30.5 35.5))
+        (function y=25, range(1 35.5) lc(gs12) lp("l") dropline(5.5 10.5 15.5 20.5 25.5 30.5 35.5))
 
         /// Legend
         (function y=29, range(11.5 12.9) lp("l") lc(gs10) lw(0.4))
@@ -323,13 +323,13 @@ local outer4 27.6 16.5 	28.4 16.5 	28.4 17.9 	27.6 17.9 	27.6 16.5
 
 
 		/// X-Axis lines
-        (function y=9, range(1 5) lc(gs8) lw(0.2))
-        (function y=9, range(6 10) lc(gs8) lw(0.2))
-        (function y=9, range(11 15) lc(gs8) lw(0.2))
-        (function y=9, range(16 20) lc(gs8) lw(0.2))
-        (function y=9, range(21 25) lc(gs8) lw(0.2))
-        (function y=9, range(26 30) lc(gs8) lw(0.2))
-        (function y=9, range(31 35) lc(gs8) lw(0.2))
+        (function y=9,   range(1 5) lp("l") lc(gs8) lw(0.2))
+        (function y=9,  range(6 10) lp("l") lc(gs8) lw(0.2))
+        (function y=9, range(11 15) lp("l") lc(gs8) lw(0.2))
+        (function y=9, range(16 20) lp("l") lc(gs8) lw(0.2))
+        (function y=9, range(21 25) lp("l") lc(gs8) lw(0.2))
+        (function y=9, range(26 30) lp("l") lc(gs8) lw(0.2))
+        (function y=9, range(31 35) lp("l") lc(gs8) lw(0.2))
 		,
 			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 		
 			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 

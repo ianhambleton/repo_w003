@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap2-000a-mr-region-americas.do
+    //  algorithm name			    chap2-000b-mr-subregion.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	26-Apr-2021
@@ -26,72 +26,8 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap2-000a-mr-region-americas", replace
+    log using "`logpath'\chap2-000b-mr-subregion", replace
 ** HEADER -----------------------------------------------------
-
-** ------------------------------------------
-** Load and save the WHO standard population
-** ------------------------------------------
-input str5 atext spop
-"0-4"	88569
-"5-9" 86870
-"10-14"	85970
-"15-19"	84670
-"20-24"	82171
-"25-29"	79272
-"30-34"	76073
-"35-39"	71475
-"40-44"	65877
-"45-49"	60379
-"50-54"	53681
-"55-59"	45484
-"60-64"	37187
-"65-69"	29590
-"70-74"	22092
-"75-79"	15195
-"80-84"	9097
-"85-89"	4398
-"90-94"	1500
-"95-99"	400
-"100+"	50
-end
-** Collapse to 18 age groups in 5 year bands, and 85+
-gen age21 = 1 if atext=="0-4"
-replace age21 = 2 if atext=="5-9"
-replace age21 = 3 if atext=="10-14"
-replace age21 = 4 if atext=="15-19"
-replace age21 = 5 if atext=="20-24"
-replace age21 = 6 if atext=="25-29"
-replace age21 = 7 if atext=="30-34"
-replace age21 = 8 if atext=="35-39"
-replace age21 = 9 if atext=="40-44"
-replace age21 = 10 if atext=="45-49"
-replace age21 = 11 if atext=="50-54"
-replace age21 = 12 if atext=="55-59"
-replace age21 = 13 if atext=="60-64"
-replace age21 = 14 if atext=="65-69"
-replace age21 = 15 if atext=="70-74"
-replace age21 = 16 if atext=="75-79"
-replace age21 = 17 if atext=="80-84"
-replace age21 = 18 if atext=="85-89"
-replace age21 = 19 if atext=="90-94"
-replace age21 = 20 if atext=="95-99"
-replace age21 = 21 if atext=="100+"
-gen age18 = age21
-recode age18 (18 19 20 21 = 18) 
-collapse (sum) spop , by(age18) 
-rename spop rpop 
-tempfile who_std
-save `who_std', replace
-
-
-
-
-** ------------------------------------------
-** Loading DEATHS dataset for the Americas only 
-** Americas (AMR)
-** ------------------------------------------
-use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
 
     ** Restrict to individual causes (NCDs and External Causes)
     ** CVD causes
@@ -161,6 +97,77 @@ use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
     ** 1610     Self-harm * 
     ** 1620     Interpersonal violence * 
     ** 1630     Collective violence and legal intervention 
+
+** ------------------------------------------
+** Load and save the WHO standard population
+** ------------------------------------------
+input str5 atext spop
+"0-4"	88569
+"5-9" 86870
+"10-14"	85970
+"15-19"	84670
+"20-24"	82171
+"25-29"	79272
+"30-34"	76073
+"35-39"	71475
+"40-44"	65877
+"45-49"	60379
+"50-54"	53681
+"55-59"	45484
+"60-64"	37187
+"65-69"	29590
+"70-74"	22092
+"75-79"	15195
+"80-84"	9097
+"85-89"	4398
+"90-94"	1500
+"95-99"	400
+"100+"	50
+end
+** Collapse to 18 age groups in 5 year bands, and 85+
+gen age21 = 1 if atext=="0-4"
+replace age21 = 2 if atext=="5-9"
+replace age21 = 3 if atext=="10-14"
+replace age21 = 4 if atext=="15-19"
+replace age21 = 5 if atext=="20-24"
+replace age21 = 6 if atext=="25-29"
+replace age21 = 7 if atext=="30-34"
+replace age21 = 8 if atext=="35-39"
+replace age21 = 9 if atext=="40-44"
+replace age21 = 10 if atext=="45-49"
+replace age21 = 11 if atext=="50-54"
+replace age21 = 12 if atext=="55-59"
+replace age21 = 13 if atext=="60-64"
+replace age21 = 14 if atext=="65-69"
+replace age21 = 15 if atext=="70-74"
+replace age21 = 16 if atext=="75-79"
+replace age21 = 17 if atext=="80-84"
+replace age21 = 18 if atext=="85-89"
+replace age21 = 19 if atext=="90-94"
+replace age21 = 20 if atext=="95-99"
+replace age21 = 21 if atext=="100+"
+gen age18 = age21
+recode age18 (18 19 20 21 = 18) 
+collapse (sum) spop , by(age18) 
+rename spop pop 
+tempfile who_std
+save `who_std', replace
+
+
+
+** ------------------------------------------
+** Loading DEATHS dataset for the Americas only 
+** Americas (AMR)
+**  1100    Cardiovascular 
+**  1110    Rheumatic heart disease I01-I09
+**  1120    Hypertensive heart disease I11-I15 
+**  1130    Ischaemic heart disease I20-I25 
+**  1140    Stroke I60-I69 
+**  1150    Cardiomyopathy, myocarditis, endocarditis I30-I33, I38, I40, I42 
+**  1160    Other circulatory diseases I00, I26-I28, I34-I37, I44-I51, I70-I99
+** ------------------------------------------
+use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
+* TODO: Change restriction for each disease group
     #delimit ;
     keep if     
                 /// CVD causes
@@ -289,12 +296,11 @@ use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
                     (1620 = 56)
                     (1630 = 57);
     #delimit cr
-
     keep if who_region==2
     drop if age<0 
     drop dths_low dths_up
     ** Collapse from countries to subregions
-    collapse (sum) dths pop, by(ghecause year who_region sex age)
+    collapse (sum) dths pop, by(ghecause year paho_subregion sex age)
     ** save "`datapath'\from-who\chap2_cvd_001", replace
 
 ** BROAD age groups
@@ -330,7 +336,7 @@ replace age18 = 15 if age==70
 replace age18 = 16 if age==75
 replace age18 = 17 if age==80
 replace age18 = 18 if age==85
-collapse (sum) dths pop, by(year ghecause who_region sex age18 agroup)
+collapse (sum) dths pop, by(year ghecause paho_subregion sex age18 agroup)
 
 ** Join the DEATHS dataset with the WHO STD population
 ** merge m:m age18 using `who_std'
@@ -360,7 +366,7 @@ label values age18 age18_
 ** drop _merge
 
 ** Variable labelling
-label var who_region "WHO region of the Americas"
+label var paho_subregion "8 PAHO subregions of the Americas"
 label var agroup "5 broad age groups: young children, youth, young adult, older adult, elderly"
 label var age18 "5-year age groups: 18 groups"
 label var dths "Count of all deaths"
@@ -439,137 +445,66 @@ label define ghecause_
 label values ghecause ghecause_ 
 
 
+** Use in Chapter 3. Population change
+** 18 age groups
+save "`datapath'\from-who\chap3_byage_subregion_malefemale", replace
 
-** ------- 7-Apr-2022 new rate code ---------------------- 
-** Add the Reference population
-    merge m:m age18 using `who_std'
-    rename pop lpop
-    rename dths case
-    drop _merge
+** Direct standardization 
+        ** Two methods (-dstdize- and -distrate-)
+        gen deaths = round(dths*1000000) 
+        label var deaths "dths round to nearest integer" 
+        replace pop = round(pop*1000000) 
+        ** Save dataset ready for direct standardization 
+        tempfile for_mr
+        save `for_mr' , replace
+** Standardised MR values
+forval x = 2000(1)2019 {
+    forval y = 1(1)2 {
+        * TODO: Change loop range for each disease group
+        forval z = 1(1)57 {
+            use `for_mr' , clear 
+            tempfile results
+            keep if year==`x' 
+            keep if sex==`y'
+            keep if ghecause==`z' 
+            dstdize deaths pop age18, by(paho_subregion) using(`who_std')
+            matrix m`x'_`y'_`z' = r(crude) \ r(adj) \r(ub_adj) \ r(lb_adj) \  r(se) \ r(Nobs)
+            matrix m`x'_`y'_`z' = m`x'_`y'_`z''
+            svmat double m`x'_`y'_`z', name(col)
+            keep  Crude Adjusted Right Left Se Nobs
+            keep if Crude < .
+            gen year = `x' 
+            gen sex = `y'
+            gen ghecause = `z'
+            tempfile f_`x'_`y'_`z'
+            save `f_`x'_`y'_`z'' , replace
+        }    
+    }
+}
 
-** Crude rate
-    bysort sex year ghecause who_region: egen num = sum(case)
-    bysort sex year ghecause who_region: egen denom = sum(lpop)
-    gen crude = num / denom
+use `f_2000_1_1' , clear
 
-** (Ref Pop)/(Local Pop) * (Local Observed Events)
-    gen srate1 = rpop / lpop * case 
-    bysort sex year ghecause who_region: egen tsrate1 = sum(srate1)
-    bysort sex year ghecause who_region: egen trpop = sum(rpop)
-    bysort sex year ghecause who_region: egen tlpop = sum(lpop)
-    sort age18
-    ** Per 10,000
-    gen rate = tsrate1 / trpop
+forval x = 2000(1)2019 {
+    forval y = 1(1)2 {
+        * TODO: Change loop range for each disease group
+        forval z = 1(1)57 {
+            append using `f_`x'_`y'_`z''
+        }
+    }
+}
+bysort year sex ghecause : gen region = _n 
+* Drop duplicated initial dataset (2000, male, communicable) 
+drop if region > 8
 
-** Method
-** DSR: 1 / sum(refpop) * sum(refpop*case/localpop) 
-    bysort sex year ghecause who_region: egen t1a = sum(rpop)
-    gen  t1b = 1/t1a
-    gen t2a = rpop * case / lpop
-    bysort sex year ghecause who_region: egen t2b = sum(t2a)
-    gen dsr = t1b * t2b
-
-** DSR 95%CI
-    **  DSR
-    gen ci1 = dsr 
-    **  Case(lower)
-    bysort sex year ghecause who_region: egen ol1 = sum(case)
-    gen ol2 = 1 / (9*ol1)
-    gen ol3 = 1.96 / (3 * sqrt(ol1))
-    gen ol4 = ol1 * (1- ol2 - ol3)^3
-    **  Case(upper)
-    bysort sex year ghecause who_region: egen ou1 = sum(case)
-    gen ou2 = 1 / (9*(ou1 + 1))
-    gen ou3 = 1.96 / (3 * sqrt(ou1 + 1))
-    gen ou4 = (ou1+1) * (1 - ou2 + ou3)^3
-    **  Var(DSR)
-    gen var1 = rpop^2 * case / lpop^2
-    bysort sex year ghecause who_region: egen var2 = sum(var1)
-    bysort sex year ghecause who_region: egen var3 = sum(rpop)
-    gen var4 = var2 / (var3 ^2)
-    **  DSR(lower)
-    gen cl1 = dsr
-    gen cl = cl1 + sqrt(var4/ol1) * (ol4 - ol1)
-    **  DSR(upper)
-    gen cu = cl1 + sqrt(var4/ol1) * (ou4 - ol1)
-    ** Clear intermediate variables
-    drop t1a t1b t2a t2b ci1 ol1 ol2 ol3 ol4 ou1 ou2 ou3 ou4 var1 var2 var3 var4 cl1 
-    rename case cases 
-
-    ** Collapse out the local population
-    collapse (sum) cases lpop (mean) crate=crude arate=dsr aupp=cu alow=cl, by(sex year ghecause who_region)  
-
-    ** Reformat variables
-    ** rename case daly 
-    rename lpop pop 
-    gen ase = .  
-
-    ** Variable re-naming and dropping unwanted variables
-    rename who_region region
-    format cases %12.1fc 
-    keep cases crate arate aupp alow ase pop sex year ghecause region 
-** ------- new code ends ---------------------- 
-
-
-
-/// ** Direct standardization 
-///         ** Two methods (-dstdize- and -distrate-)
-///         gen deaths = round(dths*1000000) 
-///         label var deaths "dths round to nearest integer" 
-///         replace pop = round(pop*1000000) 
-///         ** Save dataset ready for direct standardization 
-///         tempfile for_mr
-///         save `for_mr' , replace
-/// ** Standardised MR values
-/// forval x = 2000(1)2019 {
-///     forval y = 1(1)2 {
-///         * TODO: Change loop range for each disease group
-///         forval z = 1(1)57 {
-///             use `for_mr' , clear 
-///             tempfile results
-///             keep if year==`x' 
-///             keep if sex==`y'
-///             keep if ghecause==`z' 
-///             dstdize deaths pop age18, by(who_region) using(`who_std')
-///             matrix m`x'_`y'_`z' = r(crude) \ r(adj) \r(ub_adj) \ r(lb_adj) \  r(se) \ r(Nobs)
-///             matrix m`x'_`y'_`z' = m`x'_`y'_`z''
-///             svmat double m`x'_`y'_`z', name(col)
-///             keep  Crude Adjusted Right Left Se Nobs
-///             keep if Crude < .
-///             gen year = `x' 
-///             gen sex = `y'
-///             gen ghecause = `z'
-///             tempfile f_`x'_`y'_`z'
-///             save `f_`x'_`y'_`z'' , replace
-///         }    
-///     }
-/// }
-/// 
-/// use `f_2000_1_1' , clear
-/// 
-/// forval x = 2000(1)2019 {
-///     forval y = 1(1)2 {
-///         * TODO: Change loop range for each disease group
-///         forval z = 1(1)57 {
-///             append using `f_`x'_`y'_`z''
-///         }
-///     }
-/// }
-/// bysort year sex ghecause : gen region = _n 
-/// 
-/// * Drop duplicated initial dataset (2000, male, communicable) 
-/// drop if region > 1
-/// 
-/// ** Variable re-naming
-/// rename Crude crate
-/// rename Adjusted arate
-/// rename Right aupp
-/// rename Left alow 
-/// rename Se ase 
-/// rename Nobs pop
+** Variable re-naming
+rename Crude crate
+rename Adjusted arate
+rename Right aupp
+rename Left alow 
+rename Se ase 
+rename Nobs pop
 
 ** Variable Labelling
-label var cases "Death numbers"
 label var crate "Crude rate"
 label var arate "Adjusted rate"
 label var alow "Lower 95% limit of adjusted rate"
@@ -584,7 +519,22 @@ label var region "WHO region / PAHO subregion"
 ** Variable level labelling
 recode region 1=100 2=200 3=300 4=400 5=500 6=600 7=700 8=800
 * subregions
-label define region_    100 "americas", modify           
+#delimit ; 
+label define region_    100 "north america"
+                        200 "central america"
+                        300 "andean"
+                        400 "southern cone" 
+                        500 "latin caribbean"
+                        600 "non-latin caribbean"
+                        700 "brazil"
+                        800 "mexico"
+                        1000 "africa"
+                        2000 "americas"
+                        3000 "eastern mediterranean"
+                        4000 "europe" 
+                        5000 "south-east asia"
+                        6000 "western pacific", modify;                     
+#delimit cr 
 label values region region_ 
 * sex
 label define sex_ 1 "male" 2 "female" , modify 
@@ -655,13 +605,10 @@ label define ghecause_
 label values ghecause ghecause_ 
 
 ** Save the final MR dataset
-drop ase 
-** drop aupp alow ase 
-** replace pop = pop/1000000
+drop aupp alow ase 
+replace pop = pop/1000000
 label data "Crude and Adjusted mortality rates: PAHO sub-regions"
-save "`datapath'\from-who\chap2-000-mr-region-americas", replace
-
-
+save "`datapath'\from-who\chap2_000b_mr_subregion", replace
 
 
 
@@ -808,12 +755,11 @@ use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
                     (1620 = 56)
                     (1630 = 57);
     #delimit cr
-
     keep if who_region==2
     drop if age<0 
     drop dths_low dths_up
     ** Collapse from countries to subregions
-    collapse (sum) dths pop, by(ghecause year who_region sex age)
+    collapse (sum) dths pop, by(ghecause year paho_subregion sex age)
     ** save "`datapath'\from-who\chap2_cvd_001", replace
 
 ** BROAD age groups
@@ -849,7 +795,7 @@ replace age18 = 15 if age==70
 replace age18 = 16 if age==75
 replace age18 = 17 if age==80
 replace age18 = 18 if age==85
-collapse (sum) dths pop, by(year ghecause who_region age18 agroup)
+collapse (sum) dths pop, by(year ghecause paho_subregion age18 agroup)
 
 ** Join the DEATHS dataset with the WHO STD population
 ** merge m:m age18 using `who_std'
@@ -879,7 +825,7 @@ label values age18 age18_
 ** drop _merge
 
 ** Variable labelling
-label var who_region "WHO regions"
+label var paho_subregion "8 PAHO subregions of the Americas"
 label var agroup "5 broad age groups: young children, youth, young adult, older adult, elderly"
 label var age18 "5-year age groups: 18 groups"
 label var dths "Count of all deaths"
@@ -957,131 +903,61 @@ label define ghecause_
 #delimit cr
 label values ghecause ghecause_ 
 
+** Use in Chapter 3. Population change
+** 18 age groups
+save "`datapath'\from-who\chap3_byage_subregion_both", replace
 
 
-** ------- 7-Apr-2022 new rate code  ---------------------- 
-** Add the Reference population
-    merge m:m age18 using `who_std'
-    rename pop lpop
-    rename dths case
-    drop _merge
+** Direct standardization 
+        ** Two methods (-dstdize- and -distrate-)
+        gen deaths = round(dths*1000000) 
+        label var deaths "dths round to nearest integer" 
+        replace pop = round(pop*1000000) 
+        ** Save dataset ready for direct standardization 
+        tempfile for_mr
+        save `for_mr' , replace
+** Standardised MR values
+forval x = 2000(1)2019 {
+        * TODO: Change loop range for each disease group
+        forval z = 1(1)57 {
+            use `for_mr' , clear 
+            tempfile results
+            keep if year==`x' 
+            keep if ghecause==`z' 
+            dstdize deaths pop age18, by(paho_subregion) using(`who_std')
+            matrix m`x'_`z' = r(crude) \ r(adj) \r(ub_adj) \ r(lb_adj) \  r(se) \ r(Nobs)
+            matrix m`x'_`z' = m`x'_`z''
+            svmat double m`x'_`z', name(col)
+            keep  Crude Adjusted Right Left Se Nobs
+            keep if Crude < .
+            gen year = `x' 
+            gen ghecause = `z'
+            tempfile f_`x'_`z'
+            save `f_`x'_`z'' , replace
+        }    
+}
 
-** Crude rate
-    bysort year ghecause who_region: egen num = sum(case)
-    bysort year ghecause who_region: egen denom = sum(lpop)
-    gen crude = num / denom
+use `f_2000_1' , clear
 
-** (Ref Pop)/(Local Pop) * (Local Observed Events)
-    gen srate1 = rpop / lpop * case 
-    bysort year ghecause who_region: egen tsrate1 = sum(srate1)
-    bysort year ghecause who_region: egen trpop = sum(rpop)
-    bysort year ghecause who_region: egen tlpop = sum(lpop)
-    sort age18
-    ** Per 10,000
-    gen rate = tsrate1 / trpop
+forval x = 2000(1)2019 {
+        * TODO: Change loop range for each disease group
+        forval z = 1(1)57 {
+            append using `f_`x'_`z''
+        }
+}
+bysort year ghecause : gen region = _n 
+* Drop duplicated initial dataset (2000, male, communicable) 
+drop if region > 8
 
-** Method
-** DSR: 1 / sum(refpop) * sum(refpop*case/localpop) 
-    bysort year ghecause who_region: egen t1a = sum(rpop)
-    gen  t1b = 1/t1a
-    gen t2a = rpop * case / lpop
-    bysort year ghecause who_region: egen t2b = sum(t2a)
-    gen dsr = t1b * t2b
-
-** DSR 95%CI
-    **  DSR
-    gen ci1 = dsr 
-    **  Case(lower)
-    bysort year ghecause who_region: egen ol1 = sum(case)
-    gen ol2 = 1 / (9*ol1)
-    gen ol3 = 1.96 / (3 * sqrt(ol1))
-    gen ol4 = ol1 * (1- ol2 - ol3)^3
-    **  Case(upper)
-    bysort year ghecause who_region: egen ou1 = sum(case)
-    gen ou2 = 1 / (9*(ou1 + 1))
-    gen ou3 = 1.96 / (3 * sqrt(ou1 + 1))
-    gen ou4 = (ou1+1) * (1 - ou2 + ou3)^3
-    **  Var(DSR)
-    gen var1 = rpop^2 * case / lpop^2
-    bysort year ghecause who_region: egen var2 = sum(var1)
-    bysort year ghecause who_region: egen var3 = sum(rpop)
-    gen var4 = var2 / (var3 ^2)
-    **  DSR(lower)
-    gen cl1 = dsr
-    gen cl = cl1 + sqrt(var4/ol1) * (ol4 - ol1)
-    **  DSR(upper)
-    gen cu = cl1 + sqrt(var4/ol1) * (ou4 - ol1)
-    ** Clear intermediate variables
-    drop t1a t1b t2a t2b ci1 ol1 ol2 ol3 ol4 ou1 ou2 ou3 ou4 var1 var2 var3 var4 cl1 
-    rename case cases
-
-    ** Collapse out the local population
-    collapse (sum) cases lpop (mean) crate=crude arate=dsr aupp=cu alow=cl, by(year ghecause who_region)  
-
-    ** Reformat variables
-    ** rename case daly 
-    rename lpop pop 
-    gen ase = .  
-
-    ** Variable re-naming and dropping unwanted variables
-    format cases %12.1fc
-    rename who_region region
-    keep cases crate arate aupp alow ase pop year ghecause region 
-** ------- new code ends ---------------------- 
-
-
-
-/// ** Direct standardization 
-///         ** Two methods (-dstdize- and -distrate-)
-///         gen deaths = round(dths*1000000) 
-///         label var deaths "dths round to nearest integer" 
-///         replace pop = round(pop*1000000) 
-///         ** Save dataset ready for direct standardization 
-///         tempfile for_mr
-///         save `for_mr' , replace
-/// ** Standardised MR values
-/// forval x = 2000(1)2019 {
-///         * TODO: Change loop range for each disease group
-///         forval z = 1(1)57 {
-///             use `for_mr' , clear 
-///             tempfile results
-///             keep if year==`x' 
-///             keep if ghecause==`z' 
-///             dstdize deaths pop age18, by(who_region) using(`who_std')
-///             matrix m`x'_`z' = r(crude) \ r(adj) \r(ub_adj) \ r(lb_adj) \  r(se) \ r(Nobs)
-///             matrix m`x'_`z' = m`x'_`z''
-///             svmat double m`x'_`z', name(col)
-///             keep  Crude Adjusted Right Left Se Nobs
-///             keep if Crude < .
-///             gen year = `x' 
-///             gen ghecause = `z'
-///             tempfile f_`x'_`z'
-///             save `f_`x'_`z'' , replace
-///         }    
-/// }
-/// 
-/// use `f_2000_1' , clear
-/// 
-/// forval x = 2000(1)2019 {
-///         * TODO: Change loop range for each disease group
-///         forval z = 1(1)57 {
-///             append using `f_`x'_`z''
-///         }
-/// }
-/// bysort year ghecause : gen region = _n 
-/// * Drop duplicated initial dataset (2000, male, communicable) 
-/// drop if region > 1
-/// 
-/// ** Variable re-naming
-/// rename Crude crate
-/// rename Adjusted arate
-/// rename Right aupp
-/// rename Left alow 
-/// rename Se ase 
-/// rename Nobs pop
+** Variable re-naming
+rename Crude crate
+rename Adjusted arate
+rename Right aupp
+rename Left alow 
+rename Se ase 
+rename Nobs pop
 
 ** Variable Labelling
-label var cases "Death numbers"
 label var crate "Crude rate"
 label var arate "Adjusted rate"
 label var alow "Lower 95% limit of adjusted rate"
@@ -1095,9 +971,23 @@ label var region "WHO region / PAHO subregion"
 ** Variable level labelling
 recode region 1=100 2=200 3=300 4=400 5=500 6=600 7=700 8=800
 * subregions
-label define region_    100 "americas", modify                    
-label values region region_
-
+#delimit ; 
+label define region_    100 "north america"
+                        200 "central america"
+                        300 "andean"
+                        400 "southern cone" 
+                        500 "latin caribbean"
+                        600 "non-latin caribbean"
+                        700 "brazil"
+                        800 "mexico"
+                        1000 "africa"
+                        2000 "americas"
+                        3000 "eastern mediterranean"
+                        4000 "europe" 
+                        5000 "south-east asia"
+                        6000 "western pacific", modify;                     
+#delimit cr 
+label values region region_ 
 * Cause of death
 * TODO: Change labelling for each disease group
 #delimit ; 
@@ -1165,8 +1055,8 @@ label values ghecause ghecause_
 
 ** Save the final MR dataset
 gen sex = 3 
-drop ase 
-** drop aupp alow ase 
-** replace pop = pop/1000000
+drop aupp alow ase 
+replace pop = pop/1000000
 label data "Crude and Adjusted mortality rates: PAHO sub-regions"
-save "`datapath'\from-who\chap2-000-mr-region-both-americas", replace
+save "`datapath'\from-who\chap2_000b_mr_subregion_both", replace
+

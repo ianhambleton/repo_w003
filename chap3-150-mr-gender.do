@@ -336,8 +336,8 @@ label define yorder_
     9    "Lymphomas, myelomas"
     10    "Lung cancer"
     11    "Leukemia"
-    12    "Pancreatic cancer"
-    13    "Colorectal cancer"
+    12    "Colorectal cancer"
+    13    "Pancreatic cancer"
 
     15    "COPD"
     16    "Asthma"
@@ -383,9 +383,10 @@ label values yorder2019 yorder_
 ** The Gender ratio values for plotting on graphic
 ** Ratios < 1 are reciprocated 
 gen i2019 = drat2019 
-replace i2019 = 1/drat2019 if drat2019 < 1
+** replace i2019 = 1/drat2019 if drat2019 < 1
+replace i2019 = drat2019 if drat2019 < 1
 replace i2019 = round(i2019,0.1)
-
+format i2019 %3.1fc 
 ** The Gender ration values for creating bar lengths
 ** note that injury values are contracted for visual ease
 gen drat2019_inj = 3.25 if cod==29

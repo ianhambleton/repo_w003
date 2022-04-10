@@ -266,7 +266,7 @@ sort sex ghecause drate
 
 use "`datapath'\from-who\chap2_000_adjusted", clear
 use "`datapath'\from-who\chap2_000_mr_wb", clear
-drop crate arate_new pop_new dths_exist paho_subregion dths pop_dths
+drop crate arate_new pop_new paho_subregion cases pop
 ** We're using an earlier MR file - which hasn't been multiplied to 100,000 persons
 replace arate = arate * 100000 
 

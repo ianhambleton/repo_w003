@@ -483,7 +483,6 @@ restore
 
 
 
-
 ** --------------------------------------------------------------
 ** APPENDIX: BAR CHART ORDERED by COUNTRY (ALL CVDs)
 ** Change year on LINE 47 of DO FILE to repeat for 2000 and 2019

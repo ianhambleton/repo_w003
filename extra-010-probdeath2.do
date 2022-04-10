@@ -79,7 +79,6 @@
 ** THE AMERICAS
 ** DATASETS FROM: 
 **      chap2-000a-mr-region-groups.do
-**      chap2-000a-mr-region.do
 tempfile t1 americas1 americas2
 use "`datapath'\from-who\chap2_equiplot_mr_byage_groupeddeath", clear
     keep if who_region==2 & year>=2015
@@ -92,7 +91,6 @@ use "`datapath'\from-who\chap2_equiplot_mr_byage_groupeddeath", clear
 ** THE SUBREGIONS
 ** DATASETS FROM: 
 **      chap2-000a-mr-subregion-groups.do
-**      chap2-000a-mr-subregion.do
 tempfile t1 subregions1 
 use "`datapath'\from-who\chap3_byage_subregion_groups_both", clear
     keep if year>=2015

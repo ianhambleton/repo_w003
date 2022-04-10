@@ -1,10 +1,10 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap2-000b-mr-subregion.do
+    //  algorithm name			    chap2-000g-daly-country.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	26-Apr-2021
-    //  algorithm task			    Preparing CVD mortality rates: PAHO-subregions in the Americas
+    //  algorithm task			    Preparing CVD mortality rates: Countries of the Americas
 
     ** General algorithm set-up
     version 17
@@ -26,8 +26,9 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap2-000b-mr-subregion", replace
+    log using "`logpath'\chap2-000g-daly-country", replace
 ** HEADER -----------------------------------------------------
+
 
 
 ** ------------------------------------------
@@ -79,16 +80,20 @@ replace age21 = 19 if atext=="90-94"
 replace age21 = 20 if atext=="95-99"
 replace age21 = 21 if atext=="100+"
 gen age18 = age21
-recode age18 (18 19 20 21 = 18) 
+** For DALY standardization we use 16 groups instead of 18 
+** We do this because Guyana estimates. DALY > Population when age 85+ 
+recode age18 (16 17 18 19 20 21 = 16) 
 collapse (sum) spop , by(age18) 
-rename spop rpop 
+rename spop pop 
 tempfile who_std
 save `who_std', replace
 
 
 
+
+
 ** ------------------------------------------
-** Loading DEATHS dataset for the Americas only 
+** Loading DALYs dataset for the Americas only 
 ** Americas (AMR)
 **  1100    Cardiovascular 
 **  1110    Rheumatic heart disease I01-I09
@@ -98,7 +103,17 @@ save `who_std', replace
 **  1150    Cardiomyopathy, myocarditis, endocarditis I30-I33, I38, I40, I42 
 **  1160    Other circulatory diseases I00, I26-I28, I34-I37, I44-I51, I70-I99
 ** ------------------------------------------
-use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
+use "`datapath'\from-who\who-ghe-daly-001-who2-allcauses", replace
+** Collapse from 18 to 17 5 year groups.
+** This means 80+ instead of 85+ 
+recode age (75 80 85 = 75) 
+collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex ghecause un_region un_subregion who_region paho_subregion)
+
+** DALY to zero for Haiti in 2010 for natural disasters.
+** The earthquale meant that DALY > POP, causing problems for the algorithms
+** which expects DALY < POP
+replace daly = 0 if iso3n==332 & year==2010 & ghecause==1510
+
 * TODO: Change restriction for each disease group
    #delimit ;
     keep if     
@@ -132,12 +147,12 @@ use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
     #delimit cr
     keep if who_region==2
     drop if age<0 
-    drop dths_low dths_up
+    drop daly_low daly_up
     ** Collapse from countries to subregions
     ** Ensure we don't double count population for mental health and neurological (820 940)
     rename pop pop_temp 
-    collapse (sum) dths (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
-    collapse (sum) dths pop, by(ghecause year paho_subregion sex age)
+    collapse (sum) daly (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
+    collapse (sum) daly pop, by(ghecause year sex age iso3n iso3c paho_subregion)
     ** save "`datapath'\from-who\chap2_cvd_001", replace
 
 ** BROAD age groups
@@ -171,11 +186,10 @@ replace age18 = 13 if age==60
 replace age18 = 14 if age==65
 replace age18 = 15 if age==70
 replace age18 = 16 if age==75
-replace age18 = 17 if age==80
-replace age18 = 18 if age==85
-collapse (sum) dths pop, by(year ghecause paho_subregion sex age18 agroup)
+* TODO: This collapse only now down to country-level (instead of subregion level)
+collapse (sum) daly pop, by(year ghecause iso3n iso3c paho_subregion sex age18 agroup)
 
-** Join the DEATHS dataset with the WHO STD population
+** Join the DALYs dataset with the WHO STD population
 ** merge m:m age18 using `who_std'
 
 ** Label the age groups
@@ -195,9 +209,7 @@ label define age18_     1 "0-4"
                         13 "60-64"
                         14 "65-69"
                         15 "70-74"
-                        16 "75-79"
-                        17 "80-84"
-                        18 "85+";
+                        16 "75+";
 #delimit cr
 label values age18 age18_ 
 ** drop _merge
@@ -206,7 +218,7 @@ label values age18 age18_
 label var paho_subregion "8 PAHO subregions of the Americas"
 label var agroup "5 broad age groups: young children, youth, young adult, older adult, elderly"
 label var age18 "5-year age groups: 18 groups"
-label var dths "Count of all deaths"
+label var daly "Count of all dalys"
 label var pop "PAHO subregional populations" 
 format pop %12.0fc 
 ** label var spop "WHO Standard population: sums to 1 million"
@@ -227,147 +239,82 @@ label define ghecause_
                     500  "cancer"
                     600  "respiratory"
                     700  "diabetes"
-                    800  "mental"
+                    800  "mental" 
                     900  "neurological"
-                    1000  "injuries", modify
+                    1000 "injuries", modify
                     ;
 #delimit cr
 label values ghecause ghecause_ 
 
-** Use in Chapter 3. Population change
-** 18 age groups
-save "`datapath'\from-who\chap3_byage_subregion_groups_malefemale", replace
+** Temporary Removal of "Natural Disaster" DALY values for Haiti in 2010
+preserve
+    keep if iso3n==332 & year==2010 & ghecause==54
+    save "`datapath'\from-who\chap2_000g_daly_country_haiti_natural_disaster_groups", replace
+restore
 
 
+** Direct standardization 
+        rename daly dalyt
+        gen daly = round(dalyt*1000000) 
+        label var daly "dalys rounded to nearest integer" 
+        replace pop = round(pop*1000000) 
+        * Save dataset ready for direct standardization 
+        drop if ghecause<400
+        tempfile for_mr
+        save `for_mr' , replace
+** Standardised MR values
+forval x = 2000(1)2019 {
+    forval y = 1(1)2 {
+        * TODO: Change loop range for each disease group
+        forval z = 400(100)1000 {
+            dis "YEAR = " `x'
+            dis "SEX = " `y'
+            dis "CAUSE = " `z' 
+            use `for_mr' , clear 
+            tempfile results
+            keep if year==`x' 
+            keep if sex==`y'
+            keep if ghecause==`z' 
+            * TODO: This loop is by country for each year/sex/disease group
+            dstdize daly pop age18, by(iso3n) using(`who_std')
+            matrix m`x'_`y'_`z' = r(crude) \ r(adj) \r(ub_adj) \ r(lb_adj) \  r(se) \ r(Nobs)
+            matrix m`x'_`y'_`z' = m`x'_`y'_`z''
+            svmat double m`x'_`y'_`z', name(col)
+            keep  Crude Adjusted Right Left Se Nobs
+            keep if Crude < .
+            gen year = `x' 
+            gen sex = `y'
+            gen ghecause = `z'
+            tempfile f_`x'_`y'_`z'
+            save `f_`x'_`y'_`z'' , replace
+        }    
+    }
+}
 
-** ------- 7-Apr-2022 new rate code ---------------------- 
-** Add the Reference population
-    merge m:m age18 using `who_std'
-    rename pop lpop
-    rename dths case
-    drop _merge
+use `f_2000_1_400' , clear
 
-** Crude rate
-    bysort sex year ghecause paho_subregion: egen num = sum(case)
-    bysort sex year ghecause paho_subregion: egen denom = sum(lpop)
-    gen crude = num / denom
+forval x = 2000(1)2019 {
+    forval y = 1(1)2 {
+        * TODO: Change loop range for each disease group
+        forval z = 400(100)1000 {
+            append using `f_`x'_`y'_`z''
+        }
+    }
+}
+bysort year sex ghecause : gen region = _n 
+* Drop duplicated initial dataset (2000, male, communicable) 
+* TODO: This value is above 33 and 33 is the number of countries in LAC region
+drop if region > 33
 
-** (Ref Pop)/(Local Pop) * (Local Observed Events)
-    gen srate1 = rpop / lpop * case 
-    bysort sex year ghecause paho_subregion: egen tsrate1 = sum(srate1)
-    bysort sex year ghecause paho_subregion: egen trpop = sum(rpop)
-    bysort sex year ghecause paho_subregion: egen tlpop = sum(lpop)
-    sort age18
-    ** Per 10,000
-    gen rate = tsrate1 / trpop
-
-** Method
-** DSR: 1 / sum(refpop) * sum(refpop*case/localpop) 
-    bysort sex year ghecause paho_subregion: egen t1a = sum(rpop)
-    gen  t1b = 1/t1a
-    gen t2a = rpop * case / lpop
-    bysort sex year ghecause paho_subregion: egen t2b = sum(t2a)
-    gen dsr = t1b * t2b
-
-** DSR 95%CI
-    **  DSR
-    gen ci1 = dsr 
-    **  Case(lower)
-    bysort sex year ghecause paho_subregion: egen ol1 = sum(case)
-    gen ol2 = 1 / (9*ol1)
-    gen ol3 = 1.96 / (3 * sqrt(ol1))
-    gen ol4 = ol1 * (1- ol2 - ol3)^3
-    **  Case(upper)
-    bysort sex year ghecause paho_subregion: egen ou1 = sum(case)
-    gen ou2 = 1 / (9*(ou1 + 1))
-    gen ou3 = 1.96 / (3 * sqrt(ou1 + 1))
-    gen ou4 = (ou1+1) * (1 - ou2 + ou3)^3
-    **  Var(DSR)
-    gen var1 = rpop^2 * case / lpop^2
-    bysort sex year ghecause paho_subregion: egen var2 = sum(var1)
-    bysort sex year ghecause paho_subregion: egen var3 = sum(rpop)
-    gen var4 = var2 / (var3 ^2)
-    **  DSR(lower)
-    gen cl1 = dsr
-    gen cl = cl1 + sqrt(var4/ol1) * (ol4 - ol1)
-    **  DSR(upper)
-    gen cu = cl1 + sqrt(var4/ol1) * (ou4 - ol1)
-    ** Clear intermediate variables
-    drop t1a t1b t2a t2b ci1 ol1 ol2 ol3 ol4 ou1 ou2 ou3 ou4 var1 var2 var3 var4 cl1 
-    rename case cases 
-
-    ** Collapse out the local population
-    collapse (sum) cases lpop (mean) crate=crude arate=dsr aupp=cu alow=cl, by(sex year ghecause paho_subregion)  
-
-    ** Reformat variables
-    ** rename case daly 
-    rename lpop pop 
-    gen ase = .  
-
-    ** Variable re-naming and dropping unwanted variables
-    rename paho_subregion region
-    format cases %12.1fc 
-    keep cases crate arate aupp alow ase pop sex year ghecause region 
-** ------- new code ends ---------------------- 
-
-
-/// ** Direct standardization 
-///         ** Two methods (-dstdize- and -distrate-)
-///         gen deaths = round(dths*1000000) 
-///         label var deaths "dths round to nearest integer" 
-///         replace pop = round(pop*1000000) 
-///         ** Save dataset ready for direct standardization 
-///         tempfile for_mr
-///         save `for_mr' , replace
-/// ** Standardised MR values
-/// forval x = 2000(1)2019 {
-///     forval y = 1(1)2 {
-///         * TODO: Change loop range for each disease group
-///         forval z = 100(100)1000 {
-///             use `for_mr' , clear 
-///             tempfile results
-///             keep if year==`x' 
-///             keep if sex==`y'
-///             keep if ghecause==`z' 
-///             dstdize deaths pop age18, by(paho_subregion) using(`who_std')
-///             matrix m`x'_`y'_`z' = r(crude) \ r(adj) \r(ub_adj) \ r(lb_adj) \  r(se) \ r(Nobs)
-///             matrix m`x'_`y'_`z' = m`x'_`y'_`z''
-///             svmat double m`x'_`y'_`z', name(col)
-///             keep  Crude Adjusted Right Left Se Nobs
-///             keep if Crude < .
-///             gen year = `x' 
-///             gen sex = `y'
-///             gen ghecause = `z'
-///             tempfile f_`x'_`y'_`z'
-///             save `f_`x'_`y'_`z'' , replace
-///         }    
-///     }
-/// }
-/// 
-/// use `f_2000_1_100' , clear
-/// 
-/// forval x = 2000(1)2019 {
-///     forval y = 1(1)2 {
-///         * TODO: Change loop range for each disease group
-///         forval z = 100(100)1000 {
-///             append using `f_`x'_`y'_`z''
-///         }
-///     }
-/// }
-/// bysort year sex ghecause : gen region = _n 
-/// * Drop duplicated initial dataset (2000, male, communicable) 
-/// drop if region > 8
-/// 
-/// ** Variable re-naming
-/// rename Crude crate
-/// rename Adjusted arate
-/// rename Right aupp
-/// rename Left alow 
-/// rename Se ase 
-/// rename Nobs pop
+** Variable re-naming
+rename Crude crate
+rename Adjusted arate
+rename Right aupp
+rename Left alow 
+rename Se ase 
+rename Nobs pop
 
 ** Variable Labelling
-label var cases "Death numbers" 
 label var crate "Crude rate"
 label var arate "Adjusted rate"
 label var alow "Lower 95% limit of adjusted rate"
@@ -380,23 +327,43 @@ label var ghecause "Broad causes of death"
 label var region "WHO region / PAHO subregion"
 
 ** Variable level labelling
-recode region 1=100 2=200 3=300 4=400 5=500 6=600 7=700 8=800
-* subregions
+* Countries
+
 #delimit ; 
-label define region_    100 "north america"
-                        200 "central america"
-                        300 "andean"
-                        400 "southern cone" 
-                        500 "latin caribbean"
-                        600 "non-latin caribbean"
-                        700 "brazil"
-                        800 "mexico"
-                        1000 "africa"
-                        2000 "americas"
-                        3000 "eastern mediterranean"
-                        4000 "europe" 
-                        5000 "south-east asia"
-                        6000 "western pacific", modify;                     
+label define region_   
+                    1 "Antigua and Barbuda"
+                    2 "Argentina"
+                    3 "Bahamas"
+                    4 "Barbados"
+                    5 "Bolivia"
+                    6 "Brazil"
+                    7 "Belize"
+                    8 "Canada"
+                    9 "Chile"
+                    10 "Colombia"
+                    11 "Costa Rica"
+                    12 "Cuba"
+                    13 "Dominican Republic"
+                    14 "Ecuador"
+                    15 "El Salvador"
+                    16 "Grenada"
+                    17 "Guatemala"
+                    18 "Guyana"
+                    19 "Haiti"
+                    20 "Honduras"
+                    21 "Jamaica"
+                    22 "Mexico"
+                    23 "Nicaragua"
+                    24 "Panama"
+                    25 "Paraguay"
+                    26 "Peru"
+                    27 "Saint Lucia"
+                    28 "Saint Vincent and the Grenadines"
+                    29 "Suriname"
+                    30 "Trinidad and Tobago"
+                    31 "United States"
+                    32 "Uruguay"
+                    33 "Venezuela", modify;                     
 #delimit cr 
 label values region region_ 
 * sex
@@ -418,35 +385,22 @@ label define ghecause_
                     1000 "injuries", modify
                     ;
 #delimit cr
-label values ghecause ghecause_  
+label values ghecause ghecause_ 
 
 ** Save the final MR dataset
-drop ase 
-** drop aupp alow ase 
-** replace pop = pop/1000000
-label data "Crude and Adjusted mortality rates: PAHO sub-regions"
-save "`datapath'\from-who\chap2_000b_mr_subregion-groups", replace
-
-
-
-** List for TABLE 1.3
-preserve
-    use "`datapath'\from-who\chap2_000b_mr_subregion-groups", clear
-    gen mortr = arate * 100000
-    keep if year==2019
-    keep if ghecause==100 | ghecause==200 | ghecause==300 | ghecause==1000
-    gsort ghecause -sex region 
-    list year ghecause sex region mortr, sep(3)
-restore
+drop aupp alow ase 
+replace pop = pop/1000000
+label data "Crude and Adjusted DALYs: PAHO sub-regions"
+save "`datapath'\from-who\chap2_000g_daly_country_groups", replace
 
 
 
 
+** Repeat for women and men combined 
 
-** REPEAT FOR WOMEN AND MEN COMBINED
 
 ** ------------------------------------------
-** Loading DEATHS dataset for the Americas only 
+** Loading DALYs dataset for the Americas only 
 ** Americas (AMR)
 **  1100    Cardiovascular 
 **  1110    Rheumatic heart disease I01-I09
@@ -456,7 +410,17 @@ restore
 **  1150    Cardiomyopathy, myocarditis, endocarditis I30-I33, I38, I40, I42 
 **  1160    Other circulatory diseases I00, I26-I28, I34-I37, I44-I51, I70-I99
 ** ------------------------------------------
-use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
+use "`datapath'\from-who\who-ghe-daly-001-who2-allcauses", replace
+** Collapse from 18 to 17 5 year groups.
+** This means 80+ instead of 85+ 
+recode age (75 80 85 = 75) 
+collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex ghecause un_region un_subregion who_region paho_subregion)
+
+** DALY to zero for Haiti in 2010 for natural disasters.
+** The earthquale meant that DALY > POP, causing problems for the algorithms
+** which expects DALY < POP
+replace daly = 0 if iso3n==332 & year==2010 & ghecause==1510
+
 * TODO: Change restriction for each disease group
    #delimit ;
     keep if     
@@ -490,12 +454,12 @@ use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
     #delimit cr
     keep if who_region==2
     drop if age<0 
-    drop dths_low dths_up
+    drop daly_low daly_up
     ** Collapse from countries to subregions
     ** Ensure we don't double count population for mental health and neurological (820 940)
     rename pop pop_temp 
-    collapse (sum) dths (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
-    collapse (sum) dths pop, by(ghecause year paho_subregion sex age)
+    collapse (sum) daly (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
+    collapse (sum) daly pop, by(ghecause year sex age iso3n iso3c paho_subregion)
     ** save "`datapath'\from-who\chap2_cvd_001", replace
 
 ** BROAD age groups
@@ -529,11 +493,10 @@ replace age18 = 13 if age==60
 replace age18 = 14 if age==65
 replace age18 = 15 if age==70
 replace age18 = 16 if age==75
-replace age18 = 17 if age==80
-replace age18 = 18 if age==85
-collapse (sum) dths pop, by(year ghecause paho_subregion age18 agroup)
+* TODO: This collapse only now down to country-level (instead of subregion level)
+collapse (sum) daly pop, by(year ghecause iso3n iso3c paho_subregion age18 agroup)
 
-** Join the DEATHS dataset with the WHO STD population
+** Join the DALYs dataset with the WHO STD population
 ** merge m:m age18 using `who_std'
 
 ** Label the age groups
@@ -553,9 +516,7 @@ label define age18_     1 "0-4"
                         13 "60-64"
                         14 "65-69"
                         15 "70-74"
-                        16 "75-79"
-                        17 "80-84"
-                        18 "85+";
+                        16 "75+";
 #delimit cr
 label values age18 age18_ 
 ** drop _merge
@@ -564,7 +525,7 @@ label values age18 age18_
 label var paho_subregion "8 PAHO subregions of the Americas"
 label var agroup "5 broad age groups: young children, youth, young adult, older adult, elderly"
 label var age18 "5-year age groups: 18 groups"
-label var dths "Count of all deaths"
+label var daly "Count of all DALYs"
 label var pop "PAHO subregional populations" 
 format pop %12.0fc 
 ** label var spop "WHO Standard population: sums to 1 million"
@@ -592,134 +553,67 @@ label define ghecause_
 #delimit cr
 label values ghecause ghecause_ 
 
-** Use in Chapter 3. Population change
-** 18 age groups
-save "`datapath'\from-who\chap3_byage_subregion_groups_both", replace
+
+** Temporary Removal of "Natural Disaster" DALY values for Haiti in 2010
+preserve
+    keep if iso3n==332 & year==2010 & ghecause==54
+    save "`datapath'\from-who\chap2_000g_daly_country_haiti_natural_disaster", replace
+restore
 
 
+** Direct standardization 
+        rename daly dalyt
+        gen daly = round(dalyt*1000000) 
+        label var daly "dalys rounded to nearest integer" 
+        replace pop = round(pop*1000000) 
+        * Save dataset ready for direct standardization 
+        drop if ghecause<400
+        tempfile for_mr
+        save `for_mr' , replace
+** Standardised MR values
+forval x = 2000(1)2019 {
+        * TODO: Change loop range for each disease group
+        forval z = 400(100)1000 {
+            use `for_mr' , clear 
+            tempfile results
+            keep if year==`x' 
+            keep if ghecause==`z' 
+            * TODO: This loop is by country for each year/sex/disease group
+            dstdize daly pop age18, by(iso3n) using(`who_std')
+            matrix m`x'_`z' = r(crude) \ r(adj) \r(ub_adj) \ r(lb_adj) \  r(se) \ r(Nobs)
+            matrix m`x'_`z' = m`x'_`z''
+            svmat double m`x'_`z', name(col)
+            keep  Crude Adjusted Right Left Se Nobs
+            keep if Crude < .
+            gen year = `x' 
+            gen ghecause = `z'
+            tempfile f_`x'_`z'
+            save `f_`x'_`z'' , replace
+        }    
+}
 
-** ------- 7-Apr-2022 new rate code  ---------------------- 
-** Add the Reference population
-    merge m:m age18 using `who_std'
-    rename pop lpop
-    rename dths case
-    drop _merge
+use `f_2000_400' , clear
 
-** Crude rate
-    bysort year ghecause paho_subregion: egen num = sum(case)
-    bysort year ghecause paho_subregion: egen denom = sum(lpop)
-    gen crude = num / denom
+forval x = 2000(1)2019 {
+        * TODO: Change loop range for each disease group
+        forval z = 400(100)1000 {
+            append using `f_`x'_`z''
+        }
+}
+bysort year ghecause : gen region = _n 
+* Drop duplicated initial dataset (2000, male, communicable) 
+* TODO: This value is above 33 and 33 is the number of countries in LAC region
+drop if region > 33
 
-** (Ref Pop)/(Local Pop) * (Local Observed Events)
-    gen srate1 = rpop / lpop * case 
-    bysort year ghecause paho_subregion: egen tsrate1 = sum(srate1)
-    bysort year ghecause paho_subregion: egen trpop = sum(rpop)
-    bysort year ghecause paho_subregion: egen tlpop = sum(lpop)
-    sort age18
-    ** Per 10,000
-    gen rate = tsrate1 / trpop
-
-** Method
-** DSR: 1 / sum(refpop) * sum(refpop*case/localpop) 
-    bysort year ghecause paho_subregion: egen t1a = sum(rpop)
-    gen  t1b = 1/t1a
-    gen t2a = rpop * case / lpop
-    bysort year ghecause paho_subregion: egen t2b = sum(t2a)
-    gen dsr = t1b * t2b
-
-** DSR 95%CI
-    **  DSR
-    gen ci1 = dsr 
-    **  Case(lower)
-    bysort year ghecause paho_subregion: egen ol1 = sum(case)
-    gen ol2 = 1 / (9*ol1)
-    gen ol3 = 1.96 / (3 * sqrt(ol1))
-    gen ol4 = ol1 * (1- ol2 - ol3)^3
-    **  Case(upper)
-    bysort year ghecause paho_subregion: egen ou1 = sum(case)
-    gen ou2 = 1 / (9*(ou1 + 1))
-    gen ou3 = 1.96 / (3 * sqrt(ou1 + 1))
-    gen ou4 = (ou1+1) * (1 - ou2 + ou3)^3
-    **  Var(DSR)
-    gen var1 = rpop^2 * case / lpop^2
-    bysort year ghecause paho_subregion: egen var2 = sum(var1)
-    bysort year ghecause paho_subregion: egen var3 = sum(rpop)
-    gen var4 = var2 / (var3 ^2)
-    **  DSR(lower)
-    gen cl1 = dsr
-    gen cl = cl1 + sqrt(var4/ol1) * (ol4 - ol1)
-    **  DSR(upper)
-    gen cu = cl1 + sqrt(var4/ol1) * (ou4 - ol1)
-    ** Clear intermediate variables
-    drop t1a t1b t2a t2b ci1 ol1 ol2 ol3 ol4 ou1 ou2 ou3 ou4 var1 var2 var3 var4 cl1 
-    rename case cases
-
-    ** Collapse out the local population
-    collapse (sum) cases lpop (mean) crate=crude arate=dsr aupp=cu alow=cl, by(year ghecause paho_subregion)  
-
-    ** Reformat variables
-    ** rename case daly 
-    rename lpop pop 
-    gen ase = .  
-
-    ** Variable re-naming and dropping unwanted variables
-    format cases %12.1fc
-    rename paho_subregion region
-    keep cases crate arate aupp alow ase pop year ghecause region 
-** ------- new code ends ---------------------- 
-
-
-/// ** Direct standardization 
-///         ** Two methods (-dstdize- and -distrate-)
-///         gen deaths = round(dths*1000000) 
-///         label var deaths "dths round to nearest integer" 
-///         replace pop = round(pop*1000000) 
-///         ** Save dataset ready for direct standardization 
-///         tempfile for_mr
-///         save `for_mr' , replace
-/// ** Standardised MR values
-/// forval x = 2000(1)2019 {
-///         * TODO: Change loop range for each disease group
-///         forval z = 100(100)1000 {
-///             use `for_mr' , clear 
-///             tempfile results
-///             keep if year==`x' 
-///             keep if ghecause==`z' 
-///             dstdize deaths pop age18, by(paho_subregion) using(`who_std')
-///             matrix m`x'_`z' = r(crude) \ r(adj) \r(ub_adj) \ r(lb_adj) \  r(se) \ r(Nobs)
-///             matrix m`x'_`z' = m`x'_`z''
-///             svmat double m`x'_`z', name(col)
-///             keep  Crude Adjusted Right Left Se Nobs
-///             keep if Crude < .
-///             gen year = `x' 
-///             gen ghecause = `z'
-///             tempfile f_`x'_`z'
-///             save `f_`x'_`z'' , replace
-///         }    
-/// }
-/// 
-/// use `f_2000_100' , clear
-/// 
-/// forval x = 2000(1)2019 {
-///         * TODO: Change loop range for each disease group
-///         forval z = 100(100)1000 {
-///             append using `f_`x'_`z''
-///         }
-/// }
-/// bysort year ghecause : gen region = _n 
-/// * Drop duplicated initial dataset (2000, male, communicable) 
-/// drop if region > 8
-/// 
-/// ** Variable re-naming
-/// rename Crude crate
-/// rename Adjusted arate
-/// rename Right aupp
-/// rename Left alow 
-/// rename Se ase 
-/// rename Nobs pop
+** Variable re-naming
+rename Crude crate
+rename Adjusted arate
+rename Right aupp
+rename Left alow 
+rename Se ase 
+rename Nobs pop
 
 ** Variable Labelling
-label var cases "Death numbers" 
 label var crate "Crude rate"
 label var arate "Adjusted rate"
 label var alow "Lower 95% limit of adjusted rate"
@@ -731,25 +625,45 @@ label var ghecause "Broad causes of death"
 label var region "WHO region / PAHO subregion"
 
 ** Variable level labelling
-recode region 1=100 2=200 3=300 4=400 5=500 6=600 7=700 8=800
-* subregions
+* Countries
+
 #delimit ; 
-label define region_    100 "north america"
-                        200 "central america"
-                        300 "andean"
-                        400 "southern cone" 
-                        500 "latin caribbean"
-                        600 "non-latin caribbean"
-                        700 "brazil"
-                        800 "mexico"
-                        1000 "africa"
-                        2000 "americas"
-                        3000 "eastern mediterranean"
-                        4000 "europe" 
-                        5000 "south-east asia"
-                        6000 "western pacific", modify;                     
+label define region_   
+                    1 "Antigua and Barbuda"
+                    2 "Argentina"
+                    3 "Bahamas"
+                    4 "Barbados"
+                    5 "Bolivia"
+                    6 "Brazil"
+                    7 "Belize"
+                    8 "Canada"
+                    9 "Chile"
+                    10 "Colombia"
+                    11 "Costa Rica"
+                    12 "Cuba"
+                    13 "Dominican Republic"
+                    14 "Ecuador"
+                    15 "El Salvador"
+                    16 "Grenada"
+                    17 "Guatemala"
+                    18 "Guyana"
+                    19 "Haiti"
+                    20 "Honduras"
+                    21 "Jamaica"
+                    22 "Mexico"
+                    23 "Nicaragua"
+                    24 "Panama"
+                    25 "Paraguay"
+                    26 "Peru"
+                    27 "Saint Lucia"
+                    28 "Saint Vincent and the Grenadines"
+                    29 "Suriname"
+                    30 "Trinidad and Tobago"
+                    31 "United States"
+                    32 "Uruguay"
+                    33 "Venezuela", modify;                     
 #delimit cr 
-label values region region_ 
+label values region region_  
 * Cause of death
 * TODO: Change labelling for each disease group
 #delimit ; 
@@ -761,7 +675,7 @@ label define ghecause_
                     500  "cancer"
                     600  "respiratory"
                     700  "diabetes"
-                    800  "mental" 
+                    800  "mental"
                     900  "neurological"
                     1000 "injuries", modify
                     ;
@@ -769,10 +683,8 @@ label define ghecause_
 label values ghecause ghecause_ 
 
 ** Save the final MR dataset
-gen sex = 3 
-drop ase 
-** drop aupp alow ase 
-** replace pop = pop/1000000
-label data "Crude and Adjusted mortality rates: PAHO sub-regions"
-save "`datapath'\from-who\chap2_000b_mr_subregion_groups_both", replace
-
+gen sex = 3
+drop aupp alow ase 
+replace pop = pop/1000000
+label data "Crude and Adjusted DALYs: PAHO sub-regions"
+save "`datapath'\from-who\chap2_000g_daly_country_groups_both", replace

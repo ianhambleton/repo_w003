@@ -123,8 +123,8 @@ save "`datapath'\from-who\chap2_000_adjusted_mentalhealthonly", replace
 ** (35)  4   "Alcohol use disorders" 
 ** (34)  5   "Schizophrenia" 
 ** NEUROLOGICAL
-** (42)  6   "Alzheimer/dementias"
-** (46)  7   "Migraine"
+** (46)  6   "Migraine"
+** (42)  7   "Alzheimer/dementias"
 ** (44)  8   "Epilepsy"
 ** (47)  9   "Non-migraine headache"
 ** (43)  10  "Parkinson disease"
@@ -152,8 +152,8 @@ label define cod_   1   "Drug use disorders"
                     3   "Anxiety disorders" 
                     4   "Alcohol use disorders" 
                     5   "Schizophrenia" 
-                    6   "Alzheimer/dementias"
-                    7   "Migraine"
+                    6   "Migraine"
+                    7   "Alzheimer/dementias"
                     8   "Epilepsy"
                     9   "Non-migraine headache"
                     10  "Parkinson's disease"
@@ -168,7 +168,7 @@ keep if cod<=13
 
 ** COD as proportion of ALL MENTAL/NEUROLOGICAL and ALL DEATHS
 ** Women and men combined, all Americas
-**preserve
+preserve
     keep if sex==3 & region==2000
     drop sex region
     collapse (sum) dths daly, by(year cod)
@@ -236,10 +236,10 @@ keep if cod<=13
         gen pdaly_`x'a = (daly`x'/daly12)*100
         gen pdaly_`x'b = (daly`x'/daly13)*100
         if `x'==6 {
-            dis "Alzheimer/dementias"
+            dis "Migraine"
         }
         if `x'==7 {
-            dis "Migraine"
+            dis "Alzheimer/dementias"
         }
         if `x'==8 {
             dis "Epilepsy"
@@ -252,7 +252,7 @@ keep if cod<=13
         }
         list year pdth_`x'a pdth_`x'b pdaly_`x'a pdaly_`x'b 
     }
-/*restore
+restore
 
 
 

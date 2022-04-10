@@ -107,7 +107,7 @@ merge 1:1 ghecause age16 using `t1'
 drop _merge age16
 collapse (sum) daly deaths , by(ghecause agroup)
 format deaths daly %15.0fc 
-reshape wide daly deaths , i(ghecause) j(agroup)
+/*reshape wide daly deaths , i(ghecause) j(agroup)
 egen deaths_tot = rowtotal(deaths1 deaths2 deaths3 deaths4 deaths5) 
 egen daly_tot = rowtotal(daly1 daly2 daly3 daly4 daly5) 
 sort ghecause deaths* daly* 
@@ -118,7 +118,7 @@ forval x = 1(1)5 {
     gen death_perc`x' = (deaths`x' / deaths_tot) * 100 
     gen daly_perc`x' = (daly`x' / daly_tot) * 100 
 }
-/*keep ghecause death_perc* daly_perc*
+keep ghecause death_perc* daly_perc*
 order ghecause death_* daly_*
 
 **------------------------------------------------

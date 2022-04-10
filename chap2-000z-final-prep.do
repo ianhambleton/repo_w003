@@ -39,12 +39,14 @@ replace arate_new = arate_new * 100000
 gen arate_final = arate
 replace arate_final = arate_new if arate_new<. 
 ** Update POPULATION for sex-specific cancers
-gen pop_final = pop_dths
+rename cases dths
+gen pop_final = pop
 replace pop_final = pop_new if pop_new<. 
 keep year sex ghecause region paho_subregion dths arate_final pop_final 
 order year sex ghecause region paho_subregion dths arate_final pop_final 
 rename arate_final mortr
 rename pop_final pop_mortr
+format pop_mortr %15.1fc
 save "`datapath'\from-who\chap2_000_mr_adjusted", replace
 tempfile t1
 save `t1', replace
@@ -57,12 +59,14 @@ replace arate_new = arate_new * 100000
 gen arate_final = arate
 replace arate_final = arate_new if arate_new<. 
 ** Update POPULATION for sex-specific cancers
-gen pop_final = pop_daly
+rename cases daly
+gen pop_final = pop
 replace pop_final = pop_new if pop_new<. 
 keep year sex ghecause region paho_subregion daly arate_final pop_final 
 order year sex ghecause region paho_subregion daly arate_final pop_final 
 rename arate_final dalyr
 rename pop_final pop_dalyr
+format pop_dalyr %15.1fc
 save "`datapath'\from-who\chap2_000_daly_adjusted", replace
 
 ** Join the two datasets

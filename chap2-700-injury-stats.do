@@ -380,7 +380,7 @@ qui {
 ** Percent Improvement
 ** Death excess (men vs women)
 **-----------------------------------------------------------
-qui {
+**qui {
     use "`datapath'\from-who\chap2_000_daly_adjusted", clear
     keep if ghecause == 56 & region==2000
     rename dalyr drate

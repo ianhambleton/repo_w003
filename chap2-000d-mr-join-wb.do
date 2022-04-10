@@ -146,21 +146,21 @@ tempfile mr1
 save `mr1', replace 
 
 
-** Merge the deaths dataset
-tempfile d1 
-use "`datapath'\from-who\chap2_000d_dths", clear
-append using "`datapath'\from-who\chap2_000d_dths_both"
-rename pop pop_dths 
-label define sex_ 1 "men" 2 "women" 3 "both" , modify
-label values sex sex_ 
-keep year ghecause sex region paho_subregion dths pop_dths
-sort year sex ghecause region 
-merge 1:1 year sex ghecause region using `mr1' 
-
-rename _merge dths_exist
-recode dths_exist 3=1 2=0 
-label define dths_exist_ 1 "yes" 0 "no"
-label values dths_exist dths_exist_
+/// ** Merge the deaths dataset
+/// tempfile d1 
+/// use "`datapath'\from-who\chap2_000d_dths", clear
+/// append using "`datapath'\from-who\chap2_000d_dths_both"
+/// rename pop pop_dths 
+/// label define sex_ 1 "men" 2 "women" 3 "both" , modify
+/// label values sex sex_ 
+/// keep year ghecause sex region paho_subregion dths pop_dths
+/// sort year sex ghecause region 
+/// merge 1:1 year sex ghecause region using `mr1' 
+/// 
+/// rename _merge dths_exist
+/// recode dths_exist 3=1 2=0 
+/// label define dths_exist_ 1 "yes" 0 "no"
+/// label values dths_exist dths_exist_
 
 
 ** Region labelling
@@ -223,9 +223,15 @@ label define region_
 #delimit cr 
 label values region region_ 
 
+** Fill the paho-subregion variable
+tempfile t1
+save `t1', replace
+use `t1', clear
+merge m:m region using "`datapath'\from-who\paho_subregion_key"
+
 ** Save the JOINED Mortality Rate file
-order year sex ghecause region paho_subregion dths pop_dths dths_exist crate arate arate_new pop_new 
+order year sex ghecause region paho_subregion cases pop crate arate arate_new pop_new 
 sort year sex ghecause region
-keep year sex ghecause region paho_subregion dths pop_dths dths_exist crate arate arate_new pop_new 
+keep year sex ghecause region paho_subregion cases pop crate arate arate_new pop_new 
 label data "Crude and Adjusted mortality rates: Countries, PAHO sub-regions, WHO regions"
 save "`datapath'\from-who\chap2_000_mr_wb", replace

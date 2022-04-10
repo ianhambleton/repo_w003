@@ -116,8 +116,8 @@ label define cod_   1   "Drug use disorders"
                     3   "Anxiety disorders" 
                     4   "Alcohol use disorders" 
                     5   "Schizophrenia" 
-                    6   "Alzheimer/dementias"
-                    7   "Migraine"
+                    6   "Migraine"
+                    7   "Alzheimer/dementias"
                     8   "Epilepsy"
                     9  "Non-migraine headache"
                     10 "Parkinson disease"
@@ -368,6 +368,37 @@ rename dalyr arate
 ** (900)  12  "all neurological"
 ** (100)  13  "all cause"  
 ** -----------------------------------------------
+/// gen cod = .
+/// replace cod = 1 if type==1 & top5==1
+/// replace cod = 2 if type==1 & top5==2
+/// replace cod = 3 if type==1 & top5==3
+/// replace cod = 4 if type==1 & top5==4
+/// replace cod = 5 if type==1 & top5==5
+/// replace cod = 6 if type==2 & top5==1
+/// replace cod = 7 if type==2 & top5==2
+/// replace cod = 8 if type==2 & top5==3
+/// replace cod = 9 if type==2 & top5==4
+/// replace cod = 10 if type==2 & top5==5
+/// replace cod = 11 if ghecause==800
+/// replace cod = 12 if ghecause==900
+/// replace cod = 13 if ghecause==100
+/// #delimit ;
+/// label define cod_   1   "Drug use disorders" 
+///                     2   "Depressive disorders" 
+///                     3   "Anxiety disorders" 
+///                     4   "Alcohol use disorders" 
+///                     5   "Schizophrenia" 
+///                     6   "All mental"
+///                     7   "Alzheimer/dementias"
+///                     8   "Migraine"
+///                     9   "Epilepsy"
+///                     10  "Non-migraine headache"
+///                     11  "Parkinson disease"
+///                     12  "All neurological", modify;
+/// #delimit cr
+/// label values cod cod_    
+/// keep if cod<=12
+
 gen cod = .
 replace cod = 1 if type==1 & top5==1
 replace cod = 2 if type==1 & top5==2
@@ -388,18 +419,16 @@ label define cod_   1   "Drug use disorders"
                     3   "Anxiety disorders" 
                     4   "Alcohol use disorders" 
                     5   "Schizophrenia" 
-                    6   "All mental"
+                    6   "Migraine"
                     7   "Alzheimer/dementias"
-                    8   "Migraine"
-                    9   "Epilepsy"
-                    10  "Non-migraine headache"
-                    11  "Parkinson disease"
+                    8   "Epilepsy"
+                    9  "Non-migraine headache"
+                    10 "Parkinson disease"
+                    11   "All mental"
                     12  "All neurological", modify;
 #delimit cr
 label values cod cod_    
 keep if cod<=12
-
-
 
 ** -----------------------------------------------------
 ** COLUMN 6
@@ -717,10 +746,10 @@ putdocx table cvd(8,1) = ("Schizophrenia"), halign(right) bold
 putdocx table cvd(9,1) = ("All Mental Health"), halign(right) bold
 putdocx table cvd(9,1) = (" 2"), bold halign(right) script(super) append
 
-putdocx table cvd(11,1) = ("Alzheimer/Dementias"), halign(right) bold
+putdocx table cvd(11,1) = ("Migraine"), halign(right) bold
 /// putdocx table cvd(10,1) = ("4"), halign(right) script(super) append
 
-putdocx table cvd(12,1) = ("Migraine"), halign(right) bold
+putdocx table cvd(12,1) = ("Alzheimer/Dementias"), halign(right) bold
 /// putdocx table cvd(11,1) = ("4"), halign(right) script(super) append
 
 putdocx table cvd(13,1) = ("Epilepsy"), halign(right) bold
@@ -756,12 +785,12 @@ putdocx table cvd(16,2) = ("$deaths12") , nformat(%12.0fc) trim
 ** COL3. Mortality Rates
 putdocx table cvd(4,3) = ("$arate1") , nformat(%9.1fc)  trim
 putdocx table cvd(5,3) = ("$arate2") , nformat(%9.1fc)  trim
-putdocx table cvd(6,3) = ("<0.1") , nformat(%9.1fc)  trim
+putdocx table cvd(6,3) = ("<0.1") 
 putdocx table cvd(7,3) = ("$arate4") , nformat(%9.1fc)  trim
 putdocx table cvd(8,3) = ("$arate5") , nformat(%9.1fc)  trim
 putdocx table cvd(9,3) = ("$arate11") , nformat(%9.1fc)  trim
-putdocx table cvd(11,3) = ("$arate6") , nformat(%9.1fc)  trim
-putdocx table cvd(12,3) = ("<0.1") , nformat(%9.1fc)  trim
+putdocx table cvd(11,3) = ("<0.1") 
+putdocx table cvd(12,3) = ("$arate7") , nformat(%9.1fc)  trim
 putdocx table cvd(13,3) = ("$arate8") , nformat(%9.1fc)  trim
 putdocx table cvd(14,3) = ("$arate9") , nformat(%9.1fc)  trim
 putdocx table cvd(15,3) = ("$arate10") , nformat(%9.1fc)  trim
@@ -769,43 +798,43 @@ putdocx table cvd(16,3) = ("$arate12") , nformat(%9.1fc)  trim
 
 ** COL4. Sex ratio
 putdocx table cvd(4,4) = ("$sratio1") , nformat(%9.2fc)  trim
-putdocx table cvd(5,4) = ("-") , nformat(%9.2fc)  trim
-putdocx table cvd(6,4) = ("-") , nformat(%9.2fc)  trim
+putdocx table cvd(5,4) = ("-") 
+putdocx table cvd(6,4) = ("-") 
 putdocx table cvd(7,4) = ("$sratio4") , nformat(%9.2fc)  trim
 putdocx table cvd(8,4) = ("$sratio5") , nformat(%9.2fc)  trim
 putdocx table cvd(9,4) = ("$sratio11") , nformat(%9.2fc)  trim
-putdocx table cvd(11,4) = ("$sratio6") , nformat(%9.2fc)  trim
-putdocx table cvd(12,4) = ("-") , nformat(%9.2fc)  trim
+putdocx table cvd(11,4) = ("-") 
+putdocx table cvd(12,4) = ("$sratio7") , nformat(%9.2fc)  trim
 putdocx table cvd(13,4) = ("$sratio8") , nformat(%9.2fc)  trim
-putdocx table cvd(14,4) = ("-") , nformat(%9.2fc)  trim
+putdocx table cvd(14,4) = ("-") 
 putdocx table cvd(15,4) = ("$sratio10") , nformat(%9.2fc)  trim
 putdocx table cvd(16,4) = ("$sratio12") , nformat(%9.2fc)  trim
 
 ** COL5. Mortality Rate Change since 2000
 putdocx table cvd(4,5) = image("`outputpath'\graphics\spike1.png")
-putdocx table cvd(5,5) = ("-") , nformat(%9.2fc)  trim
-putdocx table cvd(6,5) = ("-") , nformat(%9.2fc)  trim
+putdocx table cvd(5,5) = ("-") 
+putdocx table cvd(6,5) = ("-") 
 putdocx table cvd(7,5) = image("`outputpath'\graphics\spike4.png")
 putdocx table cvd(8,5) = image("`outputpath'\graphics\spike5.png")
 putdocx table cvd(9,5) = image("`outputpath'\graphics\spike11.png")
-putdocx table cvd(11,5) = image("`outputpath'\graphics\spike6.png")
-putdocx table cvd(12,5) = ("-") , nformat(%9.2fc)  trim
+putdocx table cvd(11,5) = ("-") 
+putdocx table cvd(12,5) = image("`outputpath'\graphics\spike7.png")
 putdocx table cvd(13,5) = image("`outputpath'\graphics\spike8.png")
-putdocx table cvd(14,5) = ("-") , nformat(%9.2fc)  trim
+putdocx table cvd(14,5) = ("-") 
 putdocx table cvd(15,5) = image("`outputpath'\graphics\spike10.png")
 putdocx table cvd(16,5) = image("`outputpath'\graphics\spike12.png")
 
 ** COL6. Percent change
 putdocx table cvd(4,6) = image("`outputpath'\graphics\mrc1.png"), width(25pt)
-putdocx table cvd(5,6) = ("-") , nformat(%9.2fc)  trim
-putdocx table cvd(6,6) = ("-") , nformat(%9.2fc)  trim
+putdocx table cvd(5,6) = ("-") 
+putdocx table cvd(6,6) = ("-") 
 putdocx table cvd(7,6) = image("`outputpath'\graphics\mrc4.png"), width(25pt)
 putdocx table cvd(8,6) = image("`outputpath'\graphics\mrc5.png"), width(25pt)
 putdocx table cvd(9,6) = image("`outputpath'\graphics\mrc11.png"), width(25pt)
-putdocx table cvd(11,6) = image("`outputpath'\graphics\mrc6.png"), width(25pt)
-putdocx table cvd(12,6) = ("-") , nformat(%9.2fc)  trim
+putdocx table cvd(11,6) = ("-")
+putdocx table cvd(12,6) = image("`outputpath'\graphics\mrc7.png"), width(25pt)
 putdocx table cvd(13,6) = image("`outputpath'\graphics\mrc8.png"), width(25pt)
-putdocx table cvd(14,6) = ("-") , nformat(%9.2fc)  trim
+putdocx table cvd(14,6) = ("-") 
 putdocx table cvd(15,6) = image("`outputpath'\graphics\mrc10.png"), width(25pt)
 putdocx table cvd(16,6) = image("`outputpath'\graphics\mrc12.png"), width(25pt)
 

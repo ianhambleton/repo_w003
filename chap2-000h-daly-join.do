@@ -109,8 +109,6 @@ merge 1:1 year ghecause region using `subregion_m' , update replace
 drop _merge
 save "`datapath'\from-who\chap2_000f_daly_subregion_both_updated" , replace
 
-
-** NOT YET COMPLETED
 ** COUNTRY
 ** Replace selected cancers with sex-specific rates
 use "`datapath'\from-who\chap2_000g_daly_country_both" , clear
@@ -119,7 +117,6 @@ drop _merge
 merge 1:1 year ghecause region using `country_m' , update replace
 drop _merge
 save "`datapath'\from-who\chap2_000g_daly_country_both_updated" , replace
-
 
 
 
@@ -147,23 +144,22 @@ save `mr1', replace
 
 
 
-** Merge the DALY dataset with the DALY rate dataset (mr1)
-tempfile d1 
-use "`datapath'\from-who\chap2_000h_daly", clear
-append using "`datapath'\from-who\chap2_000h_daly_both"
-rename pop pop_daly 
-label define sex_ 1 "men" 2 "women" 3 "both" , modify
-label values sex sex_ 
-keep year ghecause sex region paho_subregion daly pop_daly
-sort year sex ghecause region 
-merge 1:1 year sex ghecause region using `mr1' 
-
-rename _merge daly_exist
-recode daly_exist 3=1 2=0 1=10
-label define daly_exist_ 1 "yes" 0 "no" 10 "temp code"
-label values daly_exist daly_exist_
-
-
+/// ** Merge the DALY dataset with the DALY rate dataset (mr1)
+/// tempfile d1 
+/// use "`datapath'\from-who\chap2_000h_daly", clear
+/// append using "`datapath'\from-who\chap2_000h_daly_both"
+/// rename pop pop_daly 
+/// label define sex_ 1 "men" 2 "women" 3 "both" , modify
+/// label values sex sex_ 
+/// keep year ghecause sex region paho_subregion daly pop_daly
+/// sort year sex ghecause region 
+/// merge 1:1 year sex ghecause region using `mr1' 
+/// 
+/// rename _merge daly_exist
+/// recode daly_exist 3=1 2=0 1=10
+/// label define daly_exist_ 1 "yes" 0 "no" 10 "temp code"
+/// label values daly_exist daly_exist_
+ 
 ** Region labelling
 #delimit ; 
 label define region_   
@@ -220,8 +216,24 @@ label define region_
 label values region region_ 
 
 ** Save the JOINED Mortality Rate file
-order year sex ghecause region paho_subregion daly pop_daly daly_exist crate arate arate_new pop_new 
+replace paho_subregion = 1 if region==100
+replace paho_subregion = 2 if region==200
+replace paho_subregion = 3 if region==300
+replace paho_subregion = 4 if region==400
+replace paho_subregion = 5 if region==500
+replace paho_subregion = 6 if region==600
+replace paho_subregion = 7 if region==700
+replace paho_subregion = 8 if region==800
+
+order year sex ghecause region paho_subregion cases pop crate arate arate_new pop_new 
 sort year sex ghecause region
-keep year sex ghecause region paho_subregion daly pop_daly daly_exist crate arate arate_new pop_new 
+keep year sex ghecause region paho_subregion cases pop crate arate arate_new pop_new 
 label data "Crude and Adjusted DALY rates: Countries, PAHO sub-regions, WHO regions"
 save "`datapath'\from-who\chap2_000_daly", replace
+
+** Region / paho-subregion mapping to use in MR join DO file
+keep region paho_subregion
+bysort region : gen rid = _n
+keep if rid==1
+drop rid
+save "`datapath'\from-who\paho_subregion_key", replace

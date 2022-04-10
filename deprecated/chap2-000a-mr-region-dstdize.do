@@ -82,7 +82,7 @@ replace age21 = 21 if atext=="100+"
 gen age18 = age21
 recode age18 (18 19 20 21 = 18) 
 collapse (sum) spop , by(age18) 
-rename spop rpop 
+rename spop pop 
 tempfile who_std
 save `who_std', replace
 
@@ -1068,134 +1068,62 @@ label values ghecause ghecause_
 save "`datapath'\from-who\chap3_byage_malefemale", replace
 
 
-** ------- 7-Apr-2022 new rate code ---------------------- 
-** Add the Reference population
-    merge m:m age18 using `who_std'
-    rename pop lpop
-    rename dths case
-    drop _merge
+** Direct standardization 
+        ** Two methods (-dstdize- and -distrate-)
+        gen deaths = round(dths*1000000) 
+        label var deaths "dths round to nearest integer" 
+        replace pop = round(pop*1000000) 
+        ** Save dataset ready for direct standardization 
+        tempfile for_mr
+        save `for_mr' , replace
+** 2019, Male, Communicable Disease
+forval x = 2000(1)2019 {
+    forval y = 1(1)2 {
+        * TODO: Change next line for each disease group
+        forval z = 1(1)57 {
+            use `for_mr' , clear 
+            tempfile results
+            keep if year==`x' 
+            keep if sex==`y'
+            keep if ghecause==`z' 
+            dstdize deaths pop age18, by(who_region) using(`who_std')
+            matrix m`x'_`y'_`z' = r(crude) \ r(adj) \r(ub_adj) \ r(lb_adj) \  r(se) \ r(Nobs)
+            matrix m`x'_`y'_`z' = m`x'_`y'_`z''
+            svmat double m`x'_`y'_`z', name(col)
+            keep  Crude Adjusted Right Left Se Nobs
+            keep if Crude < .
+            gen year = `x' 
+            gen sex = `y'
+            gen ghecause = `z'
+            tempfile f_`x'_`y'_`z'
+            save `f_`x'_`y'_`z'' , replace
+        }    
+    }
+}
+* TODO: Change last number of filename for each disease group
+use `f_2000_1_1' , clear
 
-** Crude rate
-    bysort sex year ghecause who_region: egen num = sum(case)
-    bysort sex year ghecause who_region: egen denom = sum(lpop)
-    gen crude = num / denom
+forval x = 2000(1)2019 {
+    forval y = 1(1)2 {
+        * TODO: Change range of loop for each disease group
+        forval z = 1(1)57 {
+            append using `f_`x'_`y'_`z''
+        }
+    }
+}
+bysort year sex ghecause : gen region = _n 
+* Drop duplicated initial dataset (2000, male, communicable) 
+drop if region > 6
 
-** (Ref Pop)/(Local Pop) * (Local Observed Events)
-    gen srate1 = rpop / lpop * case 
-    bysort sex year ghecause who_region: egen tsrate1 = sum(srate1)
-    bysort sex year ghecause who_region: egen trpop = sum(rpop)
-    bysort sex year ghecause who_region: egen tlpop = sum(lpop)
-    sort age18
-    ** Per 10,000
-    gen rate = tsrate1 / trpop
-
-** Method
-** DSR: 1 / sum(refpop) * sum(refpop*case/localpop) 
-    bysort sex year ghecause who_region: egen t1a = sum(rpop)
-    gen  t1b = 1/t1a
-    gen t2a = rpop * case / lpop
-    bysort sex year ghecause who_region: egen t2b = sum(t2a)
-    gen dsr = t1b * t2b
-
-** DSR 95%CI
-    **  DSR
-    gen ci1 = dsr 
-    **  Case(lower)
-    bysort sex year ghecause who_region: egen ol1 = sum(case)
-    gen ol2 = 1 / (9*ol1)
-    gen ol3 = 1.96 / (3 * sqrt(ol1))
-    gen ol4 = ol1 * (1- ol2 - ol3)^3
-    **  Case(upper)
-    bysort sex year ghecause who_region: egen ou1 = sum(case)
-    gen ou2 = 1 / (9*(ou1 + 1))
-    gen ou3 = 1.96 / (3 * sqrt(ou1 + 1))
-    gen ou4 = (ou1+1) * (1 - ou2 + ou3)^3
-    **  Var(DSR)
-    gen var1 = rpop^2 * case / lpop^2
-    bysort sex year ghecause who_region: egen var2 = sum(var1)
-    bysort sex year ghecause who_region: egen var3 = sum(rpop)
-    gen var4 = var2 / (var3 ^2)
-    **  DSR(lower)
-    gen cl1 = dsr
-    gen cl = cl1 + sqrt(var4/ol1) * (ol4 - ol1)
-    **  DSR(upper)
-    gen cu = cl1 + sqrt(var4/ol1) * (ou4 - ol1)
-    ** Clear intermediate variables
-    drop t1a t1b t2a t2b ci1 ol1 ol2 ol3 ol4 ou1 ou2 ou3 ou4 var1 var2 var3 var4 cl1 
-    rename case cases 
-
-    ** Collapse out the local population
-    collapse (sum) cases lpop (mean) crate=crude arate=dsr aupp=cu alow=cl, by(sex year ghecause who_region)  
-
-    ** Reformat variables
-    ** rename case daly 
-    rename lpop pop 
-    gen ase = .  
-
-    ** Variable re-naming and dropping unwanted variables
-    rename who_region region
-    format cases %12.1fc 
-    keep cases crate arate aupp alow ase pop sex year ghecause region 
-** ------- new code ends ---------------------- 
-
-
-/// ** Direct standardization 
-///         ** Two methods (-dstdize- and -distrate-)
-///         gen deaths = round(dths*1000000) 
-///         label var deaths "dths round to nearest integer" 
-///         replace pop = round(pop*1000000) 
-///         ** Save dataset ready for direct standardization 
-///         tempfile for_mr
-///         save `for_mr' , replace
-/// ** 2019, Male, Communicable Disease
-/// forval x = 2000(1)2019 {
-///     forval y = 1(1)2 {
-///         * TODO: Change next line for each disease group
-///         forval z = 1(1)57 {
-///             use `for_mr' , clear 
-///             tempfile results
-///             keep if year==`x' 
-///             keep if sex==`y'
-///             keep if ghecause==`z' 
-///             dstdize deaths pop age18, by(who_region) using(`who_std')
-///             matrix m`x'_`y'_`z' = r(crude) \ r(adj) \r(ub_adj) \ r(lb_adj) \  r(se) \ r(Nobs)
-///             matrix m`x'_`y'_`z' = m`x'_`y'_`z''
-///             svmat double m`x'_`y'_`z', name(col)
-///             keep  Crude Adjusted Right Left Se Nobs
-///             keep if Crude < .
-///             gen year = `x' 
-///             gen sex = `y'
-///             gen ghecause = `z'
-///             tempfile f_`x'_`y'_`z'
-///             save `f_`x'_`y'_`z'' , replace
-///         }    
-///     }
-/// }
-/// * TODO: Change last number of filename for each disease group
-/// use `f_2000_1_1' , clear
-/// 
-/// forval x = 2000(1)2019 {
-///     forval y = 1(1)2 {
-///         * TODO: Change range of loop for each disease group
-///         forval z = 1(1)57 {
-///             append using `f_`x'_`y'_`z''
-///         }
-///     }
-/// }
-/// bysort year sex ghecause : gen region = _n 
-/// * Drop duplicated initial dataset (2000, male, communicable) 
-/// drop if region > 6
-/// 
-/// ** Variable re-naming
-/// rename Crude crate
-/// rename Adjusted arate
-/// rename Right aupp
-/// rename Left alow 
-/// rename Se ase 
-/// rename Nobs pop
+** Variable re-naming
+rename Crude crate
+rename Adjusted arate
+rename Right aupp
+rename Left alow 
+rename Se ase 
+rename Nobs pop
 
 ** Variable Labelling
-label var cases "Death numbers"
 label var crate "Crude rate"
 label var arate "Adjusted rate"
 label var alow "Lower 95% limit of adjusted rate"
@@ -1288,9 +1216,8 @@ label define ghecause_
 label values ghecause ghecause_ 
 
 ** Save the final MR dataset
-drop ase 
-** drop aupp alow ase 
-** replace pop = pop/1000000
+drop aupp alow ase 
+replace pop = pop/1000000
 label data "Crude and Adjusted mortality rates: WHO regions"
 save "`datapath'\from-who\chap2_000a_mr_region", replace
 
@@ -2285,129 +2212,56 @@ save "`datapath'\from-who\chap2_equiplot_mr_byage", replace
 save "`datapath'\from-who\chap3_byage_both", replace
 
 
+** Direct standardization 
+        ** Two methods (-dstdize- and -distrate-)
+        gen deaths = round(dths*1000000) 
+        label var deaths "dths round to nearest integer" 
+        replace pop = round(pop*1000000) 
+        ** Save dataset ready for direct standardization 
+        tempfile for_mr
+        save `for_mr' , replace
+** 2019, Male, Communicable Disease
+forval x = 2000(1)2019 {
+        * TODO: Change next line for each disease group
+        forval z = 1(1)57 {
+            use `for_mr' , clear 
+            tempfile results
+            keep if year==`x' 
+            keep if ghecause==`z' 
+            dstdize deaths pop age18, by(who_region) using(`who_std')
+            matrix m`x'_`z' = r(crude) \ r(adj) \r(ub_adj) \ r(lb_adj) \  r(se) \ r(Nobs)
+            matrix m`x'_`z' = m`x'_`z''
+            svmat double m`x'_`z', name(col)
+            keep  Crude Adjusted Right Left Se Nobs
+            keep if Crude < .
+            gen year = `x' 
+            gen ghecause = `z'
+            tempfile f_`x'_`z'
+            save `f_`x'_`z'' , replace
+        }    
+}
+* TODO: Change last number of filename for each disease group
+use `f_2000_1' , clear
 
-** ------- 7-Apr-2022 new rate code  ---------------------- 
-** Add the Reference population
-    merge m:m age18 using `who_std'
-    rename pop lpop
-    rename dths case
-    drop _merge
+forval x = 2000(1)2019 {
+        * TODO: Change range of loop for each disease group
+        forval z = 1(1)57 {
+            append using `f_`x'_`z''
+        }
+}
+bysort year ghecause : gen region = _n 
+* Drop duplicated initial dataset (2000, male, communicable) 
+drop if region > 6
 
-** Crude rate
-    bysort year ghecause who_region: egen num = sum(case)
-    bysort year ghecause who_region: egen denom = sum(lpop)
-    gen crude = num / denom
-
-** (Ref Pop)/(Local Pop) * (Local Observed Events)
-    gen srate1 = rpop / lpop * case 
-    bysort year ghecause who_region: egen tsrate1 = sum(srate1)
-    bysort year ghecause who_region: egen trpop = sum(rpop)
-    bysort year ghecause who_region: egen tlpop = sum(lpop)
-    sort age18
-    ** Per 10,000
-    gen rate = tsrate1 / trpop
-
-** Method
-** DSR: 1 / sum(refpop) * sum(refpop*case/localpop) 
-    bysort year ghecause who_region: egen t1a = sum(rpop)
-    gen  t1b = 1/t1a
-    gen t2a = rpop * case / lpop
-    bysort year ghecause who_region: egen t2b = sum(t2a)
-    gen dsr = t1b * t2b
-
-** DSR 95%CI
-    **  DSR
-    gen ci1 = dsr 
-    **  Case(lower)
-    bysort year ghecause who_region: egen ol1 = sum(case)
-    gen ol2 = 1 / (9*ol1)
-    gen ol3 = 1.96 / (3 * sqrt(ol1))
-    gen ol4 = ol1 * (1- ol2 - ol3)^3
-    **  Case(upper)
-    bysort year ghecause who_region: egen ou1 = sum(case)
-    gen ou2 = 1 / (9*(ou1 + 1))
-    gen ou3 = 1.96 / (3 * sqrt(ou1 + 1))
-    gen ou4 = (ou1+1) * (1 - ou2 + ou3)^3
-    **  Var(DSR)
-    gen var1 = rpop^2 * case / lpop^2
-    bysort year ghecause who_region: egen var2 = sum(var1)
-    bysort year ghecause who_region: egen var3 = sum(rpop)
-    gen var4 = var2 / (var3 ^2)
-    **  DSR(lower)
-    gen cl1 = dsr
-    gen cl = cl1 + sqrt(var4/ol1) * (ol4 - ol1)
-    **  DSR(upper)
-    gen cu = cl1 + sqrt(var4/ol1) * (ou4 - ol1)
-    ** Clear intermediate variables
-    drop t1a t1b t2a t2b ci1 ol1 ol2 ol3 ol4 ou1 ou2 ou3 ou4 var1 var2 var3 var4 cl1 
-    rename case cases
-
-    ** Collapse out the local population
-    collapse (sum) cases lpop (mean) crate=crude arate=dsr aupp=cu alow=cl, by(year ghecause who_region)  
-
-    ** Reformat variables
-    ** rename case daly 
-    rename lpop pop 
-    gen ase = .  
-
-    ** Variable re-naming and dropping unwanted variables
-    format cases %12.1fc
-    rename who_region region
-    keep cases crate arate aupp alow ase pop year ghecause region 
-** ------- new code ends ---------------------- 
-
-
-/// ** Direct standardization 
-///         ** Two methods (-dstdize- and -distrate-)
-///         gen deaths = round(dths*1000000) 
-///         label var deaths "dths round to nearest integer" 
-///         replace pop = round(pop*1000000) 
-///         ** Save dataset ready for direct standardization 
-///         tempfile for_mr
-///         save `for_mr' , replace
-/// ** 2019, Male, Communicable Disease
-/// forval x = 2000(1)2019 {
-///         * TODO: Change next line for each disease group
-///         forval z = 1(1)57 {
-///             use `for_mr' , clear 
-///             tempfile results
-///             keep if year==`x' 
-///             keep if ghecause==`z' 
-///             dstdize deaths pop age18, by(who_region) using(`who_std')
-///             matrix m`x'_`z' = r(crude) \ r(adj) \r(ub_adj) \ r(lb_adj) \  r(se) \ r(Nobs)
-///             matrix m`x'_`z' = m`x'_`z''
-///             svmat double m`x'_`z', name(col)
-///             keep  Crude Adjusted Right Left Se Nobs
-///             keep if Crude < .
-///             gen year = `x' 
-///             gen ghecause = `z'
-///             tempfile f_`x'_`z'
-///             save `f_`x'_`z'' , replace
-///         }    
-/// }
-/// * TODO: Change last number of filename for each disease group
-/// use `f_2000_1' , clear
-/// 
-/// forval x = 2000(1)2019 {
-///         * TODO: Change range of loop for each disease group
-///         forval z = 1(1)57 {
-///             append using `f_`x'_`z''
-///         }
-/// }
-/// bysort year ghecause : gen region = _n 
-/// * Drop duplicated initial dataset (2000, male, communicable) 
-/// drop if region > 6
-/// 
-/// ** Variable re-naming
-/// rename Crude crate
-/// rename Adjusted arate
-/// rename Right aupp
-/// rename Left alow 
-/// rename Se ase 
-/// rename Nobs pop
+** Variable re-naming
+rename Crude crate
+rename Adjusted arate
+rename Right aupp
+rename Left alow 
+rename Se ase 
+rename Nobs pop
 
 ** Variable Labelling
-label var cases "Death numbers"
 label var crate "Crude rate"
 label var arate "Adjusted rate"
 label var alow "Lower 95% limit of adjusted rate"
@@ -2497,9 +2351,8 @@ label values ghecause ghecause_
 
 ** Save the final MR dataset
 gen sex = 3
-drop ase 
-** drop aupp alow ase 
-** replace pop = pop/1000000
+drop aupp alow ase 
+replace pop = pop/1000000
 label data "Crude and Adjusted mortality rates: WHO regions"
 save "`datapath'\from-who\chap2_000a_mr_region_both", replace
 

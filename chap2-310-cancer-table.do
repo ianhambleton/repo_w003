@@ -718,7 +718,7 @@ putdocx table cvd(14,1) = ("6"), bold halign(right) script(super) append
 ** ----------------------
 ** COL2. Deaths
 putdocx table cvd(4,2) = ("$deaths1") , nformat(%12.0fc) trim 
-putdocx table cvd(5,2) = ("108,411") , nformat(%12.0fc) trim  
+putdocx table cvd(5,2) = ("$deaths2") , nformat(%12.0fc) trim 
 putdocx table cvd(6,2) = ("$deaths3") , nformat(%12.0fc) trim  
 putdocx table cvd(7,2) = ("$deaths4") , nformat(%12.0fc) trim  
 putdocx table cvd(8,2) = ("$deaths5") , nformat(%12.0fc) trim  
@@ -744,10 +744,10 @@ putdocx table cvd(14,3) = ("$arate11") , nformat(%9.1fc)  trim
 
 ** COL4. Sex ratio
 putdocx table cvd(4,4) = ("$sratio1") , nformat(%9.2fc)  trim
-putdocx table cvd(5,4) = ("--") , nformat(%9.2fc)  trim
-putdocx table cvd(6,4) = ("--") , nformat(%9.2fc)  trim
+putdocx table cvd(5,4) = ("--") 
+putdocx table cvd(6,4) = ("--") 
 putdocx table cvd(7,4) = ("$sratio4") , nformat(%9.2fc)  trim
-putdocx table cvd(8,4) = ("--") , nformat(%9.2fc)  trim
+putdocx table cvd(8,4) = ("--") 
 putdocx table cvd(9,4) = ("$sratio6") , nformat(%9.2fc)  trim
 putdocx table cvd(10,4) = ("$sratio7") , nformat(%9.2fc)  trim
 putdocx table cvd(11,4) = ("$sratio8") , nformat(%9.2fc)  trim
@@ -783,7 +783,7 @@ putdocx table cvd(14,6) = image("`outputpath'\graphics\mrc11.png"), width(25pt)
 
 ** COL7. DALY in 2019
 putdocx table cvd(4,7) = ("$daly1") , nformat(%12.0fc)  trim
-putdocx table cvd(5,7) = ("3,069,567") , nformat(%12.0fc)  trim
+putdocx table cvd(5,7) = ("$daly2") , nformat(%12.0fc)  trim
 putdocx table cvd(6,7) = ("$daly3") , nformat(%12.0fc)  trim
 putdocx table cvd(7,7) = ("$daly4") , nformat(%12.0fc)  trim
 putdocx table cvd(8,7) = ("$daly5") , nformat(%12.0fc)  trim
@@ -809,10 +809,10 @@ putdocx table cvd(14,8) = ("$drate11") , nformat(%9.1fc)  trim
 
 ** COL9. Sex ratio
 putdocx table cvd(4,9) = ("$sdaly1") , nformat(%9.2fc)  trim
-putdocx table cvd(5,9) = ("--") , nformat(%9.2fc)  trim
-putdocx table cvd(6,9) = ("--") , nformat(%9.2fc)  trim
+putdocx table cvd(5,9) = ("--") 
+putdocx table cvd(6,9) = ("--") 
 putdocx table cvd(7,9) = ("$sdaly4") , nformat(%9.2fc)  trim
-putdocx table cvd(8,9) = ("--") , nformat(%9.2fc)  trim
+putdocx table cvd(8,9) = ("--") 
 putdocx table cvd(9,9) = ("$sdaly6") , nformat(%9.2fc)  trim
 putdocx table cvd(10,9) = ("$sdaly7") , nformat(%9.2fc)  trim
 putdocx table cvd(11,9) = ("$sdaly8") , nformat(%9.2fc)  trim

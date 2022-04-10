@@ -449,6 +449,7 @@ restore
 
 
 
+
     ** generate a local for the D3 color scheme
     colorpalette d3, 20 n(20) nograph
     local list r(p) 
@@ -470,6 +471,9 @@ restore
     ** External causes
     local inj1 `r(p7)'
     local inj2 `r(p8)'
+
+
+
 
 
 ** --------------------------------------------------------------

@@ -151,7 +151,7 @@ use "`datapath'\from-who\chap2_000_adjusted", clear
 	gsort ghecause -sex region 
 	list year ghecause sex region mortr if region>=1000, sep(6)
 	list year ghecause sex region mortr if region<1000, sep(8)
-/*
+
 ** Associated stats for Table 1.3
 ** ALL-CAUSE in 2019, women and men separately
 use "`datapath'\from-who\chap2_000_adjusted", clear
@@ -166,7 +166,7 @@ use "`datapath'\from-who\chap2_000_adjusted", clear
 	list year ghecause sex region mortr if region<1000, sep(8)
 
 
-/*
+
 
 ** LOAD THE DATASET that was prepared above for the graphic
 use `graphic', clear
@@ -493,14 +493,14 @@ local outer3 860 2106 890 2106 890 2111 860 2111 860 2106
         (function y=850, range(2041 2125) lp("l") lc(gs14) lw(0.4))
 
 		/// X-Axis lines
-        (function y=-17, range(2000 2019) lc(gs12) lw(0.2))
-        (function y=-17, range(2021 2040) lc(gs12) lw(0.2))
-        (function y=-17, range(2042 2061) lc(gs12) lw(0.2))
-        (function y=-17, range(2063 2082) lc(gs12) lw(0.2))
-        (function y=-17, range(2084 2103) lc(gs12) lw(0.2))
-        (function y=-17, range(2105 2124) lc(gs12) lw(0.2))
-        (function y=-17, range(2126 2145) lc(gs12) lw(0.2))
-        (function y=-17, range(2147 2166) lc(gs12) lw(0.2))
+        (function y=-17, range(2000 2019) lp("l") lc(gs12) lw(0.2))
+        (function y=-17, range(2021 2040) lp("l") lc(gs12) lw(0.2))
+        (function y=-17, range(2042 2061) lp("l") lc(gs12) lw(0.2))
+        (function y=-17, range(2063 2082) lp("l") lc(gs12) lw(0.2))
+        (function y=-17, range(2084 2103) lp("l") lc(gs12) lw(0.2))
+        (function y=-17, range(2105 2124) lp("l") lc(gs12) lw(0.2))
+        (function y=-17, range(2126 2145) lp("l") lc(gs12) lw(0.2))
+        (function y=-17, range(2147 2166) lp("l") lc(gs12) lw(0.2))
 
 		,
 			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 		

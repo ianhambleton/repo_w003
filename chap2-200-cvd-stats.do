@@ -33,10 +33,42 @@
 ** Load primary deaths dataset
 use "`datapath'\from-who\chap2_000_adjusted", clear
 
+** 9-APR-2022
+** Percentage of deaths and DALYs from conditions reported in this report
+** Used in Intro to Chapter 3
+**preserve
+    keep if region==2000 & sex==3 & ghecause>=100 
+    keep dths daly ghecause year
+    ** Label the broad causes
+    #delimit ; 
+    label define ghecause_  
+                        100  "all causes"
+                        200  "communicable"
+                        300  "NCD"
+                        400  "CVD"
+                        500  "cancer"
+                        600  "respiratory"
+                        700  "diabetes"
+                        800  "mental"
+                        900 "neurological"
+                        1000  "injuries", modify
+                        ;
+    #delimit cr
+    label values ghecause ghecause_
+    reshape wide dths daly, i(year) j(ghecause)
+    gen report_dtot = dths400 + dths500 + dths600 + dths700 + dths800 + dths900 + dths1000
+    gen report_dalytot = daly400 + daly500 + daly600 + daly700 + daly800 + daly900 + daly1000
+    gen perc1 = (report_dtot / dths100) * 100
+    gen perc2 = (report_dalytot / daly100) * 100
+    list year perc1 perc2
+/*restore
+
+
 ** Restrict to Americas ONLY
 keep if region==2000 & sex==3
 keep dths daly year ghecause 
 reshape wide dths daly, i(year) j(ghecause)
+
 
 ** CODES
 **    1  "Rheumatic heart disease"
