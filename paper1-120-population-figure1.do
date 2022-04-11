@@ -44,14 +44,18 @@ order region, after(iso3n)
 ** Collapse into PAHO sub-regions
 preserve
     tempfile sr_totals
+    keep if paho_subregion<.
     collapse (sum) a0 a5 a10 a15 a20 a25 a30 a35 a40 a45 a50 a55 a60 a65 a70 a75 a80 a85 a90 a95 a100, by(paho_subregion year sex)
+    gen iso3n = 20000
     save `sr_totals', replace
 restore
 
 ** Collapse into AMERICAS region
 preserve
     tempfile r_totals
+    keep if paho_subregion<.
     collapse (sum) a0 a5 a10 a15 a20 a25 a30 a35 a40 a45 a50 a55 a60 a65 a70 a75 a80 a85 a90 a95 a100, by(region year sex)
+    gen iso3n = 10000
     save `r_totals', replace
 restore
 
@@ -60,11 +64,12 @@ append using `sr_totals'
 append using `r_totals'
 
 ** Keep region and subregions
-keep if iso3n==.
+drop if iso3n<900
+** keep if iso3n==.
 replace paho_subregion = 10 if region==1
 label define paho_subregion_ 10 "americas" , modify 
 label values paho_subregion paho_subregion_
-drop iso3c iso3n region un_subregion iid rcode
+drop region un_subregion
 
 ** Calculate age-group percentages
 egen group1 = rowtotal(a0 a5 a10 a15) 
@@ -82,13 +87,42 @@ gen pg3 = (group3/total)
 label var pg1 "Proportion 0-19"
 label var pg2 "Proportion 20-69"
 label var pg3 "Proportion 70+"
-keep paho_subregion sex year group1 group2 group3 total pg1 pg2 pg3
+keep iso3n paho_subregion sex year group1 group2 group3 total pg1 pg2 pg3
 sort paho_subregion sex year
 
-** Basic Graphic
+** STATS to ACCOMPANY GRAPHIC
 keep if sex==3 
-sort paho_subregion
+sort iso3n paho_subregion year
 
+gen perc1 = pg1 * 100
+gen perc2 = pg2 * 100
+gen perc3 = pg3 * 100
+gen rise1 = perc1[_n] - perc1[_n-1] if iso3n[_n]==iso3n[_n-1] 
+gen rise3 = perc3[_n] - perc3[_n-1] if iso3n[_n]==iso3n[_n-1] 
+format perc1 perc2 perc3 rise1 rise3 %9.1f
+list  paho_subregion iso3n perc1 rise1 perc2 perc3 rise3, sep(3) line(120)
+sort year rise3 
+list  paho_subregion iso3n rise3 if year==2020 & paho_subregion==10, sep(3) line(120)
+list  paho_subregion iso3n rise3 if year==2060 & paho_subregion==10, sep(3) line(120)
+list  paho_subregion iso3n rise3 if year==2020 & paho_subregion<10, sep(3) line(120)
+list  paho_subregion iso3n rise3 if year==2060 & paho_subregion<10, sep(3) line(120)
+sort year perc3
+list  paho_subregion year iso3n perc3 if year==1980 & paho_subregion==10, sep(3)
+list  paho_subregion year iso3n perc3 if year==2020 & paho_subregion==10, sep(3)
+list  paho_subregion year iso3n perc3 if year==2060 & paho_subregion==10, sep(3)
+
+sort year perc3
+list  paho_subregion year iso3n perc3 if year==1980 & paho_subregion<10, sep(3)
+list  paho_subregion year iso3n perc3 if year==2020 & paho_subregion<10, sep(3)
+list  paho_subregion year iso3n perc3 if year==2060 & paho_subregion<10, sep(3)
+
+
+
+** -------------------------------------------------------
+** GRAPHIC
+** ONLY using PAHO-SUBREGIONS
+** -------------------------------------------------------
+drop if paho_subregion==10
 ** Metrics on RHS of chart
 ** (a) % change 70+ between 1980 and 2020
 ** (b) % change 70+ between 2020 and 2060
@@ -171,78 +205,78 @@ twoway
      /// (6) non-Latin Caribbean
      /// (7) Brazil
      /// (8) Mexico   
-     (scatter y1 x1 if paho_subregion==1 & year==1980 & agroup==1, msize(0.20) mc("`blu2'"))
-     (scatter y1 x1 if paho_subregion==1 & year==1980 & agroup==2, msize(0.20) mc("`blu6'"))
-     (scatter y1 x1 if paho_subregion==1 & year==1980 & agroup==3, msize(0.20) mc("`blu4'"))
-     (scatter y1 x1 if paho_subregion==1 & year==2020 & agroup==1, msize(0.20) mc("`blu2'"))
-     (scatter y1 x1 if paho_subregion==1 & year==2020 & agroup==2, msize(0.20) mc("`blu6'"))
-     (scatter y1 x1 if paho_subregion==1 & year==2020 & agroup==3, msize(0.20) mc("`blu4'"))
-     (scatter y1 x1 if paho_subregion==1 & year==2060 & agroup==1, msize(0.20) mc("`blu2'"))
-     (scatter y1 x1 if paho_subregion==1 & year==2060 & agroup==2, msize(0.20) mc("`blu6'"))
-     (scatter y1 x1 if paho_subregion==1 & year==2060 & agroup==3, msize(0.20) mc("`blu4'"))
-     (scatter y1 x1 if paho_subregion==2 & year==1980 & agroup==1, msize(0.20) mc("`blu2'"))
-     (scatter y1 x1 if paho_subregion==2 & year==1980 & agroup==2, msize(0.20) mc("`blu6'"))
-     (scatter y1 x1 if paho_subregion==2 & year==1980 & agroup==3, msize(0.20) mc("`blu4'"))
-     (scatter y1 x1 if paho_subregion==2 & year==2020 & agroup==1, msize(0.20) mc("`blu2'"))
-     (scatter y1 x1 if paho_subregion==2 & year==2020 & agroup==2, msize(0.20) mc("`blu6'"))
-     (scatter y1 x1 if paho_subregion==2 & year==2020 & agroup==3, msize(0.20) mc("`blu4'"))    
-     (scatter y1 x1 if paho_subregion==2 & year==2060 & agroup==1, msize(0.20) mc("`blu2'"))
-     (scatter y1 x1 if paho_subregion==2 & year==2060 & agroup==2, msize(0.20) mc("`blu6'"))
-     (scatter y1 x1 if paho_subregion==2 & year==2060 & agroup==3, msize(0.20) mc("`blu4'"))  
-     (scatter y1 x1 if paho_subregion==3 & year==1980 & agroup==1, msize(0.20) mc("`blu2'"))
-     (scatter y1 x1 if paho_subregion==3 & year==1980 & agroup==2, msize(0.20) mc("`blu6'"))
-     (scatter y1 x1 if paho_subregion==3 & year==1980 & agroup==3, msize(0.20) mc("`blu4'"))
-     (scatter y1 x1 if paho_subregion==3 & year==2020 & agroup==1, msize(0.20) mc("`blu2'"))
-     (scatter y1 x1 if paho_subregion==3 & year==2020 & agroup==2, msize(0.20) mc("`blu6'"))
-     (scatter y1 x1 if paho_subregion==3 & year==2020 & agroup==3, msize(0.20) mc("`blu4'"))  
-     (scatter y1 x1 if paho_subregion==3 & year==2060 & agroup==1, msize(0.20) mc("`blu2'"))
-     (scatter y1 x1 if paho_subregion==3 & year==2060 & agroup==2, msize(0.20) mc("`blu6'"))
-     (scatter y1 x1 if paho_subregion==3 & year==2060 & agroup==3, msize(0.20) mc("`blu4'"))  
-     (scatter y1 x1 if paho_subregion==4 & year==1980 & agroup==1, msize(0.20) mc("`blu2'"))
-     (scatter y1 x1 if paho_subregion==4 & year==1980 & agroup==2, msize(0.20) mc("`blu6'"))
-     (scatter y1 x1 if paho_subregion==4 & year==1980 & agroup==3, msize(0.20) mc("`blu4'"))
-     (scatter y1 x1 if paho_subregion==4 & year==2020 & agroup==1, msize(0.20) mc("`blu2'"))
-     (scatter y1 x1 if paho_subregion==4 & year==2020 & agroup==2, msize(0.20) mc("`blu6'"))
-     (scatter y1 x1 if paho_subregion==4 & year==2020 & agroup==3, msize(0.20) mc("`blu4'"))  
-     (scatter y1 x1 if paho_subregion==4 & year==2060 & agroup==1, msize(0.20) mc("`blu2'"))
-     (scatter y1 x1 if paho_subregion==4 & year==2060 & agroup==2, msize(0.20) mc("`blu6'"))
-     (scatter y1 x1 if paho_subregion==4 & year==2060 & agroup==3, msize(0.20) mc("`blu4'"))  
-     (scatter y1 x1 if paho_subregion==5 & year==1980 & agroup==1, msize(0.20) mc("`blu2'"))
-     (scatter y1 x1 if paho_subregion==5 & year==1980 & agroup==2, msize(0.20) mc("`blu6'"))
-     (scatter y1 x1 if paho_subregion==5 & year==1980 & agroup==3, msize(0.20) mc("`blu4'"))
-     (scatter y1 x1 if paho_subregion==5 & year==2020 & agroup==1, msize(0.20) mc("`blu2'"))
-     (scatter y1 x1 if paho_subregion==5 & year==2020 & agroup==2, msize(0.20) mc("`blu6'"))
-     (scatter y1 x1 if paho_subregion==5 & year==2020 & agroup==3, msize(0.20) mc("`blu4'"))  
-     (scatter y1 x1 if paho_subregion==5 & year==2060 & agroup==1, msize(0.20) mc("`blu2'"))
-     (scatter y1 x1 if paho_subregion==5 & year==2060 & agroup==2, msize(0.20) mc("`blu6'"))
-     (scatter y1 x1 if paho_subregion==5 & year==2060 & agroup==3, msize(0.20) mc("`blu4'"))  
-     (scatter y1 x1 if paho_subregion==6 & year==1980 & agroup==1, msize(0.20) mc("`blu2'"))
-     (scatter y1 x1 if paho_subregion==6 & year==1980 & agroup==2, msize(0.20) mc("`blu6'"))
-     (scatter y1 x1 if paho_subregion==6 & year==1980 & agroup==3, msize(0.20) mc("`blu4'"))
-     (scatter y1 x1 if paho_subregion==6 & year==2020 & agroup==1, msize(0.20) mc("`blu2'"))
-     (scatter y1 x1 if paho_subregion==6 & year==2020 & agroup==2, msize(0.20) mc("`blu6'"))
-     (scatter y1 x1 if paho_subregion==6 & year==2020 & agroup==3, msize(0.20) mc("`blu4'"))  
-     (scatter y1 x1 if paho_subregion==6 & year==2060 & agroup==1, msize(0.20) mc("`blu2'"))
-     (scatter y1 x1 if paho_subregion==6 & year==2060 & agroup==2, msize(0.20) mc("`blu6'"))
-     (scatter y1 x1 if paho_subregion==6 & year==2060 & agroup==3, msize(0.20) mc("`blu4'"))  
-     (scatter y1 x1 if paho_subregion==7 & year==1980 & agroup==1, msize(0.20) mc("`blu2'"))
-     (scatter y1 x1 if paho_subregion==7 & year==1980 & agroup==2, msize(0.20) mc("`blu6'"))
-     (scatter y1 x1 if paho_subregion==7 & year==1980 & agroup==3, msize(0.20) mc("`blu4'"))
-     (scatter y1 x1 if paho_subregion==7 & year==2020 & agroup==1, msize(0.20) mc("`blu2'"))
-     (scatter y1 x1 if paho_subregion==7 & year==2020 & agroup==2, msize(0.20) mc("`blu6'"))
-     (scatter y1 x1 if paho_subregion==7 & year==2020 & agroup==3, msize(0.20) mc("`blu4'"))  
-     (scatter y1 x1 if paho_subregion==7 & year==2060 & agroup==1, msize(0.20) mc("`blu2'"))
-     (scatter y1 x1 if paho_subregion==7 & year==2060 & agroup==2, msize(0.20) mc("`blu6'"))
-     (scatter y1 x1 if paho_subregion==7 & year==2060 & agroup==3, msize(0.20) mc("`blu4'"))  
-     (scatter y1 x1 if paho_subregion==8 & year==1980 & agroup==1, msize(0.20) mc("`blu2'"))
-     (scatter y1 x1 if paho_subregion==8 & year==1980 & agroup==2, msize(0.20) mc("`blu6'"))
-     (scatter y1 x1 if paho_subregion==8 & year==1980 & agroup==3, msize(0.20) mc("`blu4'"))
-     (scatter y1 x1 if paho_subregion==8 & year==2020 & agroup==1, msize(0.20) mc("`blu2'"))
-     (scatter y1 x1 if paho_subregion==8 & year==2020 & agroup==2, msize(0.20) mc("`blu6'"))
-     (scatter y1 x1 if paho_subregion==8 & year==2020 & agroup==3, msize(0.20) mc("`blu4'"))  
-     (scatter y1 x1 if paho_subregion==8 & year==2060 & agroup==1, msize(0.20) mc("`blu2'"))
-     (scatter y1 x1 if paho_subregion==8 & year==2060 & agroup==2, msize(0.20) mc("`blu6'"))
-     (scatter y1 x1 if paho_subregion==8 & year==2060 & agroup==3, msize(0.20) mc("`blu4'"))  
+     (scatter y1 x1 if paho_subregion==1 & year==1980 & agroup==1, msize(0.20) mc("`blu2'") m(O))
+     (scatter y1 x1 if paho_subregion==1 & year==1980 & agroup==2, msize(0.20) mc("`blu6'") m(O))
+     (scatter y1 x1 if paho_subregion==1 & year==1980 & agroup==3, msize(0.20) mc("`blu4'") m(O))
+     (scatter y1 x1 if paho_subregion==1 & year==2020 & agroup==1, msize(0.20) mc("`blu2'") m(O))
+     (scatter y1 x1 if paho_subregion==1 & year==2020 & agroup==2, msize(0.20) mc("`blu6'") m(O))
+     (scatter y1 x1 if paho_subregion==1 & year==2020 & agroup==3, msize(0.20) mc("`blu4'") m(O))
+     (scatter y1 x1 if paho_subregion==1 & year==2060 & agroup==1, msize(0.20) mc("`blu2'") m(O))
+     (scatter y1 x1 if paho_subregion==1 & year==2060 & agroup==2, msize(0.20) mc("`blu6'") m(O))
+     (scatter y1 x1 if paho_subregion==1 & year==2060 & agroup==3, msize(0.20) mc("`blu4'") m(O))
+     (scatter y1 x1 if paho_subregion==2 & year==1980 & agroup==1, msize(0.20) mc("`blu2'") m(O))
+     (scatter y1 x1 if paho_subregion==2 & year==1980 & agroup==2, msize(0.20) mc("`blu6'") m(O))
+     (scatter y1 x1 if paho_subregion==2 & year==1980 & agroup==3, msize(0.20) mc("`blu4'") m(O))
+     (scatter y1 x1 if paho_subregion==2 & year==2020 & agroup==1, msize(0.20) mc("`blu2'") m(O))
+     (scatter y1 x1 if paho_subregion==2 & year==2020 & agroup==2, msize(0.20) mc("`blu6'") m(O))
+     (scatter y1 x1 if paho_subregion==2 & year==2020 & agroup==3, msize(0.20) mc("`blu4'") m(O))    
+     (scatter y1 x1 if paho_subregion==2 & year==2060 & agroup==1, msize(0.20) mc("`blu2'") m(O))
+     (scatter y1 x1 if paho_subregion==2 & year==2060 & agroup==2, msize(0.20) mc("`blu6'") m(O))
+     (scatter y1 x1 if paho_subregion==2 & year==2060 & agroup==3, msize(0.20) mc("`blu4'") m(O))  
+     (scatter y1 x1 if paho_subregion==3 & year==1980 & agroup==1, msize(0.20) mc("`blu2'") m(O))
+     (scatter y1 x1 if paho_subregion==3 & year==1980 & agroup==2, msize(0.20) mc("`blu6'") m(O))
+     (scatter y1 x1 if paho_subregion==3 & year==1980 & agroup==3, msize(0.20) mc("`blu4'") m(O))
+     (scatter y1 x1 if paho_subregion==3 & year==2020 & agroup==1, msize(0.20) mc("`blu2'") m(O))
+     (scatter y1 x1 if paho_subregion==3 & year==2020 & agroup==2, msize(0.20) mc("`blu6'") m(O))
+     (scatter y1 x1 if paho_subregion==3 & year==2020 & agroup==3, msize(0.20) mc("`blu4'") m(O))  
+     (scatter y1 x1 if paho_subregion==3 & year==2060 & agroup==1, msize(0.20) mc("`blu2'") m(O))
+     (scatter y1 x1 if paho_subregion==3 & year==2060 & agroup==2, msize(0.20) mc("`blu6'") m(O))
+     (scatter y1 x1 if paho_subregion==3 & year==2060 & agroup==3, msize(0.20) mc("`blu4'") m(O))  
+     (scatter y1 x1 if paho_subregion==4 & year==1980 & agroup==1, msize(0.20) mc("`blu2'") m(O))
+     (scatter y1 x1 if paho_subregion==4 & year==1980 & agroup==2, msize(0.20) mc("`blu6'") m(O))
+     (scatter y1 x1 if paho_subregion==4 & year==1980 & agroup==3, msize(0.20) mc("`blu4'") m(O))
+     (scatter y1 x1 if paho_subregion==4 & year==2020 & agroup==1, msize(0.20) mc("`blu2'") m(O))
+     (scatter y1 x1 if paho_subregion==4 & year==2020 & agroup==2, msize(0.20) mc("`blu6'") m(O))
+     (scatter y1 x1 if paho_subregion==4 & year==2020 & agroup==3, msize(0.20) mc("`blu4'") m(O))  
+     (scatter y1 x1 if paho_subregion==4 & year==2060 & agroup==1, msize(0.20) mc("`blu2'") m(O))
+     (scatter y1 x1 if paho_subregion==4 & year==2060 & agroup==2, msize(0.20) mc("`blu6'") m(O))
+     (scatter y1 x1 if paho_subregion==4 & year==2060 & agroup==3, msize(0.20) mc("`blu4'") m(O))  
+     (scatter y1 x1 if paho_subregion==5 & year==1980 & agroup==1, msize(0.20) mc("`blu2'") m(O))
+     (scatter y1 x1 if paho_subregion==5 & year==1980 & agroup==2, msize(0.20) mc("`blu6'") m(O))
+     (scatter y1 x1 if paho_subregion==5 & year==1980 & agroup==3, msize(0.20) mc("`blu4'") m(O))
+     (scatter y1 x1 if paho_subregion==5 & year==2020 & agroup==1, msize(0.20) mc("`blu2'") m(O))
+     (scatter y1 x1 if paho_subregion==5 & year==2020 & agroup==2, msize(0.20) mc("`blu6'") m(O))
+     (scatter y1 x1 if paho_subregion==5 & year==2020 & agroup==3, msize(0.20) mc("`blu4'") m(O))  
+     (scatter y1 x1 if paho_subregion==5 & year==2060 & agroup==1, msize(0.20) mc("`blu2'") m(O))
+     (scatter y1 x1 if paho_subregion==5 & year==2060 & agroup==2, msize(0.20) mc("`blu6'") m(O))
+     (scatter y1 x1 if paho_subregion==5 & year==2060 & agroup==3, msize(0.20) mc("`blu4'") m(O))  
+     (scatter y1 x1 if paho_subregion==6 & year==1980 & agroup==1, msize(0.20) mc("`blu2'") m(O))
+     (scatter y1 x1 if paho_subregion==6 & year==1980 & agroup==2, msize(0.20) mc("`blu6'") m(O))
+     (scatter y1 x1 if paho_subregion==6 & year==1980 & agroup==3, msize(0.20) mc("`blu4'") m(O))
+     (scatter y1 x1 if paho_subregion==6 & year==2020 & agroup==1, msize(0.20) mc("`blu2'") m(O))
+     (scatter y1 x1 if paho_subregion==6 & year==2020 & agroup==2, msize(0.20) mc("`blu6'") m(O))
+     (scatter y1 x1 if paho_subregion==6 & year==2020 & agroup==3, msize(0.20) mc("`blu4'") m(O))  
+     (scatter y1 x1 if paho_subregion==6 & year==2060 & agroup==1, msize(0.20) mc("`blu2'") m(O))
+     (scatter y1 x1 if paho_subregion==6 & year==2060 & agroup==2, msize(0.20) mc("`blu6'") m(O))
+     (scatter y1 x1 if paho_subregion==6 & year==2060 & agroup==3, msize(0.20) mc("`blu4'") m(O))  
+     (scatter y1 x1 if paho_subregion==7 & year==1980 & agroup==1, msize(0.20) mc("`blu2'") m(O))
+     (scatter y1 x1 if paho_subregion==7 & year==1980 & agroup==2, msize(0.20) mc("`blu6'") m(O))
+     (scatter y1 x1 if paho_subregion==7 & year==1980 & agroup==3, msize(0.20) mc("`blu4'") m(O))
+     (scatter y1 x1 if paho_subregion==7 & year==2020 & agroup==1, msize(0.20) mc("`blu2'") m(O))
+     (scatter y1 x1 if paho_subregion==7 & year==2020 & agroup==2, msize(0.20) mc("`blu6'") m(O))
+     (scatter y1 x1 if paho_subregion==7 & year==2020 & agroup==3, msize(0.20) mc("`blu4'") m(O))  
+     (scatter y1 x1 if paho_subregion==7 & year==2060 & agroup==1, msize(0.20) mc("`blu2'") m(O))
+     (scatter y1 x1 if paho_subregion==7 & year==2060 & agroup==2, msize(0.20) mc("`blu6'") m(O))
+     (scatter y1 x1 if paho_subregion==7 & year==2060 & agroup==3, msize(0.20) mc("`blu4'") m(O))  
+     (scatter y1 x1 if paho_subregion==8 & year==1980 & agroup==1, msize(0.20) mc("`blu2'") m(O))
+     (scatter y1 x1 if paho_subregion==8 & year==1980 & agroup==2, msize(0.20) mc("`blu6'") m(O))
+     (scatter y1 x1 if paho_subregion==8 & year==1980 & agroup==3, msize(0.20) mc("`blu4'") m(O))
+     (scatter y1 x1 if paho_subregion==8 & year==2020 & agroup==1, msize(0.20) mc("`blu2'") m(O))
+     (scatter y1 x1 if paho_subregion==8 & year==2020 & agroup==2, msize(0.20) mc("`blu6'") m(O))
+     (scatter y1 x1 if paho_subregion==8 & year==2020 & agroup==3, msize(0.20) mc("`blu4'") m(O))  
+     (scatter y1 x1 if paho_subregion==8 & year==2060 & agroup==1, msize(0.20) mc("`blu2'") m(O))
+     (scatter y1 x1 if paho_subregion==8 & year==2060 & agroup==2, msize(0.20) mc("`blu6'") m(O))
+     (scatter y1 x1 if paho_subregion==8 & year==2060 & agroup==3, msize(0.20) mc("`blu4'") m(O))  
 
     /// Legend 
      (scatteri `a1' , recast(area) lw(none) lc("`blu2'") fc("`blu2'")  )
@@ -286,6 +320,8 @@ twoway
     text(203 11 "1980" ,  place(c) size(4) color(gs0) just(right))
     text(203 36 "2020" ,  place(c) size(4) color(gs0) just(right))
     text(203 61 "2060" ,  place(c) size(4) color(gs0) just(right))
+    text(205 72 "Proportion" ,  place(e) size(3.75) color(gs0) just(right))
+    text(200 73 "aged 70+" ,  place(e) size(3.75) color(gs0) just(right))
 
     /// RHS text
     text(191 73 "1980: $a70_8_1980%" ,   place(e) size(3.25) color(gs8) just(right))

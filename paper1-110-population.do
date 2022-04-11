@@ -92,7 +92,45 @@ keep if _merge>1
 **                      Grenadines, Suriname, Trinidad and Tobago
 ** - Brazil as a separate country
 ** - Mexico as a separate country
-keep if paho_subregion<. & who_region<.
+** 11-APR-2021
+        ** Limit to all countries and selected regions
+        ** Using a few of the regions in associated RESULTS text
+        ** Keep countries and major UN regions
+        ** 900      World
+        ** 1503     High Income
+        ** 1517     Middle income
+        ** 1500     Low income
+        ** 903      Africa
+        ** 935      Asia
+        ** 908      Europe
+        ** 904      LAC
+        ** 905      Northern America
+        ** 909      Oceania
+        ** 1830     LAC ?
+        ** 915      Caribbean
+        ** 916      Central America
+        ** 931      South America
+        #delimit ;
+        keep if  (paho_subregion<. & who_region<.) | 
+                    (iso3n==900 | iso3n==1503 | iso3n==1517 | iso3n==1500 | 
+                    iso3n==903 | iso3n==935 | iso3n==908 | iso3n==904 | iso3n==905 | iso3n==909 |
+                    iso3n==1830 | iso3n==915 | iso3n==916 | iso3n==931 );
+        label define iso3n 900     "World"
+                            1503    "High income"
+                            1517    "Middle income"
+                            1500    "Low income"
+                            903     "Africa"
+                            935     "Asia"
+                            908     "Europe"
+                            904     "LAC"
+                            905     "Northern America"
+                            909     "Oceania"
+                            1830    "LAC again"
+                            915     "Caribbean"
+                            916     "Central America"
+                            931     "South America" , modify; 
+        label values iso3n iso3n;
+        #delimit cr
 ** Drop the 2 countries with populations below 90k in 2019 
 drop if iso3c=="DMA" | iso3c=="KNA"
 drop _merge area rtype who_region un_region 
@@ -170,7 +208,45 @@ keep if _merge>1
 **                      Grenadines, Suriname, Trinidad and Tobago
 ** - Brazil as a separate country
 ** - Mexico as a separate country
-keep if paho_subregion<. & who_region<.
+** 11-APR-2021
+        ** Limit to all countries and selected regions
+        ** Using a few of the regions in associated RESULTS text
+        ** Keep countries and major UN regions
+        ** 900      World
+        ** 1503     High Income
+        ** 1517     Middle income
+        ** 1500     Low income
+        ** 903      Africa
+        ** 935      Asia
+        ** 908      Europe
+        ** 904      LAC
+        ** 905      Northern America
+        ** 909      Oceania
+        ** 1830     LAC ?
+        ** 915      Caribbean
+        ** 916      Central America
+        ** 931      South America
+        #delimit ;
+        keep if  (paho_subregion<. & who_region<.) | 
+                    (iso3n==900 | iso3n==1503 | iso3n==1517 | iso3n==1500 | 
+                    iso3n==903 | iso3n==935 | iso3n==908 | iso3n==904 | iso3n==905 | iso3n==909 |
+                    iso3n==1830 | iso3n==915 | iso3n==916 | iso3n==931 );
+        label define iso3n 900     "World"
+                            1503    "High income"
+                            1517    "Middle income"
+                            1500    "Low income"
+                            903     "Africa"
+                            935     "Asia"
+                            908     "Europe"
+                            904     "LAC"
+                            905     "Northern America"
+                            909     "Oceania"
+                            1830    "LAC again"
+                            915     "Caribbean"
+                            916     "Central America"
+                            931     "South America" , modify; 
+        label values iso3n iso3n;
+        #delimit cr
 ** Drop the 2 countries with populations below 90k in 2019 
 drop if iso3c=="DMA" | iso3c=="KNA"
 drop _merge area rtype who_region un_region 
@@ -248,7 +324,45 @@ keep if _merge>1
 **                      Grenadines, Suriname, Trinidad and Tobago
 ** - Brazil as a separate country
 ** - Mexico as a separate country
-keep if paho_subregion<. & who_region<.
+** 11-APR-2021
+        ** Limit to all countries and selected regions
+        ** Using a few of the regions in associated RESULTS text
+        ** Keep countries and major UN regions
+        ** 900      World
+        ** 1503     High Income
+        ** 1517     Middle income
+        ** 1500     Low income
+        ** 903      Africa
+        ** 935      Asia
+        ** 908      Europe
+        ** 904      LAC
+        ** 905      Northern America
+        ** 909      Oceania
+        ** 1830     LAC ?
+        ** 915      Caribbean
+        ** 916      Central America
+        ** 931      South America
+        #delimit ;
+        keep if  (paho_subregion<. & who_region<.) | 
+                    (iso3n==900 | iso3n==1503 | iso3n==1517 | iso3n==1500 | 
+                    iso3n==903 | iso3n==935 | iso3n==908 | iso3n==904 | iso3n==905 | iso3n==909 |
+                    iso3n==1830 | iso3n==915 | iso3n==916 | iso3n==931 );
+        label define iso3n 900     "World"
+                            1503    "High income"
+                            1517    "Middle income"
+                            1500    "Low income"
+                            903     "Africa"
+                            935     "Asia"
+                            908     "Europe"
+                            904     "LAC"
+                            905     "Northern America"
+                            909     "Oceania"
+                            1830    "LAC again"
+                            915     "Caribbean"
+                            916     "Central America"
+                            931     "South America" , modify; 
+        label values iso3n iso3n;
+        #delimit cr
 ** Drop the 2 countries with populations below 90k in 2019 
 drop if iso3c=="DMA" | iso3c=="KNA"
 drop _merge area rtype who_region un_region 
@@ -331,7 +445,45 @@ keep if _merge>1
 **                      Grenadines, Suriname, Trinidad and Tobago
 ** - Brazil as a separate country
 ** - Mexico as a separate country
-keep if paho_subregion<. & who_region<.
+** 11-APR-2021
+        ** Limit to all countries and selected regions
+        ** Using a few of the regions in associated RESULTS text
+        ** Keep countries and major UN regions
+        ** 900      World
+        ** 1503     High Income
+        ** 1517     Middle income
+        ** 1500     Low income
+        ** 903      Africa
+        ** 935      Asia
+        ** 908      Europe
+        ** 904      LAC
+        ** 905      Northern America
+        ** 909      Oceania
+        ** 1830     LAC ?
+        ** 915      Caribbean
+        ** 916      Central America
+        ** 931      South America
+        #delimit ;
+        keep if  (paho_subregion<. & who_region<.) | 
+                    (iso3n==900 | iso3n==1503 | iso3n==1517 | iso3n==1500 | 
+                    iso3n==903 | iso3n==935 | iso3n==908 | iso3n==904 | iso3n==905 | iso3n==909 |
+                    iso3n==1830 | iso3n==915 | iso3n==916 | iso3n==931 );
+        label define iso3n 900     "World"
+                            1503    "High income"
+                            1517    "Middle income"
+                            1500    "Low income"
+                            903     "Africa"
+                            935     "Asia"
+                            908     "Europe"
+                            904     "LAC"
+                            905     "Northern America"
+                            909     "Oceania"
+                            1830    "LAC again"
+                            915     "Caribbean"
+                            916     "Central America"
+                            931     "South America" , modify; 
+        label values iso3n iso3n;
+        #delimit cr
 drop if year==2020
 ** Drop the 2 countries with populations below 90k in 2019 
 drop if iso3c=="DMA" | iso3c=="KNA"
@@ -410,7 +562,45 @@ keep if _merge>1
 **                      Grenadines, Suriname, Trinidad and Tobago
 ** - Brazil as a separate country
 ** - Mexico as a separate country
-keep if paho_subregion<. & who_region<.
+** 11-APR-2021
+        ** Limit to all countries and selected regions
+        ** Using a few of the regions in associated RESULTS text
+        ** Keep countries and major UN regions
+        ** 900      World
+        ** 1503     High Income
+        ** 1517     Middle income
+        ** 1500     Low income
+        ** 903      Africa
+        ** 935      Asia
+        ** 908      Europe
+        ** 904      LAC
+        ** 905      Northern America
+        ** 909      Oceania
+        ** 1830     LAC ?
+        ** 915      Caribbean
+        ** 916      Central America
+        ** 931      South America
+        #delimit ;
+        keep if  (paho_subregion<. & who_region<.) | 
+                    (iso3n==900 | iso3n==1503 | iso3n==1517 | iso3n==1500 | 
+                    iso3n==903 | iso3n==935 | iso3n==908 | iso3n==904 | iso3n==905 | iso3n==909 |
+                    iso3n==1830 | iso3n==915 | iso3n==916 | iso3n==931 );
+        label define iso3n 900     "World"
+                            1503    "High income"
+                            1517    "Middle income"
+                            1500    "Low income"
+                            903     "Africa"
+                            935     "Asia"
+                            908     "Europe"
+                            904     "LAC"
+                            905     "Northern America"
+                            909     "Oceania"
+                            1830    "LAC again"
+                            915     "Caribbean"
+                            916     "Central America"
+                            931     "South America" , modify; 
+        label values iso3n iso3n;
+        #delimit cr
 drop if year==2020
 ** Drop the 2 countries with populations below 90k in 2019 
 drop if iso3c=="DMA" | iso3c=="KNA"
@@ -489,7 +679,45 @@ keep if _merge>1
 **                      Grenadines, Suriname, Trinidad and Tobago
 ** - Brazil as a separate country
 ** - Mexico as a separate country
-keep if paho_subregion<. & who_region<.
+** 11-APR-2021
+        ** Limit to all countries and selected regions
+        ** Using a few of the regions in associated RESULTS text
+        ** Keep countries and major UN regions
+        ** 900      World
+        ** 1503     High Income
+        ** 1517     Middle income
+        ** 1500     Low income
+        ** 903      Africa
+        ** 935      Asia
+        ** 908      Europe
+        ** 904      LAC
+        ** 905      Northern America
+        ** 909      Oceania
+        ** 1830     LAC ?
+        ** 915      Caribbean
+        ** 916      Central America
+        ** 931      South America
+        #delimit ;
+        keep if  (paho_subregion<. & who_region<.) | 
+                    (iso3n==900 | iso3n==1503 | iso3n==1517 | iso3n==1500 | 
+                    iso3n==903 | iso3n==935 | iso3n==908 | iso3n==904 | iso3n==905 | iso3n==909 |
+                    iso3n==1830 | iso3n==915 | iso3n==916 | iso3n==931 );
+        label define iso3n 900     "World"
+                            1503    "High income"
+                            1517    "Middle income"
+                            1500    "Low income"
+                            903     "Africa"
+                            935     "Asia"
+                            908     "Europe"
+                            904     "LAC"
+                            905     "Northern America"
+                            909     "Oceania"
+                            1830    "LAC again"
+                            915     "Caribbean"
+                            916     "Central America"
+                            931     "South America" , modify; 
+        label values iso3n iso3n;
+        #delimit cr
 drop if year==2020
 ** Drop the 2 countries with populations below 90k in 2019 
 drop if iso3c=="DMA" | iso3c=="KNA"
@@ -504,9 +732,6 @@ order sex, after(rcode)
 label data "Population data by age group: Americas 1050 to 2020 (women)"
 save "`datapath'/paper1_population2_women_pred", replace
 
-
-
-
 ** Join the SIX datasets
 use "`datapath'/paper1_population2_men", clear 
 append using "`datapath'/paper1_population2_men_pred"
@@ -514,11 +739,17 @@ append using "`datapath'/paper1_population2_women"
 append using "`datapath'/paper1_population2_women_pred"
 append using "`datapath'/paper1_population2_both"
 append using "`datapath'/paper1_population2_both_pred"
+
+recode iso3n (905 = 904)
+label define iso3n 904 "Americas UN" 1830 "LAC" 10000 "Americas IH" 20000 "PAHO subregions IH", modify
+label values iso3n iso3n
+collapse (sum) a0 a5 a10 a15 a20 a25 a30 a35 a40 a45 a50 a55 a60 a65 a70 a75 a80 a85 a90 a95 a100 , by(iso3n un_subregion paho_subregion sex year)
+
 sort sex iso3n year 
 label var un_subregion "UN subregions"
 label var paho_subregion "PAHO subregions of the Americas"
-label var iid "Unique code on UN WPP data spreadsheet"
-label var rcode "UN regional code"
+** label var iid "Unique code on UN WPP data spreadsheet"
+** label var rcode "UN regional code"
 label var sex "1=men, 2=women, 3=both"
 label var year "Annual totals: 1950 to 2020" 
 label data "Population data by age: Americas 1050 to 2020"

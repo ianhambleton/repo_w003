@@ -75,13 +75,14 @@ gen pg3 = (group3/total)
 label var pg1 "Proportion 0-19"
 label var pg2 "Proportion 20-69"
 label var pg3 "Proportion 70+"
-keep iso3n iso3c region paho_subregion sex year group1 group2 group3 total pg1 pg2 pg3
+keep iso3n region paho_subregion sex year group1 group2 group3 total pg1 pg2 pg3
 sort paho_subregion sex year
 
 ** Keep women and men combined
 keep if sex==3 
 
 ** Generate unique code by country - alphabetically
+keep if iso3n<.
 decode iso3n, gen(country)
 order country, after(iso3n)
 sort country year 
@@ -187,7 +188,7 @@ keep uid iso3n country paho_subregion year dratio
 reshape wide dratio , i(uid iso3n country paho_subregion) j(year)
 
 ** Only keep the 33 countries AND The Americas in total
-keep if iso3n<. | uid==42
+keep if uid<=33 | uid==42
 
 ** Generate order based on size of dependency ratio
 sort dratio2060
@@ -196,7 +197,7 @@ replace uid1 = uid1 + 1 if uid1>=7
 replace uid1 = uid1 + 1 if uid1>=15 
 replace uid1 = uid1 + 1 if uid1>=23 
 replace uid1 = uid1 + 1 if uid1>=31 
-order uid1 
+sort dratio2020
 replace country = "St Vincent & Gren" if country=="Saint Vincent and the Grenadines"
 replace country = "Antigua & Barbuda" if country=="Antigua and Barbuda"
 replace country = "Trinidad & Tobago" if country=="Trinidad and Tobago"
@@ -236,6 +237,38 @@ label values uid1 uid1_
     local am1980 `r(p9)'     
 
 
+** ASSOCIATED STATISTICS FOR RESULTS TEXT
+
+    ** Dependency ratio at each time point (1980, 2020, 2060)
+preserve
+    keep if iso3n<900
+        sort dratio1980
+        format dratio1980 %9.1f
+        list uid dratio1980 if uid<=33, sep(5) line(120)
+        sort dratio2020
+        format dratio2020 %9.1f
+        list uid dratio2020 if uid<=33, sep(5) line(120)
+        sort dratio2060
+        format dratio2060 %9.1f
+        list uid dratio2060 if uid<=33, sep(5) line(120)
+
+        ** Annual change in dependency ratio
+
+        ** Full period
+        gsort uid
+        gen dratio = round( ( ( ln(dratio2060 / dratio1980) ) / 80 ) * 100 , 0.01) 
+        gen dratio_1st = round( ( ( ln(dratio2020 / dratio1980) ) / 40 ) * 100 , 0.01)  
+        gen dratio_2nd = round( ( ( ln(dratio2060 / dratio2020) ) / 40 ) * 100 , 0.01)  
+        sort dratio
+        list uid dratio if uid<=33, sep(5) line(120)
+        sort dratio_1st
+        list uid dratio_1st if uid<=33, sep(5) line(120)
+        sort dratio_2nd
+        list uid dratio_2nd if uid<=33, sep(5) line(120)
+restore
+
+
+
 ** --------------------------------------------------------------
 ** GRAPHIC - Equiplot, ordered by size of depenency ratio in 2060
 ** --------------------------------------------------------------
@@ -262,17 +295,17 @@ local yax5 " 32 "Canada" 33 "Brazil" 34 "St Lucia" 35 "Costa Rica" 36 "Chile" 37
 
 #delimit ;
 	gr twoway 
-        (scatteri `inner1' , recast(area) lw(0.25) lc(gs10) fc(gs10) )
-        (scatteri `inner2' , recast(area) lw(0.25) lc(gs10) fc(gs10) )
-        (scatteri `inner3' , recast(area) lw(0.25) lc(gs10) fc(gs10) )
-        (scatteri `inner4' , recast(area) lw(0.25) lc(gs10) fc(gs10) )
-        (scatteri `inner5' , recast(area) lw(0.25) lc(gs10) fc(gs10) )
+        (scatteri `inner1' , recast(area) lw(0.25) lc(gs10) fc(gs10) lp(l))
+        (scatteri `inner2' , recast(area) lw(0.25) lc(gs10) fc(gs10) lp(l))
+        (scatteri `inner3' , recast(area) lw(0.25) lc(gs10) fc(gs10) lp(l))
+        (scatteri `inner4' , recast(area) lw(0.25) lc(gs10) fc(gs10) lp(l))
+        (scatteri `inner5' , recast(area) lw(0.25) lc(gs10) fc(gs10) lp(l))
 
-        (scatteri `outer1' , recast(area) lw(0.25) lc(gs7) fc(none) )
-        (scatteri `outer2' , recast(line) lw(0.25) lc(gs7) fc(none) )
-        (scatteri `outer3' , recast(line) lw(0.25) lc(gs7) fc(none) )
-        (scatteri `outer4' , recast(line) lw(0.25) lc(gs7) fc(none) )
-        (scatteri `outer5' , recast(line) lw(0.25) lc(gs7) fc(none) )
+        (scatteri `outer1' , recast(area) lw(0.25) lc(gs7) fc(none) lp(l))
+        (scatteri `outer2' , recast(line) lw(0.25) lc(gs7) fc(none) lp(l))
+        (scatteri `outer3' , recast(line) lw(0.25) lc(gs7) fc(none) lp(l))
+        (scatteri `outer4' , recast(line) lw(0.25) lc(gs7) fc(none) lp(l))
+        (scatteri `outer5' , recast(line) lw(0.25) lc(gs7) fc(none) lp(l))
 
         /// Horizontal lines
         (rbar dratio1980 dratio2060 uid1, horizontal fc(gs13)   barw(0.1) lw(none))
@@ -351,4 +384,6 @@ local yax5 " 32 "Canada" 33 "Brazil" 34 "St Lucia" 35 "Costa Rica" 36 "Chile" 37
 			name(equiplot_dratio)
 			;
 #delimit cr	
+
+
 
