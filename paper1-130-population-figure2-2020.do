@@ -318,11 +318,11 @@ local yax1 " 1 "Belize" 2 "Honduras" 3 "Haiti" 4 "Nicaragua" 5 "Guatemala" 6 "Ba
 
 #delimit ;
 	gr twoway 
-        (scatteri `inner1' , recast(area) lw(0.25) lc(gs10) fc(gs10) lp(l))
-        (scatteri `inner2' , recast(area) lw(0.25) lc(gs10) fc(gs10) lp(l))
-        (scatteri `inner3' , recast(area) lw(0.25) lc(gs10) fc(gs10) lp(l))
-        (scatteri `inner4' , recast(area) lw(0.25) lc(gs10) fc(gs10) lp(l))
-        (scatteri `inner5' , recast(area) lw(0.25) lc(gs10) fc(gs10) lp(l))
+        (scatteri `inner1' , recast(area) lw(0.25) lc(gs10) fc(gs14) lp(l))
+        (scatteri `inner2' , recast(area) lw(0.25) lc(gs10) fc(gs14) lp(l))
+        (scatteri `inner3' , recast(area) lw(0.25) lc(gs10) fc(gs14) lp(l))
+        (scatteri `inner4' , recast(area) lw(0.25) lc(gs10) fc(gs14) lp(l))
+        (scatteri `inner5' , recast(area) lw(0.25) lc(gs10) fc(gs14) lp(l))
 
         (scatteri `outer1' , recast(area) lw(0.25) lc(gs7) fc(none) lp(l))
         (scatteri `outer2' , recast(line) lw(0.25) lc(gs7) fc(none) lp(l))

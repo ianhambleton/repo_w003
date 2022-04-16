@@ -192,7 +192,7 @@ gen dr3 = (group3 / group2) * 100
                 global country_`c'_`y' = country1
                 ** (2) Population
                 local pop_`c'_`y' = total
-                global pop_`c'_`y' : dis %11.0fc `pop_`c'_`y''
+                global pop_`c'_`y' : dis %14.0fc `pop_`c'_`y''
                 ** (3) Percent 70+
                 local a70_`c'_`y' = pg3 * 100      
                 global a70_`c'_`y' : dis %5.1f `a70_`c'_`y''
@@ -210,8 +210,8 @@ putdocx begin , font("calibri light", 10)
 putdocx table t1 = (42,6) 
 
 ** Structural formats
-putdocx table t1(.,1) , width(25%)
-putdocx table t1(.,2) , width(15%)
+putdocx table t1(.,1) , width(22%)
+putdocx table t1(.,2) , width(18%)
 putdocx table t1(.,3) , width(15%)
 putdocx table t1(.,4) , width(15%)
 putdocx table t1(.,5) , width(15%)
@@ -251,7 +251,7 @@ local coi = 3
 forval c = 3(1)42 {
     global coi = `c' - 2
     putdocx table t1(`c',1) = ("${country_${coi}_2000}"), halign(right)
-    putdocx table t1(`c',2) = ("${pop_${coi}_2000}"), halign(right)
+    putdocx table t1(`c',2) = ("${pop_${coi}_2019}"), halign(right)
     putdocx table t1(`c',3) = ("${a70_${coi}_2000}"), halign(right)
     putdocx table t1(`c',4) = ("${a70_${coi}_2019}"), halign(right)
     putdocx table t1(`c',5) = ("${gr_${coi}_2000}"), halign(right)

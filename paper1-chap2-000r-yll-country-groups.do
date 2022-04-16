@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap2-000c-mr-country.do
+    //  algorithm name			    chap2-000r-yll-country.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	26-Apr-2021
@@ -26,16 +26,15 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap2-000c-mr-country", replace
+    log using "`logpath'\chap2-000r-yll-country", replace
 ** HEADER -----------------------------------------------------
-
 
 
 ** Repeat for women and men combined 
 
 
 ** ------------------------------------------
-** Loading DEATHS dataset for the Americas only 
+** Loading ylls dataset for the Americas only 
 ** Americas (AMR)
 **  1100    Cardiovascular 
 **  1110    Rheumatic heart disease I01-I09
@@ -45,7 +44,16 @@
 **  1150    Cardiomyopathy, myocarditis, endocarditis I30-I33, I38, I40, I42 
 **  1160    Other circulatory diseases I00, I26-I28, I34-I37, I44-I51, I70-I99
 ** ------------------------------------------
-use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
+use "`datapath'\from-who\who-ghe-yll-001-who2-allcauses", replace
+** Collapse from 18 to 17 5 year groups.
+** This means 80+ instead of 85+ 
+collapse (sum) yll yll_low yll_up pop, by(iso3c iso3n iso3 year age sex ghecause un_region un_subregion who_region paho_subregion)
+
+** yll to zero for Haiti in 2010 for natural disasters.
+** The earthquale meant that yll > POP, causing problems for the algorithms
+** which expects yll < POP
+replace yll = 0 if iso3n==332 & year==2010 & ghecause==1510
+
 * TODO: Change restriction for each disease group
    #delimit ;
     keep if     
@@ -79,12 +87,12 @@ use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
     #delimit cr
     keep if who_region==2
     drop if age<0 
-    drop dths_low dths_up
+    drop yll_low yll_up
     ** Collapse from countries to subregions
     ** Ensure we don't double count population for mental health and neurological (820 940)
     rename pop pop_temp 
-    collapse (sum) dths (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
-    collapse (sum) dths pop, by(ghecause year sex age iso3n iso3c paho_subregion)
+    collapse (sum) yll (mean) pop=pop_temp, by(ghecause year who_region sex age iso3c iso3n paho_subregion)
+    collapse (sum) yll pop, by(ghecause year sex age iso3n iso3c paho_subregion)
     ** save "`datapath'\from-who\chap2_cvd_001", replace
 
 ** BROAD age groups
@@ -121,9 +129,9 @@ replace age18 = 16 if age==75
 replace age18 = 17 if age==80
 replace age18 = 18 if age==85
 * TODO: This collapse only now down to country-level (instead of subregion level)
-collapse (sum) dths pop, by(year ghecause iso3n iso3c paho_subregion age18 agroup)
+collapse (sum) yll pop, by(year ghecause iso3n iso3c paho_subregion age18 agroup)
 
-** Join the DEATHS dataset with the WHO STD population
+** Join the ylls dataset with the WHO STD population
 ** merge m:m age18 using `who_std'
 
 ** Label the age groups
@@ -154,10 +162,11 @@ label values age18 age18_
 label var paho_subregion "8 PAHO subregions of the Americas"
 label var agroup "5 broad age groups: young children, youth, young adult, older adult, elderly"
 label var age18 "5-year age groups: 18 groups"
-label var dths "Count of all deaths"
+label var yll "Count of all ylls"
 label var pop "PAHO subregional populations" 
 format pop %12.0fc 
 ** label var spop "WHO Standard population: sums to 1 million"
+
 
 ** Looped creation of Mortality Rates
 ** YEAR (2000 to 2019)
@@ -174,14 +183,12 @@ label define ghecause_
                     500  "cancer"
                     600  "respiratory"
                     700  "diabetes"
-                    800  "mental" 
+                    800  "mental"
                     900  "neurological"
                     1000 "injuries", modify
                     ;
 #delimit cr
 label values ghecause ghecause_ 
-
-
 
 
 ** Create a combined disease subgroup category
@@ -192,7 +199,7 @@ preserve
     gen subgroup = 0
     replace subgroup = 1 if ghecause>=400 & ghecause<=900
     rename pop t1
-    collapse (sum) dths (mean) pop=t1 , by(year paho_subregion iso3c iso3n age18 agroup subgroup)
+    collapse (sum) yll (mean) pop=t1 , by(year paho_subregion iso3c iso3n age18 agroup subgroup)
     keep if subgroup == 1
     gen ghecause = 50
     drop subgroup
@@ -206,5 +213,5 @@ sort year iso3n ghecause age18
 
 ** Use in Chapter 3. Population change
 ** 18 age groups
-save "`datapath'\from-who\paper1-chap3_byage_country_groups_both", replace
+save "`datapath'\from-who\paper1-chap3_byage_country_groups_both_yll", replace
 

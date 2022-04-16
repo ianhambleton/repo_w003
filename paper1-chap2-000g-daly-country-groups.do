@@ -130,6 +130,9 @@ replace age18 = 18 if age==85
 * TODO: This collapse only now down to country-level (instead of subregion level)
 collapse (sum) daly pop, by(year ghecause iso3n iso3c paho_subregion age18 agroup)
 
+
+
+
 ** Join the DALYs dataset with the WHO STD population
 ** merge m:m age18 using `who_std'
 
