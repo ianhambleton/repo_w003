@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    paper1-140-population-table1.do
+    //  algorithm name			    paper1-140-population-table1-2020.do
     //  project:				    UN WPP (2019 edition)
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	24-Mar-2022
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\paper1-140-population-table1", replace
+    log using "`logpath'\paper1-140-population-table1-2020", replace
 ** HEADER -----------------------------------------------------
 
 ** Load population file from: 
@@ -34,7 +34,7 @@
 use "`datapath'/paper1_population2", clear
 
 ** Keep required years and drop wider world regions:
-keep if year==2000 | year==2019 
+keep if year==2000 | year==2020 
 drop if paho_subregion==.
 ** UN region
 gen region = 1
@@ -177,14 +177,53 @@ replace country1 = "Dominican Rep" if country=="Dominican Republic"
 gsort uid -year
 gen pc1 = ( group3[_n] - group3[_n-1] ) / total[_n-1] if paho_subregion[_n] == paho_subregion[_n-1] 
 ** Growth rate all ages
-gen gr = round( ( ( ln(total[_n-1] / total[_n]) ) / 19 ) * 100 , 0.01)  if uid[_n] == uid[_n-1] 
+gen gr = round( ( ( ln(total[_n-1] / total[_n]) ) / 20 ) * 100 , 0.01)  if uid[_n] == uid[_n-1] 
 ** Growth rate older adults (70+)
-gen gr3 = round( ( ( ln(group3[_n-1] / group3[_n]) ) / 19 ) * 100 , 0.01)  if uid[_n] == uid[_n-1] 
+gen gr3 = round( ( ( ln(group3[_n-1] / group3[_n]) ) / 20 ) * 100 , 0.01)  if uid[_n] == uid[_n-1] 
 ** Old Age Dependency Ratio: Ratio of people aged 70+ per 100 people aged 20-69
 gen dr3 = (group3 / group2) * 100
 
+** Listings for accompanying RESULTS text
+** Percentage 70+
+sort year pg3
+gen perc3 = pg3 * 100
+format perc3 %9.1f
+list year uid perc3 if uid<=33, sep(5) line(120)
+** Growth rate (Older adults)
+sort year gr3
+format gr3 %9.2f
+list year uid gr3 if uid<=33, sep(5) line(120)
+** Growth rate (Full age range of population)
+sort year gr
+format gr %9.2f
+list year uid gr if uid<=33, sep(5) line(120)
+** Change in growth rates
+* Full age range of population
+egen gr_min = min(gr)
+egen gr_max = max(gr)
+gen gr_diff = gr_max - gr_min
+* Older adults aged 70+
+egen gr3_min = min(gr3)
+egen gr3_max = max(gr3)
+gen gr3_diff = gr3_max - gr3_min
+** Difference between minimum and maximum proportion aged 70+
+bysort year : egen pg3_min = min(pg3)
+bysort year : egen pg3_max = max(pg3)
+gen pg3_diff = (pg3_max - pg3_min) * 100
+
+** Dependency ratio
+sort year dr3
+format dr3 %9.1f
+list year uid dr3 if uid<=33, sep(5) line(120)
+** Annual change in dependency ratio
+** Full period
+gsort uid -year
+gen dg3 = round( ( ( ln(dr3[_n-1] / dr3[_n]) ) / 20 ) * 100 , 0.01)  if uid[_n] == uid[_n-1] 
+
+
+** Convert variables to global macros for insertion in Table
     forval c = 1(1)40 {   
-        forval y = 2000(19)2019 {
+        forval y = 2000(20)2020 {
         ** forval y = 2000(20)2020 {
             preserve
                 keep if uid1==`c' & year==`y'
@@ -234,26 +273,26 @@ putdocx table t1(42,.) , shading("e6e6e6")
 ** x2 Header rows
 ** Row 1
 putdocx table t1(1,1) = ("Country"), halign(right)
-putdocx table t1(1,2) = ("Population in 2019"), halign(right)
+putdocx table t1(1,2) = ("Population in 2020"), halign(right)
 putdocx table t1(1,3) = ("Percent of population aged 70+"), halign(right)
-putdocx table t1(1,4) = ("Annual growth rate (2000 to 2019)"), halign(right)
+putdocx table t1(1,4) = ("Annual growth rate (2000 to 2020)"), halign(right)
 ** Row 2
 putdocx table t1(2,3) = ("2000"), halign(right)
-putdocx table t1(2,4) = ("2019"), halign(right)
+putdocx table t1(2,4) = ("2020"), halign(right)
 putdocx table t1(2,5) = ("All ages"), halign(right)
 putdocx table t1(2,6) = ("Older adults (70+)"), halign(right)
 
 ** ROW 1: Country
 ** ROW 2: Population
 ** ROW 3: Percent 70+ years (2000)
-** ROW 4: Percent 70+ years (2019)
+** ROW 4: Percent 70+ years (2020)
 local coi = 3 
 forval c = 3(1)42 {
     global coi = `c' - 2
     putdocx table t1(`c',1) = ("${country_${coi}_2000}"), halign(right)
-    putdocx table t1(`c',2) = ("${pop_${coi}_2019}"), halign(right)
+    putdocx table t1(`c',2) = ("${pop_${coi}_2020}"), halign(right)
     putdocx table t1(`c',3) = ("${a70_${coi}_2000}"), halign(right)
-    putdocx table t1(`c',4) = ("${a70_${coi}_2019}"), halign(right)
+    putdocx table t1(`c',4) = ("${a70_${coi}_2020}"), halign(right)
     putdocx table t1(`c',5) = ("${gr_${coi}_2000}"), halign(right)
     putdocx table t1(`c',6) = ("${gr3_${coi}_2000}"), halign(right)
 }

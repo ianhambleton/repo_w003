@@ -298,17 +298,17 @@ gen line_lo = dratio1980 + 2
 gen line_hi = dratio2060 - 2
 
 ** The surrounding boxes
-local outer1 -1 0     7 0    7 65     -1 65 
-local outer2  7 0    15 0   15 65      7 65 
-local outer3  15 0   23 0   23 65     15 65 
-local outer4  23 0   31 0   31 65     23 65 
-local outer5  31 0   39 0   39 65     31 65 
+local outer1 -1 0     7 0    7 77     -1 77 
+local outer2  7 0    15 0   15 77      7 77 
+local outer3  15 0   23 0   23 77     15 77 
+local outer4  23 0   31 0   31 77     23 77 
+local outer5  31 0   39 0   39 77     31 77 
 
-local inner1 -1 48     7 48    7 65     -1 65
-local inner2  7 48    15 48   15 65      7 65 
-local inner3  15 48   23 48   23 65     15 65 
-local inner4  23 48   31 48   31 65     23 65 
-local inner5  31 48   39 48   39 65     31 65 
+local inner1 -1 48     7 48    7 77     -1 77
+local inner2  7 48    15 48   15 77      7 77 
+local inner3  15 48   23 48   23 77     15 77 
+local inner4  23 48   31 48   31 77     23 77 
+local inner5  31 48   39 48   39 77     31 77 
 
 local yax5 " 32 "Americas"  33 "Argentina" 34 "Cuba" 35 "Uruguay" 36 "United States" 37 "Barbados" 38 "Canada" "
 local yax4 " 24 "El Salvador" 25 "Grenada" 26 "Saint Vincent & Gren" 27 "Saint Lucia" 28 "Costa Rica" 29 "Trinidad & Tobago" 30 "Chile" "
@@ -334,9 +334,9 @@ local yax1 " 1 "Belize" 2 "Honduras" 3 "Haiti" 4 "Nicaragua" 5 "Guatemala" 6 "Ba
         (rbar line_lo line_hi uid1, horizontal fc(gs13)   barw(0.1) lw(none))
 
 		/// Dependency Ratio Points - 33 countries
-        (sc uid1 dratio1980  , msize(4) m(o) mlc("`blu1'") mfc("`blu2'%50") mlw(0.1))
-        (sc uid1 dratio2020  , msize(4) m(o) mlc("gs0") mfc("`gry2'") mlw(0.1))
-        (sc uid1 dratio2060  , msize(4) m(o) mlc("`pur1'") mfc("`pur2'%50") mlw(0.1))
+        (sc uid1 dratio1980  , msize(3) m(o) mlc("`blu1'") mfc("`blu2'%50") mlw(0.1))
+        (sc uid1 dratio2020  , msize(3) m(o) mlc("gs0") mfc("`gry2'") mlw(0.1))
+        (sc uid1 dratio2060  , msize(3) m(o) mlc("`pur1'") mfc("`pur2'%50") mlw(0.1))
 
 		/// Dependency Ratio Points - 33 countries
         /// (sc uid1 dratio1980 if uid1!=26 , msize(4) m(o) mlc("`blu1'") mfc("`blu3'") mlw(0.1))
@@ -350,23 +350,31 @@ local yax1 " 1 "Belize" 2 "Honduras" 3 "Haiti" 4 "Nicaragua" 5 "Guatemala" 6 "Ba
 		,
 			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 		
 			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 
-			ysize(14) xsize(8)
+			ysize(14) xsize(10)
 
 			/// X-axis
-			xlab(5(10)45, 
+			xlab(none, 
 			labc(gs8) labs(4) notick grid glc(gs16) angle(0) format(%9.0f))
-			xscale(noline range(0(5)60) lw(vthin)) 
+			xscale(noline range(0(5)80) lw(vthin)) 
 			xtitle(" ", size(3) color(gs8) margin(l=0 r=0 t=0 b=0)) 
-            xmtick(5(5)45, tlc(gs8))
+            ///xmtick(5(5)45, tlc(gs8))
 
 			/// Y-axis
 			ylab(   `yax1' `yax2' `yax3' `yax4' `yax5',
 			valuelabels labc(gs8) labs(3) tlc(gs8) nogrid notick glc(blue) angle(0) format(%9.0f) labgap(2) )
-			yscale(noline range(0(1)42) noextend   ) 
+			yscale(noline range(-5(1)42) ) 
 			ytitle("", color(gs8) size(3) margin(l=1 r=1 t=1 b=1)) 
 
-            text( 41 55 "Dep Ratio" ,  place(c) size(3.5) color(gs8) just(right))
-            text( 40 55 "2020"      ,  place(c) size(3.5) color(gs8) just(right))
+            text( -2.5 30 "Number of adults 70+" ,  place(c) size(3) color(gs8) just(right))
+            text( -3.5 30 "per 100 adults 20-69" ,  place(c) size(3) color(gs8) just(right))
+            text( -1 5 "5" ,  place(c) size(3) color(gs8) just(right))
+            text( -1 15 "15" ,  place(c) size(3) color(gs8) just(right))
+            text( -1 25 "25" ,  place(c) size(3) color(gs8) just(right))
+            text( -1 35 "35" ,  place(c) size(3) color(gs8) just(right))
+            text( -1 45 "45" ,  place(c) size(3) color(gs8) just(right))
+            
+            text( 41.25 58 "Dependency Ratio" ,  place(c) size(3) color(gs8) just(right))
+            text( 40 55 "2020"      ,  place(c) size(3) color(gs8) just(right))
             text( 1 55 "${dr_1_2020}"  ,  place(c) size(3) color(gs4) just(right))
             text( 2 55 "${dr_2_2020}"  ,  place(c) size(3) color(gs4) just(right))
             text( 3 55 "${dr_3_2020}"  ,  place(c) size(3) color(gs4) just(right))
@@ -401,8 +409,42 @@ local yax1 " 1 "Belize" 2 "Honduras" 3 "Haiti" 4 "Nicaragua" 5 "Guatemala" 6 "Ba
             text(36 55 "${dr_36_2020}" ,  place(c) size(3) color(gs4) just(right))
             text(37 55 "${dr_37_2020}" ,  place(c) size(3) color(gs4) just(right))
             text(38 55 "${dr_38_2020}" ,  place(c) size(3) color(gs4) just(right))
-
-			legend(size(4) color(gs8) position(12) nobox ring(1) bm(t=0 b=0 l=0 r=0) colf cols(13)
+            text(40 69  "2060"      ,  place(c) size(3) color(gs8) just(right))
+            text( 1 69  "${dr_1_2060}"  ,  place(c) size(3) color(gs4) just(right))
+            text( 2 69  "${dr_2_2060}"  ,  place(c) size(3) color(gs4) just(right))
+            text( 3 69  "${dr_3_2060}"  ,  place(c) size(3) color(gs4) just(right))
+            text( 4 69  "${dr_4_2060}"  ,  place(c) size(3) color(gs4) just(right))
+            text( 5 69  "${dr_5_2060}"  ,  place(c) size(3) color(gs4) just(right))
+            text( 6 69  "${dr_6_2060}"  ,  place(c) size(3) color(gs4) just(right))
+            text( 8 69  "${dr_8_2060}"  ,  place(c) size(3) color(gs4) just(right))
+            text( 9 69  "${dr_9_2060}"  ,  place(c) size(3) color(gs4) just(right))
+            text(10 69 "${dr_10_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(11 69 "${dr_11_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(12 69 "${dr_12_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(13 69 "${dr_13_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(14 69 "${dr_14_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(16 69 "${dr_16_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(17 69 "${dr_17_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(18 69 "${dr_18_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(19 69 "${dr_19_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(20 69 "${dr_20_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(21 69 "${dr_21_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(22 69 "${dr_22_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(24 69 "${dr_24_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(25 69 "${dr_25_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(26 69 "${dr_26_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(27 69 "${dr_27_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(28 69 "${dr_28_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(29 69 "${dr_29_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(30 69 "${dr_30_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(32 69 "${dr_32_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(33 69 "${dr_33_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(34 69 "${dr_34_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(35 69 "${dr_35_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(36 69 "${dr_36_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(37 69 "${dr_37_2060}" ,   place(c) size(3) color(gs4) just(right))
+            text(38 69 "${dr_38_2060}" ,   place(c) size(3) color(gs4) just(right))
+			legend(size(3) color(gs8) position(12) nobox ring(1) bm(t=0 b=0 l=0 r=0) colf cols(13)
 			region(fcolor(gs16) lw(none) margin(t=0 b=1 l=0 r=0)) 
 			order(12 13 14) textfirst
 			lab(12 "1980") 

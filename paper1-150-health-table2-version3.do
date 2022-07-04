@@ -1,9 +1,9 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    paper1-150-health-table2-version2.do
+    //  algorithm name			    paper1-150-health-table2-version3.do
     //  project:				    UN WPP (2019 edition)
     //  analysts:				    Ian HAMBLETON
-    // 	date last modified	    	24-Mar-2022
+    // 	date last modified	    	22-Jun-2022
     //  algorithm task			    Importing the UN WPP data for the Americas
 
     ** General algorithm set-up
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\paper1-150-health-table2-version2", replace
+    log using "`logpath'\paper1-150-health-table2-version3", replace
 ** HEADER -----------------------------------------------------
 
 
@@ -300,17 +300,16 @@ format rate %9.1fc
 drop ghecause 
 
 
-
 ** -----------------------------------------------------
 ** COLUMN 3
 ** Outputs: Total Deaths / Total DALYs 
-** in 2000
+** WOMEN in 2019
 ** -----------------------------------------------------
 ** Number of deaths in the Americas in 2000 and 2019 
 ** by GHE CoD 
-** DEATHS. Women and men combined 
+** DEATHS.   
 preserve 
-    keep if type==1 & year==2000 & sex==3
+    keep if type==1 & year==2019 & sex==2
     ** collapse (sum) dths, by(cod)
     tabdisp cod  , cell(count) format(%10.0fc)
     sort cod 
@@ -322,9 +321,9 @@ preserve
         global count`x'_3a = col3a[`x',2]
     }
 restore
-** DALYs. Women and men combined 
+** DALYs.  
 preserve 
-    keep if type==2 & year==2000 & sex==3
+    keep if type==2 & year==2019 & sex==2
     ** collapse (sum) daly, by(cod)
     tabdisp cod  , cell(count) format(%10.0fc)
     sort cod 
@@ -335,9 +334,9 @@ preserve
         global count`x'_3b = col3b[`x',2]
     }
 restore
-** YLLs. Women and men combined 
+** YLLs.  
 preserve 
-    keep if type==3 & year==2000 & sex==3
+    keep if type==3 & year==2019 & sex==2
     ** collapse (sum) daly, by(cod)
     tabdisp cod  , cell(count) format(%10.0fc)
     sort cod 
@@ -348,9 +347,9 @@ preserve
         global count`x'_3c = col3c[`x',2]
     }
 restore
-** YLDs. Women and men combined 
+** YLDs.  
 preserve 
-    keep if type==4 & year==2000 & sex==3
+    keep if type==4 & year==2019 & sex==2
     ** collapse (sum) daly, by(cod)
     tabdisp cod  , cell(count) format(%10.0fc)
     sort cod 
@@ -367,13 +366,12 @@ restore
 ** -----------------------------------------------------
 ** COLUMN 4
 ** Outputs: Total Deaths / Total DALYs
-** in 2019
+** MEN in 2019
 ** -----------------------------------------------------
 ** Number of deaths in the Americas in 2000 and 2019 
 ** by GHE CoD 
-** Women and men combined 
 preserve 
-    keep if type==1 & year==2019 & sex==3
+    keep if type==1 & year==2019 & sex==1
     ** collapse (sum) dths, by(cod)
     tabdisp cod  , cell(count) format(%10.0fc)
     sort cod 
@@ -385,9 +383,9 @@ preserve
         global count`x'_4a = col4a[`x',2]
     }
 restore
-** DALYs. Women and men combined 
+** DALYs. 
 preserve 
-    keep if type==2 & year==2019 & sex==3
+    keep if type==2 & year==2019 & sex==1
     ** collapse (sum) daly, by(cod)
     tabdisp cod  , cell(count) format(%10.0fc)
     sort cod 
@@ -398,9 +396,9 @@ preserve
         global count`x'_4b = col4b[`x',2]
     }
 restore
-** YLLs. Women and men combined 
+** YLLs. 
 preserve 
-    keep if type==3 & year==2019 & sex==3
+    keep if type==3 & year==2019 & sex==1
     ** collapse (sum) daly, by(cod)
     tabdisp cod  , cell(count) format(%10.0fc)
     sort cod 
@@ -411,9 +409,9 @@ preserve
         global count`x'_4c = col4c[`x',2]
     }
 restore
-** YLDs. Women and men combined 
+** YLDs.  
 preserve 
-    keep if type==4 & year==2019 & sex==3
+    keep if type==4 & year==2019 & sex==1
     ** collapse (sum) daly, by(cod)
     tabdisp cod  , cell(count) format(%10.0fc)
     sort cod 
@@ -428,13 +426,12 @@ restore
 ** -----------------------------------------------------
 ** COLUMN 5
 ** Outputs: Mortality Rate / DALY rate
-** 2000
+** WOMEN in 2019
 ** -----------------------------------------------------
 ** Mortality Rate in 2000
 preserve
     sort sex cod 
-    keep if type==1 & year==2000 & sex==3
-    ** Women and Men combined  
+    keep if type==1 & year==2019 & sex==2
     tabdisp cod , cell(rate) format(%6.1fc) 
     sort cod 
     gen rate_int = round(rate, 0.1)
@@ -447,8 +444,7 @@ restore
 ** DALY Rate in 2000
 preserve
     sort sex cod 
-    keep if type==2 & year==2000 & sex==3
-    ** Women and Men combined  
+    keep if type==2 & year==2019 & sex==2
     tabdisp cod , cell(rate) format(%6.1fc) 
     sort cod 
     gen rate_int = round(rate, 0.1)
@@ -461,8 +457,7 @@ restore
 ** YLL Rate in 2000
 preserve
     sort sex cod 
-    keep if type==3 & year==2000 & sex==3
-    ** Women and Men combined  
+    keep if type==3 & year==2019 & sex==2
     tabdisp cod , cell(rate) format(%6.1fc) 
     sort cod 
     gen rate_int = round(rate, 0.1)
@@ -475,8 +470,7 @@ restore
 ** YLD Rate in 2000
 preserve
     sort sex cod 
-    keep if type==4 & year==2000 & sex==3
-    ** Women and Men combined  
+    keep if type==4 & year==2019 & sex==2
     tabdisp cod , cell(rate) format(%6.1fc) 
     sort cod 
     gen rate_int = round(rate, 0.1)
@@ -492,12 +486,12 @@ restore
 ** -----------------------------------------------------
 ** COLUMN 6
 ** Outputs: Mortality Rate / DALY rate
-** 2019
+** MEN in 2019
 ** -----------------------------------------------------
 ** Mortality Rate in 2019
 preserve
     sort sex cod 
-    keep if type==1 & year==2019 & sex==3
+    keep if type==1 & year==2019 & sex==1
     ** Women and Men combined  
     tabdisp cod , cell(rate) format(%6.1fc) 
     sort cod 
@@ -511,7 +505,7 @@ restore
 ** DALY Rate in 2019
 preserve
     sort sex cod 
-    keep if type==2 & year==2019 & sex==3
+    keep if type==2 & year==2019 & sex==1
     ** Women and Men combined  
     tabdisp cod , cell(rate) format(%6.1fc) 
     sort cod 
@@ -525,7 +519,7 @@ restore
 ** YLL Rate in 2019
 preserve
     sort sex cod 
-    keep if type==3 & year==2019 & sex==3
+    keep if type==3 & year==2019 & sex==1
     ** Women and Men combined  
     tabdisp cod , cell(rate) format(%6.1fc) 
     sort cod 
@@ -539,7 +533,7 @@ restore
 ** YLD Rate in 2019
 preserve
     sort sex cod 
-    keep if type==4 & year==2019 & sex==3
+    keep if type==4 & year==2019 & sex==1
     ** Women and Men combined  
     tabdisp cod , cell(rate) format(%6.1fc) 
     sort cod 
@@ -556,10 +550,11 @@ restore
 ** -----------------------------------------------------
 ** COLUMN 7
 ** Outputs: Change in Rate between 2000 and 2019 
+** WOMEN
 ** -----------------------------------------------------
 ** DTH: Absolute / Relative Change between 2000 and 2019
 preserve
-    keep if type==1 & sex==3 & (year==2000 | year==2019)
+    keep if type==1 & sex==2 & (year==2000 | year==2019)
     keep type year cod rate 
     reshape wide rate, i(type cod) j(year)
 
@@ -579,7 +574,7 @@ preserve
 restore
 ** DALY: Absolute / Relative Change between 2000 and 2019
 preserve
-    keep if type==2 & sex==3 & (year==2000 | year==2019)
+    keep if type==2 & sex==2 & (year==2000 | year==2019)
     keep type year cod rate 
     reshape wide rate, i(type cod) j(year)
 
@@ -599,7 +594,7 @@ preserve
 restore
 ** YLL: Absolute / Relative Change between 2000 and 2019
 preserve
-    keep if type==3 & sex==3 & (year==2000 | year==2019)
+    keep if type==3 & sex==2 & (year==2000 | year==2019)
     keep type year cod rate 
     reshape wide rate, i(type cod) j(year)
 
@@ -619,7 +614,7 @@ preserve
 restore
 ** YLD: Absolute / Relative Change between 2000 and 2019
 preserve
-    keep if type==4 & sex==3 & (year==2000 | year==2019)
+    keep if type==4 & sex==2 & (year==2000 | year==2019)
     keep type year cod rate 
     reshape wide rate, i(type cod) j(year)
 
@@ -642,10 +637,11 @@ restore
 ** -----------------------------------------------------
 ** COLUMN 8
 ** Outputs: Change in Number between 2000 and 2019 
+** WOMEN
 ** -----------------------------------------------------
 ** DTH: Absolute / Relative Change between 2000 and 2019
 preserve
-    keep if type==1 & sex==3 & (year==2000 | year==2019)
+    keep if type==1 & sex==2 & (year==2000 | year==2019)
     keep type year cod count 
     reshape wide count, i(type cod) j(year)
 
@@ -665,7 +661,7 @@ preserve
 restore
 ** DALY: Absolute / Relative Change between 2000 and 2019
 preserve
-    keep if type==2 & sex==3 & (year==2000 | year==2019)
+    keep if type==2 & sex==2 & (year==2000 | year==2019)
     keep type year cod count 
     reshape wide count, i(type cod) j(year)
 
@@ -685,7 +681,7 @@ preserve
 restore
 ** YLL: Absolute / Relative Change between 2000 and 2019
 preserve
-    keep if type==3 & sex==3 & (year==2000 | year==2019)
+    keep if type==3 & sex==2 & (year==2000 | year==2019)
     keep type year cod count 
     reshape wide count, i(type cod) j(year)
 
@@ -705,7 +701,7 @@ preserve
 restore
 ** YLD: Absolute / Relative Change between 2000 and 2019
 preserve
-    keep if type==4 & sex==3 & (year==2000 | year==2019)
+    keep if type==4 & sex==2 & (year==2000 | year==2019)
     keep type year cod count 
     reshape wide count, i(type cod) j(year)
 
@@ -725,13 +721,272 @@ preserve
 restore
 
 
+
+** -----------------------------------------------------
+** COLUMN 9
+** Outputs: Change in Rate between 2000 and 2019 
+** MEN
+** -----------------------------------------------------
+** DTH: Absolute / Relative Change between 2000 and 2019
+preserve
+    keep if type==1 & sex==1 & (year==2000 | year==2019)
+    keep type year cod rate 
+    reshape wide rate, i(type cod) j(year)
+
+    ** absolute change
+    gen rate_ac = sqrt((rate2000 - rate2019)^2)
+    ** percentage change
+    gen rate_pc = ( (rate2019 - rate2000) / rate2000 ) * 100
+    gen rate_pc_abs = ( (sqrt((rate2019 - rate2000)^2)) / rate2000 ) * 100
+
+    sort cod 
+    gen rate_pc_int = round(rate_pc, 0.1)
+    mkmat cod rate_pc_int , matrix(col9a)
+    matrix list col9a
+    forval x = 1(1)9 {
+        global pc`x'_9a = col9a[`x',2]
+    } 
+restore
+** DALY: Absolute / Relative Change between 2000 and 2019
+preserve
+    keep if type==2 & sex==1 & (year==2000 | year==2019)
+    keep type year cod rate 
+    reshape wide rate, i(type cod) j(year)
+
+    ** absolute change
+    gen rate_ac = sqrt((rate2000 - rate2019)^2)
+    ** percentage change
+    gen rate_pc = ( (rate2019 - rate2000) / rate2000 ) * 100
+    gen rate_pc_abs = ( (sqrt((rate2019 - rate2000)^2)) / rate2000 ) * 100
+
+    sort cod 
+    gen rate_pc_int = round(rate_pc, 0.1)
+    mkmat cod rate_pc_int , matrix(col9b)
+    matrix list col9b
+    forval x = 1(1)9 {
+        global pc`x'_9b = col9b[`x',2]
+    } 
+restore
+** YLL: Absolute / Relative Change between 2000 and 2019
+preserve
+    keep if type==3 & sex==1 & (year==2000 | year==2019)
+    keep type year cod rate 
+    reshape wide rate, i(type cod) j(year)
+
+    ** absolute change
+    gen rate_ac = sqrt((rate2000 - rate2019)^2)
+    ** percentage change
+    gen rate_pc = ( (rate2019 - rate2000) / rate2000 ) * 100
+    gen rate_pc_abs = ( (sqrt((rate2019 - rate2000)^2)) / rate2000 ) * 100
+
+    sort cod 
+    gen rate_pc_int = round(rate_pc, 0.1)
+    mkmat cod rate_pc_int , matrix(col9c)
+    matrix list col9c
+    forval x = 1(1)9 {
+        global pc`x'_9c = col9c[`x',2]
+    } 
+restore
+** YLD: Absolute / Relative Change between 2000 and 2019
+preserve
+    keep if type==4 & sex==1 & (year==2000 | year==2019)
+    keep type year cod rate 
+    reshape wide rate, i(type cod) j(year)
+
+    ** absolute change
+    gen rate_ac = sqrt((rate2000 - rate2019)^2)
+    ** percentage change
+    gen rate_pc = ( (rate2019 - rate2000) / rate2000 ) * 100
+    gen rate_pc_abs = ( (sqrt((rate2019 - rate2000)^2)) / rate2000 ) * 100
+
+    sort cod 
+    gen rate_pc_int = round(rate_pc, 0.1)
+    mkmat cod rate_pc_int , matrix(col9d)
+    matrix list col9d
+    forval x = 1(1)9 {
+        global pc`x'_9d = col9d[`x',2]
+    } 
+restore
+
+
+** -----------------------------------------------------
+** COLUMN 10
+** Outputs: Change in Number between 2000 and 2019 
+** MEN
+** -----------------------------------------------------
+** DTH: Absolute / Relative Change between 2000 and 2019
+preserve
+    keep if type==1 & sex==1 & (year==2000 | year==2019)
+    keep type year cod count 
+    reshape wide count, i(type cod) j(year)
+
+    ** absolute change
+    gen count_ac = sqrt((count2000 - count2019)^2)
+    ** percentage change
+    gen count_pc = ( (count2019 - count2000) / count2000 ) * 100
+    gen count_pc_abs = ( (sqrt((count2019 - count2000)^2)) / count2000 ) * 100
+
+    sort cod 
+    gen count_pc_int = round(count_pc, 0.1)
+    mkmat cod count_pc_int , matrix(col10a)
+    matrix list col10a
+    forval x = 1(1)9 {
+        global pnum`x'_10a = col10a[`x',2]
+    } 
+restore
+** DALY: Absolute / Relative Change between 2000 and 2019
+preserve
+    keep if type==2 & sex==1 & (year==2000 | year==2019)
+    keep type year cod count 
+    reshape wide count, i(type cod) j(year)
+
+    ** absolute change
+    gen count_ac = sqrt((count2000 - count2019)^2)
+    ** percentage change
+    gen count_pc = ( (count2019 - count2000) / count2000 ) * 100
+    gen count_pc_abs = ( (sqrt((count2019 - count2000)^2)) / count2000 ) * 100
+
+    sort cod 
+    gen count_pc_int = round(count_pc, 0.1)
+    mkmat cod count_pc_int , matrix(col10b)
+    matrix list col10b
+    forval x = 1(1)9 {
+        global pnum`x'_10b = col10b[`x',2]
+    } 
+restore
+** YLL: Absolute / Relative Change between 2000 and 2019
+preserve
+    keep if type==3 & sex==1 & (year==2000 | year==2019)
+    keep type year cod count 
+    reshape wide count, i(type cod) j(year)
+
+    ** absolute change
+    gen count_ac = sqrt((count2000 - count2019)^2)
+    ** percentage change
+    gen count_pc = ( (count2019 - count2000) / count2000 ) * 100
+    gen count_pc_abs = ( (sqrt((count2019 - count2000)^2)) / count2000 ) * 100
+
+    sort cod 
+    gen count_pc_int = round(count_pc, 0.1)
+    mkmat cod count_pc_int , matrix(col10c)
+    matrix list col10c
+    forval x = 1(1)9 {
+        global pnum`x'_10c = col10c[`x',2]
+    } 
+restore
+** YLD: Absolute / Relative Change between 2000 and 2019
+preserve
+    keep if type==4 & sex==1 & (year==2000 | year==2019)
+    keep type year cod count 
+    reshape wide count, i(type cod) j(year)
+
+    ** absolute change
+    gen count_ac = sqrt((count2000 - count2019)^2)
+    ** percentage change
+    gen count_pc = ( (count2019 - count2000) / count2000 ) * 100
+    gen count_pc_abs = ( (sqrt((count2019 - count2000)^2)) / count2000 ) * 100
+
+    sort cod 
+    gen count_pc_int = round(count_pc, 0.1)
+    mkmat cod count_pc_int , matrix(col10d)
+    matrix list col10d
+    forval x = 1(1)9 {
+        global pnum`x'_10d = col10d[`x',2]
+    } 
+restore
+
+** -----------------------------------------------------
+** WOMEN AND MEN COMBINED
+** STATS for RESULTS text 
+** -----------------------------------------------------
+
+** Mortality Rate in 2000 and 2019
+preserve
+    sort sex cod 
+    keep if type==1 & sex==3
+    tabdisp cod year, cell(rate) format(%6.1fc) 
+restore 
+** Improvement between 2000 and 2019
+** DTH: Absolute / Relative Change between 2000 and 2019
+preserve
+    keep if type==1 & sex==3 & (year==2000 | year==2019)
+    keep type year cod rate year
+    reshape wide rate, i(type cod) j(year)
+    ** absolute change
+    gen rate_ac = sqrt((rate2000 - rate2019)^2)
+    ** percentage change
+    gen rate_pc = ( (rate2019 - rate2000) / rate2000 ) * 100
+    gen rate_pc_abs = ( (sqrt((rate2019 - rate2000)^2)) / rate2000 ) * 100
+    tabdisp cod , cell(rate_pc) format(%6.1fc) 
+restore
+
+** DALY: Absolute / Relative Change between 2000 and 2019
+** DALY Rate in 2000 and 2019
+preserve
+    sort sex cod 
+    keep if type==2 & sex==3
+    tabdisp cod year, cell(rate) format(%12.1fc) 
+restore 
+preserve
+    keep if type==2 & sex==3 & (year==2000 | year==2019)
+    keep type year cod rate year
+    reshape wide rate, i(type cod) j(year)
+    ** absolute change
+    gen rate_ac = sqrt((rate2000 - rate2019)^2)
+    ** percentage change
+    gen rate_pc = ( (rate2019 - rate2000) / rate2000 ) * 100
+    gen rate_pc_abs = ( (sqrt((rate2019 - rate2000)^2)) / rate2000 ) * 100
+    tabdisp cod , cell(rate_pc) format(%12.1fc) 
+restore
+
+** DTH: Absolute / Relative Change between 2000 and 2019
+** Mortality Rate in 2000 and 2019
+preserve
+    sort sex cod 
+    keep if type==1 & sex==3
+    tabdisp cod year, cell(count) format(%15.1fc) 
+restore 
+preserve
+    keep if type==1 & sex==3 & (year==2000 | year==2019)
+    keep type year cod count 
+    reshape wide count, i(type cod) j(year)
+
+    ** absolute change
+    gen count_ac = sqrt((count2000 - count2019)^2)
+    ** percentage change
+    gen count_pc = ( (count2019 - count2000) / count2000 ) * 100
+    gen count_pc_abs = ( (sqrt((count2019 - count2000)^2)) / count2000 ) * 100
+    tabdisp cod , cell(count_pc) format(%12.1fc) 
+restore
+** DALY: Absolute / Relative Change between 2000 and 2019
+preserve
+    sort sex cod 
+    keep if type==2 & sex==3
+    tabdisp cod year, cell(count) format(%15.1fc) 
+restore 
+preserve
+    keep if type==2 & sex==3 & (year==2000 | year==2019)
+    keep type year cod count 
+    reshape wide count, i(type cod) j(year)
+
+    ** absolute change
+    gen count_ac = sqrt((count2000 - count2019)^2)
+    ** percentage change
+    gen count_pc = ( (count2019 - count2000) / count2000 ) * 100
+    gen count_pc_abs = ( (sqrt((count2019 - count2000)^2)) / count2000 ) * 100
+    tabdisp cod , cell(count_pc) format(%12.1fc) 
+restore
+
+
+/*
+
 ** -----------------------------------------------------
 ** AUTOMATED WORD TABLE FOR REPORT
 ** -----------------------------------------------------
 ** matrix twidth = (20, 13, 13, 13, 13, 13, 13)
 
 putdocx begin , pagesize(A4) font(calibri light, 9)
-putdocx table t2 = (35 , 8) 
+putdocx table t2 = (35 , 10) 
 
 ** ----------------------
 ** Formatting
@@ -759,9 +1014,9 @@ putdocx table t2(31/33,.), bold border(bottom, single, "e6e6e6")
 ** Merge rows
 putdocx table t2(1,3),colspan(2)
 putdocx table t2(1,4),colspan(2)
-putdocx table t2(1,5),colspan(2)
-    ** ROW 10 as single cell for comments
-putdocx table t2(35,1),colspan(7)
+putdocx table t2(1,5),colspan(4)
+** ROW 10 as single cell for comments
+putdocx table t2(35,1),colspan(9)
 putdocx table t2(35,.),halign(left) font(calibri light, 8)
 putdocx table t2(35,.),border(left, single, "FFFFFF")
 putdocx table t2(35,.),border(right, single, "FFFFFF")
@@ -770,17 +1025,19 @@ putdocx table t2(35,.),border(bottom, single, "FFFFFF")
 ** ----------------------
 ** Row and Column Titles
 ** ----------------------
-putdocx table t2(1,3) = ("Number of events "),  font(calibri light,10, "000000")
-putdocx table t2(2,3) = ("2000 "),              font(calibri light,10, "000000") 
-putdocx table t2(2,4) = ("2019 "),              font(calibri light,10, "000000") 
+putdocx table t2(1,3) = ("Number of events in 2019 "),  font(calibri light,10, "000000")
+putdocx table t2(2,3) = ("Women "),              font(calibri light,10, "000000") 
+putdocx table t2(2,4) = ("Men "),              font(calibri light,10, "000000") 
 
-putdocx table t2(1,4) = ("Rate per 100,000"),   font(calibri light,10, "000000")
-putdocx table t2(2,5) = ("2000 "),              font(calibri light,10, "000000") 
-putdocx table t2(2,6) = ("2019 "),              font(calibri light,10, "000000") 
+putdocx table t2(1,4) = ("Rate per 100,000 in 2019"),   font(calibri light,10, "000000")
+putdocx table t2(2,5) = ("Women "),              font(calibri light,10, "000000") 
+putdocx table t2(2,6) = ("Men "),              font(calibri light,10, "000000") 
 
 putdocx table t2(1,5) = ("Percent change (2000 - 2019)"),  font(calibri light,10, "000000")
-putdocx table t2(2,7) = ("Rate "),  font(calibri light,10, "000000")
-putdocx table t2(2,8) = ("Count "),  font(calibri light,10, "000000")
+putdocx table t2(2,7) = ("Rate (Women) "),  font(calibri light,10, "000000")
+putdocx table t2(2,8) = ("Count (Women)"),  font(calibri light,10, "000000")
+putdocx table t2(2,9) = ("Rate (Men) "),  font(calibri light,10, "000000")
+putdocx table t2(2,10) = ("Count (Men)"),  font(calibri light,10, "000000")
 
 ** ROW headers
 putdocx table t2(3,1) = ("CVD "), halign(left) bold
@@ -831,7 +1088,7 @@ putdocx table t2(34,2) = ("YLDs "), halign(left) bold
 ** ----------------------
 ** DATA
 ** ----------------------
-** COL3. COUNT in 2000
+** COL3. COUNT in WOMEN
 putdocx table   t2(3,3) = ("$count3_3a") , nformat(%12.0fc) trim halign(right)
 putdocx table   t2(4,3) = ("$count3_3b") , nformat(%12.0fc) trim halign(right)
 putdocx table   t2(5,3) = ("$count3_3c") , nformat(%12.0fc) trim halign(right)
@@ -865,7 +1122,7 @@ putdocx table  t2(32,3) = ("$count2_3b") , nformat(%12.0fc) trim halign(right)
 putdocx table  t2(33,3) = ("$count2_3c") , nformat(%12.0fc) trim halign(right)
 putdocx table  t2(34,3) = ("$count2_3d") , nformat(%12.0fc) trim halign(right)
 
-** COL4. COUNT in 2019
+** COL4. COUNT in MEN
 putdocx table   t2(3,4) = ("$count3_4a") , nformat(%12.0fc) trim halign(right)
 putdocx table   t2(4,4) = ("$count3_4b") , nformat(%12.0fc) trim halign(right)
 putdocx table   t2(5,4) = ("$count3_4c") , nformat(%12.0fc) trim halign(right)
@@ -899,7 +1156,7 @@ putdocx table  t2(32,4) = ("$count2_4b") , nformat(%12.0fc) trim halign(right)
 putdocx table  t2(33,4) = ("$count2_4c") , nformat(%12.0fc) trim halign(right)
 putdocx table  t2(34,4) = ("$count2_4d") , nformat(%12.0fc) trim halign(right)
 
-** COL5: RATE in 2000
+** COL5: RATE in WOMEN
 putdocx table   t2(3,5) = ("$rate3_5a") , nformat(%12.0fc) trim halign(right)
 putdocx table   t2(4,5) = ("$rate3_5b") , nformat(%12.0fc) trim halign(right)
 putdocx table   t2(5,5) = ("$rate3_5c") , nformat(%12.0fc) trim halign(right)
@@ -934,7 +1191,7 @@ putdocx table  t2(33,5) = ("$rate2_5c") , nformat(%12.0fc) trim halign(right)
 putdocx table  t2(34,5) = ("$rate2_5d") , nformat(%12.0fc) trim halign(right)
 
 
-** COL6. RATE in 2019
+** COL6. RATE in MEN
 putdocx table   t2(3,6) = ("$rate3_6a") , nformat(%12.0fc) trim halign(right)
 putdocx table   t2(4,6) = ("$rate3_6b") , nformat(%12.0fc) trim halign(right)
 putdocx table   t2(5,6) = ("$rate3_6c") , nformat(%12.0fc) trim halign(right)
@@ -968,7 +1225,7 @@ putdocx table  t2(32,6) = ("$rate2_6b") , nformat(%12.0fc) trim halign(right)
 putdocx table  t2(33,6) = ("$rate2_6c") , nformat(%12.0fc) trim halign(right)
 putdocx table  t2(34,6) = ("$rate2_6d") , nformat(%12.0fc) trim halign(right)
 
-** COL7. Percent change in RATE
+** COL7. WOMEN Percent change in RATE
 putdocx table   t2(3,7) = ("$pc3_7a") , nformat(%12.0fc) trim halign(right)
 putdocx table   t2(4,7) = ("$pc3_7b") , nformat(%12.0fc) trim halign(right)
 putdocx table   t2(5,7) = ("$pc3_7c") , nformat(%12.0fc) trim halign(right)
@@ -1036,6 +1293,73 @@ putdocx table  t2(32,8) = ("$pnum2_8b") , nformat(%12.0fc) trim halign(right)
 putdocx table  t2(33,8) = ("$pnum2_8c") , nformat(%12.0fc) trim halign(right)
 putdocx table  t2(34,8) = ("$pnum2_8d") , nformat(%12.0fc) trim halign(right)
 
+** COL9. MEN Percent change in RATE
+putdocx table   t2(3,9) = ("$pc3_9a") , nformat(%12.0fc) trim halign(right)
+putdocx table   t2(4,9) = ("$pc3_9b") , nformat(%12.0fc) trim halign(right)
+putdocx table   t2(5,9) = ("$pc3_9c") , nformat(%12.0fc) trim halign(right)
+putdocx table   t2(6,9) = ("$pc3_9d") , nformat(%12.0fc) trim halign(right)
+putdocx table   t2(7,9) = ("$pc4_9a") , nformat(%12.0fc) trim halign(right)
+putdocx table   t2(8,9) = ("$pc4_9b") , nformat(%12.0fc) trim halign(right)
+putdocx table   t2(9,9) = ("$pc4_9c") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(10,9) = ("$pc4_9d") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(11,9) = ("$pc5_9a") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(12,9) = ("$pc5_9b") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(13,9) = ("$pc5_9c") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(14,9) = ("$pc5_9d") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(15,9) = ("$pc6_9a") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(16,9) = ("$pc6_9b") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(17,9) = ("$pc6_9c") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(18,9) = ("$pc6_9d") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(19,9) = ("$pc7_9a") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(20,9) = ("$pc7_9b") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(21,9) = ("$pc7_9c") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(22,9) = ("$pc7_9d") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(23,9) = ("$pc8_9a") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(24,9) = ("$pc8_9b") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(25,9) = ("$pc8_9c") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(26,9) = ("$pc8_9d") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(27,9) = ("$pc9_9a") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(28,9) = ("$pc9_9b") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(29,9) = ("$pc9_9c") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(30,9) = ("$pc9_9d") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(31,9) = ("$pc2_9a") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(32,9) = ("$pc2_9b") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(33,9) = ("$pc2_9c") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(34,9) = ("$pc2_9d") , nformat(%12.0fc) trim halign(right)
+
+** COL10. MEN Percent change in COUNT
+putdocx table   t2(3,10) = ("$pnum3_10a") , nformat(%12.0fc) trim halign(right)
+putdocx table   t2(4,10) = ("$pnum3_10b") , nformat(%12.0fc) trim halign(right)
+putdocx table   t2(5,10) = ("$pnum3_10c") , nformat(%12.0fc) trim halign(right)
+putdocx table   t2(6,10) = ("$pnum3_10d") , nformat(%12.0fc) trim halign(right)
+putdocx table   t2(7,10) = ("$pnum4_10a") , nformat(%12.0fc) trim halign(right)
+putdocx table   t2(8,10) = ("$pnum4_10b") , nformat(%12.0fc) trim halign(right)
+putdocx table   t2(9,10) = ("$pnum4_10c") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(10,10) = ("$pnum4_10d") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(11,10) = ("$pnum5_10a") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(12,10) = ("$pnum5_10b") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(13,10) = ("$pnum5_10c") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(14,10) = ("$pnum5_10d") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(15,10) = ("$pnum6_10a") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(16,10) = ("$pnum6_10b") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(17,10) = ("$pnum6_10c") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(18,10) = ("$pnum6_10d") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(19,10) = ("$pnum7_10a") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(20,10) = ("$pnum7_10b") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(21,10) = ("$pnum7_10c") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(22,10) = ("$pnum7_10d") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(23,10) = ("$pnum8_10a") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(24,10) = ("$pnum8_10b") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(25,10) = ("$pnum8_10c") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(26,10) = ("$pnum8_10d") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(27,10) = ("$pnum9_10a") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(28,10) = ("$pnum9_10b") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(29,10) = ("$pnum9_10c") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(30,10) = ("$pnum9_10d") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(31,10) = ("$pnum2_10a") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(32,10) = ("$pnum2_10b") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(33,10) = ("$pnum2_10c") , nformat(%12.0fc) trim halign(right)
+putdocx table  t2(34,10) = ("$pnum2_10d") , nformat(%12.0fc) trim halign(right)
 
 ** FINAL TABLE NOTES
 putdocx table t2(35,1) = ("(1) ") , script(super) font(calibri light, 8)
@@ -1045,6 +1369,6 @@ putdocx table t2(35,1) = ("(2) ") , script(super) font(calibri light, 8) append
 putdocx table t2(35,1) = ("All NCDs, includes all noncommunicable diseases") , append font(calibri light, 8) 
 
 ** Save the Table
-putdocx save "`outputpath'/articles/paper-ncd/article-draft/ncd_table2_version2", replace 
+putdocx save "`outputpath'/articles/paper-ncd/article-draft/ncd_table2_version3", replace 
 
 

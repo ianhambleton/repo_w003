@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    paper1-140-population-table1-2020.do
+    //  algorithm name			    paper1-140-population-table1-2019.do
     //  project:				    UN WPP (2019 edition)
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	24-Mar-2022
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\paper1-140-population-table1-2020", replace
+    log using "`logpath'\paper1-140-population-table1-2019", replace
 ** HEADER -----------------------------------------------------
 
 ** Load population file from: 
@@ -34,7 +34,7 @@
 use "`datapath'/paper1_population2", clear
 
 ** Keep required years and drop wider world regions:
-keep if year==2000 | year==2020 
+keep if year==2000 | year==2019 
 drop if paho_subregion==.
 ** UN region
 gen region = 1
@@ -179,7 +179,7 @@ use `create_table', clear
         replace country1 = "Dominican Rep" if country=="Dominican Republic"
         ** (1) Country
         ** (2) Population
-        ** (3) Percent change 70+ between 2000 and 2020
+        ** (3) Percent change 70+ between 2000 and 2019
         ** (4) Annual growth rate of Older adults
         ** (5) Dependency Ratio
         gsort uid -year
@@ -194,32 +194,16 @@ use `create_table', clear
         ** STATISTICS FOR RESULTS SECTION OF PAPER
         ** Paragraph 3
         preserve
-            ** population growth rates by country (2000 to 2019) for the region of the Americas
+        * population growth rates by country (2000 to 2019) for the region of the Americas
             keep if sex==3 & year==2000
-            * range of growth: all ages
-            sort gr
-            list uid year gr pg3 gr if uid<=33
-            * range of growth: older adults
             sort gr3
-            list uid year gr pg3 gr3 if uid<=33 
-            * older adults range in 2000
-            sort pg3
-            gen perc3 = pg3 * 100
-            list uid year gr perc3 if uid<=33 
-        restore
-        preserve
-            ** population growth rates by country (2000 to 2019) for the region of the Americas
-            keep if sex==3 & year==2020
-            * older adults range in 2020
-            gen perc3 = pg3 * 100
-            sort pg3
-            list uid year gr perc3 if uid<=33 
+            list uid year pg3 gr3 if uid<=33 
         restore
 
 
             forval c = 1(1)40 {   
-                ** forval y = 2000(19)2019 {
-                forval y = 2000(20)2020 {
+                forval y = 2000(19)2019 {
+                ** forval y = 2000(20)2020 {
                     preserve
                         keep if uid1==`c' & year==`y'
                         ** (1) Country
@@ -268,12 +252,12 @@ use `create_table', clear
         ** x2 Header rows
         ** Row 1
         putdocx table t1(1,1) = ("Country"), halign(right)
-        putdocx table t1(1,2) = ("Population in 2020"), halign(right)
+        putdocx table t1(1,2) = ("Population in 2019"), halign(right)
         putdocx table t1(1,3) = ("Percent of population aged 70+"), halign(right)
-        putdocx table t1(1,4) = ("Annual growth rate (2000 to 2020)"), halign(right)
+        putdocx table t1(1,4) = ("Annual growth rate (2000 to 2019)"), halign(right)
         ** Row 2
         putdocx table t1(2,3) = ("2000"), halign(right)
-        putdocx table t1(2,4) = ("2020"), halign(right)
+        putdocx table t1(2,4) = ("2019"), halign(right)
         putdocx table t1(2,5) = ("All ages"), halign(right)
         putdocx table t1(2,6) = ("Older adults (70+)"), halign(right)
 
@@ -285,9 +269,9 @@ use `create_table', clear
         forval c = 3(1)42 {
             global coi = `c' - 2
             putdocx table t1(`c',1) = ("${country_${coi}_2000}"), halign(right)
-            putdocx table t1(`c',2) = ("${pop_${coi}_2020}"), halign(right)
+            putdocx table t1(`c',2) = ("${pop_${coi}_2019}"), halign(right)
             putdocx table t1(`c',3) = ("${a70_${coi}_2000}"), halign(right)
-            putdocx table t1(`c',4) = ("${a70_${coi}_2020}"), halign(right)
+            putdocx table t1(`c',4) = ("${a70_${coi}_2019}"), halign(right)
             putdocx table t1(`c',5) = ("${gr_${coi}_2000}"), halign(right)
             putdocx table t1(`c',6) = ("${gr3_${coi}_2000}"), halign(right)
         }
@@ -408,8 +392,8 @@ use `create_table', clear
         gen dr3 = (group3 / group2) * 100
 
             forval c = 1(1)40 {   
-                ** forval y = 2000(19)2019 {
-                forval y = 2000(20)2020 {
+                forval y = 2000(19)2019 {
+                ** forval y = 2000(20)2020 {
                     preserve
                         keep if uid1==`c' & year==`y'
                         ** (1) Country
@@ -458,12 +442,12 @@ use `create_table', clear
         ** x2 Header rows
         ** Row 1
         putdocx table t1(1,1) = ("Country"), halign(right)
-        putdocx table t1(1,2) = ("Population in 2020"), halign(right)
+        putdocx table t1(1,2) = ("Population in 2019"), halign(right)
         putdocx table t1(1,3) = ("Percent of population aged 70+"), halign(right)
-        putdocx table t1(1,4) = ("Annual growth rate (2000 to 2020)"), halign(right)
+        putdocx table t1(1,4) = ("Annual growth rate (2000 to 2019)"), halign(right)
         ** Row 2
         putdocx table t1(2,3) = ("2000"), halign(right)
-        putdocx table t1(2,4) = ("2020"), halign(right)
+        putdocx table t1(2,4) = ("2019"), halign(right)
         putdocx table t1(2,5) = ("All ages"), halign(right)
         putdocx table t1(2,6) = ("Older adults (70+)"), halign(right)
 
@@ -475,9 +459,9 @@ use `create_table', clear
         forval c = 3(1)42 {
             global coi = `c' - 2
             putdocx table t1(`c',1) = ("${country_${coi}_2000}"), halign(right)
-            putdocx table t1(`c',2) = ("${pop_${coi}_2020}"), halign(right)
+            putdocx table t1(`c',2) = ("${pop_${coi}_2019}"), halign(right)
             putdocx table t1(`c',3) = ("${a70_${coi}_2000}"), halign(right)
-            putdocx table t1(`c',4) = ("${a70_${coi}_2020}"), halign(right)
+            putdocx table t1(`c',4) = ("${a70_${coi}_2019}"), halign(right)
             putdocx table t1(`c',5) = ("${gr_${coi}_2000}"), halign(right)
             putdocx table t1(`c',6) = ("${gr3_${coi}_2000}"), halign(right)
         }
@@ -598,8 +582,8 @@ use `create_table', clear
         gen dr3 = (group3 / group2) * 100
 
             forval c = 1(1)40 {   
-                ** forval y = 2000(19)2019 {
-                forval y = 2000(20)2020 {
+                forval y = 2000(19)2019 {
+                ** forval y = 2000(20)2020 {
                     preserve
                         keep if uid1==`c' & year==`y'
                         ** (1) Country
@@ -648,26 +632,26 @@ use `create_table', clear
         ** x2 Header rows
         ** Row 1
         putdocx table t1(1,1) = ("Country"), halign(right)
-        putdocx table t1(1,2) = ("Population in 2020"), halign(right)
+        putdocx table t1(1,2) = ("Population in 2019"), halign(right)
         putdocx table t1(1,3) = ("Percent of population aged 70+"), halign(right)
-        putdocx table t1(1,4) = ("Annual growth rate (2000 to 2020)"), halign(right)
+        putdocx table t1(1,4) = ("Annual growth rate (2000 to 2019)"), halign(right)
         ** Row 2
         putdocx table t1(2,3) = ("2000"), halign(right)
-        putdocx table t1(2,4) = ("2020"), halign(right)
+        putdocx table t1(2,4) = ("2019"), halign(right)
         putdocx table t1(2,5) = ("All ages"), halign(right)
         putdocx table t1(2,6) = ("Older adults (70+)"), halign(right)
 
         ** ROW 1: Country
         ** ROW 2: Population
         ** ROW 3: Percent 70+ years (2000)
-        ** ROW 4: Percent 70+ years (2020)
+        ** ROW 4: Percent 70+ years (2019)
         local coi = 3 
         forval c = 3(1)42 {
             global coi = `c' - 2
             putdocx table t1(`c',1) = ("${country_${coi}_2000}"), halign(right)
-            putdocx table t1(`c',2) = ("${pop_${coi}_2020}"), halign(right)
+            putdocx table t1(`c',2) = ("${pop_${coi}_2019}"), halign(right)
             putdocx table t1(`c',3) = ("${a70_${coi}_2000}"), halign(right)
-            putdocx table t1(`c',4) = ("${a70_${coi}_2020}"), halign(right)
+            putdocx table t1(`c',4) = ("${a70_${coi}_2019}"), halign(right)
             putdocx table t1(`c',5) = ("${gr_${coi}_2000}"), halign(right)
             putdocx table t1(`c',6) = ("${gr3_${coi}_2000}"), halign(right)
         }

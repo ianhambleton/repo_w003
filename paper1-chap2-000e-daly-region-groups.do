@@ -257,6 +257,9 @@ append using `combined'
     label values ghecause ghecause_ 
 sort year sex who_region ghecause age18
 
+** 18 age groups
+save "`datapath'\from-who\paper1-chap3_byage_groups_malefemale_daly", replace
+
 
 ** ------- 7-Apr-2022 new rate code ---------------------- 
 ** Add the Reference population
