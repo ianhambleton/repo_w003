@@ -67,7 +67,8 @@ use "`datapath'\from-owid\regions", clear
 **      and save external files: by METRIC and by UN-REGION
 ** **********************************************************
 ** foreach var in yll yld daly deaths { 
-foreach var in yll yld daly deaths { 
+** foreach var in yll yld daly deaths { 
+foreach var in daly deaths { 
     frame change `var'
     use "`datapath'\from-who\who-ghe-`var'-001", clear
     #delimit ;
@@ -159,6 +160,16 @@ foreach var in yll yld daly deaths {
     /// label data "WHO GHE 2019: `var', Oceania, all years"
     /// save "`datapath'\from-who\who-ghe-`var'-001-oceania", replace
 
+    ** Global dataset - All WHO regions 
+    frame copy `var' `var'_world 
+    frame change `var'_world 
+    frlink m:1 iso3c, frame(iso3)
+    ** keep if frval(iso3, who_region)==2 
+    frget iso3n un_region un_subregion who_region paho_subregion, from(iso3)
+    labmask ghecause, values(causename)
+    drop causename
+    label data "WHO GHE 2019: `var', global, all years"
+    save "`datapath'\from-who\who-ghe-`var'-001-world", replace
 
     ///** restrict to WHO Africa (who_regions==1) 
     ///frame copy `var' `var'_who1 
@@ -171,16 +182,16 @@ foreach var in yll yld daly deaths {
     ///label data "WHO GHE 2019: `var', WHO Africa, all years"
     ///save "`datapath'\from-who\who-ghe-`var'-001-who1", replace
 
-    ** restrict to WHO Americas (who_regions==2) 
-    frame copy `var' `var'_who2 
-    frame change `var'_who2 
-    frlink m:1 iso3c, frame(iso3)
-    keep if frval(iso3, who_region)==2 
-    frget iso3n un_region un_subregion who_region paho_subregion, from(iso3)
-    labmask ghecause, values(causename)
-    drop causename
-    label data "WHO GHE 2019: `var', WHO Americas, all years"
-    save "`datapath'\from-who\who-ghe-`var'-001-who2", replace
+    /// ** restrict to WHO Americas (who_regions==2) 
+    /// frame copy `var' `var'_who2 
+    /// frame change `var'_who2 
+    /// frlink m:1 iso3c, frame(iso3)
+    /// keep if frval(iso3, who_region)==2 
+    /// frget iso3n un_region un_subregion who_region paho_subregion, from(iso3)
+    /// labmask ghecause, values(causename)
+    /// drop causename
+    /// label data "WHO GHE 2019: `var', WHO Americas, all years"
+    /// save "`datapath'\from-who\who-ghe-`var'-001-who2", replace
 
     ///** restrict to WHO Eastern Mediterranean (who_regions==3) 
     ///frame copy `var' `var'_who3 
