@@ -60,8 +60,19 @@ keep if year==2000 | year==2019
 ** Keep selected regions + subregions
 keep if (region>=100 & region<=800) | region==2000 | region==7000
 
-** Keep total injuries
-keep if ghecause==1000
+** (ghecause 48. road injury)
+** (ghecause 49. poisonings)
+** (ghecause 50. falls)
+** (ghecause 51. fire and heat)
+** (ghecause 52. drowning)
+** (ghecause 53. mechanical forces)
+** (ghecause 54. natural disasters)
+** (ghecause 55. self harm)
+** (ghecause 56. interpersonal violence)
+** (ghecause 57. collective violence)
+
+** KEEP interpersonal violence
+keep if ghecause==49
 
 ** Drop unwanted variables
 drop paho_subregion pop_dalyr ghecause
@@ -244,7 +255,7 @@ decode uid, gen(rtext)
         putdocx begin , landscape font("calibri light", 10) margin(left, 0.65) margin(right, 0.6)
 
         putdocx paragraph
-        putdocx text ("TABLE 1. "), bold
+        putdocx text ("TABLE. "), bold
         putdocx text ("Deaths and Years Lived with Disability (DALYs) among women and men ")
         putdocx text ("in 8 subregions of the Americas (2000 - 2019). ")
 
@@ -366,5 +377,5 @@ decode uid, gen(rtext)
             putdocx table t1(`r',13) = ("${dp2_${roi}_3}"), halign(right)
             }
         ** Save Word table
-        putdocx save "`outputpath'/articles/paper-injury/article-draft/inj_table1", replace 
+        putdocx save "`outputpath'/articles/paper-injury/inj_table_49_poisoning", replace 
 

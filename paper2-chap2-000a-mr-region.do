@@ -227,7 +227,7 @@ use "`datapath'\from-who\who-ghe-deaths-001-who1-allcauses", replace
     ** Collapse to WHO regions 
     collapse (sum) dths pop, by(ghecause year who_region sex age)
     save `afr' , replace
-/*
+
 ** Americas (AMR)
 use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
 * TODO: Change restriction for each disease group
@@ -1199,10 +1199,9 @@ label define ghecause_
 label values ghecause ghecause_ 
 
 
-
-** Use in Chapter 3. Population change
-** 18 age groups
-** save "`datapath'\from-who\chap3_byage_malefemale", replace
+** Use in PAPER 2
+** DEATHS in 18 age groups
+save "`datapath'\paper2-inj\paper2_deaths_byage_bysex", replace
 
 
 ** ------- 7-Apr-2022 new rate code ---------------------- 
@@ -2495,14 +2494,9 @@ label define ghecause_
 #delimit cr
 label values ghecause ghecause_ 
 
-** Used for Equiplot by age 
-** 18 age groups
-** save "`datapath'\from-who\chap2_equiplot_mr_byage", replace
-
-** Use in Chapter 3. Population change
-** 18 age groups
-** save "`datapath'\from-who\chap3_byage_both", replace
-
+** Use in PAPER 2
+** DEATHS in 18 age groups
+save "`datapath'\paper2-inj\paper2_deaths_byage", replace
 
 
 ** ------- 7-Apr-2022 new rate code  ---------------------- 

@@ -1301,6 +1301,10 @@ label define ghecause_
 #delimit cr
 label values ghecause ghecause_ 
 
+** Use in PAPER 2
+** DEATHS in 18 age groups
+save "`datapath'\paper2-inj\paper2_daly_byage_bysex", replace
+
 
 
 ** ------- 7-Apr-2022 new rate code ---------------------- 
@@ -2620,6 +2624,10 @@ label values ghecause ghecause_
 ** 18 age groups
 ** save "`datapath'\from-who\chap2_equiplot_daly_byage", replace
 
+
+** Use in PAPER 2
+** DEATHS in 18 age groups
+save "`datapath'\paper2-inj\paper2_daly_byage", replace
 
 
 ** ------- 7-Apr-2022 new rate code  ---------------------- 

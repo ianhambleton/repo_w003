@@ -60,32 +60,62 @@ use "`datapath'\paper2-inj\paper2_chap2_000_adjusted", clear
 label data "GHE Injuries 2000-2019: Mortality and DALY, by sex, country, subregion, region" 
 save "`datapath'\paper2-inj\dataset01", replace
 
-
+/*
 ** -----------------------------------------------------------------------------
 ** DATASET 02
 ** -----------------------------------------------------------------------------
 ** Created in --> paper2-chap2-000a-mr-region-groups / paper2-chap2-000a-daly-region-groups 
 ** These datasets allow us to create age-stratified figures for the Americas as a region
 
-** Deaths
+** Deaths (INJURY GROUPS)
 use "`datapath'\paper2-inj\paper2_deaths_groups_byage_bysex", clear
     append using "`datapath'\paper2-inj\paper2_deaths_groups_byage"
     replace sex = 3 if sex==.
     label define sex_ 1 "men" 2 "women" 3 "both",modify
     label values sex sex_ 
     sort year ghecause who_region sex agroup age18  
-    tempfile deaths
-    save `deaths', replace
+    tempfile deaths1
+    save `deaths1', replace
 
-** Disease burden: DALYs
+** Deaths (INJURY COMPONENTS)
+use "`datapath'\paper2-inj\paper2_deaths_byage_bysex", clear
+    append using "`datapath'\paper2-inj\paper2_deaths_byage"
+    replace sex = 3 if sex==.
+    label define sex_ 1 "men" 2 "women" 3 "both",modify
+    label values sex sex_ 
+    sort year ghecause who_region sex agroup age18  
+    tempfile deaths2
+    save `deaths2', replace
+
+** Disease burden: DALYs (INJURY GROUPS)
 use "`datapath'\paper2-inj\paper2_daly_groups_byage_bysex", clear
     append using "`datapath'\paper2-inj\paper2_daly_groups_byage"
     replace sex = 3 if sex==.
     label define sex_ 1 "men" 2 "women" 3 "both",modify
     label values sex sex_ 
     sort year ghecause who_region sex agroup age18  
-    tempfile dalys
-    save `dalys', replace
+    tempfile dalys1
+    save `dalys1', replace
+
+** Disease burden: DALYs (INJURY COMPONENTS)
+use "`datapath'\paper2-inj\paper2_daly_byage_bysex", clear
+    append using "`datapath'\paper2-inj\paper2_daly_byage"
+    replace sex = 3 if sex==.
+    label define sex_ 1 "men" 2 "women" 3 "both",modify
+    label values sex sex_ 
+    sort year ghecause who_region sex agroup age18  
+    tempfile dalys2
+    save `dalys2', replace
+
+tempfile deaths
+use `deaths1', clear
+append using `deaths2'
+save `deaths', replace
+
+tempfile dalys
+use `dalys1', clear
+append using `dalys2'
+save `dalys', replace
 
 ** Merge deaths and DALYs
 use `deaths', replace
@@ -95,18 +125,39 @@ drop _merge
 ** Labelling
 #delimit ;
 label define who_region_    1 "africa"
-                        2 "americas"
-                        3 "eastern mediterranean"
-                        4 "europe" 
-                        5 "south-east asia"
-                        6 "western pacific"
-                        7 "world", modify; 
+                            2 "americas"
+                            3 "eastern mediterranean"
+                            4 "europe" 
+                            5 "south-east asia"
+                            6 "western pacific"
+                            7 "world", modify; 
 #delimit cr
 label values who_region who_region_
 
+** Labelling
+#delimit ;
+label define ghecause_      48 "Road injury"
+                            49 "Poisonings" 
+                            50 "Falls" 
+                            51 "Fire and heat" 
+                            52 "Drowning" 
+                            53 "Mechanical forces" 
+                            54 "Natural disasters" 
+                            55 "Self-harm"
+                            56 "Interpersonal violence"
+                            57 "Collective violence",modify;
+#delimit cr
+label values ghecause ghecause_
+
+
 ** Collapse to broad age groups from 18 5-year age groups
-collapse (sum) dths daly pop , by(ghecause who_region sex agroup)
+collapse (sum) dths daly pop , by(year ghecause who_region sex agroup)
 format daly dths pop %19.1fc 
+
+* Keep Injury components for Americas only
+keep if (ghecause>=48 & ghecause<=57) | ghecause>=1000
+keep if who_region==2
+
 
 ** Save age-stratified dataset for Americas region
 label data "GHE Injuries 2000-2019: Mortality and DALY, by age, sex, cause, for Americas region" 

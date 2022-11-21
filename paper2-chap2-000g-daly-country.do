@@ -461,7 +461,7 @@ restore
 ** DALY to zero for Haiti in 2010 for natural disasters.
 ** The earthquale meant that DALY > POP, causing problems for the algorithms
 ** which expects DALY < POP
-replace daly = 0 if iso3n==332 & year==2010 & ghecause==54
+** replace daly = 0 if iso3n==332 & year==2010 & ghecause==54
 
 
 ** ------- 7-Apr-2022 new rate code ---------------------- 
@@ -981,7 +981,7 @@ restore
 ** DALY to zero for Haiti in 2010 for natural disasters.
 ** The earthquale meant that DALY > POP, causing problems for the algorithms
 ** which expects DALY < POP
-replace daly = 0 if iso3n==332 & year==2010 & ghecause==54
+** replace daly = 0 if iso3n==332 & year==2010 & ghecause==54
 
 
 ** ------- 7-Apr-2022 new rate code  ---------------------- 

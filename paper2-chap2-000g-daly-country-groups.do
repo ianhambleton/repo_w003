@@ -111,7 +111,7 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
 ** DALY to zero for Haiti in 2010 for natural disasters.
 ** The earthquale meant that DALY > POP, causing problems for the algorithms
 ** which expects DALY < POP
-replace daly = 0 if iso3n==332 & year==2010 & ghecause==1510
+** replace daly = 0 if iso3n==332 & year==2010 & ghecause==1510
 
 * TODO: Change restriction for each disease group
    #delimit ;
@@ -423,7 +423,6 @@ save "`datapath'\paper2-inj\paper2_chap2_000g_daly_country_groups", replace
 
 
 
-
 ** Repeat for women and men combined 
 
 
@@ -446,7 +445,7 @@ collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex gheca
 ** DALY to zero for Haiti in 2010 for natural disasters.
 ** The earthquale meant that DALY > POP, causing problems for the algorithms
 ** which expects DALY < POP
-replace daly = 0 if iso3n==332 & year==2010 & ghecause==1510
+** replace daly = 0 if iso3n==332 & year==2010 & ghecause==1510
 
 * TODO: Change restriction for each disease group
    #delimit ;

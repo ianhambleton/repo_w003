@@ -182,7 +182,7 @@ preserve
     save  `d4', replace
 restore
 
-** DALY Rate ratio of Men to Women in 2019
+** DALY Rate ratio of Men to Women in 2000
 preserve
     keep if sex<3 & region==2000 & year==2000
     keep sex cod drate 
@@ -204,7 +204,7 @@ preserve
     save  `d6', replace
 restore
 
-** Mortality Rate ratio of Men to Women in 2019
+** Mortality Rate ratio of Men to Women in 2000
 preserve
     keep if sex<3 & region==2000 & year==2000
     keep sex cod arate 
@@ -237,7 +237,7 @@ restore
     replace arat2000 = . if cod == 20 | cod==21 | cod==25 | cod==27     
     replace arat2019 = . if cod == 20 | cod==21 | cod==25 | cod==27     
 
-
+/*
 
 ** -----------------------------------------------------
 ** GRAPHICS COLOR SCHEME

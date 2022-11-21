@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    paper1-160-health-figure3.do
+    //  algorithm name			    paper1-160-health-figure3-women-men.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	26-OCT-2021
@@ -26,27 +26,30 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\paper1-160-health-figure3", replace
+    log using "`logpath'\paper1-160-health-figure3-women-men", replace
 ** HEADER -----------------------------------------------------
 
 
 
-** -----------------------------------------------
-** 2. DEATHS
-** -----------------------------------------------
+**! -----------------------------------------------
+**! 2. 	DEATHS
+**!		WOMEN
+**! -----------------------------------------------
 
 ** Load the country-level death and population data
 ** This comes from:
-**	--> C:\Sync\OneDrive - The University of the West Indies\repo_ianhambleton\repo_w003\chap2-000c-mr-country-groups.do
-use "`datapath'\from-who\paper1-chap3_byage_country_groups_both", clear
-	append using "`datapath'\from-who\paper1-chap3_byage_groups_both"
+**	--> C:\Sync\OneDrive - The University of the West Indies\repo_ianhambleton\repo_w003\paper1-chap2-000a-mr-region-groups.do
+**  --> C:\Sync\OneDrive - The University of the West Indies\repo_ianhambleton\repo_w003\paper1-chap2-000c-mr-country-groups.do
+use "`datapath'\from-who\deaths3", clear
+append using "`datapath'\from-who\deaths1"
+	keep if sex==2
 	keep if who_region==. | who_region==2
 	replace iso3c = "LAC" if who_region==2
 	replace iso3n = 2000 if who_region==2
 
 	rename age18 age
 	rename dths death
-/*
+
 	** keep if ghecause==100
 	keep if ghecause==50
 	keep if year==2000 | year==2019
@@ -120,27 +123,19 @@ format death* %15.0fc
 		list iso3n ch_d ch_gr ch_as ch_epi, sep(5) line(120)
 
 
-** Save the datset for use in country report
-save "`outputpath'/country_report_table4", replace 
-drop if iso3c=="LAC"
-
-
 ** Country names
+drop if iso3c=="LAC"
 gsort -ch_d
 gen y1 = _n
 decode iso3n, gen(cname)
 labmask y1, val(cname)
 #delimit ; 
-label define y1         30 "St.Vincent & Gren"
-                        14 "Antigua & Barbuda"
+label define y1         32 "St.Vincent & Gren"
+                        11 "Antigua & Barbuda"
                         33 "Trinidad & Tobago"
                         1  "Dominican Rep", modify;
 label values y1 y1; 
 #delimit cr
-
-
-
-
 
 ** Color scheme
 colorpalette d3, 20 n(20) nograph
@@ -161,36 +156,44 @@ local ora2 `r(p4)'
 local pur1 `r(p9)'
 local pur2 `r(p10)'
 
+        #delimit ;
+		** Colorblind friendly palette (Bischof, 2017b);
+        ** Bischof, D. 2017b. New graphic schemes for Stata: plotplain and plottig.  The Stata Journal 17(3): 748–759;
+        colorpalette cblind, select(1 2 4 5 9 8 7 3 6) nograph;
+        local list r(p);    local blk `r(p1)'; local gry `r(p2)'; local bl1 `r(p3)';  local gre `r(p4)'; local pur `r(p5)'; 
+                            local red `r(p6)'; local bl2 `r(p7)'; local ora `r(p8)'; local yel `r(p9)';
+        #delimit cr
+
 ** Column X-location for death metrics 
 ** Max of first panel = 144
-gen xloc2 = 220
-gen xloc3 = 310
+gen xloc2 = 240
+gen xloc3 = 330
 gen pd = round(ch_d) 
 gen ad = int(death2019 - death2000)
 format ad %10.0fc
 
 ** Boxes around metrics
-local box1 0.5 200 33.5 200 33.5 240 0.5 240
-local box2 0.5 260 33.5 260 33.5 360 0.5 360
+local box1 0.5 220 33.5 220 33.5 260 0.5 260
+local box2 0.5 280 33.5 280 33.5 380 0.5 380
 
 sort ch_d
 
 #delimit ;
 	graph twoway 
 		/// Boxes around metrics
-		(scatteri `box1'  , recast(area) lw(0.2) lc("gs13") fc("gs14") lp("l"))
-		(scatteri `box2'  , recast(area) lw(0.2) lc("gs13") fc("gs14") lp("l"))
+		(scatteri `box1'  , recast(area) lw(0.2) lc("`gry'") fc("gs14") lp("l"))
+		(scatteri `box2'  , recast(area) lw(0.2) lc("`gry'") fc("gs14") lp("l"))
 
 		///epi change
-		(rbar zero ch_epi y1, horizontal barwidth(.75)  lc("`blu2'") lw(0.05) fc("`blu2'")) 
-		/// Change in Population Size
-		(rbar basepop addage y1 , horizontal barwidth(.75)  lc("`ora2'") lw(0.05) fc("`ora2'")) 
+		(rbar zero ch_epi y1, horizontal barwidth(.75)  lc("`gre'") lw(0.05) fc("`gre'")) 
 		/// Change in Population Age
-		(rbar addage addpop y1 , horizontal barwidth(.75)  lc("`pur2'") lw(0.05) fc("`pur2'")) 
+		(rbar basepop addage y1 , horizontal barwidth(.75)  lc("`ora'") lw(0.05) fc("`ora'")) 
+		/// Change in Population Size
+		(rbar addage addpop y1 , horizontal barwidth(.75)  lc("`bl2'") lw(0.05) fc("`bl2'")) 
 		/// Vertical Zero Line
-		(line y1 realzero, lcolor(gs10) lp(l) lc(gs0%25)) 
+		(line y1 realzero, lcolor("`gry'") lp(l) lc("`gry'")) 
 		/// Overall Change point
-		(scatter y1 ch_d, msymbol(O) mlcolor(gs10) mfcolor(gs16%80) msize(2))
+		(scatter y1 ch_d, msymbol(O) mlcolor("`blk'") mfcolor(gs16) msize(2))
 
 		/// Percentage change in deaths
 		(sc y1 xloc2, msymbol(i) mlabel(pd) mlabsize(2.5) mlabcol(gs8) mlabp(0))
@@ -202,52 +205,51 @@ sort ch_d
 		graphregion(c(gs16) ic(gs16) ilw(thin) lw(thin))
 		ysize(15) xsize(10)
 	
-		xlabel(-50(50)200, labsize(2.5) nogrid labcolor(gs8))
+		xlabel(-50(50)210, labsize(2.5) nogrid labcolor(gs8))
 		xscale(noextend) 
 		xtitle(" ", margin(top) color(gs0) size(2.5)) 
 
 		ylabel(
 				33	"Trinidad & Tobago"
-				32	"Uruguay"
-				31	"Argentina"
-				30	"St Vincent & Gren"
-				29	"United States"
-				28	"Canada"
-				27	"Grenada"
+				32	"Saint Vincent & Gren"
+				31	"United States"
+				30	"Uruguay"
+				29	"Argentina"
+				28	"Barbados"
+				27	"Canada"
 				26	"Jamaica"
-				25	"Barbados"
-				24	"Saint Lucia"
-				23	"Brazil"
-				22	"Haiti"
+				25	"Saint Lucia"
+				24	"Grenada"
+				23	"Haiti"
+				22	"Cuba"
 				21	"Chile"
-				20	"Cuba"
+				20	"Brazil"
 				19	"El Salvador"
-				18	"Guyana"
-				17	"Belize"
-				16	"Costa Rica"
-				15	"Colombia"
-				14	"Antigua & Barbuda"
-				13	"Venezuela"
-				12	"Ecuador"
-				11	"Peru"
-				10	"Bahamas"
-				9	"Suriname"
+				18	"Belize"
+				17	"Guyana"
+				16	"Colombia"
+				15	"Bahamas"
+				14	"Peru"
+				13	"Costa Rica"
+				12	"Paraguay"
+				11	"Antigua & Barbuda"
+				10	"Ecuador"
+				9	"Venezuela"
 				8	"Mexico"
-				7	"Guatemala"
-				6	"Paraguay"
+				7	"Suriname"
+				6	"Nicaragua"
 				5	"Bolivia"
 				4	"Panama"
-				3	"Nicaragua"
+				3	"Guatemala"
 				2	"Honduras"
 				1	"Dominican Rep"
-
-		, notick grid valuelabel angle(0) labsize(2.5) labcolor(gs10)) 
+		, notick grid valuelabel angle(0) labsize(2.5) labcolor("`gry'")) 
 		ytitle(" ", axis(1)) 
 		yscale(noline range(1(1)35))
 
         text(-2.5 50 "Percent Change in Deaths" "2000-2019", place(c) size(2.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
-        text(35 220 "Percent" "Change", place(c) size(2.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
-        text(35 310 "Extra" "Deaths", place(c) size(2.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
+        text(35 240 "Percent" "Change", place(c) size(2.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
+        text(35 330 "Extra" "Deaths", place(c) size(2.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
 
 		legend(order(7 3 4 5) keygap(2) rowgap(2) linegap(0.75)
 		label(3 "Change due to age-" "specific mortality rates")  
@@ -256,16 +258,22 @@ sort ch_d
 		label(7 "Change in deaths") 
 		cols(2) position(6) size(2.5) symysize(3) color(gs8)
 		) 
-		name(fig3_dth)
+		name(fig3_dth_women)
 	;
 #delimit cr
 
 
 ** ----------------------------------------------------
-** DEATHS (WOMEN AND MEN COMBINED)
+** DEATHS (WOMEN)
 ** ----------------------------------------------------
+sort cname
+replace cname = "St Vincent & Gren" if cname=="Saint Vincent and the Grenadines"
+replace cname = "Dominican Rep" if cname=="Dominican Republic"
+replace cname = "Antigua & Barbuda" if cname=="Antigua and Barbuda"
+replace cname = "Trinidad & Tobago" if cname=="Trinidad and Tobago"
+
 preserve
-	rename y1 Country
+	rename cname Country
 	rename death2000 d2000
 	rename death2019 d2019
 	rename d_p2019_as2000 dgrowth
@@ -284,8 +292,8 @@ preserve
 	** Begin Table 
 	putdocx begin , font(calibri light, 9)
 	putdocx paragraph 
-		putdocx text ("Table S3. "), bold
-		putdocx text ("Contribution of changes in population growth, population aging, and rates of age-specific morbidity to the percentage change in mortality due to NCDs, 2000 to 2019"), 
+		putdocx text ("TABLE S5. "), bold
+		putdocx text ("Contribution of changes in population growth, population aging, and rates of age-specific morbidity to the percentage change in mortality due to NCDs, 2000 to 2019. Women only."), 
 		** Place data 
 		putdocx table ss = data("Country d2000 d2019 dgrowth daging pall pgr pas pepi"), varnames note("(3) Expected deaths due to population growth alone (4) Expected deaths due to population aging (5) Percent change in deaths (2000 to 2019) (6) Percent change due to growth (7) Percent change due to aging (8) Percent change due to age-stratified rate change", italic font("Calibri Light", 9))
 		** Line colors + Shadng
@@ -304,20 +312,23 @@ preserve
 		putdocx table ss(1,8) = ("(7)"),  font(calibri light,10, "000000")
 		putdocx table ss(1,9) = ("(8)"),  font(calibri light,10, "000000")
 
-		putdocx save "`outputpath'/decomp_death_both", replace 
+		putdocx save "`outputpath'/decomp_death_women", replace 
 restore
 
 
 
-** -----------------------------------------------
-** 2. DALY
-** -----------------------------------------------
+**! -----------------------------------------------
+**! 2. 	DALY
+**!		WOMEN
+**! -----------------------------------------------
 
 ** Load the country-level daly and population data
 ** This comes from:
-**	--> C:\Sync\OneDrive - The University of the West Indies\repo_ianhambleton\repo_w003\chap2-000g-daly-country-groups.do
-use "`datapath'\from-who\paper1-chap3_byage_country_groups_both_daly", clear
-	append using "`datapath'\from-who\paper1-chap3_byage_groups_both_daly"
+**	--> C:\Sync\OneDrive - The University of the West Indies\repo_ianhambleton\repo_w003\paper1-chap2-000e-daly-region-groups.do
+**	--> C:\Sync\OneDrive - The University of the West Indies\repo_ianhambleton\repo_w003\paper1-chap2-000g-daly-country-groups.do
+use "`datapath'\from-who\daly3", clear
+append using "`datapath'\from-who\daly1"
+	keep if sex==2 
 	keep if who_region==. | who_region==2
 	replace iso3c = "LAC" if who_region==2
 	replace iso3n = 2000 if who_region==2
@@ -396,7 +407,6 @@ format daly* %15.0fc
 		gsort ch_d
 		list iso3n ch_d ch_gr ch_as ch_epi, sep(5) line(120)
 
-/*
 ** Country names
 drop if iso3c=="LAC"
 gsort -ch_d
@@ -404,8 +414,8 @@ gen y1 = _n
 decode iso3n, gen(cname)
 labmask y1, val(cname)
 #delimit ; 
-label define y1         30 "St.Vincent & Gren"
-                        14 "Antigua & Barbuda"
+label define y1         31 "St.Vincent & Gren"
+                        7 "Antigua & Barbuda"
                         33 "Trinidad & Tobago"
                         1  "Dominican Rep", modify;
 label values y1 y1; 
@@ -430,6 +440,14 @@ local ora2 `r(p4)'
 local pur1 `r(p9)'
 local pur2 `r(p10)'
 
+        #delimit ;
+        ** Colorblind friendly palette (Bischof, 2017b);
+        ** Bischof, D. 2017b. New graphic schemes for Stata: plotplain and plottig.  The Stata Journal 17(3): 748–759;
+        colorpalette cblind, select(1 2 4 5 9 8 7 3 6) nograph;
+        local list r(p);    local blk `r(p1)'; local gry `r(p2)'; local bl1 `r(p3)';  local gre `r(p4)'; local pur `r(p5)'; 
+                            local red `r(p6)'; local bl2 `r(p7)'; local ora `r(p8)'; local yel `r(p9)';
+        #delimit cr
+
 ** Column X-location for daly metrics 
 ** Max of first panel = 144
 gen xloc2 = 220
@@ -442,27 +460,28 @@ format ad %10.0fc
 local box1 0.5 200 33.5 200 33.5 240 0.5 240
 local box2 0.5 260 33.5 260 33.5 360 0.5 360
 
+sort ch_d 
 
 #delimit ;
 	graph twoway 
 		/// Boxes around metrics
-		(scatteri `box1'  , recast(area) lw(0.2) lc("gs13") fc("gs14") lp("l"))
-		(scatteri `box2'  , recast(area) lw(0.2) lc("gs13") fc("gs14") lp("l"))
+		(scatteri `box1'  , recast(area) lw(0.2) lc("`gry'") fc("gs14") lp("l"))
+		(scatteri `box2'  , recast(area) lw(0.2) lc("`gry'") fc("gs14") lp("l"))
 
 		///epi change
-		(rbar zero ch_epi y1, horizontal barwidth(.75)  lc("`blu2'") lw(0.05) fc("`blu2'")) 
-		/// Change in Population Size
-		(rbar basepop addage y1 , horizontal barwidth(.75)  lc("`ora2'") lw(0.05) fc("`ora2'")) 
+		(rbar zero ch_epi y1, horizontal barwidth(.75)  lc("`gre'") lw(0.05) fc("`gre'")) 
 		/// Change in Population Age
-		(rbar addage addpop y1 , horizontal barwidth(.75)  lc("`pur2'") lw(0.05) fc("`pur2'")) 
+		(rbar basepop addage y1 , horizontal barwidth(.75)  lc("`ora'") lw(0.05) fc("`ora'")) 
+		/// Change in Population Size
+		(rbar addage addpop y1 , horizontal barwidth(.75)  lc("`bl2'") lw(0.05) fc("`bl2'")) 
 		/// Vertical Zero Line
-		(line y1 realzero, lcolor(gs10) lp(l) lc(gs0%25)) 
+		(line y1 realzero, lcolor("`gry'") lp(l) lc("`gry'")) 
 		/// Overall Change point
-		(scatter y1 ch_d, msymbol(O) mlcolor(gs10) mfcolor(gs16%80) msize(2))
+		(scatter y1 ch_d, msymbol(O) mlcolor("`blk'") mfcolor(gs16) msize(2))
 
-		/// Percentage change in dalys
+		/// Percentage change in deaths
 		(sc y1 xloc2, msymbol(i) mlabel(pd) mlabsize(2.5) mlabcol(gs8) mlabp(0))
-		/// Actual change in numbers of dalys
+		/// Actual change in numbers of deaths
 		(sc y1 xloc3, msymbol(i) mlabel(ad) mlabsize(2.5) mlabcol(gs8) mlabp(0))
 
 		,
@@ -470,44 +489,45 @@ local box2 0.5 260 33.5 260 33.5 360 0.5 360
 		graphregion(c(gs16) ic(gs16) ilw(thin) lw(thin))
 		ysize(15) xsize(10)
 	
-		xlabel(-50(50)200, labsize(2.5) nogrid labcolor(gs8))
+		xlabel(-50(50)210, labsize(2.5) nogrid labcolor(gs8))
 		xscale(noextend) 
 		xtitle(" ", margin(top) color(gs0) size(2.5)) 
 
 		ylabel(
-				33	"Uruguay"
-				32	"Trinidad & Tobago"
-				31	"Argentina"
-				30	"Grenada"
-				29	"Canada"
-				28	"El Salvador"
-				27	"United States"
-				26	"St Vincent & Gren"
-				25	"Barbados"
-				24	"Cuba"
+				33	"Trinidad & Tobago"
+				32	"Uruguay"
+				31	"Saint Vincent & Gren"
+				30	"Argentina"
+				29	"United States"
+				28	"Cuba"
+				27	"Canada"
+				26	"Barbados"
+				25	"Grenada"
+				24	"El Salvador"
 				23	"Brazil"
-				22	"Jamaica"
-				21	"Guyana"
-				20	"Chile"
+				22	"Guyana"
+				21	"Peru"
+				20	"Haiti"
 				19	"Colombia"
-				18	"Haiti"
-				17	"Peru"
-				16	"Venezuela"
-				15	"Saint Lucia"
-				14	"Bolivia"
+				18	"Chile"
+				17	"Jamaica"
+				16	"Saint Lucia"
+				15	"Venezuela"
+				14	"Paraguay"
 				13	"Costa Rica"
-				12	"Ecuador"
-				11	"Antigua & Barbuda"
-				10	"Suriname"
-				9	"Guatemala"
+				12	"Bolivia"
+				11	"Ecuador"
+				10	"Mexico"
+				9	"Suriname"
 				8	"Nicaragua"
-				7	"Paraguay"
-				6	"Mexico"
+				7	"Antigua & Barbuda"
+				6	"Bahamas"
 				5	"Belize"
-				4	"Panama"
-				3	"Bahamas"
+				4	"Guatemala"
+				3	"Panama"
 				2	"Honduras"
 				1	"Dominican Rep"
+
 		, notick grid valuelabel angle(0) labsize(2.5) labcolor(gs10)) 
 		ytitle(" ", axis(1)) 
 		yscale(noline range(1(1)35))
@@ -523,16 +543,21 @@ local box2 0.5 260 33.5 260 33.5 360 0.5 360
 		label(7 "Change in DALYs") 
 		cols(2) position(6) size(2.5) symysize(3) color(gs8)
 		) 
-		name(fig3_daly)
+		name(fig3_daly_women)
 	;
 #delimit cr
 
 
 ** ----------------------------------------------------
-** DALYs (WOMEN AND MEN COMBINED)
+** DALYs (WOMEN)
 ** ----------------------------------------------------
+sort cname
+replace cname = "St Vincent & Gren" if cname=="Saint Vincent and the Grenadines"
+replace cname = "Dominican Rep" if cname=="Dominican Republic"
+replace cname = "Antigua & Barbuda" if cname=="Antigua and Barbuda"
+replace cname = "Trinidad & Tobago" if cname=="Trinidad and Tobago"
 preserve
-	rename y1 Country
+	rename cname Country
 	rename daly2000 d2000
 	rename daly2019 d2019
 	rename d_p2019_as2000 dgrowth
@@ -551,8 +576,8 @@ preserve
 	** Begin Table 
 	putdocx begin , font(calibri light, 9)
 	putdocx paragraph 
-		putdocx text ("Table S4. "), bold
-		putdocx text ("Contribution of changes in population growth, population aging, and rates of age-specific morbidity to the percentage change in mortality due to NCDs, 2000 to 2019"), 
+		putdocx text ("TABLE S6. "), bold
+		putdocx text ("Contribution of changes in population growth, population aging, and rates of age-specific morbidity to the percentage change in mortality due to NCDs, 2000 to 2019. Women only."), 
 		** Place data 
 		putdocx table ss = data("Country d2000 d2019 dgrowth daging pall pgr pas pepi"), varnames note("(3) Expected DALYs due to population growth alone (4) Expected DALYs due to population aging (5) Percent change in DALYs (2000 to 2019) (6) Percent change due to growth (7) Percent change due to aging (8) Percent change due to age-stratified rate change", italic font("Calibri Light", 9))
 		** Line colors + Shadng
@@ -571,78 +596,80 @@ preserve
 		putdocx table ss(1,8) = ("(7)"),  font(calibri light,10, "000000")
 		putdocx table ss(1,9) = ("(8)"),  font(calibri light,10, "000000")
 
-		putdocx save "`outputpath'/decomp_daly_both", replace 
+		putdocx save "`outputpath'/decomp_daly_women", replace 
 restore
 
 
 
-/*
+**! -----------------------------------------------
+**! 2.   DEATHS
+**!		 MEN
+**! -----------------------------------------------
 
-** -----------------------------------------------
-** 3. YLL
-** -----------------------------------------------
-
-** Load the country-level yll and population data
+** Load the country-level death and population data
 ** This comes from:
-**	--> C:\Sync\OneDrive - The University of the West Indies\repo_ianhambleton\repo_w003\chap2-000r-yll-country-groups.do
-use "`datapath'\from-who\paper1-chap3_byage_country_groups_both_yll", clear
-	append using "`datapath'\from-who\paper1-chap3_byage_groups_both_yll"
+**	--> C:\Sync\OneDrive - The University of the West Indies\repo_ianhambleton\repo_w003\paper1-chap2-000a-mr-region-groups.do
+**  --> C:\Sync\OneDrive - The University of the West Indies\repo_ianhambleton\repo_w003\paper1-chap2-000c-mr-country-groups.do
+use "`datapath'\from-who\deaths3", clear
+append using "`datapath'\from-who\deaths1"
+	keep if sex==1
 	keep if who_region==. | who_region==2
 	replace iso3c = "LAC" if who_region==2
 	replace iso3n = 2000 if who_region==2
 
 	rename age18 age
+	rename dths death
 
 	** keep if ghecause==100
 	keep if ghecause==50
 	keep if year==2000 | year==2019
 	drop paho_subregion agroup 
 	rename pop pop_orig
-	collapse (sum) yll (mean) pop = pop_orig , by(iso3c iso3n year age) 
+	collapse (sum) death (mean) pop = pop_orig , by(iso3c iso3n year age) 
 	order iso3c iso3n year  
 	bysort year iso3c : egen tpop = sum(pop)
 	format tpop %15.0fc
-	reshape wide yll pop tpop , i(iso3c iso3n age) j(year)
+	reshape wide death pop tpop , i(iso3c iso3n age) j(year)
 
 ** AS = age-structure
 **  P = Population
 **  R = Crude Rate 
-**  D = ylls
+**  D = Deaths
 
 ** METRIC 1. Population given the Age-Structure in 2000, rescaled for the population in 2019  
 gen as2000_p2019 = (pop2000 / tpop2000) * tpop2019
 format as2000_p2019 %15.1fc
 
 ** METRIC 2. Age-specific Mortality Rates in each year 
-gen r2000 = yll2000 / pop2000
-gen r2019 = yll2019 / pop2019
+gen r2000 = death2000 / pop2000
+gen r2019 = death2019 / pop2019
 
-** METRIC 3. yll, assuming:  
-**	(a) age-stratified yllS assuming (POP in 2019 given AS in 2000) and (mortality rate in 2000)
+** METRIC 3. DEATHS, assuming:  
+**	(a) age-stratified DEATHS assuming (POP in 2019 given AS in 2000) and (mortality rate in 2000)
 gen d_p2019_as2000 = as2000_p2019 * (r2000)
-**	(b) age-stratified yllS (POP in 2019 given AS in 2019) and (mortality rate in 2000)
+**	(b) age-stratified DEATHS (POP in 2019 given AS in 2019) and (mortality rate in 2000)
 gen d_p2019_as2019 = pop2019 * (r2000) 
 format d_p2019_as2000 d_p2019_as2019 %15.1fc
 
 ** COLLAPSE OUT AGE - keeping 4 statistics
-**		- d_p2019_as2000	ylls | POP2019 and AS2000 and MR2000
-**		- d_p2019_as2019	ylls | POP2019 and AS2019 and MR2000
-**		- ylls2000		ylls | POP2000 and AS2000 and MR2000
-**		- ylls2019		ylls | POP2019 and AS2019 and MR2019
-collapse (sum) d_* yll2000 yll2019, by(iso3c iso3n)
-format d_* yll2000 yll2019 %15.1fc
+**		- d_p2019_as2000	Deaths | POP2019 and AS2000 and MR2000
+**		- d_p2019_as2019	Deaths | POP2019 and AS2019 and MR2000
+**		- deaths2000		Deaths | POP2000 and AS2000 and MR2000
+**		- deaths2019		Deaths | POP2019 and AS2019 and MR2019
+collapse (sum) d_* death2000 death2019, by(iso3c iso3n)
+format d_* death2000 death2019 %15.1fc
 
-** Percentage change in ylls between 2000 and 2019
-gen ch_d = ((yll2019 - yll2000) / yll2000) * 100
+** Percentage change in deaths between 2000 and 2019
+gen ch_d = ((death2019 - death2000) / death2000) * 100
 
 
 ** Combined metrics of interest
 
 ** Percentage change due to population growth
-gen ch_gr    = ((d_p2019_as2000 - yll2000) / yll2000) * 100
-gen ch_as    = ((d_p2019_as2019 - d_p2019_as2000) / yll2000) * 100
+gen ch_gr    = ((d_p2019_as2000 - death2000) / death2000) * 100
+gen ch_as    = ((d_p2019_as2019 - d_p2019_as2000) / death2000) * 100
 gen ch_epi   = (ch_d - ch_as - ch_gr) 
-gen test_epi = ((yll2019 - d_p2019_as2019) / yll2000) * 100
+gen test_epi = ((death2019 - d_p2019_as2019) / death2000) * 100
 
 ** Further graph preparation
 gen zero = 0 
@@ -656,7 +683,7 @@ replace addage = ch_as + ch_epi if ch_epi > 0
 replace addage = ch_epi if ch_epi > 0 & ch_as < 0
 gen addpop = addage + ch_gr
 
-format yll* %15.0fc
+format death* %15.0fc
 
 ** List the decompiosition by overall change in deaths
 ** IE same order as for graphic
@@ -665,6 +692,7 @@ format yll* %15.0fc
 		gsort ch_d
 		list iso3n ch_d ch_gr ch_as ch_epi, sep(5) line(120)
 
+
 ** Country names
 drop if iso3c=="LAC"
 gsort -ch_d
@@ -672,9 +700,9 @@ gen y1 = _n
 decode iso3n, gen(cname)
 labmask y1, val(cname)
 #delimit ; 
-label define y1         30 "St.Vincent & Gren"
-                        14 "Antigua & Barbuda"
-                        33 "Trinidad & Tobago"
+label define y1         26 "St.Vincent & Gren"
+                        20 "Antigua & Barbuda"
+                        32 "Trinidad & Tobago"
                         1  "Dominican Rep", modify;
 label values y1 y1; 
 #delimit cr
@@ -698,39 +726,48 @@ local ora2 `r(p4)'
 local pur1 `r(p9)'
 local pur2 `r(p10)'
 
-** Column X-location for yll metrics 
+        #delimit ;
+        ** Colorblind friendly palette (Bischof, 2017b);
+        ** Bischof, D. 2017b. New graphic schemes for Stata: plotplain and plottig.  The Stata Journal 17(3): 748–759;
+        colorpalette cblind, select(1 2 4 5 9 8 7 3 6) nograph;
+        local list r(p);    local blk `r(p1)'; local gry `r(p2)'; local bl1 `r(p3)';  local gre `r(p4)'; local pur `r(p5)'; 
+                            local red `r(p6)'; local bl2 `r(p7)'; local ora `r(p8)'; local yel `r(p9)';
+        #delimit cr
+
+** Column X-location for death metrics 
 ** Max of first panel = 144
 gen xloc2 = 220
 gen xloc3 = 310
 gen pd = round(ch_d) 
-gen ad = int(yll2019 - yll2000)
+gen ad = int(death2019 - death2000)
 format ad %10.0fc
 
 ** Boxes around metrics
 local box1 0.5 200 33.5 200 33.5 240 0.5 240
 local box2 0.5 260 33.5 260 33.5 360 0.5 360
 
+sort ch_d
 
 #delimit ;
 	graph twoway 
 		/// Boxes around metrics
-		(scatteri `box1'  , recast(area) lw(0.2) lc("gs13") fc("gs14") lp("l"))
-		(scatteri `box2'  , recast(area) lw(0.2) lc("gs13") fc("gs14") lp("l"))
+		(scatteri `box1'  , recast(area) lw(0.2) lc("`gry'") fc("gs14") lp("l"))
+		(scatteri `box2'  , recast(area) lw(0.2) lc("`gry'") fc("gs14") lp("l"))
 
 		///epi change
-		(rbar zero ch_epi y1, horizontal barwidth(.75)  lc("`blu2'") lw(0.05) fc("`blu2'")) 
-		/// Change in Population Size
-		(rbar basepop addage y1 , horizontal barwidth(.75)  lc("`ora2'") lw(0.05) fc("`ora2'")) 
+		(rbar zero ch_epi y1, horizontal barwidth(.75)  lc("`gre'") lw(0.05) fc("`gre'")) 
 		/// Change in Population Age
-		(rbar addage addpop y1 , horizontal barwidth(.75)  lc("`pur2'") lw(0.05) fc("`pur2'")) 
+		(rbar basepop addage y1 , horizontal barwidth(.75)  lc("`ora'") lw(0.05) fc("`ora'")) 
+		/// Change in Population Size
+		(rbar addage addpop y1 , horizontal barwidth(.75)  lc("`bl2'") lw(0.05) fc("`bl2'")) 
 		/// Vertical Zero Line
-		(line y1 realzero, lcolor(gs10) lp(l) lc(gs0%25)) 
+		(line y1 realzero, lcolor("`gry'") lp(l) lc("`gry'")) 
 		/// Overall Change point
-		(scatter y1 ch_d, msymbol(O) mlcolor(gs10) mfcolor(gs16%80) msize(2))
+		(scatter y1 ch_d, msymbol(O) mlcolor("`blk'") mfcolor(gs16) msize(2))
 
-		/// Percentage change in ylls
+		/// Percentage change in deaths
 		(sc y1 xloc2, msymbol(i) mlabel(pd) mlabsize(2.5) mlabcol(gs8) mlabp(0))
-		/// Actual change in numbers of ylls
+		/// Actual change in numbers of deaths
 		(sc y1 xloc3, msymbol(i) mlabel(ad) mlabsize(2.5) mlabcol(gs8) mlabp(0))
 
 		,
@@ -738,282 +775,396 @@ local box2 0.5 260 33.5 260 33.5 360 0.5 360
 		graphregion(c(gs16) ic(gs16) ilw(thin) lw(thin))
 		ysize(15) xsize(10)
 	
-		xlabel(-50(50)200, labsize(2.5) nogrid labcolor(gs8))
+		xlabel(-50(50)210, labsize(2.5) nogrid labcolor(gs8))
 		xscale(noextend) 
 		xtitle(" ", margin(top) color(gs0) size(2.5)) 
 
 		ylabel(
-				33	"Trinidad & Tobago"
-				32	"Uruguay"
+				33	"Uruguay"
+				32	"Trinidad & Tobago"
 				31	"Argentina"
-				30	"Canada"
+				30	"Grenada"
 				29	"United States"
-				28	"Grenada"
-				27	"El Salvador"
-				26	"St Vincent & Gren"
-				25	"Brazil"
-				24	"Barbados"
-				23	"Chile"
-				22	"Jamaica"
-				21	"Colombia"
-				20	"Haiti"
-				19	"Cuba"
-				18	"Guyana"
-				17	"Peru"
-				16	"Venezuela"
-				15	"St Lucia"
-				14	"Bolivia"
-				13	"Costa Rica"
-				12	"Ecuador"
-				11	"Guatemala"
-				10	"Belize"
-				9	"Antigua & Barbuda"
-				8	"Suriname"
+				28	"Canada"
+				27	"Jamaica"
+				26	"Saint Vincent & Gren"
+				25	"Barbados"
+				24	"El Salvador"
+				23	"Brazil"
+				22	"Chile"
+				21	"Cuba"
+				20	"Antigua & Barbuda"
+				19	"Haiti"
+				18	"Saint Lucia"
+				17	"Guyana"
+				16	"Costa Rica"
+				15	"Venezuela"
+				14	"Belize"
+				13	"Colombia"
+				12	"Guatemala"
+				11	"Ecuador"
+				10	"Suriname"
+				9	"Bolivia"
+				8	"Panama"
 				7	"Mexico"
-				6	"Paraguay"
-				5	"Panama"
+				6	"Bahamas"
+				5	"Peru"
 				4	"Nicaragua"
+				3	"Paraguay"
+				2	"Honduras"
+				1	"Dominican Rep"
+
+		, notick grid valuelabel angle(0) labsize(2.5) labcolor(gs10)) 
+		ytitle(" ", axis(1)) 
+		yscale(noline range(1(1)35))
+
+        text(-2.5 50 "Percent Change in Deaths" "2000-2019", place(c) size(2.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
+        text(35 220 "Percent" "Change", place(c) size(2.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
+        text(35 310 "Extra" "Deaths", place(c) size(2.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
+
+		legend(order(7 3 4 5) keygap(2) rowgap(2) linegap(0.75)
+		label(3 "Change due to age-" "specific mortality rates")  
+		label(4 "Change due to" "population aging") 
+		label(5 "Change due to" "population growth") 
+		label(7 "Change in deaths") 
+		cols(2) position(6) size(2.5) symysize(3) color(gs8)
+		) 
+		name(fig3_dth_men)
+	;
+#delimit cr
+
+
+** ----------------------------------------------------
+** DEATHS (MEN)
+** ----------------------------------------------------
+sort cname
+replace cname = "St Vincent & Gren" if cname=="Saint Vincent and the Grenadines"
+replace cname = "Dominican Rep" if cname=="Dominican Republic"
+replace cname = "Antigua & Barbuda" if cname=="Antigua and Barbuda"
+replace cname = "Trinidad & Tobago" if cname=="Trinidad and Tobago"
+preserve
+	rename cname Country
+	rename death2000 d2000
+	rename death2019 d2019
+	rename d_p2019_as2000 dgrowth
+	rename d_p2019_as2019 daging
+	rename ch_d pall
+	rename ch_gr pgr
+	rename ch_as pas
+	rename ch_epi pepi
+	format dgrowth %9.0fc 
+	format daging %9.0fc 
+	format pall %5.1fc 
+	format pgr %5.1fc 
+	format pas %5.1fc 
+	format pepi %5.1fc 
+
+	** Begin Table 
+	putdocx begin , font(calibri light, 9)
+	putdocx paragraph 
+		putdocx text ("TABLE S7. "), bold
+		putdocx text ("Contribution of changes in population growth, population aging, and rates of age-specific morbidity to the percentage change in mortality due to NCDs, 2000 to 2019. Men only."), 
+		** Place data 
+		putdocx table ss = data("Country d2000 d2019 dgrowth daging pall pgr pas pepi"), varnames note("(3) Expected deaths due to population growth alone (4) Expected deaths due to population aging (5) Percent change in deaths (2000 to 2019) (6) Percent change due to growth (7) Percent change due to aging (8) Percent change due to age-stratified rate change", italic font("Calibri Light", 9))
+		** Line colors + Shadng
+		///putdocx table ss(2/10,.), border(bottom, single, "e6e6e6")
+		///putdocx table ss(12/20,.), border(bottom, single, "e6e6e6")
+		putdocx table ss(1,.),  shading("e6e6e6")
+		///putdocx table ss(.,1),  shading("e6e6e6")
+		** Column and Row headers
+		putdocx table ss(1,1) = ("Country"),  font(calibri light,10, "000000")
+		putdocx table ss(1,2) = ("(1) Deaths (2000)"),  font(calibri light,10, "000000")
+		putdocx table ss(1,3) = ("(2) Deaths (2019)"),  font(calibri light,10, "000000")
+		putdocx table ss(1,4) = ("(3)"),  font(calibri light,10, "000000")
+		putdocx table ss(1,5) = ("(4)"),  font(calibri light,10, "000000")
+		putdocx table ss(1,6) = ("(5)"),  font(calibri light,10, "000000")
+		putdocx table ss(1,7) = ("(6)"),  font(calibri light,10, "000000")
+		putdocx table ss(1,8) = ("(7)"),  font(calibri light,10, "000000")
+		putdocx table ss(1,9) = ("(8)"),  font(calibri light,10, "000000")
+
+		putdocx save "`outputpath'/decomp_death_men", replace 
+restore
+
+
+**! -----------------------------------------------
+**! 2. 	DALY
+**! 	MEN
+**! -----------------------------------------------
+
+** Load the country-level daly and population data
+** This comes from:
+**	--> C:\Sync\OneDrive - The University of the West Indies\repo_ianhambleton\repo_w003\paper1-chap2-000e-daly-region-groups.do
+**	--> C:\Sync\OneDrive - The University of the West Indies\repo_ianhambleton\repo_w003\paper1-chap2-000g-daly-country-groups.do
+use "`datapath'\from-who\daly3", clear
+append using "`datapath'\from-who\daly1"
+	keep if sex==1
+	keep if who_region==. | who_region==2
+	replace iso3c = "LAC" if who_region==2
+	replace iso3n = 2000 if who_region==2
+
+	rename age18 age
+
+	** keep if ghecause==100
+	keep if ghecause==50
+	keep if year==2000 | year==2019
+	drop paho_subregion agroup 
+	rename pop pop_orig
+	collapse (sum) daly (mean) pop = pop_orig , by(iso3c iso3n year age) 
+	order iso3c iso3n year  
+	bysort year iso3c : egen tpop = sum(pop)
+	format tpop %15.0fc
+	reshape wide daly pop tpop , i(iso3c iso3n age) j(year)
+
+** AS = age-structure
+**  P = Population
+**  R = Crude Rate 
+**  D = dalys
+
+** METRIC 1. Population given the Age-Structure in 2000, rescaled for the population in 2019  
+gen as2000_p2019 = (pop2000 / tpop2000) * tpop2019
+format as2000_p2019 %15.1fc
+
+** METRIC 2. Age-specific Mortality Rates in each year 
+gen r2000 = daly2000 / pop2000
+gen r2019 = daly2019 / pop2019
+
+** METRIC 3. dalyS, assuming:  
+**	(a) age-stratified dalyS assuming (POP in 2019 given AS in 2000) and (mortality rate in 2000)
+gen d_p2019_as2000 = as2000_p2019 * (r2000)
+**	(b) age-stratified dalyS (POP in 2019 given AS in 2019) and (mortality rate in 2000)
+gen d_p2019_as2019 = pop2019 * (r2000) 
+format d_p2019_as2000 d_p2019_as2019 %15.1fc
+
+** COLLAPSE OUT AGE - keeping 4 statistics
+**		- d_p2019_as2000	dalys | POP2019 and AS2000 and MR2000
+**		- d_p2019_as2019	dalys | POP2019 and AS2019 and MR2000
+**		- dalys2000		dalys | POP2000 and AS2000 and MR2000
+**		- dalys2019		dalys | POP2019 and AS2019 and MR2019
+collapse (sum) d_* daly2000 daly2019, by(iso3c iso3n)
+format d_* daly2000 daly2019 %15.1fc
+
+** Percentage change in dalys between 2000 and 2019
+gen ch_d = ((daly2019 - daly2000) / daly2000) * 100
+
+
+** Combined metrics of interest
+
+** Percentage change due to population growth
+gen ch_gr    = ((d_p2019_as2000 - daly2000) / daly2000) * 100
+gen ch_as    = ((d_p2019_as2019 - d_p2019_as2000) / daly2000) * 100
+gen ch_epi   = (ch_d - ch_as - ch_gr) 
+gen test_epi = ((daly2019 - d_p2019_as2019) / daly2000) * 100
+
+** Further graph preparation
+gen zero = 0 
+gen realzero = 0
+
+gen addage = ch_as  if ch_epi < 0  & ch_as > 0
+gen basepop = 0 
+replace basepop = ch_as if ch_as < 0
+replace basepop = ch_epi + basepop if ch_epi > 0
+replace addage = ch_as + ch_epi if ch_epi > 0 
+replace addage = ch_epi if ch_epi > 0 & ch_as < 0
+gen addpop = addage + ch_gr
+
+format daly* %15.0fc
+
+** List the decompiosition by overall change in deaths
+** IE same order as for graphic
+		label define iso3n 2000 "THE AMERICAS", modify
+		label values iso3n iso3n 
+		gsort ch_d
+		list iso3n ch_d ch_gr ch_as ch_epi, sep(5) line(120)
+
+** Country names
+drop if iso3c=="LAC"
+gsort -ch_d
+gen y1 = _n
+decode iso3n, gen(cname)
+labmask y1, val(cname)
+#delimit ; 
+label define y1         19 "St.Vincent & Gren"
+                        15 "Antigua & Barbuda"
+                        31 "Trinidad & Tobago"
+                        1  "Dominican Rep", modify;
+label values y1 y1; 
+#delimit cr
+
+** Color scheme
+colorpalette d3, 20 n(20) nograph
+local list r(p) 
+** Blue 
+local blu1 `r(p1)'
+local blu2 `r(p2)'
+** Red
+local red1 `r(p7)'
+local red2 `r(p8)'
+** Gray
+local gry1 `r(p15)'
+local gry2 `r(p16)'
+** Orange
+local ora1 `r(p3)'
+local ora2 `r(p4)'
+** Purple
+local pur1 `r(p9)'
+local pur2 `r(p10)'
+
+        #delimit ;
+        ** Colorblind friendly palette (Bischof, 2017b);
+        ** Bischof, D. 2017b. New graphic schemes for Stata: plotplain and plottig.  The Stata Journal 17(3): 748–759;
+        colorpalette cblind, select(1 2 4 5 9 8 7 3 6) nograph;
+        local list r(p);    local blk `r(p1)'; local gry `r(p2)'; local bl1 `r(p3)';  local gre `r(p4)'; local pur `r(p5)'; 
+                            local red `r(p6)'; local bl2 `r(p7)'; local ora `r(p8)'; local yel `r(p9)';
+        #delimit cr
+
+** Column X-location for daly metrics 
+** Max of first panel = 144
+gen xloc2 = 220
+gen xloc3 = 310
+gen pd = round(ch_d) 
+gen ad = int(daly2019 - daly2000)
+format ad %10.0fc
+
+** Boxes around metrics
+local box1 0.5 200 33.5 200 33.5 240 0.5 240
+local box2 0.5 260 33.5 260 33.5 360 0.5 360
+
+sort ch_d
+
+
+#delimit ;
+	graph twoway 
+		/// Boxes around metrics
+		(scatteri `box1'  , recast(area) lw(0.2) lc("`gry'") fc("gs14") lp("l"))
+		(scatteri `box2'  , recast(area) lw(0.2) lc("`gry'") fc("gs14") lp("l"))
+
+		///epi change
+		(rbar zero ch_epi y1, horizontal barwidth(.75)  lc("`gre'") lw(0.05) fc("`gre'")) 
+		/// Change in Population Age
+		(rbar basepop addage y1 , horizontal barwidth(.75)  lc("`ora'") lw(0.05) fc("`ora'")) 
+		/// Change in Population Size
+		(rbar addage addpop y1 , horizontal barwidth(.75)  lc("`bl2'") lw(0.05) fc("`bl2'")) 
+		/// Vertical Zero Line
+		(line y1 realzero, lcolor("`gry'") lp(l) lc("`gry'")) 
+		/// Overall Change point
+		(scatter y1 ch_d, msymbol(O) mlcolor("`blk'") mfcolor(gs16) msize(2))
+
+		/// Percentage change in deaths
+		(sc y1 xloc2, msymbol(i) mlabel(pd) mlabsize(2.5) mlabcol(gs8) mlabp(0))
+		/// Actual change in numbers of deaths
+		(sc y1 xloc3, msymbol(i) mlabel(ad) mlabsize(2.5) mlabcol(gs8) mlabp(0))
+ 
+		,
+		plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin)) 
+		graphregion(c(gs16) ic(gs16) ilw(thin) lw(thin))
+		ysize(15) xsize(10)
+	
+		xlabel(-50(50)210, labsize(2.5) nogrid labcolor(gs8))
+		xscale(noextend) 
+		xtitle(" ", margin(top) color(gs0) size(2.5)) 
+
+		ylabel(
+				33	"Uruguay"
+				32	"Argentina"
+				31	"Trinidad & Tobago"
+				30	"Grenada"
+				29	"El Salvador"
+				28	"Canada"
+				27	"Jamaica"
+				26	"Barbados"
+				25	"United States"
+				24	"Brazil"
+				23	"Chile"
+				22	"Cuba"
+				21	"Guyana"
+				20	"Venezuela"
+				19	"Saint Vincent & Gren"
+				18	"Colombia"
+				17	"Haiti"
+				16	"Bolivia"
+				15	"Antigua & Barbuda"
+				14	"Peru"
+				13	"Saint Lucia"
+				12	"Guatemala"
+				11	"Ecuador"
+				10	"Costa Rica"
+				9	"Suriname"
+				8	"Panama"
+				7	"Nicaragua"
+				6	"Belize"
+				5	"Mexico"
+				4	"Paraguay"
 				3	"Honduras"
 				2	"Bahamas"
 				1	"Dominican Rep"
-		, notick grid valuelabel angle(0) labsize(2.5) labcolor(gs10)) 
-		ytitle(" ", axis(1)) 
-		yscale(noline range(1(1)35))
-
-        text(-2.5 50 "Percent Change in YLLs" "2000-2019", place(c) size(2.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
-        text(35 220 "Percent" "Change", place(c) size(2.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
-        text(35 310 "Extra" "YLLs", place(c) size(2.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
-
-		legend(order(7 3 4 5) keygap(2) rowgap(2) linegap(0.75)
-		label(3 "Change due to age-" "specific YLL rates")  
-		label(4 "Change due to" "population aging") 
-		label(5 "Change due to" "population growth") 
-		label(7 "Change in YLLs") 
-		cols(2) position(6) size(2.5) symysize(3) color(gs8)
-		) 
-		name(fig3_yll)
-	;
-#delimit cr
-
-
-
-
-
-** -----------------------------------------------
-** 4. YLD
-** -----------------------------------------------
-
-** Load the country-level yld and population data
-** This comes from:
-**	--> C:\Sync\OneDrive - The University of the West Indies\repo_ianhambleton\repo_w003\chap2-000m-yld-country-groups.do
-use "`datapath'\from-who\paper1-chap3_byage_country_groups_both_yld", clear
-	append using "`datapath'\from-who\paper1-chap3_byage_groups_both_yld"
-	keep if who_region==. | who_region==2
-	replace iso3c = "LAC" if who_region==2
-	replace iso3n = 2000 if who_region==2
-
-	rename age18 age
-
-	** keep if ghecause==100
-	keep if ghecause==50
-	keep if year==2000 | year==2019
-	drop paho_subregion agroup 
-	rename pop pop_orig
-	collapse (sum) yld (mean) pop = pop_orig , by(iso3c iso3n year age) 
-	order iso3c iso3n year  
-	bysort year iso3c : egen tpop = sum(pop)
-	format tpop %15.0fc
-	reshape wide yld pop tpop , i(iso3c iso3n age) j(year)
-
-** AS = age-structure
-**  P = Population
-**  R = Crude Rate 
-**  D = ylds
-
-** METRIC 1. Population given the Age-Structure in 2000, rescaled for the population in 2019  
-gen as2000_p2019 = (pop2000 / tpop2000) * tpop2019
-format as2000_p2019 %15.1fc
-
-** METRIC 2. Age-specific Mortality Rates in each year 
-gen r2000 = yld2000 / pop2000
-gen r2019 = yld2019 / pop2019
-
-** METRIC 3. yld, assuming:  
-**	(a) age-stratified yldS assuming (POP in 2019 given AS in 2000) and (mortality rate in 2000)
-gen d_p2019_as2000 = as2000_p2019 * (r2000)
-**	(b) age-stratified yldS (POP in 2019 given AS in 2019) and (mortality rate in 2000)
-gen d_p2019_as2019 = pop2019 * (r2000) 
-format d_p2019_as2000 d_p2019_as2019 %15.1fc
-
-** COLLAPSE OUT AGE - keeping 4 statistics
-**		- d_p2019_as2000	ylds | POP2019 and AS2000 and MR2000
-**		- d_p2019_as2019	ylds | POP2019 and AS2019 and MR2000
-**		- ylds2000		ylds | POP2000 and AS2000 and MR2000
-**		- ylds2019		ylds | POP2019 and AS2019 and MR2019
-collapse (sum) d_* yld2000 yld2019, by(iso3c iso3n)
-format d_* yld2000 yld2019 %15.1fc
-
-** Percentage change in ylds between 2000 and 2019
-gen ch_d = ((yld2019 - yld2000) / yld2000) * 100
-
-
-** Combined metrics of interest
-
-** Percentage change due to population growth
-gen ch_gr    = ((d_p2019_as2000 - yld2000) / yld2000) * 100
-gen ch_as    = ((d_p2019_as2019 - d_p2019_as2000) / yld2000) * 100
-gen ch_epi   = (ch_d - ch_as - ch_gr) 
-gen test_epi = ((yld2019 - d_p2019_as2019) / yld2000) * 100
-
-** Further graph preparation
-gen zero = 0 
-gen realzero = 0
-
-gen addage = ch_as  if ch_epi < 0  & ch_as > 0
-gen basepop = 0 
-replace basepop = ch_as if ch_as < 0
-replace basepop = ch_epi + basepop if ch_epi > 0
-replace addage = ch_as + ch_epi if ch_epi > 0 
-replace addage = ch_epi if ch_epi > 0 & ch_as < 0
-gen addpop = addage + ch_gr
-
-format yld* %15.0fc
-
-** List the decompiosition by overall change in deaths
-** IE same order as for graphic
-		label define iso3n 2000 "THE AMERICAS", modify
-		label values iso3n iso3n 
-		gsort ch_d
-		list iso3n ch_d ch_gr ch_as ch_epi, sep(5) line(120)
-
-** Country names
-drop if iso3c=="LAC"
-gsort -ch_d
-gen y1 = _n
-decode iso3n, gen(cname)
-labmask y1, val(cname)
-#delimit ; 
-label define y1         30 "St.Vincent & Gren"
-                        14 "Antigua & Barbuda"
-                        33 "Trinidad & Tobago"
-                        1  "Dominican Rep", modify;
-label values y1 y1; 
-#delimit cr
-
-** Color scheme
-colorpalette d3, 20 n(20) nograph
-local list r(p) 
-** Blue 
-local blu1 `r(p1)'
-local blu2 `r(p2)'
-** Red
-local red1 `r(p7)'
-local red2 `r(p8)'
-** Gray
-local gry1 `r(p15)'
-local gry2 `r(p16)'
-** Orange
-local ora1 `r(p3)'
-local ora2 `r(p4)'
-** Purple
-local pur1 `r(p9)'
-local pur2 `r(p10)'
-
-** Column X-location for yld metrics 
-** Max of first panel = 144
-gen xloc2 = 220
-gen xloc3 = 310
-gen pd = round(ch_d) 
-gen ad = int(yld2019 - yld2000)
-format ad %10.0fc
-
-** Boxes around metrics
-local box1 0.5 200 33.5 200 33.5 240 0.5 240
-local box2 0.5 260 33.5 260 33.5 360 0.5 360
-
-
-#delimit ;
-	graph twoway 
-		/// Boxes around metrics
-		(scatteri `box1'  , recast(area) lw(0.2) lc("gs13") fc("gs14") lp("l"))
-		(scatteri `box2'  , recast(area) lw(0.2) lc("gs13") fc("gs14") lp("l"))
-
-		///epi change
-		(rbar zero ch_epi y1, horizontal barwidth(.75)  lc("`blu2'") lw(0.05) fc("`blu2'")) 
-		/// Change in Population Size
-		(rbar basepop addage y1 , horizontal barwidth(.75)  lc("`ora2'") lw(0.05) fc("`ora2'")) 
-		/// Change in Population Age
-		(rbar addage addpop y1 , horizontal barwidth(.75)  lc("`pur2'") lw(0.05) fc("`pur2'")) 
-		/// Vertical Zero Line
-		(line y1 realzero, lcolor(gs10) lp(l) lc(gs0%25)) 
-		/// Overall Change point
-		(scatter y1 ch_d, msymbol(O) mlcolor(gs10) mfcolor(gs16%80) msize(2))
-
-		/// Percentage change in ylds
-		(sc y1 xloc2, msymbol(i) mlabel(pd) mlabsize(2.5) mlabcol(gs8) mlabp(0))
-		/// Actual change in numbers of ylds
-		(sc y1 xloc3, msymbol(i) mlabel(ad) mlabsize(2.5) mlabcol(gs8) mlabp(0))
-
-		,
-		plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin)) 
-		graphregion(c(gs16) ic(gs16) ilw(thin) lw(thin))
-		ysize(15) xsize(10)
-	
-		xlabel(-50(50)200, labsize(2.5) nogrid labcolor(gs8))
-		xscale(noextend) 
-		xtitle(" ", margin(top) color(gs0) size(2.5)) 
-
-		ylabel(
-				33	"Cuba"
-				32	"Uruguay"
-				31	"Barbados"
-				30	"Guyana"
-				29	"El Salvador"
-				28	"St Vincent & Gren"
-				27	"Argentina"
-				26	"Jamaica"
-				25	"Grenada"
-				24	"Trinidad & Tobago"
-				23	"Brazil"
-				22	"Peru"
-				21	"United States"
-				20	"Venezuela"
-				19	"Chile"
-				18	"Colombia"
-				17	"Canada"
-				16	"St Lucia"
-				15	"Suriname"
-				14	"Haiti"
-				13	"Bolivia"
-				12	"Antigua & Barbuda"
-				11	"Nicaragua"
-				10	"Dominican Rep"
-				9	"Bahamas"
-				8	"Ecuador"
-				7	"Costa Rica"
-				6	"Paraguay"
-				5	"Mexico"
-				4	"Panama"
-				3	"Guatemala"
-				2	"Honduras"
-				1	"Belize"
 
 		, notick grid valuelabel angle(0) labsize(2.5) labcolor(gs10)) 
 		ytitle(" ", axis(1)) 
 		yscale(noline range(1(1)35))
 
-        text(-2.5 50 "Percent Change in ylds" "2000-2019", place(c) size(2.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
+        text(-2.5 50 "Percent Change in DALYs" "2000-2019", place(c) size(2.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
         text(35 220 "Percent" "Change", place(c) size(2.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
-        text(35 310 "Extra" "ylds", place(c) size(2.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
+        text(35 310 "Extra" "DALYs", place(c) size(2.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
 
 		legend(order(7 3 4 5) keygap(2) rowgap(2) linegap(0.75)
-		label(3 "Change due to age-" "specific yld rates")  
+		label(3 "Change due to age-" "specific DALY rates")  
 		label(4 "Change due to" "population aging") 
 		label(5 "Change due to" "population growth") 
-		label(7 "Change in ylds") 
+		label(7 "Change in DALYs") 
 		cols(2) position(6) size(2.5) symysize(3) color(gs8)
 		) 
-		name(fig3_yld)
+		name(fig3_daly_men)
 	;
 #delimit cr
 
+
+** ----------------------------------------------------
+** DALYs (MEN)
+** ----------------------------------------------------
+sort cname
+replace cname = "St Vincent & Gren" if cname=="Saint Vincent and the Grenadines"
+replace cname = "Dominican Rep" if cname=="Dominican Republic"
+replace cname = "Antigua & Barbuda" if cname=="Antigua and Barbuda"
+replace cname = "Trinidad & Tobago" if cname=="Trinidad and Tobago"
+preserve
+	rename cname Country
+	rename daly2000 d2000
+	rename daly2019 d2019
+	rename d_p2019_as2000 dgrowth
+	rename d_p2019_as2019 daging
+	rename ch_d pall
+	rename ch_gr pgr
+	rename ch_as pas
+	rename ch_epi pepi
+	format dgrowth %9.0fc 
+	format daging %9.0fc 
+	format pall %5.1fc 
+	format pgr %5.1fc 
+	format pas %5.1fc 
+	format pepi %5.1fc 
+
+	** Begin Table 
+	putdocx begin , font(calibri light, 9)
+	putdocx paragraph 
+		putdocx text ("TABLE S8. "), bold
+		putdocx text ("Contribution of changes in population growth, population aging, and rates of age-specific morbidity to the percentage change in mortality due to NCDs, 2000 to 2019. Men only."), 
+		** Place data 
+		putdocx table ss = data("Country d2000 d2019 dgrowth daging pall pgr pas pepi"), varnames note("(3) Expected DALYs due to population growth alone (4) Expected DALYs due to population aging (5) Percent change in DALYs (2000 to 2019) (6) Percent change due to growth (7) Percent change due to aging (8) Percent change due to age-stratified rate change", italic font("Calibri Light", 9))
+		** Line colors + Shadng
+		///putdocx table ss(2/10,.), border(bottom, single, "e6e6e6")
+		///putdocx table ss(12/20,.), border(bottom, single, "e6e6e6")
+		putdocx table ss(1,.),  shading("e6e6e6")
+		///putdocx table ss(.,1),  shading("e6e6e6")
+		** Column and Row headers
+		putdocx table ss(1,1) = ("Country"),  font(calibri light,10, "000000")
+		putdocx table ss(1,2) = ("(1) DALYs (2000)"),  font(calibri light,10, "000000")
+		putdocx table ss(1,3) = ("(2) DALYs (2019)"),  font(calibri light,10, "000000")
+		putdocx table ss(1,4) = ("(3)"),  font(calibri light,10, "000000")
+		putdocx table ss(1,5) = ("(4)"),  font(calibri light,10, "000000")
+		putdocx table ss(1,6) = ("(5)"),  font(calibri light,10, "000000")
+		putdocx table ss(1,7) = ("(6)"),  font(calibri light,10, "000000")
+		putdocx table ss(1,8) = ("(7)"),  font(calibri light,10, "000000")
+		putdocx table ss(1,9) = ("(8)"),  font(calibri light,10, "000000")
+
+		putdocx save "`outputpath'/decomp_daly_men", replace 
+restore
