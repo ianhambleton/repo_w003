@@ -123,6 +123,12 @@ preserve
     #delimit ;
     gr hbox drate4001 drate4002 drate600 drate5001 drate5002 drate800 drate311 drate312
         , 
+
+        over(sex, axis(off))
+        plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin))
+        graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin))
+        ysize(8) xsize(18)
+
         medtype(cline) medline(lc(gs16) lw(0.5) ) 
 
         box(1, lc("`cvd1'") fc("`cvd1'") )
@@ -142,14 +148,10 @@ preserve
         box(8, lc("`dia1'") fc("`dia1'") )
         marker(8, mcol("`dia2'") m(o) msize(3) )
 
-        plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin))
-        graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin))
-        ysize(8) xsize(18)
-
         ylab(0(2000)10000,
                 labc(gs8) labs(4) tstyle(major_notick) nogrid glc(gs16) angle(0) format(%9.0fc) labgap(1))    
-        yscale(range(-2500(100)1010))
-        ytitle("DALY rate (per 100,000)", size(5) color(gs8) margin(l=0 r=0 t=5 b=0)) 
+        yscale(range(-2500(100)1010) noextend)
+        ytitle("DALY rate (per 100,000)", size(5) color(gs8) margin(l=0 r=0 t=2 b=0)) 
 
         text(5 20 "Caribbean" , place(w) size(5) color("gs8") just(left) margin(l=0 r=1 t=4 b=2))
         text(5 9 "Rest of the Americas" , place(w) size(5) color("gs8") just(left) margin(l=0 r=1 t=4 b=2))
@@ -163,17 +165,21 @@ preserve
         text(4100 46  "Uruguay" , place(e) size(5) color("`can2'") just(left) margin(l=0 r=1 t=4 b=2))
         text(2800 8  "Mexico" , place(e) size(5) color("`dia2'") just(left) margin(l=0 r=1 t=4 b=2))
 
-
         legend(order(1 4 7) 
         label(1 "CVD")  
         label(4 "Cancer") 
         label(7 "Diabetes") 
         cols(3) position(6) margin(t=2) size(4.5) symxsize(6) symysize(4) color("gs8")
+        region(lw(none))
         )
-
         name(box1)
     ;
     #delimit cr
+
+    ** Export to Vector Graphic
+    ** DEC 22nd, 2022
+    graph export "`outputpath'\reports\graphics\fig3-6.svg", replace
+    graph export "`outputpath'\reports\graphics\fig3-6.pdf", replace
 restore
 
 /*

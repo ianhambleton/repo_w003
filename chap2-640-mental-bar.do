@@ -444,12 +444,15 @@ restore
                                     place(e) size(2.25) color(gs10)  just(left))
 			legend(off)
 			name(bar1)
+            saving("`outputpath'\reports\chapter2\fig2-14a", replace)
 			;
 #delimit cr	
 
 
 
 
+
+/*
     ** generate a local for the D3 color scheme
     colorpalette d3, 20 n(20) nograph
     local list r(p) 

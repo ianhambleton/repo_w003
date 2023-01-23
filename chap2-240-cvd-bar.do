@@ -455,8 +455,13 @@ restore
 			;
 #delimit cr	
 
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig2-5.svg", replace
+graph export "`outputpath'\reports\graphics\fig2-5.pdf", replace
 
 
+/*
 
     ** generate a local for the D3 color scheme
     colorpalette d3, 20 n(20) nograph
@@ -479,7 +484,6 @@ restore
     ** External causes
     local inj1 `r(p7)'
     local inj2 `r(p8)'
-
 
 
 

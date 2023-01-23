@@ -320,7 +320,7 @@ gen zhrh_hi = zhrh_xb + 1.96 * zhrh_se
 			
 			ylab(50(10)90,
 			valuelabel labc(gs8) labs(4) tstyle(major_notick) nogrid glc(gs16) angle(0) format(%9.0f))
-			yscale(noline lw(vthin) ) 
+			yscale(lw(vthin) lc(gs12)) 
 			ytitle("Life Expectancy at birth (yrs)", size(4) color(gs8) margin(l=2 r=2 t=2 b=2)) 
 
 			/// X-Axis text
@@ -328,7 +328,7 @@ gen zhrh_hi = zhrh_xb + 1.96 * zhrh_se
             text(90 -1.1 "Doctors and nurses (per 10,000 pop)",  place(e) size(4.25) color(gs8))
 
 			legend( size(4) position(5) ring(0) bc(gs8) color(gs8) bm(t=1 b=4 l=5 r=0) colf cols(2)
-			region(fcolor(gs16) lw(vthin) margin(l=2 r=2 t=2 b=2)) 
+			region(fcolor(gs16) lc(gs12) lw(vthin) margin(l=0 r=0 t=0 b=0)) 
 			order(3 4 5 6 7 8 9 10) 
 			lab(3 "North America") 
 			lab(4 "Southern Cone")
@@ -340,6 +340,7 @@ gen zhrh_hi = zhrh_xb + 1.96 * zhrh_se
             lab(10 "Mexico")
 			)
 			name(subregion)
+            saving("`outputpath'\reports\graphics\fig1-4-subregion.pdf", replace)
 			;
 #delimit cr	
 
@@ -376,7 +377,6 @@ gen zhrh_hi = zhrh_xb + 1.96 * zhrh_se
         /// (sc metric zhrh                 if wb==6 & ghocode==35 , msize(4) m(o) mlc("`le6'%75") mfc("`le6'%75") mlw(0.1))
         /// (sc metric zhrh                 if wb==7 & ghocode==35 , msize(4) m(o) mlc("`le7'%75") mfc("`le7'%75") mlw(0.1))
         /// (sc metric zhrh                 if wb==8 & ghocode==35 , msize(4) m(o) mlc("`le8'%75") mfc("`le8'%75") mlw(0.1))
-
 		,
 			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 		
 			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=3 t=5)) 
@@ -388,15 +388,15 @@ gen zhrh_hi = zhrh_xb + 1.96 * zhrh_se
 			
 			ylab(50(10)90,
 			valuelabel labc(gs8) labs(4) tstyle(major_notick) nogrid glc(gs16) angle(0) format(%9.0f))
-			yscale(noline lw(vthin) ) 
+			yscale(lw(vthin) lc(gs12)) 
 			ytitle("Life Expectancy at birth (yrs)", size(4) color(gs8) margin(l=2 r=2 t=2 b=2)) 
 
 			/// X-Axis text
-            text(90 2.8 "Health Expenditure (% GDP)",  place(e) size(4.25) color(gs8))
-            text(90 -1.1 "Doctors and nurses (per 10,000 pop)",  place(e) size(4.25) color(gs8))
+            ///text(90 2.8 "Health Expenditure (% GDP)",  place(e) size(4.25) color(gs8))
+            ///text(90 -1.1 "Doctors and nurses (per 10,000 pop)",  place(e) size(4.25) color(gs8))
 
 			legend( size(4) position(5) ring(0) bc(gs8) color(gs8) bm(t=1 b=4 l=5 r=0) colf cols(2)
-			region(fcolor(gs16) lw(vthin) margin(l=2 r=2 t=2 b=2)) 
+			region(fcolor(gs16) lc(gs12) lw(vthin) margin(l=0 r=0 t=0 b=0)) 
 			order(3 4 5 6) 
 			lab(3 "Low Income") 
 			lab(4 "Low-Middle Income")
@@ -404,6 +404,25 @@ gen zhrh_hi = zhrh_xb + 1.96 * zhrh_se
             lab(6 "High Income")
 			)
 			name(worldbank)
+            saving("`outputpath'\reports\graphics\fig1-4-worldbank.pdf", replace)
 			;
 #delimit cr	
 
+** Figure 1.4
+#delimit ;
+gr combine  "`outputpath'\reports\graphics\fig1-4-subregion.pdf" 
+            "`outputpath'\reports\graphics\fig1-4-worldbank.pdf"
+            ,
+			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 		
+			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=3 t=5)) 
+
+            rows(2) cols(1)
+            iscale(*0.7)
+            ycommon
+            ;
+#delimit cr
+
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig1-4.svg", replace
+graph export "`outputpath'\reports\graphics\fig1-4.pdf", replace

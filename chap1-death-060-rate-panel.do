@@ -531,9 +531,9 @@ local outer3 860 2106 890 2106 890 2111 860 2111 860 2106
             /// Legend Text
             text(875 2057 "Men",  place(w) size(2.5) color(gs8))   
             text(875 2072 "Women",  place(w) size(2.5) color(gs8))   
-            text(875 2087 "CMPN",  place(w) size(2.5) color(gs8))   
-            text(875 2102 "NCDs",  place(w) size(2.5) color(gs8))   
-            text(875 2117 "Injuries",  place(w) size(2.5) color(gs8))   
+            text(875 2088 "CMPN",  place(w) size(2.5) color(gs8))   
+            text(875 2103 "NCDs",  place(w) size(2.5) color(gs8))   
+            text(875 2118 "Injuries",  place(w) size(2.5) color(gs8))   
 
 			/// X-Axis text
             text(0 2000 "2000",  place(e) size(2.5) color(gs8))
@@ -560,3 +560,8 @@ local outer3 860 2106 890 2106 890 2111 860 2111 860 2106
 			name(mr_panel2)
 			;
 #delimit cr	
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig1-7.svg", replace
+graph export "`outputpath'\reports\graphics\fig1-7.pdf", replace
+

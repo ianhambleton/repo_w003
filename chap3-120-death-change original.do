@@ -179,8 +179,9 @@ local box2 0.5 230 33.5 230 33.5 290 0.5 290
 		ysize(15) xsize(10)
 	
 		xlabel(-50(50)150, labsize(2.5) nogrid labcolor(gs8))
-		xscale(noextend) 
+		xscale(noextend lc(gs12)) 
 		xtitle(" ", margin(top) color(gs0) size(2.5)) 
+		xtick(-50(50)150, tlc(gs12))
 
 		ylabel(
 			33	"Trinidad & Tobago"
@@ -216,7 +217,7 @@ local box2 0.5 230 33.5 230 33.5 290 0.5 290
 			3	"Nicaragua"
 			2	"Honduras"
 			1	"Dominican Rep"
-		, notick grid valuelabel angle(0) labsize(2.5) labcolor(gs10)) 
+		, notick grid glp("-") glw(0.1) glc(gs12) valuelabel angle(0) labsize(2.5) labcolor(gs10)) 
 		ytitle(" ", axis(1)) 
 		yscale(noline range(1(1)35))
 
@@ -230,6 +231,13 @@ local box2 0.5 230 33.5 230 33.5 290 0.5 290
 		label(5 "Change due to" "population growth") 
 		label(7 "Change in deaths") 
 		cols(2) position(6) size(2.5) symysize(3) color(gs8)
+		region(lw(none))
 		) 
 	;
 #delimit cr
+
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig3-3.svg", replace
+graph export "`outputpath'\reports\graphics\fig3-3.pdf", replace
+

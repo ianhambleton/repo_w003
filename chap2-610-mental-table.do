@@ -215,6 +215,8 @@ preserve
                     ;
             #delimit cr
         graph export "`outputpath'\graphics\spike`a'.png" , replace
+        graph export "`outputpath'\reports\graphics\table2-5\table2-5-col4-row`a'.pdf", replace
+        graph export "`outputpath'\reports\graphics\table2-5\table2-5-col4-row`a'.svg", replace
     }
 restore
 
@@ -519,6 +521,8 @@ preserve
                     ;
             #delimit cr
         graph export "`outputpath'\graphics\spike_daly`a'.png" , replace
+        graph export "`outputpath'\reports\graphics\table2-5\table2-5-col9-row`a'.pdf", replace
+        graph export "`outputpath'\reports\graphics\table2-5\table2-5-col9-row`a'.svg", replace
     }
 restore
 
@@ -643,6 +647,7 @@ preserve
         global sdaly`x' = col5[`x',2]
     }
 restore
+
 
 
 

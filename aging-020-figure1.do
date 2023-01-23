@@ -139,7 +139,6 @@ preserve
     list paho_subregion year perc1 arise1 perc2 perc3 arise3 if year==2060, sep(3) line(120)
 restore
 
-
 ** -------------------------------------------------------
 ** GRAPHIC
 ** ONLY using PAHO-SUBREGIONS
@@ -416,7 +415,7 @@ twoway
     text(-15 35 "20-69",  place(c) size(3) color(gs8))   
     text(-15 50   "70+",  place(c) size(3) color(gs8))   
 
-    text( -22 -20   "Data from: UN DESA, Population Division (2019). World Population Prospects (Ref. 16)" ,  place(e) size(2.5) color(gs10) just(left))
+    text( -22 -20   "Data from: UN DESA, Population Division (2019). World Population Prospects (Ref. 20)" ,  place(e) size(2.5) color(gs10) just(left))
 
     legend(off) 
     name(figure1)

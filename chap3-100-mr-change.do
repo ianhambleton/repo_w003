@@ -447,3 +447,9 @@ global sch_more = schange4
 			name(mr_change57)
 			;
 #delimit cr	
+
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig3-1.svg", replace
+graph export "`outputpath'\reports\graphics\fig3-1.pdf", replace
+

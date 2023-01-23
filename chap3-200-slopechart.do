@@ -215,3 +215,8 @@ local outer1    25 -4     -5 -4     -5 45      25 45      25 -4
 			name(slopechart_rf)
 			;
 #delimit cr	
+
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig3-7.svg", replace
+graph export "`outputpath'\reports\graphics\fig3-7.pdf", replace

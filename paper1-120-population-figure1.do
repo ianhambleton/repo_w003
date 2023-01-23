@@ -202,7 +202,7 @@ replace x1 = x1 + 25 if year==2020
 replace x1 = x1 + 50 if year==2060
 
 ** generate -locals- from the d3 qualitative-paired color scheme
-colorpalette sfso blue, nograph
+colorpalette sfso , blue nograph
 local list r(p) 
 ** Darkest to lightest
 local blu1 `r(p1)'

@@ -454,4 +454,8 @@ local yaxis_sym 2034 3900000
 			;
 #delimit cr	
 
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig2-1.svg", replace
+graph export "`outputpath'\reports\graphics\fig2-1.pdf", replace
 

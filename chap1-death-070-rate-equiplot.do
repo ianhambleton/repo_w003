@@ -258,6 +258,11 @@ sort sex ghecause drate
 			name(excess_death)
 			;
 #delimit cr	
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig1-8.svg", replace
+graph export "`outputpath'\reports\graphics\fig1-8.pdf", replace
+
 
 
 
@@ -468,3 +473,8 @@ sort sex ghecause drate
 			name(excess_death2)
 			;
 #delimit cr	
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig1-9.svg", replace
+graph export "`outputpath'\reports\graphics\fig1-9.pdf", replace
+

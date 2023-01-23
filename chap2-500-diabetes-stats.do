@@ -304,3 +304,9 @@ gen yr2 = yr1 + 0.2
 			;
 #delimit cr	
 
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig2-10.svg", replace
+graph export "`outputpath'\reports\graphics\fig2-10.pdf", replace
+
+

@@ -487,3 +487,10 @@ local line6 30 -15  34 -15
 			name(mr_IoD)
 			;
 #delimit cr	
+
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig3-4.svg", replace
+graph export "`outputpath'\reports\graphics\fig3-4.pdf", replace
+
+

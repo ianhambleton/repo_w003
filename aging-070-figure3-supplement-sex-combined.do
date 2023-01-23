@@ -167,7 +167,6 @@
 
 
 
-/*
 
 ** OVERALL CHANGE: Uncertainty intervals
 local tick1 0 -50   -0.75 -50 
@@ -221,7 +220,7 @@ graph export "`outputpath'/figure3a_ci.png", replace width(4000)
 
 
 
-*/
+
 
 ** ----------------------------------------------------------
 ** (A) REPEAT the original decomposition chart

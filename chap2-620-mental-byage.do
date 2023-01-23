@@ -107,7 +107,7 @@ merge 1:1 ghecause age16 using `t1'
 drop _merge age16
 collapse (sum) daly deaths , by(ghecause agroup)
 format deaths daly %15.0fc 
-/*reshape wide daly deaths , i(ghecause) j(agroup)
+reshape wide daly deaths , i(ghecause) j(agroup)
 egen deaths_tot = rowtotal(deaths1 deaths2 deaths3 deaths4 deaths5) 
 egen daly_tot = rowtotal(daly1 daly2 daly3 daly4 daly5) 
 sort ghecause deaths* daly* 
@@ -349,4 +349,9 @@ order mindaly maxdaly, after(daly5)
 			name(equiplot_byage)
 			;
 #delimit cr	
+
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig2-13.svg", replace
+graph export "`outputpath'\reports\graphics\fig2-13.pdf", replace
 

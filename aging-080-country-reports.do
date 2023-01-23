@@ -695,7 +695,7 @@ matrix T2W = (20, 60, 5, 5, 5, 5)
 matrix T3W = (23, 11, 11, 11, 11, 11, 11, 11)
 matrix T4W = (23, 3, 2, 15, 2, 2, 15, 2, 2, 15, 2, 2, 15)
 
-label define uid_ 28 "St Vincent & Gren" 1 "Antigua & Barbuda" 30 "Trinidad & Tobago" 13 "Dominican Rep", modify
+label define uid_ 28 "St Vincent & the Grenadines" 1 "Antigua & Barbuda" 30 "Trinidad & Tobago" 13 "Dominican Republic", modify
 
 forval a = 1(1)33 {
 
@@ -904,7 +904,7 @@ putpdf begin, pagesize(legal) font("Calibri Light", 10) margin(top,0.5cm) margin
     putpdf paragraph ,  font("Calibri Light", 10)
     putpdf text (" "), linebreak
     putpdf text ("HOW WILL "), bold font("Calibri Light", 12)
-    putpdf text ("the proportion of older adults change in the future in $cname"), font("Calibri Light", 11)
+    putpdf text ("the proportion of older adults change in the future in $cname?"), font("Calibri Light", 11)
 
     putpdf table t2 = (5,6), width(90%) width(T2W) halign(center)  
     putpdf table t2(3,2)=image("`outputpath'/figure_`a'_1.png")
@@ -967,7 +967,7 @@ putpdf begin, pagesize(legal) font("Calibri Light", 10) margin(top,0.5cm) margin
     putpdf paragraph ,  font("Calibri Light", 10)
     putpdf text (" "), linebreak
     putpdf text ("WHAT ARE ") , bold font("Calibri Light", 12)
-    putpdf text ("the number of deaths and the mortality rates from noncommunicable disease in $cname. "), font("Calibri Light", 11)
+    putpdf text ("the number of deaths and the mortality rates from noncommunicable disease in $cname?"), font("Calibri Light", 11)
     ** DALY rates for Combined NCDs
     putpdf table t3 = (8,8), width(90%) width(T3W) halign(center)  
     putpdf table t3(1/8,1/8), font("Calibri Light", 10, 000000) border(all, single, 999999)  
@@ -1043,7 +1043,7 @@ putpdf begin, pagesize(legal) font("Calibri Light", 10) margin(top,0.5cm) margin
     putpdf paragraph ,  font("Calibri Light", 10)
     putpdf text (" "), linebreak
     putpdf text ("HOW HAS ") , bold font("Calibri Light", 12)
-    putpdf text ("population growth, population aging, and epidemiological change affected the number of deaths in $cname. "), font("Calibri Light", 11)
+    putpdf text ("population growth, population aging, and epidemiological change affected the number of deaths in $cname?"), font("Calibri Light", 11)
     ** DALY rates for Combined NCDs
     putpdf table t4 = (6,13), width(90%) width(T4W) halign(center)  
     putpdf table t4(1/6,1/13), font("Calibri Light", 10, 000000) border(all, nil, 999999)  

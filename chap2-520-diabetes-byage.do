@@ -274,3 +274,8 @@ order mindaly maxdaly, after(daly5)
 			;
 #delimit cr	
 
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig2-11.svg", replace
+graph export "`outputpath'\reports\graphics\fig2-11.pdf", replace
+

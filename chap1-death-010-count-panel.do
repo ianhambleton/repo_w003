@@ -337,4 +337,8 @@ local outer3 16800 2069     17400 2069      17400 2074      16800 2074      1680
 			name(deaths_panel2)
 			;
 #delimit cr	
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig1-5.svg", replace
+graph export "`outputpath'\reports\graphics\fig1-5.pdf", replace
 

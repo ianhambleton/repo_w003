@@ -52,7 +52,7 @@ use  "`datapath'\from-who\deaths2", replace
     order dths dths_lo dths_hi, after(pop)
     drop _merge
     save "`datapath'\from-who\deaths2_ci", replace
-
+/*
 ** COUNTRY. SEX-SPECIFIC
 use  "`datapath'\from-who\deaths3", replace
     merge 1:1 year sex ghecause iso3n age18 using "`datapath'\from-who\deaths3_lo"

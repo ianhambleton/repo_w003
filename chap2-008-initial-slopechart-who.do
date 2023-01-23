@@ -199,6 +199,11 @@ sort morder
 			;
 #delimit cr	
 
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\box2-1.svg", replace
+graph export "`outputpath'\reports\graphics\box2-1.pdf", replace
+
 
 /*
 #delimit ;

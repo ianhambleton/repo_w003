@@ -295,7 +295,7 @@ preserve
 restore
 
 
-
+/*
 ** --------------------------------------------------------------
 ** GRAPHIC - Equiplot, ordered by size of depenency ratio in 2060
 ** NOW SORT by 2020
@@ -394,7 +394,7 @@ local yax1 " 1 "Belize" 2 "Honduras" 3 "Haiti" 4 "Nicaragua" 5 "Guatemala" 6 "Ba
             text( -1 45 "45" ,  place(c) size(3) color(gs8) just(right))
          
             text( -5 -35 "Note: Dotted horizontal lines separate groups of 6 or 7 countries for readibility. " ,  place(e) size(2.5) color(gs10) just(left))
-            text( -6 -35   "Data from: UN DESA, Population Division (2019). World Population Prospects (Ref. 16)" ,  place(e) size(2.5) color(gs10) just(left))
+            text( -6 -35   "Data from: UN DESA, Population Division (2019). World Population Prospects (Ref. 20)" ,  place(e) size(2.5) color(gs10) just(left))
 
             text( 41.25 58 "Dependency Ratio" ,  place(c) size(3) color(gs8) just(right))
             text( 40 55 "2020"      ,  place(c) size(3) color(gs8) just(right))

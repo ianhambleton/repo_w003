@@ -339,6 +339,7 @@ local outer1    25 -4     -5 -4     -5 45      25 45      25 -4
 
 			legend(off)
 			name(slopechart_daly)
+            saving("`outputpath'\reports\graphics\fig3-2-daly.pdf", replace)
 			;
 #delimit cr	
 
@@ -564,6 +565,27 @@ local outer1    25 -4     -5 -4     -5 45      25 45      25 -4
 
 			legend(off)
 			name(slopechart_mr)
+            saving("`outputpath'\reports\graphics\fig3-2-mortality.pdf", replace)
 			;
 #delimit cr	
+
+** Figure 3.2
+#delimit ;
+gr combine  "`outputpath'\reports\graphics\fig3-2-mortality.pdf" 
+            "`outputpath'\reports\graphics\fig3-2-daly.pdf"
+            ,
+			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 		
+			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=3 t=5)) 
+			ysize(12) xsize(7)
+
+            rows(1) cols(2)
+            iscale(*0.7)
+            ycommon
+            ;
+#delimit cr
+
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig2-2.svg", replace
+graph export "`outputpath'\reports\graphics\fig2-2.pdf", replace
 

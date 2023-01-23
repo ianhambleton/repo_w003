@@ -135,19 +135,19 @@ bysort year sixtyfive: egen totm65 = sum(pmale)
 sort year age_start1
 
 ** Blues
-colorpalette hcl blues, nograph 
+colorpalette hcl , blues nograph 
 local list r(p) 
     local blu1 `r(p4)'
     local blu2 `r(p8)'
     local blu3 `r(p12)'
 ** Purple
-colorpalette hcl purples, nograph 
+colorpalette hcl , purples nograph 
 local list r(p) 
     local pur1 `r(p4)'
     local pur2 `r(p8)'
     local pur3 `r(p12)'
 ** Red
-colorpalette hcl reds, nograph 
+colorpalette hcl , reds nograph 
 local list r(p) 
     local red1 `r(p4)'
     local red2 `r(p8)'
@@ -232,6 +232,9 @@ local line2 13.5 -10 13.5 30
         (rbar origin3b pchange3b age_start1 if pchange> 0 & age_start>=14 & year==2019 , horizontal barw(0.8) fcol("`red2'") lcol("`red2'") lw(0.1))           
                 ,
 
+		plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 		
+		graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=7 r=7 b=7 t=7)) 
+
 		subtitle(, nobox size(4))
 		///text(80  -1500 "percent 70+" , place(e)) 
 		ysize(6) xsize(14)
@@ -277,6 +280,13 @@ local line2 13.5 -10 13.5 30
 		;
 #delimit cr		
 
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig3-2.svg", replace
+graph export "`outputpath'\reports\graphics\fig3-2.pdf", replace
+
+
+/*
 
 ** Pchange by age group
 gen agegr1 = 1 if age_start1 <= 13 

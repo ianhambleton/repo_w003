@@ -220,7 +220,7 @@
         text(40  18 "Change due to age-" "specific mortality rates", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
         text(40 232 "Change due to" "population aging", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
         text(40 407 "Change due to" "population growth", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
-        text(40 583 "95% UI", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(40 583 "Sensitivity" "range", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
 
         /// x-axis numbers
         text(-3 -100 "-100", place(c) size(2) color("`gry'") just(center) margin(l=2 r=2 t=2 b=2))
@@ -473,7 +473,7 @@ putpdf begin, pagesize(letter) landscape font("Calibri Light", 10) margin(top,0.
         text(40  18 "Change due to age-" "specific mortality rates", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
         text(40 232 "Change due to" "population aging", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
         text(40 407 "Change due to" "population growth", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
-        text(40 583 "95% UI", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(40 583 "Sensitivity" "range", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
 
         /// x-axis numbers
         text(-3 -100 "-100", place(c) size(2) color("`gry'") just(center) margin(l=2 r=2 t=2 b=2))
@@ -725,7 +725,7 @@ putpdf begin, pagesize(letter) landscape font("Calibri Light", 10) margin(top,0.
         text(40  18 "Change due to age-" "specific mortality rates", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
         text(40 232 "Change due to" "population aging", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
         text(40 407 "Change due to" "population growth", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
-        text(40 583 "95% UI", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(40 583 "Sensitivity" "range", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
 
         /// x-axis numbers
         text(-3 -100 "-100", place(c) size(2) color("`gry'") just(center) margin(l=2 r=2 t=2 b=2))
@@ -983,7 +983,7 @@ putpdf begin, pagesize(letter) landscape font("Calibri Light", 10) margin(top,0.
         text(40  18 "Change due to age-" "specific DALY rates", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
         text(40 232 "Change due to" "population aging", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
         text(40 407 "Change due to" "population growth", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
-        text(40 583 "95% UI", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(40 583 "Sensitivity" "range", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
 
         /// x-axis numbers
         text(-3 -100 "-100", place(c) size(2) color("`gry'") just(center) margin(l=2 r=2 t=2 b=2))
@@ -1231,7 +1231,7 @@ putpdf begin, pagesize(letter) landscape font("Calibri Light", 10) margin(top,0.
         text(40  18 "Change due to age-" "specific DALY rates", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
         text(40 232 "Change due to" "population aging", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
         text(40 407 "Change due to" "population growth", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
-        text(40 583 "95% UI", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(40 583 "Sensitivity" "range", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
 
         /// x-axis numbers
         text(-3 -100 "-100", place(c) size(2) color("`gry'") just(center) margin(l=2 r=2 t=2 b=2))
@@ -1481,7 +1481,7 @@ putpdf begin, pagesize(letter) landscape font("Calibri Light", 10) margin(top,0.
         text(40  18 "Change due to age-" "specific DALY rates", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
         text(40 232 "Change due to" "population aging", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
         text(40 407 "Change due to" "population growth", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
-        text(40 583 "95% UI", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(40 583 "Sensitivity" "range", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
 
         /// x-axis numbers
         text(-3 -100 "-100", place(c) size(2) color("`gry'") just(center) margin(l=2 r=2 t=2 b=2))

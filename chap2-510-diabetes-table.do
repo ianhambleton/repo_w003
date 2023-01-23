@@ -169,6 +169,8 @@ preserve
                     ;
             #delimit cr
         graph export "`outputpath'\graphics\spike`a'.png" , replace
+        graph export "`outputpath'\reports\graphics\table2-4\table2-4-col4-row`a'.pdf", replace
+        graph export "`outputpath'\reports\graphics\table2-4\table2-4-col4-row`a'.svg", replace
     }
 restore
 
@@ -404,6 +406,8 @@ preserve
                     ;
             #delimit cr
         graph export "`outputpath'\graphics\spike_daly`a'.png" , replace
+        graph export "`outputpath'\reports\graphics\table2-4\table2-4-col9-row`a'.pdf", replace
+        graph export "`outputpath'\reports\graphics\table2-4\table2-4-col9-row`a'.svg", replace
     }
 restore
 
@@ -531,7 +535,7 @@ restore
 
 
 
-
+/*
 
 ** -----------------------------------------------------
 ** AUTOMATED WORD TABLE FOR REPORT

@@ -184,6 +184,8 @@ preserve
                     ;
             #delimit cr
         graph export "`outputpath'\graphics\spike`a'.png" , replace
+        graph export "`outputpath'\reports\graphics\table2-1\table2-1-col4-row`a'.pdf", replace
+        graph export "`outputpath'\reports\graphics\table2-1\table2-1-col4-row`a'.svg", replace
     }
 restore
 
@@ -250,8 +252,9 @@ preserve
                         ;
             #delimit cr
             graph export "`outputpath'\graphics\mrc`a'.png" , replace
+            ///graph export "`outputpath'\reports\graphics\table2-1\table2-1-col5-row`a'.pdf", replace
+            ///graph export "`outputpath'\reports\graphics\table2-1\table2-1-col5-row`a'.svg", replace            
         }
-
         else if change[`a'] == 2 {
             #delimit ;
                 gr twoway 
@@ -277,6 +280,8 @@ preserve
                         ;
             #delimit cr
             graph export "`outputpath'\graphics\mrc`a'.png" , replace
+            ///graph export "`outputpath'\reports\graphics\table2-1\table2-1-col5-row`a'.pdf", replace
+            ///graph export "`outputpath'\reports\graphics\table2-1\table2-1-col5-row`a'.svg", replace            
         }
     }
 restore
@@ -432,7 +437,9 @@ preserve
                     ;
             #delimit cr
         graph export "`outputpath'\graphics\spike_daly`a'.png" , replace
-    }
+        graph export "`outputpath'\reports\graphics\table2-1\table2-1-col9-row`a'.pdf", replace
+        graph export "`outputpath'\reports\graphics\table2-1\table2-1-col9-row`a'.svg", replace    
+        }
 restore
 
 
@@ -501,8 +508,9 @@ preserve
                         ;
             #delimit cr
             graph export "`outputpath'\graphics\dalyc`a'.png" , replace
-        }
-
+            ///graph export "`outputpath'\reports\graphics\table2-1\table2-1-col10-row`a'.pdf", replace
+            ///graph export "`outputpath'\reports\graphics\table2-1\table2-1-col10-row`a'.svg", replace            
+            }
         else if change[`a'] == 2 {
             #delimit ;
                 gr twoway 
@@ -528,7 +536,9 @@ preserve
                         ;
             #delimit cr
             graph export "`outputpath'\graphics\dalyc`a'.png" , replace
-        }
+            ///graph export "`outputpath'\reports\graphics\table2-1\table2-1-col10-row`a'.pdf", replace
+            ///graph export "`outputpath'\reports\graphics\table2-1\table2-1-col10-row`a'.svg", replace            
+         }
     }
 restore
 
@@ -558,7 +568,7 @@ preserve
 restore
 
 
-
+/*
 
 ** -----------------------------------------------------
 ** AUTOMATED WORD TABLE FOR REPORT

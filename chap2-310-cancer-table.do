@@ -209,6 +209,8 @@ preserve
                     ;
             #delimit cr
         graph export "`outputpath'\graphics\spike`a'.png" , replace
+        graph export "`outputpath'\reports\graphics\table2-2\table2-2-col4-row`a'.pdf", replace
+        graph export "`outputpath'\reports\graphics\table2-2\table2-2-col4-row`a'.svg", replace
     }
 restore
 
@@ -481,6 +483,8 @@ preserve
                     ;
             #delimit cr
         graph export "`outputpath'\graphics\spike_daly`a'.png" , replace
+        graph export "`outputpath'\reports\graphics\table2-2\table2-2-col9-row`a'.pdf", replace
+        graph export "`outputpath'\reports\graphics\table2-2\table2-2-col9-row`a'.svg", replace
     }
 restore
 

@@ -286,6 +286,15 @@ restore
 #delimit cr	
 
 
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig2-12.svg", replace
+graph export "`outputpath'\reports\graphics\fig2-12.pdf", replace
+
+
+
+
+/*
 ** ----------------------------------------
 ** ----------------------------------------
 ** APPENDIX CHARTS ADDED

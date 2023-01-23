@@ -492,8 +492,10 @@ preserve
                                     place(e) size(2.5) color(gs10)  just(left))
 			legend(off)
 			name(bar1)
+            saving("`outputpath'\reports\chapter2\fig2-7a", replace)
 			;
 #delimit cr	
+
 
 ** Large version of BAR CHART for Top 6-10 cancers
 #delimit ;
@@ -650,10 +652,34 @@ preserve
                                     place(e) size(2.5) color(gs10)  just(left))
 			legend(off)
 			name(bar2)
+            saving("`outputpath'\reports\chapter2\fig2-7b", replace)
 			;
 #delimit cr	
 
 
+** Figure 3.2
+#delimit ;
+gr combine  "`outputpath'\reports\chapter2\fig2-7a" 
+            "`outputpath'\reports\chapter2\fig2-7b"
+            ,
+			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 		
+			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=3 t=5)) 
+			ysize(18) xsize(14)
+
+            rows(2) cols(1)
+            iscale(*0.7)
+            ycommon
+            ;
+#delimit cr
+
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig2-7.svg", replace
+graph export "`outputpath'\reports\graphics\fig2-7.pdf", replace
+
+
+
+/*
 ** Smaller version of BAR CHART for Top 6-10 cancers
 #delimit ;
 	gr twoway 
@@ -789,6 +815,9 @@ preserve
 			name(bar3)
 			;
 #delimit cr	
+
+
+
 
 
 

@@ -336,6 +336,14 @@ restore
 			;
 #delimit cr	
 
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig2-9.svg", replace
+graph export "`outputpath'\reports\graphics\fig2-9.pdf", replace
+
+
+
+/*
 ** Add ISO code
 gen iso = "ATG" if region==1
 replace iso= "ARG" if region==2

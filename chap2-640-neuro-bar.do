@@ -331,10 +331,10 @@ restore
 
             /// INDEX OF DISPARITY VALUES
            /// text(-4.4 0.3 "ID{superscript:`ddagger'}" ,  place(c) size(7) color("`child'*0.5") just(center))
-           text(16.5 70 "IoD"                        ,  place(c) size(6) color("`child'*0.5") just(center))
-           text(19   89 "`teardrop'"               ,  place(c) size(2.5) color("`child'*0.5") just(center))
+           text(16.5 75 "IoD"                        ,  place(c) size(6) color("`child'*0.5") just(center))
+           text(19   94 "`teardrop'"               ,  place(c) size(2.5) color("`child'*0.5") just(center))
            text(10   75 "`id7'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
-           text(10   205 "`id8'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
+           text(10   202 "`id8'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
            text(10   320 "`id9'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
            text(10   440 "`id10'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
            text(10   555 "`id11'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
@@ -424,13 +424,34 @@ restore
                                     place(e) size(2.25) color(gs10)  just(left))
 			legend(off)
 			name(bar1)
+            saving("`outputpath'\reports\chapter2\fig2-14b", replace)
 			;
 #delimit cr	
 
+** Figure 2.14
+#delimit ;
+gr combine  "`outputpath'\reports\chapter2\fig2-14a" 
+            "`outputpath'\reports\chapter2\fig2-14b"
+            ,
+			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 		
+			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=3 t=5)) 
+			ysize(18) xsize(14)
+
+            rows(2) cols(1)
+            iscale(*0.68)
+            ycommon
+            ;
+#delimit cr
+
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig2-14.svg", replace
+graph export "`outputpath'\reports\graphics\fig2-14.pdf", replace
 
 
 
 
+/*
     ** generate a local for the D3 color scheme
     colorpalette d3, 20 n(20) nograph
     local list r(p) 

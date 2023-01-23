@@ -242,7 +242,7 @@ forval x = 2(1)19 {
     replace monitor2 = monitor2 + 1.7 if monitor>=`x' 
 }
 
-    colorpalette spectral, nograph
+    colorpalette Spectral , nograph
     local list r(p) 
     ** red
     local red1 `r(p2)'
@@ -389,13 +389,19 @@ forval x = 2(1)19 {
 
 
 			legend(size(2.25) position(7) ring(1) bm(t=1 b=1 l=1 r=0) colf cols(2) rowgap(0.5) colgap(0.5)
-			region(fcolor(gs16) lw(vthin) margin(l=0 r=0 t=0 b=0))
+			region(fcolor(gs16) lw(none) margin(l=0 r=0 t=0 b=0))
 			order(1 2 3 4)
 			lab(1 "not implemented")
 			lab(2 "partially implemented")
 			lab(3 "fully implemented")
 			lab(4 "not reported")
-            )
+			)
 			name(heat_map)
             ;
 #delimit cr
+
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig3-8.svg", replace
+graph export "`outputpath'\reports\graphics\fig3-8.pdf", replace
+

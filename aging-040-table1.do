@@ -183,6 +183,7 @@ use `create_table', clear
         ** (4) Annual growth rate of Older adults
         ** (5) Dependency Ratio
         gsort uid -year
+    
         gen pc1 = ( group3[_n] - group3[_n-1] ) / total[_n-1] if paho_subregion[_n] == paho_subregion[_n-1] 
         ** Growth rate all ages
         gen gr = round( ( ( ln(total[_n-1] / total[_n]) ) / 20 ) * 100 , 0.01)  if uid[_n] == uid[_n-1] 

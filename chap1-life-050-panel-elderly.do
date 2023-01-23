@@ -383,3 +383,8 @@ local outer4 27.6 16.5 	28.4 16.5 	28.4 17.9 	27.6 17.9 	27.6 16.5
 			name(le_panel2)
 			;
 #delimit cr	
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig1-2.svg", replace
+graph export "`outputpath'\reports\graphics\fig1-2.pdf", replace
+

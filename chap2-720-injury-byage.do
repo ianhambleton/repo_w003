@@ -312,3 +312,9 @@ order mindaly maxdaly, after(daly5)
 			name(equiplot_byage)
 			;
 #delimit cr	
+
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig2-15.svg", replace
+graph export "`outputpath'\reports\graphics\fig2-15.pdf", replace
+

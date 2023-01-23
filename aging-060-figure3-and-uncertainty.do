@@ -70,6 +70,7 @@
             gsort ch
             list iso3n ch gr as ep, sep(5) line(120)
 
+
     drop if iso3c=="LAC"
 
     ** Country names
@@ -78,7 +79,7 @@
     decode iso3n, gen(cname)
     labmask y, val(cname)
     #delimit ; 
-    label define y         30 "St.Vincent & Gren"
+    label define y          30 "St.Vincent & Gren"
                             14 "Antigua & Barbuda"
                             33 "Trinidad & Tobago"
                             1  "Dominican Rep", modify;
@@ -120,18 +121,22 @@
     local tick6 -1 200 -1.75 200
     local tick7 -1 250 -1.75 250
     local tick8a -1 350 -1.75 350
-    local tick8 -1 400 -1.75 400
-    local tick9 -1 450 -1.75 450
+    local tick8  -1 400 -1.75 400
+    local tick9  -1 450 -1.75 450
     local tick10 -1 500 -1.75 500
     local tick11 -1 550 -1.75 550
     local tick12 -1 600 -1.75 600
     local tick13 -1 650 -1.75 650
     local tick14 -1 700 -1.75 700
     ** Legend shapes
-    local leg_circle 39.5 -100 
-    local leg1 39 0   40 0   40 25   39 25   39 0 
-    local leg2 39 215   40 215   40 240   39 240   39 215 
-    local leg3 39 390   40 390   40 415   39 415   39 390 
+    local leg_circle 41.5 -100 
+    local leg1 41 0     42 0     42 25    41 25    41 0 
+    local leg2 41 215   42 215   42 240   41 240   41 215 
+    local leg3 41 390   42 390   42 415   41 415   41 390 
+    local leg_circle1   39 0 
+    local leg_circle2   39 150
+    local leg_circle3   39 300
+    local leg_circle4   39 450 
 
     ** We develop the graphic to be TWO graph panels in a single graphic
     ** This involves shifting the x-axis values for the CI chart
@@ -149,6 +154,35 @@ local dagger = uchar(8224)
 local ddagger = uchar(8225)
 local section = uchar(0167) 
 local teardrop = uchar(10045) 
+local flower = uchar(8270)
+
+** WHO data quality palette
+capture program drop colorpalette_bootstrap3
+
+program colorpalette_WHOdataq
+    c_local P #D7E4BD,#FEFFD7,#F8ECB8,#F2DCDB
+    c_local I high,med.high,mid.low,low
+end
+
+#delimit ;
+        colorpalette WHOdataq, nograph;
+        local list r(p);    local hi `r(p1)'; local medhi `r(p2)'; local medlo `r(p3)';  local lo `r(p4)';
+        #delimit cr
+#delimit cr
+
+#delimit ;
+        colorpalette RdYlBu , n(4) nograph;
+        local list r(p); local hi `r(p4)'; local medhi `r(p3)'; local medlo `r(p2)';  local lo `r(p1)';
+        #delimit cr
+#delimit cr
+
+#delimit ;
+        colorpalette cblind , nograph;
+        local list r(p); local hi `r(p7)'; local medhi `r(p4)'; local medlo `r(p3)';  local lo `r(p8)';
+        local list r(p); local hi `r(p5)'; local medhi `r(p6)'; local medlo `r(p3)';  local lo `r(p8)';
+        #delimit cr
+#delimit cr
+
 
 ** CHART
     sort ch
@@ -156,7 +190,7 @@ local teardrop = uchar(10045)
 	graph twoway 
 		/// PANEL A. DECOMPOSITION CHART
 		/// Vertical Zero Line
-		(line y realzero, lcolor("`red'*0.25") lp(l) lc("`blk'*0.25")) 
+		/// (line y realzero, lcolor("`red'*0.25") lp(l) lc("`blk'*0.25")) 
         ///epi change (usually negative, but not always)
 		(rbar zero ep y, horizontal barwidth(.75)  lc("`gre'*0.8") lw(0.05) fc("`gre'*0.8")) 
 		/// Change due to Population Aging
@@ -178,8 +212,45 @@ local teardrop = uchar(10045)
 		(line y realzero_shift, lp(l) lc("`blk'*0.25")) 
         ///epi change (usually negative, but not always)
 		(rbar ch2_shift ch3_shift y, barwidth(0.1) horizontal lc("`blk'") fc("`blk'") lw(0.1) ) 
-		/// Overall Change point
-		(scatter y ch_shift, msymbol(O) mlcolor("`blk'") mfcolor("gs16") msize(1.15) mlw(0.1))
+		/// Overall Change point (by country with WHO quality as circle fill color)
+		(scatter y ch_shift if iso3c=="CAN", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="USA", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+
+		(scatter y ch_shift if iso3c=="BLZ", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="CRI", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="SLV", msymbol(O) mlcolor("`blk'") mfcolor("`medhi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="GTM", msymbol(O) mlcolor("`blk'") mfcolor("`medhi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="HND", msymbol(O) mlcolor("`blk'") mfcolor("`lo'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="NIC", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="PAN", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+
+		(scatter y ch_shift if iso3c=="BOL", msymbol(O) mlcolor("`blk'") mfcolor("`lo'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="COL", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="ECU", msymbol(O) mlcolor("`blk'") mfcolor("`medlo'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="PER", msymbol(O) mlcolor("`blk'") mfcolor("`medlo'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="VEN", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+
+		(scatter y ch_shift if iso3c=="ARG", msymbol(O) mlcolor("`blk'") mfcolor("`medhi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="CHL", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="PRY", msymbol(O) mlcolor("`blk'") mfcolor("`medhi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="URY", msymbol(O) mlcolor("`blk'") mfcolor("`medhi'") msize(1.15) mlw(0.1))
+
+		(scatter y ch_shift if iso3c=="CUB", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="DOM", msymbol(O) mlcolor("`blk'") mfcolor("`medlo'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="HTI", msymbol(O) mlcolor("`blk'") mfcolor("`lo'") msize(1.15) mlw(0.1))
+
+		(scatter y ch_shift if iso3c=="ATG", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="BHS", msymbol(O) mlcolor("`blk'") mfcolor("`medhi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="BRB", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="GRD", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="GUY", msymbol(O) mlcolor("`blk'") mfcolor("`medhi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="JAM", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="LCA", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="VCT", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="SUR", msymbol(O) mlcolor("`blk'") mfcolor("`medhi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="TTO", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="BRA", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="MEX", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
 
         /// X-axes
         (function y=-1, range(350 700) lp("l") lc("`gry'") lw(0.1))
@@ -202,12 +273,18 @@ local teardrop = uchar(10045)
         (scatteri `tick14' , recast(line) lw(0.1) lc("`gry'"))
 
         /// Legend
+        /// ROW 1
         (scatteri `leg_circle' , msymbol(O) msize(1.15) mlw(0.1) mlc("`blk'") mfc("gs16"))
         (scatteri `leg1' , recast(area) lw(none) lc("`gry'%35") fc("`gre'%35")  )
         (scatteri `leg2' , recast(area) lw(none) lc("`gry'%35") fc("`ora'%35")  )
         (scatteri `leg3' , recast(area) lw(none) lc("`gry'%35") fc("`bl2'%35")  )
-        (function y=39.5, range(560 590) lp("l") lc("`blk'") lw(0.2))
-        (function y=38, range(-100 650) lp("l") lc("`gry'") lw(0.1))
+        (function y=41.5, range(560 590) lp("l") lc("`blk'") lw(0.2))
+        (function y=37.4, range(-100 700) lp("l") lc("`gry'%50") lw(0.1))
+        /// ROW 2
+        (scatteri `leg_circle1' , msymbol(O) msize(1.15) mlw(0.1) mlc("`blk'") mfc("`hi'"))
+        (scatteri `leg_circle2' , msymbol(O) msize(1.15) mlw(0.1) mlc("`blk'") mfc("`medhi'"))
+        (scatteri `leg_circle3' , msymbol(O) msize(1.15) mlw(0.1) mlc("`blk'") mfc("`medlo'"))
+        (scatteri `leg_circle4' , msymbol(O) msize(1.15) mlw(0.1) mlc("`blk'") mfc("`lo'"))
 
 		,
 		plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin)) 
@@ -219,16 +296,21 @@ local teardrop = uchar(10045)
 		xtitle(" ", margin(top) color(gs0) size(2)) 
 
 		ylabel(1(1)33
-		, notick valuelabel angle(0) labsize(2) labcolor("`gry'") grid glc(gs10) glw(0.15) glp(".")) 
+		, notick valuelabel angle(0) labsize(1.9) labcolor("`gry'") grid glc(gs10) glw(0.15) glp(".")) 
 		ytitle(" ", axis(1)) 
 		yscale(noline range(-5(1)36))
 
-        /// Legend text
-        text(40 -97 "Change" "in deaths", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
-        text(40  18 "Change due to age-" "specific mortality rates", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
-        text(40 232 "Change due to" "population aging", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
-        text(40 407 "Change due to" "population growth", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
-        text(40 583 "95% UI", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        /// Legend text (row 1)
+        text(42 -97 "Change" "in deaths", place(e) size(1.9) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(42  18 "Change due to age-" "specific mortality rates", place(e) size(1.9) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(42 232 "Change due to" "population aging", place(e) size(1.9) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(42 407 "Change due to" "population growth", place(e) size(1.9) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(42 583 "Sensitivity" "range", place(e) size(1.9) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        /// Legend text (row 2)
+        text(39.3 -5 "High quality `flower'", place(e) size(1.9) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(39.3 145 "Med-High quality `flower'", place(e) size(1.9) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(39.3 295 "Med-Low quality `flower'", place(e) size(1.9) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(39.3 445 "Low quality `flower'", place(e) size(1.9) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
 
         /// x-axis numbers
         text(-3 -100 "-100", place(c) size(2) color("`gry'") just(center) margin(l=2 r=2 t=2 b=2))
@@ -249,17 +331,17 @@ local teardrop = uchar(10045)
         text(-3 700 "250", place(c) size(2) color("`gry'") just(center) margin(l=2 r=2 t=2 b=2))
 
         /// x-axis title
-        text(-6 100 "Percent Change in Deaths" "2000-2019", place(c) size(2) color("gs8") just(center) margin(l=2 r=2 t=1 b=0))
-        text(-6 550 "Percent Change in Deaths" "2000-2019", place(c) size(2) color("gs8") just(center) margin(l=2 r=2 t=1 b=0))
-        text(35.5 240 "Percent" "Change`dagger'", place(c) size(2) color("gs8") just(center) margin(l=2 r=2 t=0 b=2))
-        text(35.5 300 "Extra" "Deaths`ddagger'", place(c) size(2) color("gs8") just(center) margin(l=2 r=2 t=0 b=2))
+        text(-5 300 "Percent Change in Deaths (2000-19)", place(c) size(2) color("gs8") just(center) margin(l=2 r=2 t=1 b=0))
+        ///text(-5 550 "Percent Change in Deaths (2000-19)", place(c) size(2) color("gs8") just(center) margin(l=2 r=2 t=1 b=0))
+        text(35.5 240 "Percent" "Change`dagger'", place(c) size(1.9) color("gs8") just(center) margin(l=2 r=2 t=0 b=2))
+        text(35.5 300 "Extra" "Deaths`ddagger'", place(c) size(1.9) color("gs8") just(center) margin(l=2 r=2 t=0 b=2))
 
 		legend(off order(5 1 2 3 10) keygap(2) rowgap(1) linegap(0.45)
 		label(1 "Change due to age-" "specific mortality rates")  
 		label(2 "Change due to" "population aging") 
 		label(3 "Change due to" "population growth") 
 		label(5 "Change" "in deaths") 
-		label(10 "95% Uncertainty" "interval") 
+		label(10 "Sensitivity" "range") 
 		cols(5) position(6) size(2) symysize(2) color(gs8)
 		) 
 		name(deaths_est)
@@ -271,6 +353,8 @@ graph export "`outputpath'/figure3a_deaths.png", replace width(4000)
 ** Table of Uncertainty
 sort iso3c
 
+
+
 ** ------------------------------------------
 ** PDF of Figure 3A
 ** DEATHS
@@ -278,7 +362,7 @@ sort iso3c
 putpdf begin, pagesize(letter) landscape font("Calibri Light", 10) margin(top,0.5cm) margin(bottom,0.25cm) margin(left,0.5cm) margin(right,0.25cm)
 ** FIGURE
     putpdf paragraph ,  font("Calibri Light", 10)
-    putpdf text ("Figure 3a"), bold font("Calibri Light", 12)
+    putpdf text ("Figure 3"), bold font("Calibri Light", 12)
     putpdf table t2 = (1,1), width(85%) halign(center) border(all,nil) 
     putpdf table t2(1,1)=image("`outputpath'/figure3a_deaths.png")
     putpdf paragraph ,  font("Calibri Light", 10)
@@ -289,12 +373,17 @@ putpdf begin, pagesize(letter) landscape font("Calibri Light", 10) margin(top,0.
     putpdf text ("`ddagger' "), bold
     putpdf text ("Extra number of deaths associated with the percentage change in deaths between 2000 and 2019"), linebreak
 
+    putpdf text ("`flower'"), bold
+    putpdf text ("World Health Organization country-level data quality classification. See Supplement spreadsheet for details (and see Ref. 22)"), linebreak
+
     putpdf text ("Data from: "), bold font("Calibri Light", 10)
-    putpdf text ("UN DESA, Population Division (2019). World Population Prospects (Ref. 16), and from WHO Global Health Estimates (2019). (Refs. 19-21)"), font("Calibri Light", 10)
-** Save the PDF
+    putpdf text ("UN DESA, Population Division (2019). World Population Prospects (Ref. 20), and from WHO Global Health Estimates (2019). (Refs. 21-23)"), font("Calibri Light", 10)
+
+    ** Save the PDF
     local c_date = c(current_date)
     local date_string = subinstr("`c_date'", " ", "", .)
-    putpdf save "`outputpath'/figure3a", replace
+    putpdf save "`outputpath'/figure3-revised", replace
+
 
 
 /*
@@ -488,7 +577,7 @@ putpdf begin, pagesize(letter) landscape font("Calibri Light", 10) margin(top,0.
         text(40  18 "Change due to age-" "specific mortality rates", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
         text(40 232 "Change due to" "population aging", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
         text(40 407 "Change due to" "population growth", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
-        text(40 583 "95% UI", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(40 583 "Sensitivity" "range", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
 
         /// x-axis numbers
         text(-3 -100 "-100", place(c) size(2) color("`gry'") just(center) margin(l=2 r=2 t=2 b=2))
@@ -541,7 +630,7 @@ putpdf begin, pagesize(letter) landscape font("Calibri Light", 10) margin(top,0.
     putpdf table t2(1,1)=image("`outputpath'/figure3a_deaths_lo.png")
     putpdf paragraph ,  font("Calibri Light", 10)
     putpdf text ("Data from: "), bold font("Calibri Light", 10)
-    putpdf text ("UN DESA, Population Division (2019). World Population Prospects (Ref. 16), and from WHO Global Health Estimates (2019). (Refs. 19-21)"), font("Calibri Light", 10)
+    putpdf text ("UN DESA, Population Division (2019). World Population Prospects (Ref. 20), and from WHO Global Health Estimates (2019). (Refs. 21-23)"), font("Calibri Light", 10)
 ** Save the PDF
     local c_date = c(current_date)
     local date_string = subinstr("`c_date'", " ", "", .)
@@ -740,7 +829,7 @@ putpdf begin, pagesize(letter) landscape font("Calibri Light", 10) margin(top,0.
         text(40  18 "Change due to age-" "specific mortality rates", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
         text(40 232 "Change due to" "population aging", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
         text(40 407 "Change due to" "population growth", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
-        text(40 583 "95% UI", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(40 583 "Sensitivity" "range", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
 
         /// x-axis numbers
         text(-3 -100 "-100", place(c) size(2) color("`gry'") just(center) margin(l=2 r=2 t=2 b=2))
@@ -795,14 +884,11 @@ putpdf begin, pagesize(letter) landscape font("Calibri Light", 10) margin(top,0.
     putpdf table t2(1,1)=image("`outputpath'/figure3a_deaths_hi.png")
     putpdf paragraph ,  font("Calibri Light", 10)
     putpdf text ("Data from: "), bold font("Calibri Light", 10)
-    putpdf text ("UN DESA, Population Division (2019). World Population Prospects (Ref. 16), and from WHO Global Health Estimates (2019). (Refs. 19-21)"), font("Calibri Light", 10)
+    putpdf text ("UN DESA, Population Division (2019). World Population Prospects (Ref. 20), and from WHO Global Health Estimates (2019). (Refs. 21-23)"), font("Calibri Light", 10)
 ** Save the PDF
     local c_date = c(current_date)
     local date_string = subinstr("`c_date'", " ", "", .)
     putpdf save "`outputpath'/figure3a_hi", replace
-
-
-
 
 
 
@@ -906,10 +992,14 @@ putpdf begin, pagesize(letter) landscape font("Calibri Light", 10) margin(top,0.
     local tick13 -1 650 -1.75 650
     local tick14 -1 700 -1.75 700
     ** Legend shapes
-    local leg_circle 39.5 -100 
-    local leg1 39 0   40 0   40 25   39 25   39 0 
-    local leg2 39 215   40 215   40 240   39 240   39 215 
-    local leg3 39 390   40 390   40 415   39 415   39 390 
+    local leg_circle 41.5 -100 
+    local leg1 41 0     42 0     42 25    41 25    41 0 
+    local leg2 41 215   42 215   42 240   41 240   41 215 
+    local leg3 41 390   42 390   42 415   41 415   41 390 
+    local leg_circle1   39 0 
+    local leg_circle2   39 150
+    local leg_circle3   39 300
+    local leg_circle4   39 450 
 
     ** We develop the graphic to be TWO graph panels in a single graphic
     ** This involves shifting the x-axis values for the CI chart
@@ -927,6 +1017,10 @@ local dagger = uchar(8224)
 local ddagger = uchar(8225)
 local section = uchar(0167) 
 local teardrop = uchar(10045) 
+local flower = uchar(8270)
+
+** WHO data quality palette
+capture program drop colorpalette_bootstrap3
 
 ** CHART
     sort ch
@@ -934,8 +1028,8 @@ local teardrop = uchar(10045)
 	graph twoway 
 		/// PANEL A. DECOMPOSITION CHART
 		/// Vertical Zero Line
-		(line y realzero, lcolor("`red'*0.25") lp(l) lc("`blk'*0.25")) 
-        ///epi change (usually negative, but not always)
+		/// (line y realzero, lcolor("`red'*0.25") lp(l) lc("`blk'*0.25")) 
+        /// epi change (usually negative, but not always)
 		(rbar zero ep y, horizontal barwidth(.75)  lc("`gre'*0.8") lw(0.05) fc("`gre'*0.8")) 
 		/// Change due to Population Aging
 		(rbar basepop addage y , horizontal barwidth(.75)  lc("`ora'*0.8") lw(0.05) fc("`ora'*0.8")) 
@@ -956,8 +1050,45 @@ local teardrop = uchar(10045)
 		(line y realzero_shift, lp(l) lc("`blk'*0.25")) 
         ///epi change (usually negative, but not always)
 		(rbar ch2_shift ch3_shift y, barwidth(0.1) horizontal lc("`blk'") fc("`blk'") lw(0.1) ) 
-		/// Overall Change point
-		(scatter y ch_shift, msymbol(O) mlcolor("`blk'") mfcolor("gs16") msize(1.15) mlw(0.1))
+		/// Overall Change point (by country with WHO quality as circle fill color)
+		(scatter y ch_shift if iso3c=="CAN", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="USA", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+
+		(scatter y ch_shift if iso3c=="BLZ", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="CRI", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="SLV", msymbol(O) mlcolor("`blk'") mfcolor("`medhi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="GTM", msymbol(O) mlcolor("`blk'") mfcolor("`medhi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="HND", msymbol(O) mlcolor("`blk'") mfcolor("`lo'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="NIC", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="PAN", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+
+		(scatter y ch_shift if iso3c=="BOL", msymbol(O) mlcolor("`blk'") mfcolor("`lo'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="COL", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="ECU", msymbol(O) mlcolor("`blk'") mfcolor("`medlo'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="PER", msymbol(O) mlcolor("`blk'") mfcolor("`medlo'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="VEN", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+
+		(scatter y ch_shift if iso3c=="ARG", msymbol(O) mlcolor("`blk'") mfcolor("`medhi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="CHL", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="PRY", msymbol(O) mlcolor("`blk'") mfcolor("`medhi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="URY", msymbol(O) mlcolor("`blk'") mfcolor("`medhi'") msize(1.15) mlw(0.1))
+
+		(scatter y ch_shift if iso3c=="CUB", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="DOM", msymbol(O) mlcolor("`blk'") mfcolor("`medlo'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="HTI", msymbol(O) mlcolor("`blk'") mfcolor("`lo'") msize(1.15) mlw(0.1))
+
+		(scatter y ch_shift if iso3c=="ATG", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="BHS", msymbol(O) mlcolor("`blk'") mfcolor("`medhi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="BRB", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="GRD", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="GUY", msymbol(O) mlcolor("`blk'") mfcolor("`medhi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="JAM", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="LCA", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="VCT", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="SUR", msymbol(O) mlcolor("`blk'") mfcolor("`medhi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="TTO", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="BRA", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
+		(scatter y ch_shift if iso3c=="MEX", msymbol(O) mlcolor("`blk'") mfcolor("`hi'") msize(1.15) mlw(0.1))
 
         /// X-axes
         (function y=-1, range(350 700) lp("l") lc("`gry'") lw(0.1))
@@ -980,12 +1111,18 @@ local teardrop = uchar(10045)
         (scatteri `tick14' , recast(line) lw(0.1) lc("`gry'"))
 
         /// Legend
+        /// ROW 1
         (scatteri `leg_circle' , msymbol(O) msize(1.15) mlw(0.1) mlc("`blk'") mfc("gs16"))
         (scatteri `leg1' , recast(area) lw(none) lc("`gry'%35") fc("`gre'%35")  )
         (scatteri `leg2' , recast(area) lw(none) lc("`gry'%35") fc("`ora'%35")  )
         (scatteri `leg3' , recast(area) lw(none) lc("`gry'%35") fc("`bl2'%35")  )
-        (function y=39.5, range(560 590) lp("l") lc("`blk'") lw(0.2))
-        (function y=38, range(-100 650) lp("l") lc("`gry'") lw(0.1))
+        (function y=41.5, range(560 590) lp("l") lc("`blk'") lw(0.2))
+        (function y=37.4, range(-100 700) lp("l") lc("`gry'%50") lw(0.1))
+        /// ROW 2
+        (scatteri `leg_circle1' , msymbol(O) msize(1.15) mlw(0.1) mlc("`blk'") mfc("`hi'"))
+        (scatteri `leg_circle2' , msymbol(O) msize(1.15) mlw(0.1) mlc("`blk'") mfc("`medhi'"))
+        (scatteri `leg_circle3' , msymbol(O) msize(1.15) mlw(0.1) mlc("`blk'") mfc("`medlo'"))
+        (scatteri `leg_circle4' , msymbol(O) msize(1.15) mlw(0.1) mlc("`blk'") mfc("`lo'"))
 
 		,
 		plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin)) 
@@ -997,16 +1134,21 @@ local teardrop = uchar(10045)
 		xtitle(" ", margin(top) color(gs0) size(2)) 
 
 		ylabel(1(1)33
-		, notick valuelabel angle(0) labsize(2) labcolor("`gry'") grid glc(gs10) glw(0.15) glp(".")) 
+		, notick valuelabel angle(0) labsize(1.9) labcolor("`gry'") grid glc(gs10) glw(0.15) glp(".")) 
 		ytitle(" ", axis(1)) 
 		yscale(noline range(-5(1)36))
 
         /// Legend text
-        text(40 -97 "Change" "in DALYs", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
-        text(40  18 "Change due to age-" "specific DALY rates", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
-        text(40 232 "Change due to" "population aging", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
-        text(40 407 "Change due to" "population growth", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
-        text(40 583 "95% UI", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(42 -97 "Change" "in DALYs", place(e) size(1.9) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(42  18 "Change due to age-" "specific DALY rates", place(e) size(1.9) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(42 232 "Change due to" "population aging", place(e) size(1.9) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(42 407 "Change due to" "population growth", place(e) size(1.9) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(42 583 "Sensitivity" "range", place(e) size(1.9) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        /// Legend text (row 2)
+        text(39.3 -5 "High quality `flower'", place(e) size(1.9) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(39.3 145 "Med-High quality `flower'", place(e) size(1.9) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(39.3 295 "Med-Low quality `flower'", place(e) size(1.9) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(39.3 445 "Low quality `flower'", place(e) size(1.9) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
 
         /// x-axis numbers
         text(-3 -100 "-100", place(c) size(2) color("`gry'") just(center) margin(l=2 r=2 t=2 b=2))
@@ -1027,17 +1169,17 @@ local teardrop = uchar(10045)
         text(-3 700 "250", place(c) size(2) color("`gry'") just(center) margin(l=2 r=2 t=2 b=2))
 
         /// x-axis title
-        text(-6 100 "Percent Change in DALYs" "2000-2019", place(c) size(2) color("gs8") just(center) margin(l=2 r=2 t=1 b=0))
-        text(-6 550 "Percent Change in DALYs" "2000-2019", place(c) size(2) color("gs8") just(center) margin(l=2 r=2 t=1 b=0))
-        text(35.5 240 "Percent" "Change`dagger'", place(c) size(2) color("gs8") just(center) margin(l=2 r=2 t=0 b=2))
-        text(35.5 300 "Extra" "DALYs`ddagger'", place(c) size(2) color("gs8") just(center) margin(l=2 r=2 t=0 b=2))
+        text(-5 300 "Percent Change in DALYs (2000-19)", place(c) size(2) color("gs8") just(center) margin(l=2 r=2 t=1 b=0))
+        /// text(-6 550 "Percent Change in DALYs" "2000-2019", place(c) size(2) color("gs8") just(center) margin(l=2 r=2 t=1 b=0))
+        text(35.5 240 "Percent" "Change`dagger'", place(c) size(1.9) color("gs8") just(center) margin(l=2 r=2 t=0 b=2))
+        text(35.5 310 "Extra" "DALYs`ddagger'", place(c) size(1.9) color("gs8") just(center) margin(l=2 r=2 t=0 b=2))
 
 		legend(off order(5 1 2 3 10) keygap(2) rowgap(1) linegap(0.45)
 		label(1 "Change due to age-" "specific DALY rates")  
 		label(2 "Change due to" "population aging") 
 		label(3 "Change due to" "population growth") 
 		label(5 "Change" "in DALYs") 
-		label(10 "95% Uncertainty" "interval") 
+		label(10 "Sensitivity" "range") 
 		cols(5) position(6) size(2) symysize(2) color(gs8)
 		) 
 		name(daly_est)
@@ -1046,13 +1188,13 @@ local teardrop = uchar(10045)
 graph export "`outputpath'/figure3b_daly.png", replace width(4000)
 
 ** ------------------------------------------
-** PDF of Figure 3A
+** PDF of Figure 4
 ** DALY
 ** ------------------------------------------
 putpdf begin, pagesize(letter) landscape font("Calibri Light", 10) margin(top,0.5cm) margin(bottom,0.25cm) margin(left,0.5cm) margin(right,0.25cm)
 ** FIGURE
     putpdf paragraph ,  font("Calibri Light", 10)
-    putpdf text ("Figure 3b"), bold font("Calibri Light", 12)
+    putpdf text ("Figure 4"), bold font("Calibri Light", 12)
     putpdf table t2 = (1,1), width(85%) halign(center) border(all,nil) 
     putpdf table t2(1,1)=image("`outputpath'/figure3b_daly.png")
     putpdf paragraph ,  font("Calibri Light", 10)
@@ -1063,12 +1205,16 @@ putpdf begin, pagesize(letter) landscape font("Calibri Light", 10) margin(top,0.
     putpdf text ("`ddagger' "), bold
     putpdf text ("Extra number of DALYs associated with the percentage change in DALYs between 2000 and 2019"), linebreak
 
+    putpdf text ("`flower'"), bold
+    putpdf text ("World Health Organization country-level data quality classification. See Supplement spreadsheet for details (and see Ref. 22)"), linebreak
+
     putpdf text ("Data from: "), bold font("Calibri Light", 10)
-    putpdf text ("UN DESA, Population Division (2019). World Population Prospects (Ref. 16), and from WHO Global Health Estimates (2019). (Refs. 19-21)"), font("Calibri Light", 10)
-** Save the PDF
+    putpdf text ("UN DESA, Population Division (2019). World Population Prospects (Ref. 20), and from WHO Global Health Estimates (2019). (Refs. 21-23)"), font("Calibri Light", 10)
+
+    ** Save the PDF
     local c_date = c(current_date)
     local date_string = subinstr("`c_date'", " ", "", .)
-    putpdf save "`outputpath'/figure3b", replace
+    putpdf save "`outputpath'/figure4-revised", replace
 
 
 /*
@@ -1261,7 +1407,7 @@ putpdf begin, pagesize(letter) landscape font("Calibri Light", 10) margin(top,0.
         text(40  18 "Change due to age-" "specific DALY rates", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
         text(40 232 "Change due to" "population aging", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
         text(40 407 "Change due to" "population growth", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
-        text(40 583 "95% UI", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(40 583 "Sensitivity" "range", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
 
         /// x-axis numbers
         text(-3 -100 "-100", place(c) size(2) color("`gry'") just(center) margin(l=2 r=2 t=2 b=2))
@@ -1314,7 +1460,7 @@ putpdf begin, pagesize(letter) landscape font("Calibri Light", 10) margin(top,0.
     putpdf table t2(1,1)=image("`outputpath'/figure3b_daly_lo.png")
     putpdf paragraph ,  font("Calibri Light", 10)
     putpdf text ("Data from: "), bold font("Calibri Light", 10)
-    putpdf text ("UN DESA, Population Division (2019). World Population Prospects (Ref. 16), and from WHO Global Health Estimates (2019). (Refs. 19-21)"), font("Calibri Light", 10)
+    putpdf text ("UN DESA, Population Division (2019). World Population Prospects (Ref. 20), and from WHO Global Health Estimates (2019). (Refs. 21-23)"), font("Calibri Light", 10)
 ** Save the PDF
     local c_date = c(current_date)
     local date_string = subinstr("`c_date'", " ", "", .)
@@ -1511,7 +1657,7 @@ putpdf begin, pagesize(letter) landscape font("Calibri Light", 10) margin(top,0.
         text(40  18 "Change due to age-" "specific DALY rates", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
         text(40 232 "Change due to" "population aging", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
         text(40 407 "Change due to" "population growth", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
-        text(40 583 "95% UI", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
+        text(40 583 "Sensitivity" "range", place(e) size(2) color("gs8") just(left) margin(l=2 r=2 t=1 b=0))
 
         /// x-axis numbers
         text(-3 -100 "-100", place(c) size(2) color("`gry'") just(center) margin(l=2 r=2 t=2 b=2))
@@ -1563,7 +1709,7 @@ putpdf begin, pagesize(letter) landscape font("Calibri Light", 10) margin(top,0.
     putpdf table t2(1,1)=image("`outputpath'/figure3b_daly_hi.png")
     putpdf paragraph ,  font("Calibri Light", 10)
     putpdf text ("Data from: "), bold font("Calibri Light", 10)
-    putpdf text ("UN DESA, Population Division (2019). World Population Prospects (Ref. 16), and from WHO Global Health Estimates (2019). (Refs. 19-21)"), font("Calibri Light", 10)
+    putpdf text ("UN DESA, Population Division (2019). World Population Prospects (Ref. 20), and from WHO Global Health Estimates (2019). (Refs. 21-23)"), font("Calibri Light", 10)
 ** Save the PDF
     local c_date = c(current_date)
     local date_string = subinstr("`c_date'", " ", "", .)

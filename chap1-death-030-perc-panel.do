@@ -288,3 +288,9 @@ local outer3 112 2060 117 2060 117 2064 112 2064 112 2060
 			name(deaths_age_panel2)
 			;
 #delimit cr	
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig1-6.svg", replace
+graph export "`outputpath'\reports\graphics\fig1-6.pdf", replace
+
+

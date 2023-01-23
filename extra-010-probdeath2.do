@@ -278,3 +278,7 @@ local line8 10.5 0 10.5 -2
 			;
 #delimit cr	
 
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig2-3.svg", replace
+graph export "`outputpath'\reports\graphics\fig2-3.pdf", replace

@@ -237,7 +237,6 @@ restore
     replace arat2000 = . if cod == 20 | cod==21 | cod==25 | cod==27     
     replace arat2019 = . if cod == 20 | cod==21 | cod==25 | cod==27     
 
-/*
 
 ** -----------------------------------------------------
 ** GRAPHICS COLOR SCHEME
@@ -474,6 +473,11 @@ order drat2019, after(cod)
 			name(gr_2019)
 			;
 #delimit cr	
+
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\graphics\fig3-5.svg", replace
+graph export "`outputpath'\reports\graphics\fig3-5.pdf", replace
 
 
 
