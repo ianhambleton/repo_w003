@@ -36,7 +36,7 @@ use "`datapath'\from-who\chap2_000_adjusted", clear
 ** 9-APR-2022
 ** Percentage of deaths and DALYs from conditions reported in this report
 ** Used in Intro to Chapter 3
-**preserve
+preserve
     keep if region==2000 & sex==3 & ghecause>=100 
     keep dths daly ghecause year
     ** Label the broad causes
@@ -61,7 +61,7 @@ use "`datapath'\from-who\chap2_000_adjusted", clear
     gen perc1 = (report_dtot / dths100) * 100
     gen perc2 = (report_dalytot / daly100) * 100
     list year perc1 perc2
-/*restore
+restore
 
 
 ** Restrict to Americas ONLY
