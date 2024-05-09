@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
+    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -175,8 +175,8 @@ sort sex ghecause drate
 			ylab(	1 	"North America"
 					2 	"Mexico"
 					3 	"Andean"
-					4 	"non-Latin Caribbean"
-					5 	"Couthern Cone"
+					4 	"Non-Latin Caribbean"
+					5 	"Southern Cone"
 					6 	"Brazil"
 					7 	"Central America"
 					8 	"Latin Caribbean"
@@ -186,14 +186,14 @@ sort sex ghecause drate
 					13 	"Central America"
 					14 	"Brazil"
 					15 	"Mexico"
-					16 	"non-Latin Caribbean"
+					16 	"Non-Latin Caribbean"
 					17 	"Latin Caribbean"
 					19 	"North America"
 					20 	"Southern Cone"
 					21 	"Mexico"
 					22 	"Andean"
 					23 	"Brazil"
-					24 	"non-Latin Caribbean"
+					24 	"Non-Latin Caribbean"
 					25 	"Latin Caribbean"
 					26 	"Central America"
 					,
@@ -205,7 +205,7 @@ sort sex ghecause drate
 			ylab(	
 					1	"North America"
 					2	"Mexico"
-					3	"non-Latin Caribbean"
+					3	"Non-Latin Caribbean"
 					4	"Southern Cone"
 					5	"Andean"
 					6	"Brazil"
@@ -217,14 +217,14 @@ sort sex ghecause drate
 					13	"Brazil"
 					14	"Mexico"
 					15	"Central America"
-					16	"non-Latin Caribbean"
+					16	"Non-Latin Caribbean"
 					17	"Latin Caribbean"
 					19	"Southern Cone"
 					20	"Mexico"
 					21	"Andean"
 					22	"Brazil"
 					23	"North America"
-					24	"non-Latin Caribbean"
+					24	"Non-Latin Caribbean"
 					25	"Central America"
 					26	"Latin Caribbean"
 					,
@@ -235,7 +235,7 @@ sort sex ghecause drate
             /// Legend Text
             text(27 170 "Men",  place(c) size(3) color(gs8))   
             text(27 300 "Women",  place(c) size(3) color(gs8))   
-            text(-3 225 "Mortality Rate Excess (per 100,000 people)",  place(c) size(3) color(gs8))   
+            text(-3 225 "Excess mortality rate (per 100 000 people)",  place(c) size(3) color(gs8))   
             text(-1 0 "0",  place(c) size(3) color(gs8))   
             text(-1 450 "0",  place(c) size(3) color(gs8))   
 			/// Values
@@ -260,8 +260,8 @@ sort sex ghecause drate
 #delimit cr	
 ** Export to Vector Graphic
 ** DEC 22nd, 2022
-graph export "`outputpath'\reports\graphics\fig1-8.svg", replace
-graph export "`outputpath'\reports\graphics\fig1-8.pdf", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig8.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig8.pdf", replace
 
 
 
@@ -447,7 +447,7 @@ sort sex ghecause drate
             /// Legend Text
             text(15.3 380 "Men",  place(c) size(3) color(gs8))   
             text(15.3 750 "Women",  place(c) size(3) color(gs8))   
-            text(-3 550 "Mortality Rate Excess (per 100,000 people)",  place(c) size(3) color(gs8))   
+            text(-3 550 "Excess mortality rate (per 100 000 people)",  place(c) size(3) color(gs8))   
             text(-1 0 "0",  place(c) size(3) color(gs8))   
             text(-1 1160 "0",  place(c) size(3) color(gs8))   
 
@@ -475,6 +475,6 @@ sort sex ghecause drate
 #delimit cr	
 ** Export to Vector Graphic
 ** DEC 22nd, 2022
-graph export "`outputpath'\reports\graphics\fig1-9.svg", replace
-graph export "`outputpath'\reports\graphics\fig1-9.pdf", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig9.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig9.pdf", replace
 

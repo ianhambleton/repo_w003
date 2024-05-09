@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
+    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -410,7 +410,7 @@ label define yorder_
     13    "Pancreas cancer"
     14    "Colorectal cancer"
     15    "Lymphomas, myelomas"
-    16    "Leukaemia"
+    16    "Leukemia"
 
     18    "Asthma"
     19    "COPD"
@@ -453,7 +453,7 @@ local line6 30 -15  34 -15
         (rbar origin1 id yorder2 if cod>=19 & cod<=28, horizontal barw(0.6) fcol("`men2'") lcol("`men2'") lw(0.1))           
         (rbar origin1 id yorder2 if cod>=29 & cod<=33, horizontal barw(0.6) fcol("`inj2'") lcol("`inj2'") lw(0.1))           
         (sc yorder2 xlocation1, msymbol(i) mlabel(id_i) mlabsize(2) mlabcol(gs8) mlabp(0))
-        (scatteri -0.5 50 "Index of Disparity, 2019" , msymbol(i) mlabpos(0) mlabcol(gs8) mlabsize(2.5) mlabangle(0))
+        (scatteri -0.5 50 "Index of disparity, 2019" , msymbol(i) mlabpos(0) mlabcol(gs8) mlabsize(2.5) mlabangle(0))
         /// (scatteri `line1' , recast(line) lw(0.2) lc("gs12") fc("gs12") lp("l") )
         /// (scatteri `line2' , recast(line) lw(0.2) lc("gs12") fc("gs12") lp("l") )
         /// (scatteri `line3' , recast(line) lw(0.2) lc("gs12") fc("gs12") lp("l") )
@@ -490,7 +490,7 @@ local line6 30 -15  34 -15
 
 ** Export to Vector Graphic
 ** DEC 22nd, 2022
-graph export "`outputpath'\reports\graphics\fig3-4.svg", replace
-graph export "`outputpath'\reports\graphics\fig3-4.pdf", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig29.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig29.pdf", replace
 
 

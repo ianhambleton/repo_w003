@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
+    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -193,23 +193,23 @@ local outer1    25 -4     -5 -4     -5 45      25 45      25 -4
             text(0.2 81 "Tropical" "Latin" "America"        ,  place(c) size(2.5) color("`gry1'"))
 
             /// Disease coding 
-            text(1 -5 "High Fasting" "Plasma Glucose"       ,  place(w) size(2.5) color("`gry1'") just(right))
-            text(2 -5 "High Systolic" "Blood Pressure"      ,  place(w) size(2.5) color("`gry1'") just(right))
-            text(3 -5 "High Body" "Mass Index"              ,  place(w) size(2.5) color("`gry1'") just(right))
+            text(1 -5 "High fasting" "plasma glucose"       ,  place(w) size(2.5) color("`gry1'") just(right))
+            text(2 -5 "High systolic" "blood pressure"      ,  place(w) size(2.5) color("`gry1'") just(right))
+            text(3 -5 "High body" "mass index"              ,  place(w) size(2.5) color("`gry1'") just(right))
             text(4 -5 "Tobacco"                             ,  place(w) size(2.5) color("`gry1'") just(right))
-            text(5 -5 "Dietary Risks"                       ,  place(w) size(2.5) color("`gry1'") just(right))
-            text(6 -5 "Alcohol Use"                         ,  place(w) size(2.5) color("`gry1'") just(right))
-            text(7 -5 "High LDL" "Cholesterol"              ,  place(w) size(2.5) color("`gry1'") just(right))
-            text(8 -5 "Kidney" "Dysfunction"                ,  place(w) size(2.5) color("`gry1'") just(right))
+            text(5 -5 "Dietary risks"                       ,  place(w) size(2.5) color("`gry1'") just(right))
+            text(6 -5 "Alcohol use"                         ,  place(w) size(2.5) color("`gry1'") just(right))
+            text(7 -5 "High LDL" "cholesterol"              ,  place(w) size(2.5) color("`gry1'") just(right))
+            text(8 -5 "Kidney" "dysfunction"                ,  place(w) size(2.5) color("`gry1'") just(right))
 
-            text(1 87 "High Body" "Mass Index"              ,  place(e) size(2.5) color("`gry1'") just(left))
-            text(2 87 "High Systolic" "Blood Pressure"      ,  place(e) size(2.5) color("`gry1'") just(left))
+            text(1 87 "High body" "mass index"              ,  place(e) size(2.5) color("`gry1'") just(left))
+            text(2 87 "High systolic" "blood pressure"      ,  place(e) size(2.5) color("`gry1'") just(left))
             text(3 87 "Tobacco"                             ,  place(e) size(2.5) color("`gry1'") just(left))
-            text(4 87 "High Fasting" "Plasma Glucose"       ,  place(e) size(2.5) color("`gry1'") just(left)) 
-            text(5 87 "Dietary Risks"                       ,  place(e) size(2.5) color("`gry1'") just(left)) 
-            text(6 87 "Alcohol Use"                         ,  place(e) size(2.5) color("`gry1'") just(left)) 
-            text(7 87 "High LDL" "Cholesterol"              ,  place(e) size(2.5) color("`gry1'") just(left))
-            text(8 87 "Kidney" "Dysfunction"                ,  place(e) size(2.5) color("`gry1'") just(left))
+            text(4 87 "High fasting" "plasma glucose"       ,  place(e) size(2.5) color("`gry1'") just(left)) 
+            text(5 87 "Dietary risks"                       ,  place(e) size(2.5) color("`gry1'") just(left)) 
+            text(6 87 "Alcohol use"                         ,  place(e) size(2.5) color("`gry1'") just(left)) 
+            text(7 87 "High LDL" "cholesterol"              ,  place(e) size(2.5) color("`gry1'") just(left))
+            text(8 87 "Kidney" "dysfunction"                ,  place(e) size(2.5) color("`gry1'") just(left))
 
 			legend(off)
 			name(slopechart_rf)
@@ -218,5 +218,5 @@ local outer1    25 -4     -5 -4     -5 45      25 45      25 -4
 
 ** Export to Vector Graphic
 ** DEC 22nd, 2022
-graph export "`outputpath'\reports\graphics\fig3-7.svg", replace
-graph export "`outputpath'\reports\graphics\fig3-7.pdf", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig32.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig32.pdf", replace

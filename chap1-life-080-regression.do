@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
+    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -321,21 +321,21 @@ gen zhrh_hi = zhrh_xb + 1.96 * zhrh_se
 			ylab(50(10)90,
 			valuelabel labc(gs8) labs(4) tstyle(major_notick) nogrid glc(gs16) angle(0) format(%9.0f))
 			yscale(lw(vthin) lc(gs12)) 
-			ytitle("Life Expectancy at birth (yrs)", size(4) color(gs8) margin(l=2 r=2 t=2 b=2)) 
+			ytitle("Life expectancy at birth (yrs)", size(4) color(gs8) margin(l=2 r=2 t=2 b=2)) 
 
 			/// X-Axis text
-            text(90 2.8 "Health Expenditure (% GDP)",  place(e) size(4.25) color(gs8))
-            text(90 -1.1 "Doctors and nurses (per 10,000 pop)",  place(e) size(4.25) color(gs8))
+            text(90 2.8 "Health expenditure (% GDP)",  place(e) size(4.25) color(gs8))
+            text(90 -1.1 "Doctors and nurses (per 10 000 pop.)",  place(e) size(4.25) color(gs8))
 
-			legend( size(4) position(5) ring(0) bc(gs8) color(gs8) bm(t=1 b=4 l=5 r=0) colf cols(2)
-			region(fcolor(gs16) lc(gs12) lw(vthin) margin(l=0 r=0 t=0 b=0)) 
+			legend(nobox size(4) position(5) ring(0) bc(gs8) color(gs8) bm(t=1 b=4 l=5 r=0) colf cols(2)
+			region(fcolor(gs16) lc(gs16) lw(vthin) margin(l=0 r=0 t=0 b=0)) 
 			order(3 4 5 6 7 8 9 10) 
 			lab(3 "North America") 
 			lab(4 "Southern Cone")
             lab(5 "Central America")
             lab(6 "Andean")
             lab(7 "Latin Caribbean")
-            lab(8 "non-Latin Caribbean")
+            lab(8 "Non-Latin Caribbean")
             lab(9 "Brazil")
             lab(10 "Mexico")
 			)
@@ -343,6 +343,10 @@ gen zhrh_hi = zhrh_xb + 1.96 * zhrh_se
             saving("`outputpath'\reports\graphics\fig1-4-subregion.pdf", replace)
 			;
 #delimit cr	
+
+** Export to Vector Graphic
+graph export "`outputpath'\reports\2024-edits\graphics\fig4a.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig4a.pdf", replace
 
 
 ** (1) GRAPH BY WORLD BANK INCOME GROUPS
@@ -389,24 +393,29 @@ gen zhrh_hi = zhrh_xb + 1.96 * zhrh_se
 			ylab(50(10)90,
 			valuelabel labc(gs8) labs(4) tstyle(major_notick) nogrid glc(gs16) angle(0) format(%9.0f))
 			yscale(lw(vthin) lc(gs12)) 
-			ytitle("Life Expectancy at birth (yrs)", size(4) color(gs8) margin(l=2 r=2 t=2 b=2)) 
+			ytitle("Life expectancy at birth (yrs)", size(4) color(gs8) margin(l=2 r=2 t=2 b=2)) 
 
 			/// X-Axis text
-            ///text(90 2.8 "Health Expenditure (% GDP)",  place(e) size(4.25) color(gs8))
-            ///text(90 -1.1 "Doctors and nurses (per 10,000 pop)",  place(e) size(4.25) color(gs8))
+            text(90 2.8 "Health expenditure (% GDP)",  place(e) size(4.25) color(gs8))
+            text(90 -1.1 "Doctors and nurses (per 10 000 pop.)",  place(e) size(4.25) color(gs8))
 
 			legend( size(4) position(5) ring(0) bc(gs8) color(gs8) bm(t=1 b=4 l=5 r=0) colf cols(2)
-			region(fcolor(gs16) lc(gs12) lw(vthin) margin(l=0 r=0 t=0 b=0)) 
+			region(fcolor(gs16) lc(gs16) lw(vthin) margin(l=0 r=0 t=0 b=0)) 
 			order(3 4 5 6) 
-			lab(3 "Low Income") 
-			lab(4 "Low-Middle Income")
-            lab(5 "High-Middle Income")
-            lab(6 "High Income")
+			lab(3 "Low income") 
+			lab(4 "Low-middle income")
+            lab(5 "High-middle income")
+            lab(6 "High income")
 			)
 			name(worldbank)
             saving("`outputpath'\reports\graphics\fig1-4-worldbank.pdf", replace)
 			;
 #delimit cr	
+
+** Export to Vector Graphic
+graph export "`outputpath'\reports\2024-edits\graphics\fig4b.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig4b.pdf", replace
+
 
 ** Figure 1.4
 #delimit ;
@@ -424,5 +433,5 @@ gr combine  "`outputpath'\reports\graphics\fig1-4-subregion.pdf"
 
 ** Export to Vector Graphic
 ** DEC 22nd, 2022
-graph export "`outputpath'\reports\graphics\fig1-4.svg", replace
-graph export "`outputpath'\reports\graphics\fig1-4.pdf", replace
+** graph export "`outputpath'\reports\2024-edits\graphics\fig4.svg", replace
+** graph export "`outputpath'\reports\2024-edits\graphics\fig4.pdf", replace

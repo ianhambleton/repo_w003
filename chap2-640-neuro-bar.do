@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
+    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -234,8 +234,8 @@ gen origin12 = 600
 replace scaler12 = scaler12 + 600
 
 ** St Vincent and the Grenadines -- Too Long - Abbreviate
-replace region_lab = "St.Vincent & Gren" if region_lab == "Saint Vincent and the Grenadines"
-replace region_lab = "Antigua & Barbuda" if region_lab == "Antigua and Barbuda"
+replace region_lab = "Saint Vincent" if region_lab == "Saint Vincent and the Grenadines"
+** replace region_lab = "Antigua & Barbuda" if region_lab == "Antigua and Barbuda"
 
 
 ** COUNTRIES with High and Low Mortality Rates
@@ -341,7 +341,7 @@ restore
            text(10   680 "`id12'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
 
            /// Y-Axis text 
-           text(-29.5 340 "Age-standardized DALY rate (per 100,000)" ,  
+           text(-29.5 340 "Age-standardized DALY rate (per 100 000)" ,  
                                     place(c) size(3.5) color("gs8") just(center))
 
            /// High Rate Countries
@@ -355,7 +355,7 @@ restore
            text(-11 105 "`cid7_64' (4)",  place(w) size(3) color("`child'*0.5") just(right))
            text(-15 105 "`cid7_63' (3)",  place(w) size(3) color("`child'*0.5") just(right))
            text(-19 105 "`cid7_62' (2)",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-23 105 "`cid7_61' (1)",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-23 105 "`cid7_61'`dagger' (1)",  place(w) size(3) color("`child'*0.5") just(right))
 
            /// Migraine
            text(55 225  "`cid8_80'",  place(w) size(3) color("`child'*0.5") just(right))
@@ -420,14 +420,24 @@ restore
            /// NOTE
            text(-34.5 0.5 "`teardrop' IoD = Index of Disparity. Measures the average (mean) deviation of each country rate from the regional rate, as a percentage." , 
                                     place(e) size(2.25) color(gs10) just(left) )
-           text(-38.5 0.5 "`dagger' BLACK BAR is the DALY rate for the Region of the Americas." ,  
+           text(-38.5 0.5 "`dagger' Saint Vincent = Saint Vincent and the Grenadines." ,  
                                     place(e) size(2.25) color(gs10)  just(left))
+           text(-42.5 0.5 "`ddagger' BLACK BAR is the mortality rate for the Region of the Americas." ,  
+                                    place(e) size(2.5) color(gs10)  just(left))
 			legend(off)
 			name(bar1)
             saving("`outputpath'\reports\chapter2\fig2-14b", replace)
 			;
 #delimit cr	
 
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\2024-edits\graphics\fig23b.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig23b.pdf", replace
+
+
+
+/*
 ** Figure 2.14
 #delimit ;
 gr combine  "`outputpath'\reports\chapter2\fig2-14a" 

@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
+    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -299,7 +299,7 @@ local outer3 16800 2069     17400 2069      17400 2074      16800 2074      1680
 			ylab(0(2000)14000,
 			valuelabel labc(gs8) labs(3) tlc(gs8) nogrid glc(gs16) angle(0) format(%9.0f))
 			yscale(lw(vthin) lc(gs8) range(-500(500)18000) noextend) 
-			ytitle("Number of deaths (1,000s)", color(gs8) size(3) margin(l=1 r=1 t=1 b=1)) 
+			ytitle("Number of deaths (1 000s)", color(gs8) size(3) margin(l=1 r=1 t=1 b=1)) 
 
             /// Region Titles 
             text(15000 2010 "Eastern" "Mediterranean",  place(c) size(3) color(gs5))
@@ -339,6 +339,6 @@ local outer3 16800 2069     17400 2069      17400 2074      16800 2074      1680
 #delimit cr	
 ** Export to Vector Graphic
 ** DEC 22nd, 2022
-graph export "`outputpath'\reports\graphics\fig1-5.svg", replace
-graph export "`outputpath'\reports\graphics\fig1-5.pdf", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig5.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig5.pdf", replace
 

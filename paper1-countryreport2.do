@@ -289,8 +289,9 @@ save `for_report', replace
 ** GRAPHIC
 ** ONLY using PAHO-SUBREGIONS
 ** -------------------------------------------------------
-forval a = 1(1)33 {
-    preserve
+local a = 4
+**forval a = 1(1)33 {
+    **preserve
         ** GRAPH of women and men combined
         gen keep = 0 
         replace keep = 1 if uid == `a' 
@@ -488,14 +489,16 @@ forval a = 1(1)33 {
         #delimit cr 
         graph export "`outputpath'/figure_`a'_`r'.png", replace width(4000)
         }
-     restore
-}
+    ** restore
+**}
 
 
 
 ** TABLE 3
 ** DALYs due to Combined NCDs
-forval a = 1(1)33 {
+
+local a = 4
+** forval a = 1(1)33 {
 
         use "X:\OneDrive - The University of the West Indies\Writing\w003\data\from-who\chap2_000_mr_adjusted", clear
 
@@ -608,14 +611,15 @@ forval a = 1(1)33 {
             label values c9 paho_subregion_
             decode c9, gen(c10)
             global srname_t3_`a' = c10
-        }
+**        }
 
 
 
 
 
 ** TABLE 4 - Change due to Growth, Aging, Epi
-forval a = 1(1)33 {
+local a = 4
+** forval a = 1(1)33 {
 
     use "`outputpath'/country_report_table4", clear
 
@@ -681,7 +685,8 @@ forval a = 1(1)33 {
                         global epi2_`a'_`x' : dis %5.1fc `epi2_`a'_`x'' 
                     restore
                 }
-            }
+**            }
+
 
 
 ** ------------------------------------------------------

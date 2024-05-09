@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
+    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -115,7 +115,7 @@ gsort cod -drate
 ** -----------------------------------------------------
 
 
-preserve
+**preserve
     drop daly dths mrate 
     reshape wide drate, i(region) j(cod)
     reshape wide drate400 drate500 drate31, i(region) j(subr)
@@ -148,10 +148,10 @@ preserve
         box(8, lc("`dia1'") fc("`dia1'") )
         marker(8, mcol("`dia2'") m(o) msize(3) )
 
-        ylab(0(2000)10000,
+        ylab(0 2000 "2 000" 4000 "4 000" 6000 "6 000" 8000 "8 000" 10000 "10 000",
                 labc(gs8) labs(4) tstyle(major_notick) nogrid glc(gs16) angle(0) format(%9.0fc) labgap(1))    
         yscale(range(-2500(100)1010) noextend)
-        ytitle("DALY rate (per 100,000)", size(5) color(gs8) margin(l=0 r=0 t=2 b=0)) 
+        ytitle("DALY rate (per 100 000)", size(5) color(gs8) margin(l=0 r=0 t=2 b=0)) 
 
         text(5 20 "Caribbean" , place(w) size(5) color("gs8") just(left) margin(l=0 r=1 t=4 b=2))
         text(5 9 "Rest of the Americas" , place(w) size(5) color("gs8") just(left) margin(l=0 r=1 t=4 b=2))
@@ -164,6 +164,9 @@ preserve
         text(10000 87  "Haiti" , place(e) size(5) color("`cvd2'") just(left) margin(l=0 r=1 t=4 b=2))
         text(4100 46  "Uruguay" , place(e) size(5) color("`can2'") just(left) margin(l=0 r=1 t=4 b=2))
         text(2800 8  "Mexico" , place(e) size(5) color("`dia2'") just(left) margin(l=0 r=1 t=4 b=2))
+
+        text(0 -50  "{bf:Note:} " , place(e) size(3) color("gs8") just(left) margin(l=0 r=1 t=4 b=2))
+        text(550 -50  "Guyana, Haiti, Uruguay and Mexico have particularly high rates and are presented as individual points" , place(e) size(3) color("gs8") just(left) margin(l=0 r=1 t=4 b=2))
 
         legend(order(1 4 7) 
         label(1 "CVD")  
@@ -178,9 +181,9 @@ preserve
 
     ** Export to Vector Graphic
     ** DEC 22nd, 2022
-    graph export "`outputpath'\reports\graphics\fig3-6.svg", replace
-    graph export "`outputpath'\reports\graphics\fig3-6.pdf", replace
-restore
+    graph export "`outputpath'\reports\2024-edits\graphics\fig31.svg", replace
+    graph export "`outputpath'\reports\2024-edits\graphics\fig31.pdf", replace
+** restore
 
 /*
 

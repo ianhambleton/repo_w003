@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
+    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -139,14 +139,14 @@ sort morder
             text(2 7  "Stroke"  ,  place(w) size(3.75) color(gs10) just(right))
             text(4 23 "Stroke"  ,  place(e) size(3.75) color(gs10) just(left))
 
-            text(3 7   "Alzeimers/dementias"  ,  place(w) size(3.75) color(gs10) just(right))
-            text(13 23 "Alzeimers/dementias"  ,  place(e) size(3.75) color(gs10) just(left))
+            text(3 7   "Alzeimer/dementias"  ,  place(w) size(3.75) color(gs10) just(right))
+            text(13 23 "Alzeimer/dementias"  ,  place(e) size(3.75) color(gs10) just(left))
 
             text(4 7  "COPD"    ,  place(w) size(3.75) color(gs10) just(right))
             text(7 23 "COPD"    ,  place(e) size(3.75) color(gs10) just(left))
 
-            text(5 7   "Lower Resp.Inf"    ,  place(w) size(3.75) color(gs10) just(right))
-            text(12 23 "Lower Resp.Inf"    ,  place(e) size(3.75) color(gs10) just(left))
+            text(5 7   "Lower resp. inf."    ,  place(w) size(3.75) color(gs10) just(right))
+            text(12 23 "Lower resp. inf."    ,  place(e) size(3.75) color(gs10) just(left))
 
             text(6 7  "Diabetes"    ,  place(w) size(3.75) color(gs10) just(right))
             text(2 23 "Diabetes"    ,  place(e) size(3.75) color(gs10) just(left))
@@ -201,8 +201,8 @@ sort morder
 
 ** Export to Vector Graphic
 ** DEC 22nd, 2022
-graph export "`outputpath'\reports\graphics\box2-1.svg", replace
-graph export "`outputpath'\reports\graphics\box2-1.pdf", replace
+graph export "`outputpath'\reports\2024-edits\graphics\box4.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\box4.pdf", replace
 
 
 /*
@@ -334,3 +334,10 @@ graph export "`outputpath'\reports\graphics\box2-1.pdf", replace
 			name(slopechart2)
 			;
 #delimit cr	
+
+
+/*
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\2024-edits\graphics\fig12.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig12.pdf", replace

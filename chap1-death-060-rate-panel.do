@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
+    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -515,7 +515,7 @@ local outer3 860 2106 890 2106 890 2111 860 2111 860 2106
 			ylab(0(100)700,
 			valuelabel labc(gs8) labs(2.5) tlc(gs8) nogrid glc(gs16) angle(0) format(%9.0f))
 			yscale(lw(vthin) lc(gs8) range(-20(20)960) noextend) 
-			ytitle("Mortality rate (per 100,000)", color(gs8) size(3) margin(l=1 r=1 t=1 b=1)) 
+			ytitle("Mortality rate (per 100 000)", color(gs8) size(3) margin(l=1 r=1 t=1 b=1)) 
             ymtick(0(50)750)
 
             /// Region Titles 
@@ -524,7 +524,7 @@ local outer3 860 2106 890 2106 890 2111 860 2111 860 2106
             text(790 2053 "Andean",  place(c) size(2.5) color(gs5))
             text(790 2074 "Southern" "Cone",  place(c) size(2.5) color(gs5))
             text(790 2095 "Latin" "Caribbean",  place(c) size(2.5) color(gs5))
-            text(790 2116 "non-Latin" "Caribbean",  place(c) size(2.5) color(gs5))
+            text(790 2116 "Non-Latin" "Caribbean",  place(c) size(2.5) color(gs5))
             text(790 2137 "Brazil",  place(c) size(2.5) color(gs5))
             text(790 2158 "Mexico",  place(c) size(2.5) color(gs5))
 
@@ -562,6 +562,6 @@ local outer3 860 2106 890 2106 890 2111 860 2111 860 2106
 #delimit cr	
 ** Export to Vector Graphic
 ** DEC 22nd, 2022
-graph export "`outputpath'\reports\graphics\fig1-7.svg", replace
-graph export "`outputpath'\reports\graphics\fig1-7.pdf", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig7.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig7.pdf", replace
 

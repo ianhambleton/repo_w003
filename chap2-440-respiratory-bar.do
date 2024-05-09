@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
+    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -179,13 +179,13 @@ local outer6c -26 590   -26 710
 gsort cod mortr
 gen region_new = region
 label values region_new region_
-#delimit ; 
-    label define region_    28 "St.Vincent & Gren"
-                            1 "Antigua & Barbuda"
-                            30 "Trinidad & Tobago"
-                            13 "Dominican Rep"
-                            2000 "Americas", modify;
-#delimit cr
+/// #delimit ; 
+///     label define region_    28 "St.Vincent & Gren"
+///                             1 "Antigua & Barbuda"
+///                             30 "Trinidad & Tobago"
+///                             13 "Dominican Rep"
+///                             2000 "Americas", modify;
+/// #delimit cr
 decode region_new , gen(region_lab)
 bysort cod : gen regiono = _n
 forval x = 1(1)3 {
@@ -207,8 +207,8 @@ gen origin3 = 240
 replace scaler3 = scaler3 + 240
 
 ** St Vincent and the Grenadines -- Too Long - Abbreviate
-replace region_lab = "St.Vincent & Gren" if region_lab == "Saint Vincent and the Grenadines"
-replace region_lab = "Antigua & Barbuda" if region_lab == "Antigua and Barbuda"
+replace region_lab = "Saint Vincent" if region_lab == "Saint Vincent and the Grenadines"
+** replace region_lab = "Antigua & Barbuda" if region_lab == "Antigua and Barbuda"
 
 
 ** COUNTRIES with High and Low Mortality Rates
@@ -270,7 +270,7 @@ restore
            /// Region Titles 
            text(66 50 "COPD"       ,  place(c) size(4) color(gs8) just(center))
            text(66 170 "Asthma"              ,  place(c) size(4) color(gs8) just(center))
-           text(66 290 "All Respiratory"            ,  place(c) size(4) color(gs8) just(center))
+           text(66 290 "All respiratory"            ,  place(c) size(4) color(gs8) just(center))
 
             /// INDEX OF DISPARITY VALUES
            /// text(-4.4 0.3 "ID{superscript:`ddagger'}" ,  place(c) size(7) color("`child'*0.5") just(center))
@@ -281,7 +281,7 @@ restore
            text(10 300 "`id3'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
 
            /// Y-Axis text 
-           text(-29 160 "Age-standardized mortality rate (per 100,000)" ,  
+           text(-29 160 "Age-standardized mortality rate (per 100 000)" ,  
                                     place(c) size(4) color(gs8) just(center))
 
            /// High Rate Countries
@@ -338,8 +338,8 @@ restore
 
 ** Export to Vector Graphic
 ** DEC 22nd, 2022
-graph export "`outputpath'\reports\graphics\fig2-9.svg", replace
-graph export "`outputpath'\reports\graphics\fig2-9.pdf", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig18.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig18.pdf", replace
 
 
 

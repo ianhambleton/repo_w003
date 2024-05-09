@@ -491,7 +491,7 @@ forval a = 1(1)33 {
      restore
 }
 
-
+/*
 
 ** TABLE 3
 ** DALYs due to Combined NCDs

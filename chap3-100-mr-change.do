@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
+    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -411,12 +411,82 @@ global sch_fewer = schange3
 egen schange4 = min(schange2)
 global sch_more = schange4
 
+/// #delimit ; 
+/// label define mr_aci_    -44 "–44"
+///                         -18 "–18"
+///                         -9 "–9"
+///                         -6 "–6"
+///                         -5 "–5"
+///                         -4 "–4"
+///                         -3 "–3"
+///                         -3 "–3"
+///                         -3 "–3"
+///                         -2 "–2"
+///                         -2 "–2"
+///                         -2 "–2"
+///                         -1 "–1"
+///                         -1 "–1"
+///                         -.9 "–0.9"
+///                         -.8 "–0.8"
+///                         -.6 "–0.6"
+///                         -.6 "–0.6"
+///                         -.1 "–0.1"
+///                         -.1 "–0.1"
+///                         0 "0"
+///                         .1 "0.1"
+///                         .5 "0.5"
+///                         .8 "0.8"
+///                         1 "1"
+///                         1 "1"
+///                         2 "2"
+///                         5 "5"
+///                         11 "11", modify;
+/// label values mr_aci mr_aci_;
+/// #delimit cr 
+
+gen yorder1 = yorder 
+order yorder1, after(yorder)
+
+#delimit ; 
+label define yorder1_    1 "–44"
+                        2 "–18"
+                        3 "–9"
+                        4 "–6"
+                        5 "–5"
+                        6 "–4"
+                        7 "–3"
+                        8 "–3"
+                        9 "–3"
+                        10 "–2"
+                        11 "–2"
+                        12 "–2"
+                        13 "–1"
+                        14 "–1"
+                        15 "–0.9"
+                        16 "–0.8"
+                        17 "–0.6"
+                        18 "–0.6"
+                        19 "–0.1"
+                        20 "–0.1"
+                        21 "0"
+                        22 "0.1"
+                        23 "0.5"
+                        24 "0.8"
+                        25 "1"
+                        26 "1"
+                        27 "2"
+                        28 "5"
+                        29 "11", modify;
+label values yorder1 yorder1_;
+#delimit cr
+
+
 #delimit ;  
 	gr twoway 
 		/// country values
         (rbar origin1 mr_ac_gr1 yorder if mr_pc<0, horizontal barw(0.6) fcol("`improve'") lcol("`improve'") lw(0.1))           
         (rbar origin2 mr_ac_gr2 yorder if mr_pc>=0, horizontal barw(0.6) fcol("`worsen'") lcol("`worsen'") lw(0.1))           
-        (sc yorder xlocation1, msymbol(i) mlabel(mr_aci) mlabsize(2.5) mlabcol(gs8) mlabp(0))
+        (sc yorder1 xlocation1, msymbol(i) mlabel(yorder1) mlabsize(2.3) mlabcol(gs8) mlabp(0))
         (scatteri `line1' , recast(line) lw(0.2) lc("`gry1'%50") fc("`gry1'%50") lp("-") )
         (scatteri `line2' , recast(line) lw(0.2) lc("`gry2'%25") fc("`gry2'%25") lp("l") )
         (scatteri -0.5 -25 "Absolute change (2000 to 2019)" , msymbol(i) mlabpos(0) mlabcol(gs8) mlabsize(3) mlabangle(0))
@@ -437,11 +507,12 @@ global sch_more = schange4
 			yscale(reverse noline lw(vthin) range(1(1)31)) 
 			ytitle("", size(2) margin(l=0 r=0 t=0 b=0)) 
 
-            text(17 -30 "$sch_fewer fewer deaths" "per 100,000", place(e) size(2.5) color("`improve'%85") just(center) margin(l=2 r=2 t=2 b=2))
-            text(23 -30 "$sch_more more deaths" "per 100,000", place(e) size(2.5) color("`worsen'%85") just(center) margin(l=2 r=2 t=2 b=2))
+            text(17 -30 "$sch_fewer fewer deaths" "per 100 000", place(e) size(2.5) color("`improve'%85") just(center) margin(l=2 r=2 t=2 b=2))
+            text(23 -30 "$sch_more more deaths" "per 100 000", place(e) size(2.5) color("`worsen'%85") just(center) margin(l=2 r=2 t=2 b=2))
 
-            text(31 -64 "Abbreviations: IHD=Ischemic Heart Disease, COPD=Chronic Obstructive Pulmonary Disease", place(e) size(2) color(gs8) ) 
-            text(31.75 -54 "RHD=Rheumatic Heart Disease, IPV=Interpersonal Violence, HHD=Hypertensive Heart Disease", place(e) size(2) color(gs8) ) 
+            text(31 -64 "Abbreviations:", place(e) size(2) color(gs8)  just(left)) 
+            text(31.75 -64 "IHD=Ischemic heart disease, COPD=Chronic obstructive pulmonary disease", just(left) place(e) size(2) color(gs8) ) 
+            text(32.5 -64 "RHD=Rheumatic heart disease, IPV=Interpersonal violence, HHD=Hypertensive heart disease", just(left) place(e) size(2) color(gs8) ) 
 
             legend(off)
 			name(mr_change57)
@@ -450,6 +521,6 @@ global sch_more = schange4
 
 ** Export to Vector Graphic
 ** DEC 22nd, 2022
-graph export "`outputpath'\reports\graphics\fig3-1.svg", replace
-graph export "`outputpath'\reports\graphics\fig3-1.pdf", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig26.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig26.pdf", replace
 

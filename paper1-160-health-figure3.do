@@ -39,16 +39,18 @@
 ** This comes from:
 **	--> C:\Sync\OneDrive - The University of the West Indies\repo_ianhambleton\repo_w003\chap2-000c-mr-country-groups.do
 use "`datapath'\from-who\paper1-chap3_byage_country_groups_both", clear
-	append using "`datapath'\from-who\paper1-chap3_byage_groups_both"
+append using "`datapath'\from-who\paper1-chap3_byage_groups_both"
 	keep if who_region==. | who_region==2
 	replace iso3c = "LAC" if who_region==2
 	replace iso3n = 2000 if who_region==2
 
 	rename age18 age
 	rename dths death
-/*
+
+	** All NCDs
+	keep if ghecause==300
 	** keep if ghecause==100
-	keep if ghecause==50
+	** keep if ghecause==50
 	keep if year==2000 | year==2019
 	drop paho_subregion agroup 
 	rename pop pop_orig

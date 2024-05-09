@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
+    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -241,7 +241,7 @@ local line8 10.5 0 10.5 -2
 
 			xlab(none, 
             notick labs(3.5) tlc(gs0) labc(gs8) notick nogrid glc(gs16))
-			xscale(line range(-2(0.1)1.5) lc(gs10)) 
+			xscale(noline range(-2(0.1)1.5) lc(gs16)) 
 			xtitle("", size(2) color(gs0) margin(l=0 r=0 t=0 b=0)) 
 			
 			ylab(none, valuelabel
@@ -250,22 +250,22 @@ local line8 10.5 0 10.5 -2
 			ytitle("", size(2) margin(l=0 r=0 t=0 b=0)) 
 
             text(9.8 -1 "Annual percent change" ,  place(c) size(4) color(gs10) just(left))
-            text(9.8 4.5 "Prob dying between 30 and 70 years" ,  place(c) size(4) color(gs10) just(left))
+            text(9.8 4.5 "Probability of dying between 30 and 70 years" ,  place(c) size(4) color(gs10) just(left))
             text(1 0.1 "North America"          ,  place(e) size(4) color(gs10) just(center))
             text(2 0.1 "Central America"        ,  place(e) size(4) color(gs10) just(left))
             text(3 0.1 "Andean"                 ,  place(e) size(4) color(gs10) just(left))
             text(4 0.1 "Southern Cone"           ,  place(e) size(4) color(gs10) just(left))
             text(5 0.1 "Latin Caribbean"        ,  place(e) size(4) color(gs10) just(left))
-            text(6 0.1 "non-Latin Caribbean"    ,  place(e) size(4) color(gs10) just(left))
+            text(6 0.1 "Non-Latin Caribbean"    ,  place(e) size(4) color(gs10) just(left))
             text(7 0.1 "Brazil"                 ,  place(e) size(4) color(gs10) just(left))
             text(8 0.1 "Mexico"                 ,  place(e) size(4) color(gs10) just(left))
             text(9 0.1 "The Americas"           ,  place(e) size(4) color(gs10) just(left))
 
             /// X-axis values (LHS)
-            text(11 -0.5 "-0.5%"           ,  place(c) size(3.5) color(gs10) just(left))
-            text(11 -1 "-1%"           ,  place(c) size(3.5) color(gs10) just(left))
-            text(11 -1.5 "-1.5%"           ,  place(c) size(3.5) color(gs10) just(left))
-            text(11 -2 "-2%"           ,  place(c) size(3.5) color(gs10) just(left))
+            text(11 -0.5 "–0.5%"           ,  place(c) size(3.5) color(gs10) just(left))
+            text(11 -1 "–1%"           ,  place(c) size(3.5) color(gs10) just(left))
+            text(11 -1.5 "–1.5%"           ,  place(c) size(3.5) color(gs10) just(left))
+            text(11 -2 "–2%"           ,  place(c) size(3.5) color(gs10) just(left))
             /// X-axis values (RHS)
             text(11 2.25 "3%"           ,  place(c) size(3.5) color(gs10) just(left))
             text(11 3.75 "4%"           ,  place(c) size(3.5) color(gs10) just(left))
@@ -280,5 +280,5 @@ local line8 10.5 0 10.5 -2
 
 ** Export to Vector Graphic
 ** DEC 22nd, 2022
-graph export "`outputpath'\reports\graphics\fig2-3.svg", replace
-graph export "`outputpath'\reports\graphics\fig2-3.pdf", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig12.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig12.pdf", replace

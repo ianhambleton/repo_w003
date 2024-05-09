@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
+    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -406,7 +406,7 @@ restore
             text(93 5.5 "Central" "America",  place(c) size(3) color(gs5))
             text(93 7.5 "Andean",  place(c) size(3) color(gs5))
             text(93 9.5 "Latin" "Caribbean",  place(c) size(3) color(gs5))
-            text(93 11.5 "non-Latin" "Caribbean",  place(c) size(3) color(gs5))
+            text(93 11.5 "Non-Latin" "Caribbean",  place(c) size(3) color(gs5))
             text(93 13.5 "Brazil",  place(c) size(3) color(gs5))
             text(93 15.5 "Mexico",  place(c) size(3) color(gs5))
 
@@ -421,6 +421,6 @@ restore
 #delimit cr	
 ** Export to Vector Graphic
 ** DEC 22nd, 2022
-graph export "`outputpath'\reports\graphics\fig1-3.svg", replace
-graph export "`outputpath'\reports\graphics\fig1-3.pdf", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig3.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig3.pdf", replace
 

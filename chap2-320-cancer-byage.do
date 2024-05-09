@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
+    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -340,7 +340,7 @@ order mindaly maxdaly, after(daly5)
 
             text(-0.3 50 "Deaths"           ,  place(c) size(5) color(gs8) just(right))
             text(-0.3 170 "DALYs"           ,  place(c) size(5) color(gs8) just(right))
-            text(12 50 "% of all Deaths"     ,  place(c) size(4) color(gs8) just(right))
+            text(12 50 "% of all deaths"     ,  place(c) size(4) color(gs8) just(right))
             text(12 170 "% of all DALYs"     ,  place(c) size(4) color(gs8) just(right))
 
             text(2  245 "Under 5s"     ,  place(e) size(4) color(gs8) just(right))
@@ -364,6 +364,6 @@ order mindaly maxdaly, after(daly5)
 
 ** Export to Vector Graphic
 ** DEC 22nd, 2022
-graph export "`outputpath'\reports\graphics\fig2-6.svg", replace
-graph export "`outputpath'\reports\graphics\fig2-6.pdf", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig15.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig15.pdf", replace
 

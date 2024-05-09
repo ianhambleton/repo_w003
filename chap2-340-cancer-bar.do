@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
+    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -226,13 +226,13 @@ local touter5c  -1 470    -1 590
 gsort cod mortr
 gen region_new = region
 label values region_new region_
-#delimit ; 
-    label define region_    28 "St.Vincent & Gren"
-                            1 "Antigua & Barbuda"
-                            30 "Trinidad & Tobago"
-                            13 "Dominican Rep"
-                            2000 "Americas", modify;
-#delimit cr
+/// #delimit ; 
+///     label define region_    28 "St.Vincent & Gren"
+///                             1 "Antigua & Barbuda"
+///                             30 "Trinidad & Tobago"
+///                             13 "Dominican Rep"
+///                             2000 "Americas", modify;
+/// #delimit cr
 decode region_new , gen(region_lab)
 bysort cod : gen regiono = _n
 forval x = 1(1)11 {
@@ -271,7 +271,7 @@ gen origin11 = 480
 replace scaler11 = scaler11 + 480
 
 /// ** St Vincent and the Grenadines -- Too Long - Abbreviate
-/// replace region_lab = "St.Vincent & Gren" if region_lab == "Saint Vincent and the Grenadines"
+replace region_lab = "Saint Vincent" if region_lab == "Saint Vincent and the Grenadines"
 /// replace region_lab = "Antigua & Barbuda" if region_lab == "Antigua and Barbuda"
 
 
@@ -398,7 +398,7 @@ preserve
            text(10 670 "`id6'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
 
            /// Y-Axis text 
-           text(-29 340 "Age-standardized mortality rate (per 100,000)" ,  
+           text(-29 340 "Age-standardized mortality rate (per 100 000)" ,  
                                     place(c) size(4) color(gs8) just(center))
 
            /// High Rate Countries
@@ -410,7 +410,7 @@ preserve
            text(43 105 "`cid1_7' (4)",  place(w) size(3) color("`child'*0.5") just(right))
            text(39 105 "`cid1_6' (5)",  place(w) size(3) color("`child'*0.5") just(right))
            text(-3 0 "Lowest Rates:",  place(e) size(3.5) color("`child'*0.80") just(right))
-           text(-7 105 "`cid1_5' (5)",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-7 105 "`cid1_5'`dagger' (5)",  place(w) size(3) color("`child'*0.5") just(right))
            text(-11 105 "`cid1_4' (4)",  place(w) size(3) color("`child'*0.5") just(right))
            text(-15 105 "`cid1_3' (3)",  place(w) size(3) color("`child'*0.5") just(right))
            text(-19 105 "`cid1_2' (2)",  place(w) size(3) color("`child'*0.5") just(right))
@@ -422,7 +422,7 @@ preserve
            text(51 225 "`cid2_19'",  place(w) size(3) color("`child'*0.5") just(right))
            text(47 225 "`cid2_18'",  place(w) size(3) color("`child'*0.5") just(right))
            text(43 225 "`cid2_17'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(39 225 "`cid2_16'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(39 225 "`cid2_16'`dagger'",  place(w) size(3) color("`child'*0.5") just(right))
            /// ///text(-3 0 "Lowest Rates:",  place(e) size(3.5) color("`child'*0.80") just(right))
            text(-7 225 "`cid2_15'",  place(w) size(3) color("`child'*0.5") just(right))
            text(-11 225 "`cid2_14'",  place(w) size(3) color("`child'*0.5") just(right))
@@ -436,7 +436,7 @@ preserve
            text(51 345 "`cid3_29'",  place(w) size(3) color("`child'*0.5") just(right))
            text(47 345 "`cid3_28'",  place(w) size(3) color("`child'*0.5") just(right))
            text(43 345 "`cid3_27'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(39 345 "`cid3_26'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(39 345 "`cid3_26'`dagger'",  place(w) size(3) color("`child'*0.5") just(right))
            /// ///text(-3 0 "Lowest Rates:",  place(e) size(3.5) color("`child'*0.80") just(right))
            text(-7 345 "`cid3_25'",  place(w) size(3) color("`child'*0.5") just(right))
            text(-11 345 "`cid3_24'",  place(w) size(3) color("`child'*0.5") just(right))
@@ -477,7 +477,7 @@ preserve
            text(51 705 "`cid6_59'",  place(w) size(3) color("`child'*0.5") just(right))
            text(47 705 "`cid6_58'",  place(w) size(3) color("`child'*0.5") just(right))
            text(43 705 "`cid6_57'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(39 705 "`cid6_56'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(39 705 "`cid6_56'`dagger'",  place(w) size(3) color("`child'*0.5") just(right))
            /// ///text(-3 0 "Lowest Rates:",  place(e) size(3.5) color("`child'*0.80") just(right))
            text(-7 705 "`cid6_55'",  place(w) size(3) color("`child'*0.5") just(right))
            text(-11 705 "`cid6_54'",  place(w) size(3) color("`child'*0.5") just(right))
@@ -488,7 +488,9 @@ preserve
            /// NOTE
            text(-35 0.5 "`teardrop' IoD = Index of Disparity. Measures the average (mean) deviation of each country rate from the regional rate, as a percentage." ,  
                                     place(e) size(2.25) color(gs10)  just(left))
-           text(-39 0.5 "`ddagger' BLACK BAR is the mortality rate for the Region of the Americas." ,  
+           text(-39 0.5 "`dagger' Saint Vincent = Saint Vincent and the Grenadines." ,  
+                                    place(e) size(2.25) color(gs10)  just(left))
+           text(-43 0.5 "`ddagger' BLACK BAR is the mortality rate for the Region of the Americas." ,  
                                     place(e) size(2.5) color(gs10)  just(left))
 			legend(off)
 			name(bar1)
@@ -496,6 +498,10 @@ preserve
 			;
 #delimit cr	
 
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\2024-edits\graphics\fig16a.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig16a.pdf", replace
 
 ** Large version of BAR CHART for Top 6-10 cancers
 #delimit ;
@@ -567,7 +573,7 @@ preserve
            text(10 670 "`id6'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
 
            /// Y-Axis text 
-           text(-29 340 "Age-standardized mortality rate (per 100,000)" ,  
+           text(-29 340 "Age-standardized mortality rate (per 100 000)" ,  
                                     place(c) size(4) color(gs8) just(center))
 
            /// High Rate Countries
@@ -638,7 +644,7 @@ preserve
            text(51 705  "`cid6_59'",  place(w) size(3) color("`child'*0.5") just(right))
            text(47 705  "`cid6_58'",  place(w) size(3) color("`child'*0.5") just(right))
            text(43 705  "`cid6_57'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(39 705  "`cid6_56'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(39 705  "`cid6_56'`dagger'",  place(w) size(3) color("`child'*0.5") just(right))
            text(-7 705  "`cid6_55'",  place(w) size(3) color("`child'*0.5") just(right))
            text(-11 705 "`cid6_54'",  place(w) size(3) color("`child'*0.5") just(right))
            text(-15 705 "`cid6_53'",  place(w) size(3) color("`child'*0.5") just(right))
@@ -648,7 +654,9 @@ preserve
            /// NOTE
            text(-35 0.5 "`teardrop' IoD = Index of Disparity. Measures the average (mean) deviation of each country rate from the regional rate, as a percentage." ,  
                                     place(e) size(2.25) color(gs10)  just(left))
-           text(-39 0.5 "`ddagger' BLACK BAR is the mortality rate for the Region of the Americas." ,  
+           text(-39 0.5 "`dagger' Saint Vincent = Saint Vincent and the Grenadines." ,  
+                                    place(e) size(2.25) color(gs10)  just(left))
+           text(-43 0.5 "`ddagger' BLACK BAR is the mortality rate for the Region of the Americas." ,  
                                     place(e) size(2.5) color(gs10)  just(left))
 			legend(off)
 			name(bar2)
@@ -656,7 +664,15 @@ preserve
 			;
 #delimit cr	
 
+** Export to Vector Graphic
+** DEC 22nd, 2022
+graph export "`outputpath'\reports\2024-edits\graphics\fig16b.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig16b.pdf", replace
 
+
+
+
+/*
 ** Figure 3.2
 #delimit ;
 gr combine  "`outputpath'\reports\chapter2\fig2-7a" 

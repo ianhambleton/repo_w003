@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
+    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -179,13 +179,13 @@ local touter2c  9 110   9 230
 gsort cod mortr
 gen region_new = region
 label values region_new region_
-#delimit ; 
-    label define region_    28 "St.Vincent & Gren"
-                            1 "Antigua & Barbuda"
-                            30 "Trinidad & Tobago"
-                            13 "Dominican Rep"
-                            2000 "Americas", modify;
-#delimit cr
+/// #delimit ; 
+///     label define region_    28 "St.Vincent & Gren"
+///                             1 "Antigua & Barbuda"
+///                             30 "Trinidad & Tobago"
+///                             13 "Dominican Rep"
+///                             2000 "Americas", modify;
+/// #delimit cr
 
 decode region_new , gen(region_lab)
 bysort cod : gen regiono = _n
@@ -255,7 +255,7 @@ restore
            text(7 60 "`id1'"                     ,  place(c) size(9) color("`child'*0.5") just(center))
 
            /// Y-Axis text 
-           text(-31 40 "Age-standardized" "mortality rate (per 100,000)" ,  
+           text(-31 40 "Age-standardized" "mortality rate (per 100 000)" ,  
                                     place(c) size(5) color(gs8) just(center))
 
            /// High Rate Countries
@@ -288,8 +288,8 @@ restore
 
 ** Export to Vector Graphic
 ** DEC 22nd, 2022
-graph export "`outputpath'\reports\graphics\fig2-12.svg", replace
-graph export "`outputpath'\reports\graphics\fig2-12.pdf", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig21.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig21.pdf", replace
 
 
 

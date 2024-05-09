@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
+    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -189,13 +189,13 @@ local outer6c -26 590   -26 710
 gsort cod mortr
 gen region_new = region
 label values region_new region_
-#delimit ; 
-    label define region_    28 "St.Vincent & Gren"
-                            1 "Antigua & Barbuda"
-                            30 "Trinidad & Tobago"
-                            13 "Dominican Rep"
-                            2000 "Americas", modify;
-#delimit cr
+/// #delimit ; 
+///     label define region_    28 "St.Vincent & Gren"
+///                             1 "Antigua & Barbuda"
+///                             30 "Trinidad & Tobago"
+///                             13 "Dominican Rep"
+///                             2000 "Americas", modify;
+/// #delimit cr
 
 decode region_new , gen(region_lab)
 bysort cod : gen regiono = _n
@@ -224,8 +224,8 @@ gen origin6 = 600
 replace scaler6 = scaler6 + 600
 
 ** St Vincent and the Grenadines -- Too Long - Abbreviate
-replace region_lab = "St.Vincent & Gren" if region_lab == "Saint Vincent and the Grenadines"
-replace region_lab = "Antigua & Barbuda" if region_lab == "Antigua and Barbuda"
+replace region_lab = "Saint Vincent" if region_lab == "Saint Vincent and the Grenadines"
+** replace region_lab = "Antigua & Barbuda" if region_lab == "Antigua and Barbuda"
 
 ** COUNTRIES with 
 ** THREE highest and THREE lowest Mortality Rates
@@ -313,12 +313,12 @@ restore
 			ytitle("", size(5) margin(l=2 r=5 t=2 b=2)) 
 
            /// Region Titles 
-           text(67 50  "Interpersonal" "Violence"       ,  place(c) size(3) color(gs8) just(center))
-           text(67 170 "Road" "Injury"                  ,  place(c) size(3) color(gs8) just(center))
-           text(67 290 "Self" "Harm"                    ,  place(c) size(3) color(gs8) just(center))
+           text(67 50  "Interpersonal" "violence"       ,  place(c) size(3) color(gs8) just(center))
+           text(67 170 "Road injury"                  ,  place(c) size(3) color(gs8) just(center))
+           text(67 290 "Self-harm"                    ,  place(c) size(3) color(gs8) just(center))
            text(67 410 "Falls"                          ,  place(c) size(3) color(gs8) just(center))
            text(67 530 "Drowning"                       ,  place(c) size(3) color(gs8) just(center))
-           text(67 650 "All" "Injury"                   ,  place(c) size(3) color(gs8) just(center))
+           text(67 650 "All injury"                   ,  place(c) size(3) color(gs8) just(center))
 
 
             /// INDEX OF DISPARITY VALUES
@@ -333,7 +333,7 @@ restore
            text(10 670 "`id6'"                    ,  place(c) size(7) color("`child'*0.5") just(center))
 
            /// Y-Axis text 
-           text(-29 340 "Age-standardized mortality rate (per 100,000)" ,  
+           text(-29 340 "Age-standardized mortality rate (per 100 000)" ,  
                                     place(c) size(3.5) color(gs8) just(center))
 
            /// High Rate Countries
@@ -348,7 +348,7 @@ restore
            text(-7 105 "`cid1_5' (5)",  place(w) size(3) color("`child'*0.5") just(right))
            text(-11 105 "`cid1_4' (4)",  place(w) size(3) color("`child'*0.5") just(right))
            text(-15 105 "`cid1_3' (3)",  place(w) size(3) color("`child'*0.5") just(right))
-           text(-19 105 "`cid1_2' (2)",  place(w) size(3) color("`child'*0.5") just(right))
+           text(-19 105 "`cid1_2' (2)",  place(w) size(2.9) color("`child'*0.5") just(right))
            text(-23 105 "`cid1_1' (1)",  place(w) size(3) color("`child'*0.5") just(right))
 
            /// /// ROAD INJURY
@@ -397,7 +397,7 @@ restore
            /// ///text(48 0 "Highest Rates:",  place(e) size(3.5) color("`child'*0.80") just(right))
            text(55 585 "`cid5_50'",  place(w) size(3) color("`child'*0.5") just(right))
            text(51 585 "`cid5_49'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(47 585 "`cid5_48'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(47 585 "`cid5_48'`dagger'",  place(w) size(3) color("`child'*0.5") just(right))
            text(43 585 "`cid5_47'",  place(w) size(3) color("`child'*0.5") just(right))
            text(39 585 "`cid5_46'",  place(w) size(3) color("`child'*0.5") just(right))
            /// ///text(-3 0 "Lowest Rates:",  place(e) size(3.5) color("`child'*0.80") just(right))
@@ -424,8 +424,10 @@ restore
            /// NOTE
            text(-34.5 0.5 "`teardrop' IoD = Index of Disparity. Measures the average (mean) deviation of each country rate from the regional rate, as a percentage." , 
                                     place(e) size(2.25) color(gs10) just(left) )
-           text(-38.25 0.5 "`dagger' BLACK BAR is the mortality rate for the Region of the Americas." ,  
+           text(-38.25 0.5 "`dagger' Saint Vincent = Saint Vincent and the Grenadines." ,  
                                     place(e) size(2.25) color(gs10)  just(left))
+           text(-42 0.5 "`ddagger' BLACK BAR is the mortality rate for the Region of the Americas." ,  
+                                    place(e) size(2.5) color(gs10)  just(left))
 
             legend(off)
 			name(bar1)
@@ -434,8 +436,8 @@ restore
 
 ** Export to Vector Graphic
 ** DEC 22nd, 2022
-graph export "`outputpath'\reports\graphics\fig2-16.svg", replace
-graph export "`outputpath'\reports\graphics\fig2-16.pdf", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig25.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig25.pdf", replace
 
 
 

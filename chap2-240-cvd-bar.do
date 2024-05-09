@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
+    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -210,13 +210,13 @@ local outer6c -26 590   -26 710
 gsort cod mortr
 gen region_new = region
 label values region_new region_
-#delimit ; 
-    label define region_    28 "St.Vincent & Gren"
-                            1 "Antigua & Barbuda"
-                            30 "Trinidad & Tobago"
-                            13 "Dominican Rep"
-                            2000 "Americas", modify;
-#delimit cr
+ #delimit ; 
+     label define region_    28 "Saint Vincent`dagger'"
+                             1 "Antigua and Barbuda"
+                             30 "Trinidad and Tobago"
+                             13 "Dominican Republic"
+                             2000 "The Americas", modify;
+ #delimit cr
 
 decode region_new , gen(region_lab)
 bysort cod : gen regiono = _n
@@ -245,8 +245,8 @@ gen origin6 = 600
 replace scaler6 = scaler6 + 600
 
 ** St Vincent and the Grenadines -- Too Long - Abbreviate
-replace region_lab = "St.Vincent & Gren" if region_lab == "Saint Vincent and the Grenadines"
-replace region_lab = "Antigua & Barbuda" if region_lab == "Antigua and Barbuda"
+replace region_lab = "Saint Vincent" if region_lab == "Saint Vincent and the Grenadines"
+** replace region_lab = "Antigua & Barbuda" if region_lab == "Antigua and Barbuda"
 
 ** COUNTRIES with 
 ** FIVE highest and FIVE lowest Mortality Rates
@@ -284,7 +284,7 @@ preserve
     }
 restore
 
-/*
+
 #delimit ;
 	gr twoway 
 		/// outer boxes 
@@ -334,11 +334,11 @@ restore
 			ytitle("", size(5) margin(l=2 r=5 t=2 b=2)) 
 
            /// Region Titles 
-           text(66 50  "Ischemic" "Heart Disease"         ,  place(c) size(3) color(gs8) just(center))
+           text(66 50  "Ischemic" "heart disease"         ,  place(c) size(3) color(gs8) just(center))
            text(66 170 "Stroke"                           ,  place(c) size(3) color(gs8) just(center))
-           text(66 290 "Hypertensive" "Heart Diseases"    ,  place(c) size(3) color(gs8) just(center))
+           text(66 290 "Hypertensive" "heart disease"    ,  place(c) size(3) color(gs8) just(center))
            text(66 410 "Cardiomyopathy" "etc"             ,  place(c) size(3) color(gs8) just(center))
-           text(66 530 "Rheumatic" "Heart Disease"        ,  place(c) size(3) color(gs8) just(center))
+           text(66 530 "Rheumatic" "heart disease"        ,  place(c) size(3) color(gs8) just(center))
            text(66 650 "All" "CVD"                        ,  place(c) size(3) color(gs8) just(center))
 
 
@@ -354,7 +354,7 @@ restore
            text(10 670 "`id6'"                     ,  place(c) size(7) color("`child'*0.5") just(center))
 
            /// Y-Axis text 
-           text(-29 340 "Age-standardized mortality rate (per 100,000)" ,  
+           text(-29 340 "Age-standardized mortality rate (per 100 000)" ,  
                                     place(c) size(4) color(gs8) just(center))
 
            /// High Rate Countries
@@ -392,7 +392,7 @@ restore
            text(51 345 "`cid3_29'",  place(w) size(3) color("`child'*0.5") just(right))
            text(47 345 "`cid3_28'",  place(w) size(3) color("`child'*0.5") just(right))
            text(43 345 "`cid3_27'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(39 345 "`cid3_26'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(39 345 "`cid3_26'`dagger'",  place(w) size(3) color("`child'*0.5") just(right))
            /// ///text(-3 0 "Lowest Rates:",  place(e) size(3.5) color("`child'*0.80") just(right))
            text(-7 345 "`cid3_25'",  place(w) size(3) color("`child'*0.5") just(right))
            text(-11 345 "`cid3_24'",  place(w) size(3) color("`child'*0.5") just(right))
@@ -418,7 +418,7 @@ restore
            /// ///text(48 0 "Highest Rates:",  place(e) size(3.5) color("`child'*0.80") just(right))
            text(55 585 "`cid5_50'",  place(w) size(3) color("`child'*0.5") just(right))
            text(51 585 "`cid5_49'",  place(w) size(3) color("`child'*0.5") just(right))
-           text(47 585 "`cid5_48'",  place(w) size(3) color("`child'*0.5") just(right))
+           text(47 585 "`cid5_48'`dagger'",  place(w) size(3) color("`child'*0.5") just(right))
            text(43 585 "`cid5_47'",  place(w) size(3) color("`child'*0.5") just(right))
            text(39 585 "`cid5_46'",  place(w) size(3) color("`child'*0.5") just(right))
            /// ///text(-3 0 "Lowest Rates:",  place(e) size(3.5) color("`child'*0.80") just(right))
@@ -445,7 +445,9 @@ restore
            /// NOTE
            text(-34 0.5 "`teardrop' IoD = Index of Disparity. Measures the average (mean) deviation of each country rate from the regional rate, as a percentage." , 
                                     place(e) size(2.25) color(gs10) just(left) )
-           text(-37.75 0.5 "`dagger' BLACK BAR is the mortality rate for the Region of the Americas." ,  
+           text(-37.75 0.5 "`dagger' Saint Vincent = Saint Vincent and the Grenadines." ,  
+                                    place(e) size(2.25) color(gs10)  just(left))
+           text(-41.5 0.5 "`ddagger' BLACK BAR is the mortality rate for the Region of the Americas." ,  
                                     place(e) size(2.25) color(gs10)  just(left))
            /// text(-41 0.5 "`ddagger' Five Caribbean countries had no cases of rheumatic heart disease in 2019: Antigua, Bahamas, Belize, Grenada, St Lucia." ,  
            ///                          place(e) size(2.25) color(gs10) just(left))           
@@ -457,11 +459,11 @@ restore
 
 ** Export to Vector Graphic
 ** DEC 22nd, 2022
-graph export "`outputpath'\reports\graphics\fig2-5.svg", replace
-graph export "`outputpath'\reports\graphics\fig2-5.pdf", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig14.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig14.pdf", replace
 
 
-/*
+
 
     ** generate a local for the D3 color scheme
     colorpalette d3, 20 n(20) nograph
@@ -484,6 +486,7 @@ graph export "`outputpath'\reports\graphics\fig2-5.pdf", replace
     ** External causes
     local inj1 `r(p7)'
     local inj2 `r(p8)'
+
 
 
 
@@ -521,7 +524,7 @@ order cod region mortr mortr_str region6 scaler6 value6
 		/// country values
         (rbar origin1 scaler6 region6 if cod==6 & region!=2000, horizontal barw(0.6) fcol("`cvd1'") lcol("`cvd1'") lw(0.1))           
         (rbar origin1 scaler6 region6 if cod==6 & region==2000, horizontal barw(0.6) fcol(gs0) lcol(gs0) lw(0.1))           
-        (sc value6 x6, msymbol(i) mlabel(value6) mlabsize(7) mlabcol(gs8) mlabp(0))
+        (sc value6 x6, msymbol(i) mlabel(value6) mlabsize(6.5) mlabcol(gs8) mlabp(0))
                 		,
 			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin)) 		
 			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin)) 
@@ -532,7 +535,7 @@ order cod region mortr mortr_str region6 scaler6 value6
 			xtitle("", size(7) color(gs0) margin(l=2 r=2 t=5 b=2)) 
 			
 			ylab(1(1)34, valuelabel
-			labc(gs0) labs(7) tstyle(major_notick) nogrid glc(gs16) angle(0) format(%9.0f) labgap(5))
+			labc(gs0) labs(6.5) tstyle(major_notick) nogrid glc(gs16) angle(0) format(%9.0f) labgap(5))
 			yscale(noline lw(vthin) range(-2.5(0.5)36)) 
 			ytitle("", size(7) margin(l=2 r=2 t=2 b=2)) 
 
@@ -545,10 +548,10 @@ order cod region mortr mortr_str region6 scaler6 value6
            text(35.5  -20 "`id6'"                     ,  place(c) size(11) color("`cvd1'") just(center))
 
            /// Y-Axis text 
-           text(-0.5 -50 "Mortality rate" "(per 100,000)" ,  
+           text(-0.5 -50 "Mortality rate" "(per 100 000)" ,  
                                     place(c) size(6) color(gs8) just(center) linegap(1.25))
            /// NOTES
-           text(-2 -100 "`teardrop' IoD = Index of Disparity." , 
+           text(-2 -100 "`teardrop' IoD = Index of disparity." , 
                                     place(c) size(5) color(gs10) just(left) linegap(1.25))
 
             legend(off)
@@ -685,11 +688,11 @@ gsort cod mortr
 gen region_new = region
 label values region_new region_
 #delimit ; 
-    label define region_    28 "St.Vincent & Gren"
-                            1 "Antigua & Barbuda"
-                            30 "Trinidad & Tobago"
-                            13 "Dominican Rep"
-                            2000 "Americas", modify;
+    label define region_    28 "Saint Vincent"
+                            1 "Antigua and Barbuda"
+                            30 "Trinidad and Tobago"
+                            13 "Dominican Republic"
+                            2000 "The Americas", modify;
 #delimit cr
 
 decode region_new , gen(region_lab)
@@ -779,7 +782,7 @@ order cod region mortr mortr_str region6 scaler6 value6
 		/// country values
         (rbar origin1 scaler6 region6 if cod==6 & region!=2000, horizontal barw(0.6) fcol("`cvd1'") lcol("`cvd1'") lw(0.1))           
         (rbar origin1 scaler6 region6 if cod==6 & region==2000, horizontal barw(0.6) fcol(gs0) lcol(gs0) lw(0.1))           
-        (sc value6 x6, msymbol(i) mlabel(value6) mlabsize(7) mlabcol(gs8) mlabp(0))
+        (sc value6 x6, msymbol(i) mlabel(value6) mlabsize(6.5) mlabcol(gs8) mlabp(0))
                 		,
 			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin)) 		
 			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin)) 
@@ -790,7 +793,7 @@ order cod region mortr mortr_str region6 scaler6 value6
 			xtitle("", size(7) color(gs0) margin(l=2 r=2 t=5 b=2)) 
 			
 			ylab(1(1)34, valuelabel
-			labc(gs0) labs(7) tstyle(major_notick) nogrid glc(gs16) angle(0) format(%9.0f) labgap(5))
+			labc(gs0) labs(6.5) tstyle(major_notick) nogrid glc(gs16) angle(0) format(%9.0f) labgap(5))
 			yscale(noline lw(vthin) range(-2.5(0.5)36)) 
 			ytitle("", size(7) margin(l=2 r=2 t=2 b=2)) 
 

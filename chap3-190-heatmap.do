@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
+    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -251,6 +251,15 @@ forval x = 2(1)19 {
     ** blue
     local blu1 `r(p10)'
 
+** Unicode markers for graphic
+/// †  	U+2020 (alt-08224)	DAGGER = obelisk, obelus, long cross
+/// ‡  	U+2021 (alt-08225)	DOUBLE DAGGER = diesis, double obelisk
+/// •  	U+2022 (alt-08226)	BULLET = black small circle
+local dagger = uchar(8224)
+local ddagger = uchar(8225)
+local section = uchar(0167) 
+local teardrop = uchar(10045) 
+
 ** Heatmap
 #delimit ;
 	gr twoway
@@ -281,7 +290,7 @@ forval x = 2(1)19 {
 			,
 			axis(2) valuelabel labc(gs0) labs(2.25) tstyle(major_notick) nogrid glc(gs16) angle(60) format(%9.0f) labgap(4))
 			xlab(none, axis(1) nogrid)
-			xscale(axis(2) noline lw(vthin) range(1(1)55))
+			xscale(axis(2) noline lw(vthin) range(1(1)57))
 			xtitle("", axis(2) size(2.5) color(gs0) margin(l=2 r=2 t=5 b=2))
 			xscale(off axis(1) noline lw(vthin))
 			xtitle("", axis(1) size(3) color(gs0) margin(l=2 r=2 t=5 b=2))
@@ -295,12 +304,12 @@ forval x = 2(1)19 {
 				 13 "Guatemala"                 14 "Mexico"
 				 15 "{bf:Guyana}"	            16 "Honduras"
 				 17 "Venezuela"		            18 "{bf:Cuba}"
-				 19 "{bf:Dominican Republic}"	20 "{bf:St.Lucia}"
-				 21 "{bf:Trinidad & Tobago}"	22 "Bolivia"
+				 19 "{bf:Dominican Republic}"	20 "{bf:Saint Lucia}"
+				 21 "{bf:Trinidad and Tobago}"	22 "Bolivia"
 				 23 "{bf:Barbados}"		        24 "{bf:Jamaica}"
 				 25 "Paraguay"		            26 "{bf:Suriname}"
-				 27 "{bf:Antigua & Barbuda}"	28"Belize"
-				 29 "{bf:St.Vincent & Gren}"	30 "{bf:Bahamas}"
+				 27 "{bf:Antigua and Barbuda}"	28"Belize"
+				 29 "{bf:Saint Vincent}`dagger'"	30 "{bf:Bahamas}"
 				 31 "{bf:Grenada}"	            32 "Nicaragua"
 				 33 "{bf:Haiti}"		
 			,
@@ -309,10 +318,13 @@ forval x = 2(1)19 {
 			ytitle("", size(2.5) margin(l=2 r=2 t=2 b=2))
 
 			/// PROGRESS INDICATOR 
-			text(-0.3 25.5 "{bf: WHO Progress Indicator}",  size(2.5) color(gs0) just(center))
+			text(-0.3 25.5 "{bf: WHO progress indicator}",  size(2.5) color(gs0) just(center))
 			
 			/// WHO prgress score title
-			text(35 55 "WHO" "Progress" "Score",  size(2.5) color(gs10) just(center))
+			text(35 55 "WHO" "progress" "score",  size(2.5) color(gs10) just(center))
+
+           text(37.5 0 "`dagger' Saint Vincent = Saint Vincent and the Grenadines." ,  
+                                    place(e) size(2.25) color(gs10)  just(left))
 
 			/// CHL
 			text(1 55 "30",  size(2.5) color(gs10) just(center))
@@ -391,10 +403,10 @@ forval x = 2(1)19 {
 			legend(size(2.25) position(7) ring(1) bm(t=1 b=1 l=1 r=0) colf cols(2) rowgap(0.5) colgap(0.5)
 			region(fcolor(gs16) lw(none) margin(l=0 r=0 t=0 b=0))
 			order(1 2 3 4)
-			lab(1 "not implemented")
-			lab(2 "partially implemented")
-			lab(3 "fully implemented")
-			lab(4 "not reported")
+			lab(1 "Not implemented")
+			lab(2 "Partially implemented")
+			lab(3 "Fully implemented")
+			lab(4 "Not reported")
 			)
 			name(heat_map)
             ;
@@ -402,6 +414,6 @@ forval x = 2(1)19 {
 
 ** Export to Vector Graphic
 ** DEC 22nd, 2022
-graph export "`outputpath'\reports\graphics\fig3-8.svg", replace
-graph export "`outputpath'\reports\graphics\fig3-8.pdf", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig33.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig33.pdf", replace
 

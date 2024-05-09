@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
+    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -151,6 +151,17 @@ format ad %10.0fc
 local box1 0.5 160 33.5 160 33.5 200 0.5 200
 local box2 0.5 230 33.5 230 33.5 290 0.5 290
 
+** Unicode markers for graphic
+/// †  	U+2020 (alt-08224)	DAGGER = obelisk, obelus, long cross
+/// ‡  	U+2021 (alt-08225)	DOUBLE DAGGER = diesis, double obelisk
+/// •  	U+2022 (alt-08226)	BULLET = black small circle
+local dagger = uchar(8224)
+local ddagger = uchar(8225)
+local section = uchar(0167) 
+local teardrop = uchar(10045) 
+
+format ad %9.0f
+
 #delimit ;
 	graph twoway 
 		/// Boxes around metrics
@@ -184,10 +195,10 @@ local box2 0.5 230 33.5 230 33.5 290 0.5 290
 		xtick(-50(50)150, tlc(gs12))
 
 		ylabel(
-			33	"Trinidad & Tobago"
+			33	"Trinidad and Tobago"
 			32	"Uruguay"
 			31	"Argentina"
-			30	"St.Vincent & Gren"
+			30	"Saint Vincent`dagger'"
 			29	"United States"
 			28	"Jamaica"
 			27	"Canada"
@@ -198,12 +209,12 @@ local box2 0.5 230 33.5 230 33.5 290 0.5 290
 			22	"El Salvador"
 			21	"Cuba"
 			20	"Chile"
-			19	"St.Lucia"
+			19	"Saint Lucia"
 			18	"Brazil"
 			17	"Guyana"
 			16	"Peru"
 			15	"Ecuador"
-			14	"Antigua & Barbuda"
+			14	"Antigua and Barbuda"
 			13	"Belize"
 			12	"Venezuela"
 			11	"Costa Rica"
@@ -216,12 +227,12 @@ local box2 0.5 230 33.5 230 33.5 290 0.5 290
 			4	"Paraguay"
 			3	"Nicaragua"
 			2	"Honduras"
-			1	"Dominican Rep"
+			1	"Dominican Republic"
 		, notick grid glp("-") glw(0.1) glc(gs12) valuelabel angle(0) labsize(2.5) labcolor(gs10)) 
 		ytitle(" ", axis(1)) 
 		yscale(noline range(1(1)35))
 
-        text(-2.5 50 "Percent Change in Deaths" "2000-2019", place(c) size(2.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
+        text(-2.5 50 "Percent change in deaths" "2000–2019", place(c) size(2.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
         text(35 180 "Percent" "Change", place(c) size(2.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
         text(35 260 "Extra" "Deaths", place(c) size(2.5) color("gs8") just(center) margin(l=2 r=2 t=4 b=2))
 
@@ -238,6 +249,6 @@ local box2 0.5 230 33.5 230 33.5 290 0.5 290
 
 ** Export to Vector Graphic
 ** DEC 22nd, 2022
-graph export "`outputpath'\reports\graphics\fig3-3.svg", replace
-graph export "`outputpath'\reports\graphics\fig3-3.pdf", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig28.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig28.pdf", replace
 

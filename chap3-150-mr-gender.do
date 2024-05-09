@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
+    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -405,6 +405,14 @@ local box2 32 0   30.75 0   30.75 3.25   32 3.25  32 0
 gen xlocation = -0.15
 gen drat2019i = drat2019 
 order drat2019, after(cod)
+
+** Unicode markers for graphic
+/// †  	U+2020 (alt-08224)	DAGGER = obelisk, obelus, long cross
+/// ‡  	U+2021 (alt-08225)	DOUBLE DAGGER = diesis, double obelisk
+/// •  	U+2022 (alt-08226)	BULLET = black small circle
+/// x   U+00D7 (alt-0215)
+local mult = uchar(0215)
+
 ** 2019 only
 #delimit ;  
 	gr twoway 
@@ -457,17 +465,17 @@ order drat2019, after(cod)
 			yscale(reverse noline lw(vthin) range(-4(1)38)) 
 			ytitle("", size(2) margin(l=0 r=0 t=0 b=0)) 
 
-            text(-5 1 "DALY Gender Ratio, 2019" , place(c) size(3.5) color("gs8") just(right) margin(l=0 r=1 t=4 b=2))
-            text(-3 0.75 "More" "Women"        , place(w) size(3) color("gs8") just(right) margin(l=0 r=1 t=4 b=2))
-            text(-3 1.5 "More" "Men"        , place(e) size(3) color("gs8") just(left) margin(l=0 r=1 t=4 b=2))
+            text(-5 1 "DALY gender ratio, 2019" , place(c) size(3.5) color("gs8") just(right) margin(l=0 r=1 t=4 b=2))
+            text(-3 0.75 "More" "women"        , place(w) size(3) color("gs8") just(right) margin(l=0 r=1 t=4 b=2))
+            text(-3 1.5 "More" "men"        , place(e) size(3) color("gs8") just(left) margin(l=0 r=1 t=4 b=2))
 
-            text(-0.9 0.5 "x2"        , place(c) size(3) color("gs6") just(left) margin(l=0 r=1 t=4 b=2))
-            text(-0.9 2 "x2"        , place(c) size(3) color("gs6") just(left) margin(l=0 r=1 t=4 b=2))
-            text(-0.9 3 "x3"        , place(c) size(3) color("gs6") just(left) margin(l=0 r=1 t=4 b=2))
+            text(-0.9 0.5 "`mult'2"        , place(c) size(3) color("gs6") just(left) margin(l=0 r=1 t=4 b=2))
+            text(-0.9 2 "`mult'2"        , place(c) size(3) color("gs6") just(left) margin(l=0 r=1 t=4 b=2))
+            text(-0.9 3 "`mult'3"        , place(c) size(3) color("gs6") just(left) margin(l=0 r=1 t=4 b=2))
 
-            text(31.1 0.5 "x2"        , place(c) size(3) color("gs6") just(left) margin(l=0 r=1 t=4 b=2))
-            text(31.1 2 "x4"        , place(c) size(3) color("gs6") just(left) margin(l=0 r=1 t=4 b=2))
-            text(31.1 3 "x6"        , place(c) size(3) color("gs6") just(left) margin(l=0 r=1 t=4 b=2))
+            text(31.1 0.5 "`mult'2"        , place(c) size(3) color("gs6") just(left) margin(l=0 r=1 t=4 b=2))
+            text(31.1 2 "`mult'4"        , place(c) size(3) color("gs6") just(left) margin(l=0 r=1 t=4 b=2))
+            text(31.1 3 "`mult'6"        , place(c) size(3) color("gs6") just(left) margin(l=0 r=1 t=4 b=2))
 
             legend(off)
 			name(gr_2019)
@@ -476,8 +484,8 @@ order drat2019, after(cod)
 
 ** Export to Vector Graphic
 ** DEC 22nd, 2022
-graph export "`outputpath'\reports\graphics\fig3-5.svg", replace
-graph export "`outputpath'\reports\graphics\fig3-5.pdf", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig30.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig30.pdf", replace
 
 
 

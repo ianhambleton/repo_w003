@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
+    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -309,33 +309,33 @@ local outer1    25 -4     -5 -4     -5 45      25 45      25 -4
 
 
             /// Disease coding 
-            text(1 13 "Ischemic heart disease",  place(e) size(5) color(gs0))
-            text(2 13 "Interpersonal violence",  place(e) size(5) color(gs0))
-            text(3 13 "Diabetes",  place(e) size(5) color(gs0))
+            text(1 13 "Ischemic heart disease",  place(e) size(4.25) color(gs0))
+            text(2 13 "Interpersonal violence",  place(e) size(4.25) color(gs0))
+            text(3 13 "Diabetes",  place(e) size(4.25) color(gs0))
 
-            text(4 13 "Road injury",  place(e) size(5) color(gs0))
-            text(5 13 "Stroke",  place(e) size(5) color(gs0))
-            text(6 13 "Drug use disorders",  place(e) size(5) color(gs0))
+            text(4 13 "Road injury",  place(e) size(4.25) color(gs0))
+            text(5 13 "Stroke",  place(e) size(4.25) color(gs0))
+            text(6 13 "Drug use disorders",  place(e) size(4.25) color(gs0))
 
-            text(7 13 "Depressive disorders",  place(e) size(5) color(gs0))
-            text(8 13 "COPD",  place(e) size(5) color(gs0))
-            text(9 13 "Anxiety disorders",  place(e) size(5) color(gs0))
+            text(7 13 "Depressive disorders",  place(e) size(4.25) color(gs0))
+            text(8 13 "COPD",  place(e) size(4.25) color(gs0))
+            text(9 13 "Anxiety disorders",  place(e) size(4.25) color(gs0))
 
-            text(10 13 "Breast cancer",  place(e) size(5) color(gs0))
-            text(11 13 "Self-harm",  place(e) size(5) color(gs0))
-            text(12 13 "Lung cancer", place(e) size(5) color(gs0))
+            text(10 13 "Breast cancer",  place(e) size(4.25) color(gs0))
+            text(11 13 "Self-harm",  place(e) size(4.25) color(gs0))
+            text(12 13 "Lung cancer", place(e) size(4.25) color(gs0))
 
-            text(13 13 "Falls",  place(e) size(5) color(gs0))
-            text(14 13 "Alcohol use disorders",  place(e) size(5) color(gs0))
-            text(15 13 "Migraine",  place(e) size(5) color(gs0))
+            text(13 13 "Falls",  place(e) size(4.25) color(gs0))
+            text(14 13 "Alcohol use disorders",  place(e) size(4.25) color(gs0))
+            text(15 13 "Migraine",  place(e) size(4.25) color(gs0))
 
-            text(16 13 "Alzeimers/dementias",  place(e) size(5) color(gs0))
-            text(17 13 "Prostate cancer",  place(e) size(5) color(gs0))
-            text(18 13 "Asthma",  place(e) size(5) color(gs0))
+            text(16 13 "Alzeimer/dementias",  place(e) size(4.25) color(gs0))
+            text(17 13 "Prostate cancer",  place(e) size(4.25) color(gs0))
+            text(18 13 "Asthma",  place(e) size(4.25) color(gs0))
 
-            text(19 13 "Colorectal cancer",  place(e) size(5) color(gs0))
-            text(20 13 "Hypertensive heart disease",  place(e) size(5) color(gs0))
-            text(22 13 "Cervical cancer",  place(e) size(5) color(gs0))
+            text(19 13 "Colorectal cancer",  place(e) size(4.25) color(gs0))
+            text(20 13 "Hypertensive heart disease",  place(e) size(4.25) color(gs0))
+            text(22 13 "Cervical cancer",  place(e) size(4.25) color(gs0))
 
 			legend(off)
 			name(slopechart_daly)
@@ -540,28 +540,28 @@ local outer1    25 -4     -5 -4     -5 45      25 45      25 -4
 
 
             /// Disease coding 
-            text(1 13 "Ischemic heart disease",  place(e) size(5) color(gs0))
-            text(2 13 "Stroke",  place(e) size(5) color(gs0))
-            text(3 13 "COPD",  place(e) size(5) color(gs0))
-            text(4 13 "Alzeimers/dementias",  place(e) size(5) color(gs0))
-            text(5 13 "Diabetes",  place(e) size(5) color(gs0))
-            text(6 13 "Interpersonal violence",  place(e) size(5) color(gs0))
-            text(7 13 "Lung cancers", place(e) size(5) color(gs0))
-            text(8 13 "Breast cancer",  place(e) size(5) color(gs0))
-            text(9 13 "Prostate cancer",  place(e) size(5) color(gs0))
-            text(10 13 "Road injury",  place(e) size(5) color(gs0))
-            text(11 13 "Hypertensive heart disease",  place(e) size(5) color(gs0))
-            text(12 13 "Colorectal cancer",  place(e) size(5) color(gs0))
-            text(13 13 "Self-harm",  place(e) size(5) color(gs0))
-            text(14 13 "Drug use disorders",  place(e) size(5) color(gs0))
-            text(15 13 "Cervical cancer",  place(e) size(5) color(gs0))
-            text(16 13 "Pancreas cancer",  place(e) size(5) color(gs0))
-            text(17 13 "Lymphomas, myeloma",  place(e) size(5) color(gs0))
-            text(18 13 "Falls",  place(e) size(5) color(gs0))
-            text(19 13 "Stomach cancer",  place(e) size(5) color(gs0))
-            text(20 13 "Cardiomyopathy etc.",  place(e) size(5) color(gs0))
-            text(22 13 "Leukemia",  place(e) size(5) color(gs0))
-            text(23 13 "Ovarian cancer",  place(e) size(5) color(gs0))
+            text(1 13 "Ischemic heart disease",  place(e) size(4.25) color(gs0))
+            text(2 13 "Stroke",  place(e) size(4.25) color(gs0))
+            text(3 13 "COPD",  place(e) size(4.25) color(gs0))
+            text(4 13 "Alzeimer/dementias",  place(e) size(4.25) color(gs0))
+            text(5 13 "Diabetes",  place(e) size(4.25) color(gs0))
+            text(6 13 "Interpersonal violence",  place(e) size(4.25) color(gs0))
+            text(7 13 "Lung cancers", place(e) size(4.25) color(gs0))
+            text(8 13 "Breast cancer",  place(e) size(4.25) color(gs0))
+            text(9 13 "Prostate cancer",  place(e) size(4.25) color(gs0))
+            text(10 13 "Road injury",  place(e) size(4.25) color(gs0))
+            text(11 13 "Hypertensive heart disease",  place(e) size(4.25) color(gs0))
+            text(12 13 "Colorectal cancer",  place(e) size(4.25) color(gs0))
+            text(13 13 "Self-harm",  place(e) size(4.25) color(gs0))
+            text(14 13 "Drug use disorders",  place(e) size(4.25) color(gs0))
+            text(15 13 "Cervical cancer",  place(e) size(4.25) color(gs0))
+            text(16 13 "Pancreas cancer",  place(e) size(4.25) color(gs0))
+            text(17 13 "Lymphomas, myeloma",  place(e) size(4.25) color(gs0))
+            text(18 13 "Falls",  place(e) size(4.25) color(gs0))
+            text(19 13 "Stomach cancer",  place(e) size(4.25) color(gs0))
+            text(20 13 "Cardiomyopathy etc.",  place(e) size(4.25) color(gs0))
+            text(22 13 "Leukemia",  place(e) size(4.25) color(gs0))
+            text(23 13 "Ovarian cancer",  place(e) size(4.25) color(gs0))
 
 			legend(off)
 			name(slopechart_mr)
@@ -575,17 +575,17 @@ gr combine  "`outputpath'\reports\graphics\fig3-2-mortality.pdf"
             "`outputpath'\reports\graphics\fig3-2-daly.pdf"
             ,
 			plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 		
-			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=3 t=5)) 
-			ysize(12) xsize(7)
+			graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 
+			ysize(12) xsize(8)
 
             rows(1) cols(2)
             iscale(*0.7)
-            ycommon
+            ///ycommon
             ;
 #delimit cr
 
 ** Export to Vector Graphic
 ** DEC 22nd, 2022
-graph export "`outputpath'\reports\graphics\fig2-2.svg", replace
-graph export "`outputpath'\reports\graphics\fig2-2.pdf", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig11.svg", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig11.pdf", replace
 
