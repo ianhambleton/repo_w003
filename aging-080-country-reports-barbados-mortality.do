@@ -1059,7 +1059,7 @@ putpdf begin, pagesize(legal) font("Calibri Light", 10) margin(top,0.5cm) margin
     putpdf text ("THESE REDUCED NCD RATES ") , bold font("Calibri Light", 12)
     putpdf text ("alone would have lead to fewer deaths nationally - heading towards 10 percent fewer. "), font("Calibri Light", 11)
     putpdf text ("But... deaths because of population growth have increased by 6 percent. "), font("Calibri Light", 11)
-    putpdf text ("And deaths because of our aging population have increased by 31 percent. "), font("Calibri Light", 11)
+    putpdf text ("And deaths because of our aging population have increased by 35 percent. "), font("Calibri Light", 11)
     putpdf text ("These demographic pressures more than offset any healthcare gains."), font("Calibri Light", 11)
     ** DALY rates for Combined NCDs
     putpdf table t4 = (6,13), width(90%) width(T4W) halign(center)  

@@ -263,6 +263,7 @@ restore
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yld yldr yll yllr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 36 & region==2000
@@ -293,6 +294,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yld yldr yll yllr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 32 & region==2000
@@ -323,6 +325,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yld yldr yll yllr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 37 & region==2000
@@ -353,6 +356,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yld yldr yll yllr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 35 & region==2000
@@ -384,6 +388,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yld yldr yll yllr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 34 & region==2000
@@ -414,6 +419,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yld yldr yll yllr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 42 & region==2000
@@ -444,6 +450,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yld yldr yll yllr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 46 & region==2000
@@ -474,6 +481,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yld yldr yll yllr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 44 & region==2000
@@ -504,6 +512,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yld yldr yll yllr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 47 & region==2000
@@ -534,6 +543,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yld yldr yll yllr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 43 & region==2000
@@ -564,6 +574,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yld yldr yll yllr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 800 & region==2000
@@ -594,6 +605,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yld yldr yll yllr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 900 & region==2000

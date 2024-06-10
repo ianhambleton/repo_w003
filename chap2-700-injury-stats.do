@@ -155,6 +155,7 @@ forval x = 1(1)5 {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yll yllr yld yldr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 56 & region==2000
@@ -185,6 +186,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yll yllr yld yldr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 48 & region==2000
@@ -214,6 +216,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yll yllr yld yldr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 55 & region==2000
@@ -243,6 +246,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yll yllr yld yldr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 50 & region==2000
@@ -272,6 +276,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yll yllr yld yldr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 52 & region==2000
@@ -301,6 +306,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yll yllr yld yldr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 1000 & region==2000
@@ -380,7 +386,7 @@ qui {
 ** Percent Improvement
 ** Death excess (men vs women)
 **-----------------------------------------------------------
-**qui {
+qui {
     use "`datapath'\from-who\chap2_000_daly_adjusted", clear
     keep if ghecause == 56 & region==2000
     rename dalyr drate

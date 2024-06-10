@@ -35,6 +35,7 @@ tempfile t1
 
 ** Mortality AND DALY rates 
 use "`datapath'\from-who\chap2_000_adjusted", clear
+drop yll yllr yld yldr 
 
 ** Size of 2019 MR in Americas (women and men combined)
 keep if region==2000 & sex==3  & (ghecause<=100 | ghecause==500)
@@ -89,6 +90,8 @@ label define cod_   1   "trachea/lung"
 label values cod cod_    
 keep if cod<=12
 
+
+
 ** COD as proportion of ALL CANCERS and ALL DEATHS
 ** Women and men combined, all Americas
 keep if sex==3 & region==2000
@@ -108,13 +111,15 @@ forval x = 1(1)11 {
     gen p`x'a = (dths`x'/dths11)*100
     gen p`x'b = (dths`x'/dths12)*100
 }
-/*
+
+
 **-----------------------------------------------------------
 ** TRACHEA / LUNG (ghecause==12)
 ** Mortality rates by sex
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yll yllr yld yldr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 12 & region==2000
@@ -145,6 +150,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yll yllr yld yldr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 14 & region==2000
@@ -174,6 +180,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yll yllr yld yldr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 18 & region==2000
@@ -203,6 +210,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yll yllr yld yldr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 9 & region==2000
@@ -232,6 +240,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yll yllr yld yldr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 15 & region==2000
@@ -261,6 +270,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yll yllr yld yldr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 11 & region==2000
@@ -290,6 +300,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yll yllr yld yldr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 27 & region==2000
@@ -318,6 +329,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yll yllr yld yldr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 8 & region==2000
@@ -346,6 +358,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yll yllr yld yldr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 10 & region==2000
@@ -375,6 +388,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yll yllr yld yldr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 28 & region==2000
@@ -404,6 +418,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yll yllr yld yldr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 500 & region==2000

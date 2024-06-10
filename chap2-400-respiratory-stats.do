@@ -62,6 +62,7 @@ gen p30b = (dths30/dths100)*100
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yll yllr yld yldr
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 29 & region==2000
@@ -92,6 +93,7 @@ qui {
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yll yllr yld yldr
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 30 & region==2000
@@ -154,7 +156,12 @@ format mperc1 mperc2 mperc3 dperc1 dperc2 dperc3 %9.1f
 gen dth_excess = dths12019-dths22019
 gen daly_excess = daly12019-daly22019
 format dths12019 dths22019 daly12019 daly22019 dth_excess daly_excess %12.0fc
-
+    ** Transpose
+    drop k
+    xpose , clear varname format(%15.1fc)
+    order _varname
+    dis "ALL MENTAL HEALTH - Change between 2000 and 2019"
+    noi list _varname v1, sep(6)
 
 **-----------------------------------------------------------
 ** COPD (29)

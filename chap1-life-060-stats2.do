@@ -261,3 +261,6 @@ tabdisp region sex, c(illhealth_extra) format(%9.1f)
 gen illhealth_perc = ((le2019 - hale2019) / le2019) * 100
 tabdisp region sex, c(illhealth_perc) format(%9.1f)
 
+gen illhealth_perc2000 = ((le2000 - hale2000) / le2000) * 100
+tabdisp region sex, c(illhealth_perc2000) format(%9.1f)
+

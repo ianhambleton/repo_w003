@@ -467,7 +467,7 @@ save "`datapath'\from-who\chap3_byage_groups_malefemale", replace
     bysort sex year ghecause who_region: egen num = sum(case)
     bysort sex year ghecause who_region: egen denom = sum(lpop)
     gen crude = num / denom
-
+/*
 ** (Ref Pop)/(Local Pop) * (Local Observed Events)
     gen srate1 = rpop / lpop * case 
     bysort sex year ghecause who_region: egen tsrate1 = sum(srate1)
