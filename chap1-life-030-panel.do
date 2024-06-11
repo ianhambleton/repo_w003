@@ -16,14 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
+    local datapath "C:\yasuki\Sync\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
+    local logpath "C:\yasuki\Sync\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
-
+    local outputpath "C:\yasuki\Sync\output\analyse-write\w003\outputs"
     ** Close any open log file and open a new log file
     capture log close
     log using "`logpath'\chap1-life-030-panel", replace
