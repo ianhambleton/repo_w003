@@ -282,3 +282,13 @@ local line8 10.5 0 10.5 -2
 ** DEC 22nd, 2022
 graph export "`outputpath'\reports\2024-edits\graphics\fig12.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig12.pdf", replace
+
+    ** Export data for Figure 12
+    keep paho_subregion l f  apdiff
+    rename f prob_2015
+    rename l prob_2019 
+    rename paho_subregion subregion
+    rename apdiff prof_diff_perc
+
+    order subregion prob_2015 prob_2019 prof_diff_perc
+    export excel "`outputpath'\reports\2024-edits\graphics\chap2_data.xlsx", sheet("figure-12", replace) first(var) keepcellfmt

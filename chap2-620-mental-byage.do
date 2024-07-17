@@ -171,6 +171,12 @@ label values cod cod_
 keep if cod<=12
 sort cod
 
+    ** Export data for FIGURE-22
+    keep cod death_* daly_*
+    rename cod disease 
+    export excel "`outputpath'\reports\2024-edits\graphics\chap2_data.xlsx", sheet("figure-22", replace) first(var) keepcellfmt   
+
+/*
 
 ** ------------------------------------------------------
 ** GRAPHIC

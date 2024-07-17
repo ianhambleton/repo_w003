@@ -294,3 +294,17 @@ graph export "`outputpath'\reports\2024-edits\graphics\fig6.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig6.pdf", replace
 
 
+** Export data for Figure 6
+drop zero 
+rename inj inj_cumulative
+rename ncd ncd_cumulative
+rename com com_cumulative
+rename pd10 com
+rename pd600 ncd 
+rename pd1510 inj
+rename agroup age_group 
+rename yr1 graph_order
+order year graph_order age_group inj ncd com inj_* ncd_* com_*  
+sort graph_order
+export excel "`outputpath'\reports\2024-edits\graphics\chap1_data.xlsx", sheet("figure-6", replace) first(var)
+

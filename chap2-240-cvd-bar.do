@@ -462,8 +462,18 @@ restore
 graph export "`outputpath'\reports\2024-edits\graphics\fig14.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig14.pdf", replace
 
+    ** Export data for FIGURE-14
+    keep cod region mortr id 
+    rename cod disease 
+    rename region country
+    rename mortr mortality_rate
+    rename id index_disparity 
+    order disease country mortality_rate index_disparity
+    export excel "`outputpath'\reports\2024-edits\graphics\chap2_data.xlsx", sheet("figure-14", replace) first(var) keepcellfmt
 
 
+
+/*
 
     ** generate a local for the D3 color scheme
     colorpalette d3, 20 n(20) nograph

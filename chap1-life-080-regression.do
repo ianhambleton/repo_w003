@@ -349,6 +349,35 @@ graph export "`outputpath'\reports\2024-edits\graphics\fig4a.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig4a.pdf", replace
 
 
+
+** Export data for Figure 4a
+preserve
+    drop ghocode wb 
+    rename metric le 
+    keep sr country cname le hrhrate zhrh zhrh_xb zhrh_lo zhrh_hi 
+    order sr country cname le hrhrate zhrh zhrh_xb zhrh_lo zhrh_hi 
+    rename zhrh_xb le_line
+    rename zhrh_lo le_lo
+    rename zhrh_hi le_hi
+    rename zhrh hrhrate_zscore 
+    sort sr country 
+    export excel "`outputpath'\reports\2024-edits\graphics\chap1_data.xlsx", sheet("figure-4a-left", replace) first(var)
+restore
+
+preserve
+    drop ghocode wb 
+    rename metric le 
+    keep sr country cname le healthexp zexp zexp_xb zexp_lo zexp_hi  
+    order sr country cname le healthexp zexp zexp_xb zexp_lo zexp_hi 
+    rename zexp_xb healthexp_line
+    rename zexp_lo le_lo
+    rename zexp_hi le_hi
+    rename zexp le_zscore 
+    sort sr country 
+    export excel "`outputpath'\reports\2024-edits\graphics\chap1_data.xlsx", sheet("figure-4a-right", replace) first(var)
+restore
+
+
 ** (1) GRAPH BY WORLD BANK INCOME GROUPS
 #delimit ;
 	gr twoway 
@@ -417,6 +446,35 @@ graph export "`outputpath'\reports\2024-edits\graphics\fig4b.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig4b.pdf", replace
 
 
+** Export data for Figure 4a
+preserve
+    drop ghocode sr 
+    rename metric le 
+    keep wb country cname le hrhrate zhrh zhrh_xb zhrh_lo zhrh_hi 
+    order wb country cname le hrhrate zhrh zhrh_xb zhrh_lo zhrh_hi 
+    rename zhrh_xb le_line
+    rename zhrh_lo le_lo
+    rename zhrh_hi le_hi
+    rename zhrh hrhrate_zscore 
+    sort wb country 
+    export excel "`outputpath'\reports\2024-edits\graphics\chap1_data.xlsx", sheet("figure-4b-left", replace) first(var)
+restore
+
+preserve
+    drop ghocode sr 
+    rename metric le 
+    keep wb country cname le healthexp zexp zexp_xb zexp_lo zexp_hi  
+    order wb country cname le healthexp zexp zexp_xb zexp_lo zexp_hi 
+    rename zexp_xb healthexp_line
+    rename zexp_lo le_lo
+    rename zexp_hi le_hi
+    rename zexp le_zscore 
+    sort wb country 
+    export excel "`outputpath'\reports\2024-edits\graphics\chap1_data.xlsx", sheet("figure-4b-right", replace) first(var)
+restore
+
+
+/*
 ** Figure 1.4
 #delimit ;
 gr combine  "`outputpath'\reports\graphics\fig1-4-subregion.pdf" 
@@ -435,3 +493,4 @@ gr combine  "`outputpath'\reports\graphics\fig1-4-subregion.pdf"
 ** DEC 22nd, 2022
 ** graph export "`outputpath'\reports\2024-edits\graphics\fig4.svg", replace
 ** graph export "`outputpath'\reports\2024-edits\graphics\fig4.pdf", replace
+

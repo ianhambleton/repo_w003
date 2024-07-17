@@ -271,3 +271,15 @@ order ad ad6s
 graph export "`outputpath'\reports\2024-edits\graphics\fig28.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig28.pdf", replace
 
+
+** Export data for Figure 28
+gsort -y1 
+keep iso3n ch_epi ch_gr ch_as pd ad
+rename iso3n country 
+rename ch_epi bar_blue 
+rename ch_as bar_orange 
+rename ch_gr bar_purple 
+rename pd percent_change 
+rename ad extra_deaths
+order country bar_blue bar_orange bar_purple percent_change extra_deaths
+export excel "`outputpath'\reports\2024-edits\graphics\chap3_data.xlsx", sheet("figure-28", replace) first(var)

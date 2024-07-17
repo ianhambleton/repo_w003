@@ -114,6 +114,9 @@ order pyear2000 pyear2019 pchange, after(popboth)
 drop t1 t2 popboth2000 popboth2019 popyear2000 popyear2019 
 sort year age_start1
 
+** Original data for export
+gen pmale_data = pmale 
+gen pfemale_data = pfemale
 
 ** Negative values for men to push bar to left
 replace pmale = pmale*-1
@@ -284,6 +287,20 @@ local line2 13.5 -10 13.5 30
 ** DEC 22nd, 2022
 graph export "`outputpath'\reports\2024-edits\graphics\fig27.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig27.pdf", replace
+
+
+** Export data for Figure 27
+gen percent_male = pmale_data 
+gen percent_female = pfemale_data
+
+keep year age_start1 percent_male percent_female pchange
+rename age_start1 age_group
+gsort year -age_group
+rename pchange percent_change
+order year age_group percent_male percent_female percent_change 
+export excel "`outputpath'\reports\2024-edits\graphics\chap3_data.xlsx", sheet("figure-27", replace) first(var) keepcellfmt
+
+
 
 
 /*

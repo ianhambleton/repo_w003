@@ -151,7 +151,12 @@ keep if cod<=6
 sort cod 
 order cod ghecause death_* daly_*
 
+    ** Export data for FIGURE-24
+    keep cod death_* daly_*
+    rename cod disease 
+    export excel "`outputpath'\reports\2024-edits\graphics\chap2_data.xlsx", sheet("figure-24", replace) first(var) keepcellfmt   
 
+/*
 ** ------------------------------------------------------
 ** GRAPHIC
 ** ------------------------------------------------------

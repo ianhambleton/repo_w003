@@ -152,7 +152,7 @@ local outer2 11800 2001 12400 2001 12400 2006 11800 2006 11800 2001
 local outer3 10800 2001 11400 2001 11400 2006 10800 2006 10800 2001 
 
 
-
+/*
 #delimit ;
 	gr twoway 
 		/// Africa
@@ -238,7 +238,7 @@ local outer3 10800 2001 11400 2001 11400 2006 10800 2006 10800 2001
 			name(deaths_panel)
 			;
 #delimit cr	
-
+*/
 
 ** Version 2 - legend outside
 
@@ -334,7 +334,7 @@ local outer3 16800 2069     17400 2069      17400 2074      16800 2074      1680
 			lab(1 "xx") 
 			lab(2 "xx") 		
             )
-			name(deaths_panel2)
+			///name(deaths_panel2)
 			;
 #delimit cr	
 ** Export to Vector Graphic
@@ -342,3 +342,20 @@ local outer3 16800 2069     17400 2069      17400 2074      16800 2074      1680
 graph export "`outputpath'\reports\2024-edits\graphics\fig5.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig5.pdf", replace
 
+
+** graph drop deaths_panel 
+** grexport, list wide saving(C:\yasuki\Sync\output\analyse-write\w003\outputs\fig5)
+
+
+** Export data for Figure 5
+drop zero pop 
+rename inj inj_cumulative
+rename ncd ncd_cumulative
+rename com com_cumulative
+rename dths10 com
+rename dths600 ncd 
+rename dths1510 inj
+rename yr1 graph_order
+order year graph_order who_region inj ncd com inj_* ncd_* com_*  
+sort graph_order
+export excel "`outputpath'\reports\2024-edits\graphics\chap1_data.xlsx", sheet("figure-5", replace) first(var)

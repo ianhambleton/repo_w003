@@ -334,6 +334,18 @@ restore
 
 
 
+    ** Export data for TABLE-5
+    keep if sex==3 & region==2000
+    keep year cod arate
+    rename cod disease 
+    rename arate death_rate 
+    label values disease cod_ 
+    order year disease death_rate
+    sort disease year  
+    export excel "`outputpath'\reports\2024-edits\graphics\chap2_data.xlsx", sheet("table-5-deaths", replace) first(var) keepcellfmt
+
+
+
 
 
 
@@ -588,7 +600,7 @@ restore
 
 
 ** -----------------------------------------------------
-** COLUMN 9 
+** COLUMN 10
 ** Outputs: DALY Gender ratio
 ** sratio1 to sratio6 (1-6 are the GHE causes)
 ** -----------------------------------------------------
@@ -610,7 +622,17 @@ preserve
     }
 restore
 
+    ** Export data for TABLE-5
+    keep if sex==3 & region==2000
+    keep year cod arate
+    rename cod disease 
+    rename arate daly_rate 
+    label values disease cod_ 
+    order year disease daly_rate
+    sort disease year  
+    export excel "`outputpath'\reports\2024-edits\graphics\chap2_data.xlsx", sheet("table-5-daly", replace) first(var) keepcellfmt  
 
+/*
 
 ** -----------------------------------------------------
 ** AUTOMATED WORD TABLE FOR REPORT

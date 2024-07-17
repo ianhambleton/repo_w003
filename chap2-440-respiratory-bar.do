@@ -342,6 +342,14 @@ graph export "`outputpath'\reports\2024-edits\graphics\fig18.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig18.pdf", replace
 
 
+    ** Export data for FIGURE-18
+    keep cod region mortr id 
+    rename cod disease 
+    rename region country
+    rename mortr mortality_rate
+    rename id index_disparity 
+    order disease country mortality_rate index_disparity
+    export excel "`outputpath'\reports\2024-edits\graphics\chap2_data.xlsx", sheet("figure-18", replace) first(var) keepcellfmt
 
 /*
 ** Add ISO code

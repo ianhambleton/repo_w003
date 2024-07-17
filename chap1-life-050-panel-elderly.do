@@ -388,3 +388,14 @@ local outer4 27.6 16.5 	28.4 16.5 	28.4 17.9 	27.6 17.9 	27.6 16.5
 graph export "`outputpath'\reports\2024-edits\graphics\fig2.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig2.pdf", replace
 
+** Export data for Figure 2
+keep if sex<3
+rename metric35 le 
+rename metric100 hale 
+drop if region=="WB_HI" | region=="WB_LI" | region=="WB_LMI" | region=="WB_UMI"
+drop country cname wbregion agroup
+sort yr1 sex
+order year region sex yr1 le hale 
+rename yr1 graph_order
+export excel "`outputpath'\reports\2024-edits\graphics\chap1_data.xlsx", sheet("figure-2", replace) first(var)
+

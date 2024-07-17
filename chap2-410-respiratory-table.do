@@ -301,6 +301,18 @@ restore
 
 
 
+    ** Export data for TABLE-6
+    keep if sex==3 & region==2000
+    keep year cod arate
+    rename cod disease 
+    rename arate death_rate 
+    label values disease cod_ 
+    order year disease death_rate
+    sort disease year  
+    export excel "`outputpath'\reports\2024-edits\graphics\chap2_data.xlsx", sheet("table-6-deaths", replace) first(var) keepcellfmt  
+
+
+
 
 
 ** -----------------------------------------------------
@@ -544,6 +556,15 @@ preserve
 restore
 
 
+    ** Export data for TABLE-6
+    keep if sex==3 & region==2000
+    keep year cod arate
+    rename cod disease 
+    rename arate daly_rate 
+    label values disease cod_ 
+    order year disease daly_rate
+    sort disease year  
+    export excel "`outputpath'\reports\2024-edits\graphics\chap2_data.xlsx", sheet("table-6-daly", replace) first(var) keepcellfmt   
 
 /*
 

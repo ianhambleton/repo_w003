@@ -524,3 +524,12 @@ label values yorder1 yorder1_;
 graph export "`outputpath'\reports\2024-edits\graphics\fig26.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig26.pdf", replace
 
+
+
+** Export data for Figure 26
+keep yorder mr_ac
+rename yorder cause
+rename mr_ac mortality_rate
+export excel "`outputpath'\reports\2024-edits\graphics\chap3_data.xlsx", sheet("figure-26", replace) first(var)
+
+

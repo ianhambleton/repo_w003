@@ -135,6 +135,15 @@ order cod ghecause death_* daly_*
 keep if cod<=1
 
 
+    ** Export data for FIGURE-20
+    keep if year==2019
+    keep cod death_* daly_*
+    rename cod disease 
+    export excel "`outputpath'\reports\2024-edits\graphics\chap2_data.xlsx", sheet("figure-20", replace) first(var) keepcellfmt   
+
+
+/*
+
 ** ------------------------------------------------------
 ** GRAPHIC
 ** ------------------------------------------------------

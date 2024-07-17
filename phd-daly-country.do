@@ -1,9 +1,9 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap2-000c-mr-country.do
+    //  algorithm name			    chap2-000g-daly-country.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
-    // 	date last modified	    	26-Apr-2021
+    // 	date last modified	    	16-Aug-2021
     //  algorithm task			    Preparing CVD mortality rates: Countries of the Americas
 
     ** General algorithm set-up
@@ -16,17 +16,17 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
+    local datapath "C:\yasuki\Sync\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
+    local logpath "C:\yasuki\Sync\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
+    local outputpath "C:\yasuki\Sync\output\analyse-write\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap2-000c-mr-country", replace
+    log using "`logpath'\chap2-000g-daly-country", replace
 ** HEADER -----------------------------------------------------
 
     ** Restrict to individual causes (NCDs and External Causes)
@@ -147,6 +147,8 @@ replace age21 = 19 if atext=="90-94"
 replace age21 = 20 if atext=="95-99"
 replace age21 = 21 if atext=="100+"
 gen age18 = age21
+** For DALY standardization we use 16 groups instead of 18 
+** We do this because Guyana estimates. DALY > Population when age 85+ 
 recode age18 (18 19 20 21 = 18) 
 collapse (sum) spop , by(age18) 
 rename spop rpop 
@@ -158,7 +160,7 @@ save `who_std', replace
 
 
 ** ------------------------------------------
-** Loading DEATHS dataset for the Americas only 
+** Loading DALYs dataset for the Americas only 
 ** Americas (AMR)
 **  1100    Cardiovascular 
 **  1110    Rheumatic heart disease I01-I09
@@ -168,7 +170,10 @@ save `who_std', replace
 **  1150    Cardiomyopathy, myocarditis, endocarditis I30-I33, I38, I40, I42 
 **  1160    Other circulatory diseases I00, I26-I28, I34-I37, I44-I51, I70-I99
 ** ------------------------------------------
-use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
+use "`datapath'\from-who\who-ghe-daly-001-who2-allcauses", replace
+** Collapse from 18 to 17 5 year groups.
+** This means 80+ instead of 85+ 
+collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex ghecause un_region un_subregion who_region paho_subregion)
 * TODO: Change restriction for each disease group
     #delimit ;
     keep if     
@@ -300,9 +305,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
     #delimit cr
     keep if who_region==2
     drop if age<0 
-    drop dths_low dths_up
+    drop daly_low daly_up
     ** Collapse from countries to subregions
-    collapse (sum) dths pop, by(ghecause year sex age iso3n iso3c paho_subregion)
+    collapse (sum) daly pop, by(ghecause year sex age iso3n iso3c paho_subregion)
     ** save "`datapath'\from-who\chap2_cvd_001", replace
 
 ** BROAD age groups
@@ -339,9 +344,9 @@ replace age18 = 16 if age==75
 replace age18 = 17 if age==80
 replace age18 = 18 if age==85
 * TODO: This collapse only now down to country-level (instead of subregion level)
-collapse (sum) dths pop, by(year ghecause iso3n iso3c paho_subregion sex age18 agroup)
+collapse (sum) daly pop, by(year ghecause iso3n iso3c paho_subregion sex age18 agroup)
 
-** Join the DEATHS dataset with the WHO STD population
+** Join the DALYs dataset with the WHO STD population
 ** merge m:m age18 using `who_std'
 
 ** Label the age groups
@@ -372,7 +377,7 @@ label values age18 age18_
 label var paho_subregion "8 PAHO subregions of the Americas"
 label var agroup "5 broad age groups: young children, youth, young adult, older adult, elderly"
 label var age18 "5-year age groups: 18 groups"
-label var dths "Count of all deaths"
+label var daly "Count of all dalys"
 label var pop "PAHO subregional populations" 
 format pop %12.0fc 
 ** label var spop "WHO Standard population: sums to 1 million"
@@ -447,17 +452,23 @@ label define ghecause_
 #delimit cr
 label values ghecause ghecause_ 
 
-** Use in Chapter 3. Population change
-** 18 age groups
-save "`datapath'\from-who\chap3_byage_country_malefemale", replace
+** Temporary Removal of "Natural Disaster" DALY values for Haiti in 2010
+preserve
+    keep if iso3n==332 & year==2010 & ghecause==54
+    save "`datapath'\from-who\chap2_000g_daly_country_haiti_natural_disaster", replace
+restore
 
+** DALY to zero for Haiti in 2010 for natural disasters.
+** The earthquale meant that DALY > POP, causing problems for the algorithms
+** which expects DALY < POP
+** replace daly = 0 if iso3n==332 & year==2010 & ghecause==54
 
 
 ** ------- 7-Apr-2022 new rate code ---------------------- 
 ** Add the Reference population
     merge m:m age18 using `who_std'
     rename pop lpop
-    rename dths case
+    rename daly case
     drop _merge
 
 ** Crude rate
@@ -510,7 +521,7 @@ save "`datapath'\from-who\chap3_byage_country_malefemale", replace
     rename case cases 
 
     ** Collapse out the local population
-    collapse (sum) cases lpop (mean) crate=crude arate=dsr aupp=cu alow=cl, by(sex year ghecause iso3n)  
+    collapse (sum) cases lpop (mean) crate=crude arate=dsr aupp=cu alow=cl, by(sex year ghecause iso3n paho_subregion)  
 
     ** Reformat variables
     ** rename case daly 
@@ -520,13 +531,13 @@ save "`datapath'\from-who\chap3_byage_country_malefemale", replace
     ** Variable re-naming and dropping unwanted variables
     rename iso3n region
     format cases %12.1fc 
-    keep cases crate arate aupp alow ase pop sex year ghecause region 
+    keep cases crate arate aupp alow ase pop sex year ghecause region paho_subregion
 ** ------- new code ends ---------------------- 
 
 
 
 ** Variable Labelling
-label var cases "Death numbers"
+label var cases "DALY numbers" 
 label var crate "Crude rate"
 label var arate "Adjusted rate"
 label var alow "Lower 95% limit of adjusted rate"
@@ -652,8 +663,12 @@ label values ghecause ghecause_
 drop ase iso3n 
 ** drop aupp alow ase 
 ** replace pop = pop/1000000
-label data "Crude and Adjusted mortality rates: PAHO sub-regions"
-save "`datapath'\paper2-inj\paper2_chap2_000c_mr_country", replace
+label data "Crude and Adjusted DALYs: PAHO sub-regions"
+save "`datapath'\paper2-inj\paper2_chap2_000g_daly_country", replace
+
+
+
+
 
 
 
@@ -664,7 +679,7 @@ save "`datapath'\paper2-inj\paper2_chap2_000c_mr_country", replace
 
 
 ** ------------------------------------------
-** Loading DEATHS dataset for the Americas only 
+** Loading DALYs dataset for the Americas only 
 ** Americas (AMR)
 **  1100    Cardiovascular 
 **  1110    Rheumatic heart disease I01-I09
@@ -674,7 +689,10 @@ save "`datapath'\paper2-inj\paper2_chap2_000c_mr_country", replace
 **  1150    Cardiomyopathy, myocarditis, endocarditis I30-I33, I38, I40, I42 
 **  1160    Other circulatory diseases I00, I26-I28, I34-I37, I44-I51, I70-I99
 ** ------------------------------------------
-use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
+use "`datapath'\from-who\who-ghe-daly-001-who2-allcauses", replace
+** Collapse from 18 to 17 5 year groups.
+** This means 80+ instead of 85+ 
+collapse (sum) daly daly_low daly_up pop, by(iso3c iso3n iso3 year age sex ghecause un_region un_subregion who_region paho_subregion)
 * TODO: Change restriction for each disease group
     #delimit ;
     keep if     
@@ -806,9 +824,9 @@ use "`datapath'\from-who\who-ghe-deaths-001-who2-allcauses", replace
     #delimit cr
     keep if who_region==2
     drop if age<0 
-    drop dths_low dths_up
+    drop daly_low daly_up
     ** Collapse from countries to subregions
-    collapse (sum) dths pop, by(ghecause year sex age iso3n iso3c paho_subregion)
+    collapse (sum) daly pop, by(ghecause year sex age iso3n iso3c paho_subregion)
     ** save "`datapath'\from-who\chap2_cvd_001", replace
 
 ** BROAD age groups
@@ -845,9 +863,9 @@ replace age18 = 16 if age==75
 replace age18 = 17 if age==80
 replace age18 = 18 if age==85
 * TODO: This collapse only now down to country-level (instead of subregion level)
-collapse (sum) dths pop, by(year ghecause iso3n iso3c paho_subregion age18 agroup)
+collapse (sum) daly pop, by(year ghecause iso3n iso3c paho_subregion age18 agroup)
 
-** Join the DEATHS dataset with the WHO STD population
+** Join the DALYs dataset with the WHO STD population
 ** merge m:m age18 using `who_std'
 
 ** Label the age groups
@@ -878,7 +896,7 @@ label values age18 age18_
 label var paho_subregion "8 PAHO subregions of the Americas"
 label var agroup "5 broad age groups: young children, youth, young adult, older adult, elderly"
 label var age18 "5-year age groups: 18 groups"
-label var dths "Count of all deaths"
+label var daly "Count of all DALYs"
 label var pop "PAHO subregional populations" 
 format pop %12.0fc 
 ** label var spop "WHO Standard population: sums to 1 million"
@@ -953,16 +971,24 @@ label define ghecause_
 #delimit cr
 label values ghecause ghecause_ 
 
-** Use in Chapter 3. Population change
-** 18 age groups
-save "`datapath'\from-who\chap3_byage_country_both", replace
+
+** Temporary Removal of "Natural Disaster" DALY values for Haiti in 2010
+preserve
+    keep if iso3n==332 & year==2010 & ghecause==54
+    save "`datapath'\from-who\chap2_000g_daly_country_haiti_natural_disaster", replace
+restore
+
+** DALY to zero for Haiti in 2010 for natural disasters.
+** The earthquale meant that DALY > POP, causing problems for the algorithms
+** which expects DALY < POP
+** replace daly = 0 if iso3n==332 & year==2010 & ghecause==54
 
 
 ** ------- 7-Apr-2022 new rate code  ---------------------- 
 ** Add the Reference population
     merge m:m age18 using `who_std'
     rename pop lpop
-    rename dths case
+    rename daly case
     drop _merge
 
 ** Crude rate
@@ -1015,7 +1041,7 @@ save "`datapath'\from-who\chap3_byage_country_both", replace
     rename case cases
 
     ** Collapse out the local population
-    collapse (sum) cases lpop (mean) crate=crude arate=dsr aupp=cu alow=cl, by(year ghecause iso3n)  
+    collapse (sum) cases lpop (mean) crate=crude arate=dsr aupp=cu alow=cl, by(year ghecause iso3n paho_subregion)  
 
     ** Reformat variables
     ** rename case daly 
@@ -1025,13 +1051,13 @@ save "`datapath'\from-who\chap3_byage_country_both", replace
     ** Variable re-naming and dropping unwanted variables
     format cases %12.1fc
     rename iso3n region
-    keep cases crate arate aupp alow ase pop year ghecause region 
+    keep cases crate arate aupp alow ase pop year ghecause region paho_subregion
 ** ------- new code ends ---------------------- 
 
 
 
 ** Variable Labelling
-label var cases "Death numbers"
+label var cases "DALY numbers"
 label var crate "Crude rate"
 label var arate "Adjusted rate"
 label var alow "Lower 95% limit of adjusted rate"
@@ -1154,5 +1180,5 @@ gen sex = 3
 drop ase iso3n 
 ** drop aupp alow ase 
 ** replace pop = pop/1000000
-label data "Crude and Adjusted mortality rates: PAHO sub-regions"
-save "`datapath'\paper2-inj\paper2_chap2_000c_mr_country_both", replace
+label data "Crude and Adjusted DALYs: PAHO sub-regions"
+save "`datapath'\paper2-inj\paper2_chap2_000g_daly_country_both", replace

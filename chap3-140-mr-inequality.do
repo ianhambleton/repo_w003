@@ -494,3 +494,10 @@ graph export "`outputpath'\reports\2024-edits\graphics\fig29.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig29.pdf", replace
 
 
+** Export data for Figure 29
+keep group yorder id
+rename group disease_group 
+rename yorder disease 
+rename id index_disparity 
+export excel "`outputpath'\reports\2024-edits\graphics\chap3_data.xlsx", sheet("figure-29", replace) first(var)
+

@@ -424,3 +424,18 @@ restore
 graph export "`outputpath'\reports\2024-edits\graphics\fig3.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig3.pdf", replace
 
+
+** Export data for Figure 3
+drop agroup
+keep if sex==3 & year==2019
+drop sex region
+rename yax graph_order
+rename srmin metric_min
+rename srmax metric_max
+label define ghocode_ 35 "le", modify 
+label values ghocode ghocode_
+order sr country cname ghocode year metric metric_min metric_max graph_order 
+sort sr ghocode metric
+rename ghocode type 
+export excel "`outputpath'\reports\2024-edits\graphics\chap1_data.xlsx", sheet("figure-3", replace) first(var)
+

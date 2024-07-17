@@ -417,3 +417,33 @@ local teardrop = uchar(10045)
 graph export "`outputpath'\reports\2024-edits\graphics\fig33.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig33.pdf", replace
 
+
+
+** Export data for Figure 33
+rename t progress 
+rename monitor target 
+keep iid iso3c subr target progress 
+rename iid country_id 
+rename iso3c country 
+rename subr subregion 
+order country_id country subregion target progress 
+
+#delimit ; 
+label define target_ 
+					1 "NCD targets"
+				 	2 "Mortality data" 					3 "Risk factor survey" 
+				 4 "NCD policy" 						5 "Tobacco. Taxes / prices"
+				 6 "Smoke-free policies"				7 "Tobacco. Packaging"
+				 8 "Tobacco. Ad bans"					9 "Mass media campaigns"
+				 10 "Alcohol. Restrict availability"	11 "Alcohol. Ad bans"
+				 12 "Alcohol. Taxes"					13 "Salt policies"
+				 14 "Trans-fats policies"				15 "Restrict marketing to kids"
+				 16 "Restrict breast milk marketing"	17 "Physical activity awareness"
+				 18 "NCD management guidelines"			19 "AMI / stroke prevention" , modify;
+#delimit cr 
+
+label define progress_ 0 "not achieved" 1 "partially achieved" 2 "fully achieved" 
+label values progress progress_ 
+label values target target_ 
+export excel "`outputpath'\reports\2024-edits\graphics\chap3_data.xlsx", sheet("figure-33", replace) first(var)
+

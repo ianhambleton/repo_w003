@@ -589,3 +589,12 @@ gr combine  "`outputpath'\reports\graphics\fig3-2-mortality.pdf"
 graph export "`outputpath'\reports\2024-edits\graphics\fig11.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig11.pdf", replace
 
+
+    ** Export data for Figure 11
+    sort metric order2019 
+    keep ghecause metric arate2000 arate2019 order2000 order2019   
+    rename ghecause disease_group 
+    rename arate2000 rate2000
+    rename arate2019 rate2019
+    order disease_group metric rate2000 rate2019 order2000 order2019 
+    export excel "`outputpath'\reports\2024-edits\graphics\chap2_data.xlsx", sheet("figure-11", replace) first(var) keepcellfmt

@@ -503,6 +503,17 @@ preserve
 graph export "`outputpath'\reports\2024-edits\graphics\fig16a.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig16a.pdf", replace
 
+preserve
+    ** Export data for FIGURE-16
+    keep cod region mortr id 
+    rename cod disease 
+    rename region country
+    rename mortr mortality_rate
+    rename id index_disparity 
+    order disease country mortality_rate index_disparity
+    export excel "`outputpath'\reports\2024-edits\graphics\chap2_data.xlsx", sheet("figure-16", replace) first(var) keepcellfmt
+restore
+
 ** Large version of BAR CHART for Top 6-10 cancers
 #delimit ;
 	gr twoway 
@@ -669,6 +680,14 @@ graph export "`outputpath'\reports\2024-edits\graphics\fig16a.pdf", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig16b.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig16b.pdf", replace
 
+///    ** Export data for FIGURE-16b
+///    keep cod region mortr id 
+///    rename cod disease 
+///    rename region country
+///    rename mortr mortality_rate
+///    rename id index_disparity 
+///    order disease country mortality_rate index_disparity
+///    export excel "`outputpath'\reports\2024-edits\graphics\chap2_data.xlsx", sheet("figure-16b", replace) first(var) keepcellfmt
 
 
 

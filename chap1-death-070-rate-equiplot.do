@@ -263,6 +263,17 @@ sort sex ghecause drate
 graph export "`outputpath'\reports\2024-edits\graphics\fig8.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig8.pdf", replace
 
+** Export data for Figure 8
+** WOMEN 2. MEN 1.
+drop if sex==3
+drop year ghecause_orig paho_subregion *yll* *yld* tregion zero zerof dratef oregion pop arate mrate
+sort sex ghecause drate
+order sex ghecause region drate 
+rename drate excess_rate
+export excel "`outputpath'\reports\2024-edits\graphics\chap1_data.xlsx", sheet("figure-8", replace) first(var)
+
+
+
 
 
 
@@ -478,3 +489,12 @@ sort sex ghecause drate
 graph export "`outputpath'\reports\2024-edits\graphics\fig9.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig9.pdf", replace
 
+
+** Export data for Figure 9
+** WOMEN 2. MEN 1.
+drop if sex==3
+drop year ghecause_orig tregion zero zerof dratef oregion arate mrate
+sort sex ghecause drate
+order sex ghecause region drate 
+rename drate excess_rate
+export excel "`outputpath'\reports\2024-edits\graphics\chap1_data.xlsx", sheet("figure-9", replace) first(var)

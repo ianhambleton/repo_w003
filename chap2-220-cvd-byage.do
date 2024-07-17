@@ -150,6 +150,14 @@ sort cod
 order cod ghecause death_* daly_*
 
 
+    ** Export data for FIGURE-13
+    keep cod death_* daly_*
+    rename cod disease 
+    export excel "`outputpath'\reports\2024-edits\graphics\chap2_data.xlsx", sheet("figure-13", replace) first(var) keepcellfmt
+
+
+
+/*
 ** ------------------------------------------------------
 ** GRAPHIC
 ** ------------------------------------------------------
@@ -399,4 +407,3 @@ order mindaly maxdaly, after(daly5)
 ** DEC 22nd, 2022
 graph export "`outputpath'\reports\2024-edits\graphics\fig13.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig13.pdf", replace
-

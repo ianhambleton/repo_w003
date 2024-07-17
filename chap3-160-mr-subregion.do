@@ -116,7 +116,7 @@ gsort cod -drate
 
 
 **preserve
-    drop daly dths mrate 
+    drop daly dths mrate yll yllr yld yldr 
     reshape wide drate, i(region) j(cod)
     reshape wide drate400 drate500 drate31, i(region) j(subr)
 
@@ -183,7 +183,28 @@ gsort cod -drate
     ** DEC 22nd, 2022
     graph export "`outputpath'\reports\2024-edits\graphics\fig31.svg", replace
     graph export "`outputpath'\reports\2024-edits\graphics\fig31.pdf", replace
+
+    ** Export data for Figure 31
+    ** 400  "CVD"
+    ** 500  "cancer"
+    keep region subr3 drate311 drate312 drate4001 drate4002 drate5001 drate5002
+    gen diabetes = drate311 
+    replace diabetes = drate312 if diabetes==. 
+    gen cvd = drate4001
+    replace cvd = drate4002 if cvd==. 
+    gen cancer = drate5001
+    replace cancer = drate5002 if cancer==. 
+    rename region country 
+    rename subr3 region 
+    order country region cvd cancer diabetes
+    drop drate* 
+    export excel "`outputpath'\reports\2024-edits\graphics\chap3_data.xlsx", sheet("figure-31", replace) first(var)
+
+
 ** restore
+
+
+
 
 /*
 

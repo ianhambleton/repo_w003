@@ -459,3 +459,11 @@ local yaxis_sym 2034 3900000
 graph export "`outputpath'\reports\2024-edits\graphics\fig10.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig10.pdf", replace
 
+    ** Export data for Figure 10
+    keep year sex ghecause dths daly 
+    rename ghecause disease_group 
+    rename dths deaths  
+    replace deaths = -1 * deaths 
+    order year sex disease_group deaths daly
+    drop if disease_group<=2 | disease_group==9 
+    export excel "`outputpath'\reports\2024-edits\graphics\chap2_data.xlsx", sheet("figure-10", replace) first(var) keepcellfmt

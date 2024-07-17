@@ -54,6 +54,7 @@ gen ddrat_all = daly100 / dths100
 **-----------------------------------------------------------
 qui {
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yll yllr yld yldr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 31 & region==2000
@@ -132,6 +133,7 @@ qui {
 ** Diabetes (31)
 **-----------------------------------------------------------
     use "`datapath'\from-who\chap2_000_adjusted", clear
+    drop yll yllr yld yldr 
     rename mortr mrate
     rename dalyr drate
     keep if ghecause == 31 
@@ -310,3 +312,8 @@ graph export "`outputpath'\reports\2024-edits\graphics\fig19.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig19.pdf", replace
 
 
+    ** Export data for FIGURE-19
+    drop if region==2000
+    keep year region dratio_rate  
+    rename dratio_rate daly_rate_ratio 
+    export excel "`outputpath'\reports\2024-edits\graphics\chap2_data.xlsx", sheet("figure-19", replace) first(var) keepcellfmt

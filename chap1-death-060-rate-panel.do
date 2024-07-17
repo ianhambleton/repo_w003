@@ -40,6 +40,12 @@
 /// format pop %15.0fc
 
 use "`datapath'\from-who\chap2_000_adjusted", clear
+* DROP YLL and YLD metrics
+drop *yll* *yld* 
+save "`datapath'\from-who\chap2_000_adjusted_panel", replace
+
+
+use "`datapath'\from-who\chap2_000_adjusted_panel", clear
 ** Keep sub-regional level (this will keep the 8 PAHO subregions of the Americas)
 keep if region>=100 & region <1000
 ** Interested only in the THREE major disease groups
@@ -105,7 +111,7 @@ save `graphic', replace
 
 ** Associated stats for text
 ** COM/NCDs/INJ in 2000 and 2019, women and men separately, and women+men combined
-use "`datapath'\from-who\chap2_000_adjusted", clear
+use "`datapath'\from-who\chap2_000_adjusted_panel", clear
 	keep if (region>=100 & region <1000) | region==2000
 	keep if ghecause==200 | ghecause==300 | ghecause==1000
 	keep if year==2000 | year==2019 
@@ -125,7 +131,7 @@ use "`datapath'\from-who\chap2_000_adjusted", clear
 
 ** Associated stats for text
 ** COM/NCDs/INJ --> difference between women and men in 2000 and 2019
-use "`datapath'\from-who\chap2_000_adjusted", clear
+use "`datapath'\from-who\chap2_000_adjusted_panel", clear
 	keep if (region>=100 & region <1000) | region==2000
 	keep if ghecause==200 | ghecause==300 | ghecause==1000
 	keep if year==2000 | year==2019 
@@ -141,7 +147,7 @@ use "`datapath'\from-who\chap2_000_adjusted", clear
 
 ** Associated stats for Table 1.3
 ** COM/NCDs/INJ in 2019, women and men separately
-use "`datapath'\from-who\chap2_000_adjusted", clear
+use "`datapath'\from-who\chap2_000_adjusted_panel", clear
 	keep if (region>=100 & region <1000) | (region>=1000 & region<=6000)
 	keep if ghecause==200 | ghecause==300 | ghecause==1000
 	keep if sex<3
@@ -154,7 +160,7 @@ use "`datapath'\from-who\chap2_000_adjusted", clear
 
 ** Associated stats for Table 1.3
 ** ALL-CAUSE in 2019, women and men separately
-use "`datapath'\from-who\chap2_000_adjusted", clear
+use "`datapath'\from-who\chap2_000_adjusted_panel", clear
 	keep if (region>=100 & region <1000) | (region>=1000 & region<=6000)
 	keep if ghecause==100
 	keep if sex<3
@@ -564,4 +570,16 @@ local outer3 860 2106 890 2106 890 2111 860 2111 860 2106
 ** DEC 22nd, 2022
 graph export "`outputpath'\reports\2024-edits\graphics\fig7.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig7.pdf", replace
+
+
+
+** Export data for Figure 7
+** WOMEN 2. MEN 1.
+drop paho_subregion ghecause_orig pop1 pop2 pop3 arate3
+rename arate1 rate_men
+rename arate2 rate_women
+rename yr1 graph_order 
+sort graph_order ghecause year 
+order  region ghecause year graph_order rate_men rate_women
+export excel "`outputpath'\reports\2024-edits\graphics\chap1_data.xlsx", sheet("figure-7", replace) first(var)
 

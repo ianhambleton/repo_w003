@@ -435,6 +435,14 @@ restore
 graph export "`outputpath'\reports\2024-edits\graphics\fig23b.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig23b.pdf", replace
 
+    ** Export data for FIGURE-23b
+    keep cod region dalyr id 
+    rename cod disease 
+    rename region country
+    rename dalyr daly_rate
+    rename id index_disparity 
+    order disease country daly_rate index_disparity
+    export excel "`outputpath'\reports\2024-edits\graphics\chap2_data.xlsx", sheet("figure-23b", replace) first(var) keepcellfmt
 
 
 /*

@@ -29,7 +29,7 @@
     log using "`logpath'\chap2-008-initial-slopechart-who", replace
 ** HEADER -----------------------------------------------------
 
-import excel using "X:\OneDrive - The University of the West Indies\Writing\w003\outputs\reports\comments/Leading causes .xlsx", first sheet("Sheet1") clear
+import excel using "C:\yasuki\Sync\output\analyse-write\w003\outputs\reports\comments/Leading causes .xlsx", first sheet("Sheet1") clear
 
 ** Quintiles
 gen q1 = .
@@ -203,6 +203,15 @@ sort morder
 ** DEC 22nd, 2022
 graph export "`outputpath'\reports\2024-edits\graphics\box4.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\box4.pdf", replace
+
+
+    ** Export data for Box 2
+    keep cod morder dorder deaths daly    
+    rename cod disease 
+    rename morder deaths_order
+    rename dorder daly_order
+    order disease deaths daly deaths_order daly_order 
+    export excel "`outputpath'\reports\2024-edits\graphics\chap2_data.xlsx", sheet("box-2", replace) first(var) keepcellfmt
 
 
 /*

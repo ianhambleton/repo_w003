@@ -489,6 +489,13 @@ graph export "`outputpath'\reports\2024-edits\graphics\fig30.pdf", replace
 
 
 
+** Export data for Figure 30
+keep group yorder drat2019i
+rename group disease_group 
+rename yorder disease 
+rename drat2019i gender_ratio 
+export excel "`outputpath'\reports\2024-edits\graphics\chap3_data.xlsx", sheet("figure-30", replace) first(var)
+
 
 
 /*

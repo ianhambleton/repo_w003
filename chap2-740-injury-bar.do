@@ -440,6 +440,14 @@ graph export "`outputpath'\reports\2024-edits\graphics\fig25.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig25.pdf", replace
 
 
+    ** Export data for FIGURE-25
+    keep cod region mortr id 
+    rename cod disease 
+    rename region country
+    rename mortr mortality_rate
+    rename id index_disparity 
+    order disease country mortality_rate index_disparity
+    export excel "`outputpath'\reports\2024-edits\graphics\chap2_data.xlsx", sheet("figure-25", replace) first(var) keepcellfmt
 
 
 
