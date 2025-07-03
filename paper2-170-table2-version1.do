@@ -97,6 +97,7 @@ tempfile d1 d2 d3 d4 d5 d6 d7 d8 d9 d10 d11 d12 d13 d14
 
 ** MORTALITY MALE in 2000
 preserve
+    ** Keep individual countries + Americas 
     keep if sex==1 & year==2000 & (region<100 | region==2000)
 
     ** BASED ON ADJUSTED MORTALITY RATE 

@@ -16,18 +16,20 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\yasuki\Sync\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\yasuki\Sync\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
+    local outputpath "C:\yasuki\Sync\output\analyse-write\w003\outputs"
+
 
     ** Close any open log file and open a new log file
     capture log close
     log using "`logpath'\ap010-ghe-burden", replace
 ** HEADER -----------------------------------------------------
+
 
 
 ** ************************************************************
@@ -316,10 +318,10 @@ save "`datapath'\from-owid\regions", replace
 
 **    WHO GHE 2019. Disease burden
 **    We Load an initial 100 rows while the dataset is documented 
-use "`datapath'\from-who\dths_yld_daly", clear 
+use in 1/50000 using "`datapath'\from-who\dths_yld_daly", clear 
 rename iso3 iso3c 
 
-
+/*
 ** ************************************************************
 ** 3. ADDING GHE BURDEN DATASET METADATA 
 ** ************************************************************

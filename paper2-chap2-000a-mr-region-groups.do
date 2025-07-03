@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\data"
+    local datapath "C:\yasuki\Sync\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\tech-docs"
+    local logpath "C:\yasuki\Sync\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "C:\Sync\CaribData\My Drive\output\analyse-write\w003\outputs"
+    local outputpath "C:\yasuki\Sync\output\analyse-write\w003\outputs\articles\paper-injury\2025"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -96,6 +96,7 @@ save `who_std', replace
 tempfile afr amr emr eur sear wpr world
 ** Africa (AFR)
 use "`datapath'\from-who\who-ghe-deaths-001-who1-allcauses", replace
+/*
 
 * TODO: Change restriction for each disease group
     #delimit ;

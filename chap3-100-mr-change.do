@@ -42,7 +42,7 @@ tempfile kcancer region_mr12 region_mr3 region_daly12 region_daly3
 use "`datapath'\from-who\chap2_000_adjusted", clear
 rename mortr arate
 rename dalyr drate
-
+/*
 
 ** -----------------------------------------------------
 ** Keep only the TOP conditions used in the report

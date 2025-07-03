@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\yasuki\Sync\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\yasuki\Sync\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs\articles\paper-ncd\article-draft"
+    local outputpath "C:\yasuki\Sync\output\analyse-write\w003\outputs\articles\paper-ncd\article-draft"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -398,7 +398,7 @@ format daly* %15.0fc
 		gsort ch_d
 		list iso3n ch_d ch_gr ch_as ch_epi, sep(5) line(120)
 
-/*
+
 ** Country names
 drop if iso3c=="LAC"
 gsort -ch_d
@@ -529,7 +529,7 @@ local box2 0.5 260 33.5 260 33.5 360 0.5 360
 	;
 #delimit cr
 
-
+/*
 ** ----------------------------------------------------
 ** DALYs (WOMEN AND MEN COMBINED)
 ** ----------------------------------------------------

@@ -292,6 +292,9 @@ local outer3 112 2060 117 2060 117 2064 112 2064 112 2060
 ** DEC 22nd, 2022
 graph export "`outputpath'\reports\2024-edits\graphics\fig6.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig6.pdf", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig6-lo.jpg", quality(100) width(600) replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig6-med.jpg", quality(100) width(2000) replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig6-hi.jpg", quality(100) width(6000) replace
 
 
 ** Export data for Figure 6

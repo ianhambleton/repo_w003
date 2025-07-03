@@ -235,7 +235,7 @@ order iid tscore2020 iso3c
 drop *totpop *pmort *tmort *pdeath
 reshape long t , i(iid iso3c paho_subregion subr) j(monitor)
 order iid iso3 paho_subregion subr tscore2020 t  
-
+/*
 ** Adjust x-axis
 gen monitor2 = monitor
 forval x = 2(1)19 {

@@ -588,6 +588,9 @@ gr combine  "`outputpath'\reports\graphics\fig3-2-mortality.pdf"
 ** DEC 22nd, 2022
 graph export "`outputpath'\reports\2024-edits\graphics\fig11.svg", replace
 graph export "`outputpath'\reports\2024-edits\graphics\fig11.pdf", replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig11-lo.jpg", quality(100) width(600) replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig11-med.jpg", quality(100) width(2000) replace
+graph export "`outputpath'\reports\2024-edits\graphics\fig11-hi.jpg", quality(100) width(6000) replace
 
 
     ** Export data for Figure 11
