@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    paper2-2025-figure1.do
+    //  algorithm name			    paper2-2026-figure1.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	16-Apr-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\paper2-2025-figure1", replace
+    log using "`logpath'\paper2-2026-figure1", replace
 ** HEADER -----------------------------------------------------
 
 
@@ -859,7 +859,7 @@ local am `r(p15)'
     putpdf text ("Difference between women and men: "), italic 
 	putpdf text ("shaded regions, ")
     putpdf text ("Average for The Americas: "), italic 
-	putpdf text ("grey line). ")
+	putpdf text ("black dotted line). ")
 
 ** LEGEND
     ///putpdf table f1 = (1,1), width(25%) border(all,single) halign(right)
@@ -883,5 +883,5 @@ local am `r(p15)'
     local c_date = c(current_date)
     local date_string = subinstr("`c_date'", " ", "", .)
     ** putpdf save "`outputpath'/Figure_One_SS_`date_string'_grayscale", replace
-    putpdf save "`outputpath'//Figure_1_`date_string'_color", replace
+    putpdf save "`outputpath'//Figure_1_`date_string'_color_v2", replace
 

@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    paper2-2025-002-deathrate.do
+    //  algorithm name			    paper2-20256-002-dalyrate.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	26-Apr-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\cpaper2-2025-002-deathrate", replace
+    log using "`logpath'\cpaper2-2026-002-dalyrate", replace
 ** HEADER -----------------------------------------------------
 
 ** ------------------------------------------
@@ -86,9 +86,10 @@ save `who_std', replace
 
 
 ** ------------------------------------------
-** Loading INJURY DEATHS 
+** Loading INJURY DALYs
 ** ------------------------------------------
-use "`datapath'\ghe-2021-death-001", replace
+use "`datapath'\ghe-2021-daly-001", replace
+
 ** The CID groups
 rename cid ghecause 
 labmask ghecause, values(cname) 
@@ -112,7 +113,7 @@ replace agroup = 5 if age==14 | age==15 | age==16 | age==17 | age==18
 label define agroup_ 1 "young children" 2 "youth" 3 "young adults" 4 "older adults" 5 "elderly" , modify
 label values agroup agroup_ 
 
-** Join the DEATHS dataset with the WHO STD population
+** Join the ILLNESS dataset with the WHO STD population
 ** merge m:1 age using `who_std'
 ** drop _merge
 
@@ -147,7 +148,7 @@ tempfile mr_country
 save `mr_country', replace 
 
 
-**! Now want to append sub-regional and regional blocks to the country values
+** Append sub-regional and regional blocks to the country values
 
 ** CREATE SUB-REGIONAL DATASET
 use `mr_country', replace 
@@ -192,10 +193,10 @@ label define iso3n  1000 "North America"
 #delimit cr 
 label values iso3n iso3n 
 
-
 ** This becomes `dataset2' in --> paper2-2025-005-datasets.do
 ** DEATHS in 18 age groups
-save "`datapath'\ghe-2021-death-byage", replace
+save "`datapath'\ghe-2021-daly-byage", replace
+
 
 ** -------------------------------------------------------
 ** AGE-STANDARDIZED RATES
@@ -270,7 +271,7 @@ save "`datapath'\ghe-2021-death-byage", replace
 ** ------- new code ends ---------------------- 
 
 ** Variable Labelling
-label var cases "Death numbers"
+label var cases "DALY numbers"
 label var crate "Crude rate"
 label var arate "Adjusted rate"
 label var alow "Lower 95% limit of adjusted rate"
@@ -279,7 +280,7 @@ label var ase "standard error of adjusted rate"
 label var pop "Population of subregion"
 label var year "Year of mortality rate"
 label var sex "Men (1) and Women (2)"
-label var ghecause "Broad causes of death"
+label var ghecause "Broad causes of DALYs"
 label var region "WHO region / PAHO subregion"
 
 ** Variable level labelling
@@ -298,32 +299,8 @@ drop ase region_label
 ** replace pop = pop/1000000
 order region 
 
-label data "Crude and Adjusted mortality rates: Countries, PAHO sub-regions, region"
-save "`datapath'\ghe-2021-death-rate-001", replace
-
-
-** --------------------------------------------------------------------------------
-** CHECK MORTALITY RATES AGAINST REGIONAL AND SELECTED COUNTRY RATES IN GHE DATASET
-** CHECKED ON 21-JUN-2025
-** MY CALCULATED RATES THE SAME AS GHE DATASET RATES
-** Using my rates in order to then calculate bespoke sub-regions 
-** --------------------------------------------------------------------------------
-use "`datapath'\ghe-2021-death-001-check", clear 
-    keep if metric==2 & iso3n<. 
-    keep iso3n pop year sex age cid value metric  
-    rename cid ghecause 
-    rename value arate_check 
-    tempfile check 
-    save `check', replace 
-
-use "`datapath'\ghe-2021-death-rate-001", clear 
-    keep region iso3n year sex ghecause cases pop crate arate 
-    replace crate = crate * 100000 
-    replace arate = arate * 100000 
-
-merge 1:1 iso3n year sex ghecause using `check'
-    drop if _merge==1 
-    order crate arate arate_check , after(cases) 
+label data "Crude and Adjusted DALY rates: Countries, PAHO sub-regions, region"
+save "`datapath'\ghe-2021-daly-rate-001", replace
 
 
 

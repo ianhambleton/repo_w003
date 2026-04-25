@@ -1,10 +1,10 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    paper2-2025-002-death.do
+    //  algorithm name			    paper2-2026-002check.do
     //  project:				    WHO Global Health Estimates 2021
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	16-JUN-2025
-    //  algorithm task			    Reading the WHO GHE 2021 dataset: DEATH data
+    //  algorithm task			    Chcecking my calculated death rates against the original GHE dataset rates
 
     ** General algorithm set-up
     version 18
@@ -27,49 +27,44 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\paper2-2025-002-death", replace
+    log using "`logpath'\paper2-2026-002check", replace
 ** HEADER -----------------------------------------------------
 
-    
+
 ** ************************************************************
 ** LOAD and prepare GHE 2021 death data
 ** ************************************************************
-** import delimited using "`datapath'\AMR-GHE-2021\AMR_GHE_2021_Deaths.csv", clear rowrange(1:1000000)
+** import delimited using "`datapath'\AMR-GHE-2021\AMR_GHE_2021_Deaths.csv", clear rowrange(1:3000000)
 import delimited using "`datapath'\AMR-GHE-2021\AMR_GHE_2021_Deaths.csv", clear 
 
-** There are some special category age groups that we delete 
-drop if agegroup=="1-4 years"
-drop if agegroup=="<1 year"
-drop if agegroup=="25-49 years"
-drop if agegroup=="Age-standardized"
-drop if agegroup=="All ages"
+** Only keep two special category age groups 
+rename agegroup age 
+keep if age=="Age-standardized" | age=="All ages"
 
 ** Restrict immediately to just injury categories + (major others)
 ** ------------------------------------
-** (1) 0  All cause 
-** (2) 10 Communicable
-** (3) 600 NCDs 
+** 0  All cause 
+** 10 Communicable
+** 600 NCDs 
 ** ------------------------------------
-** (4) 1510 III. Injuries 
-** (5) 1520 A. Unintentional injuries 
-**     (7) 1530 1. Road injury
-**     (8) 1540 2. Poisonings 
-**     (9) 1550 3. Falls 
-**     (10) 1560 4. Fire, heat and hot substances 
-**     (11) 1570 5. Drowning 
-**     (12) 1575 6. Exposure to mechanical forces 
-**     (13) 1580 7. Natural disasters 
-**     (--) 1590 8. Other unintentional injuries 
-** (6) 1600 B. Intentional injuries 
-**     (14) 1610 1. Self-harm 
-**     (15) 1620 2. Interpersonal violence 
-**     (16) 1630 3. Collective violence and legal intervention 
+** 1510 III. Injuries 
+** 1520 A. Unintentional injuries 
+** 1600 B. Intentional injuries 
+**      1530 1. Road injuryj 
+**      1540 2. Poisonings 
+**      1550 3. Falls 
+**      1560 4. Fire, heat and hot substances 
+**      1570 5. Drowning 
+**      1575 6. Exposure to mechanical forces 
+**      1580 7. Natural disasters 
+**      1610 1. Self-harm 
+**      1620 2. Interpersonal violence 
+**      1630 3. Collective violence and legal intervention 
 ** ------------------------------------
     #delimit ;
     keep if     causeid==0      |
                 causeid==10     |
                 causeid==600    |
-
                 causeid==1510   |
                 causeid==1520   |
                 causeid==1530   |                
@@ -79,7 +74,6 @@ drop if agegroup=="All ages"
                 causeid==1570   |                
                 causeid==1575   |                
                 causeid==1580   |            
-
                 causeid==1600   |
                 causeid==1610   |                
                 causeid==1620   |                
@@ -114,53 +108,10 @@ label var iso3 "Country ISO3 code (text)"
 drop measure_name_en
 rename locationname country
 
-** AGE 
-** Create numeric values for age groups 
-gen age = 1 if agegroup=="0-4 years"
-replace age = 2 if agegroup=="5-9 years" 
-replace age = 3 if agegroup=="10-14 years" 
-replace age = 4 if agegroup=="15-19 years" 
-replace age = 5 if agegroup=="20-24 years" 
-replace age = 6 if agegroup=="25-29 years" 
-replace age = 7 if agegroup=="30-34 years" 
-replace age = 8 if agegroup=="35-39 years" 
-replace age = 9 if agegroup=="40-44 years" 
-replace age = 10 if agegroup=="45-49 years" 
-replace age = 11 if agegroup=="50-54 years" 
-replace age = 12 if agegroup=="55-59 years" 
-replace age = 13 if agegroup=="60-64 years" 
-replace age = 14 if agegroup=="65-69 years" 
-replace age = 15 if agegroup=="70-74 years" 
-replace age = 16 if agegroup=="75-79 years" 
-replace age = 17 if agegroup=="80-84 years" 
-replace age = 18 if agegroup=="85+ years" 
-
-#delimit ; 
-label define age_   1 "0-4 yrs"
-                    2 "5-9 yrs"
-                    3 "10-14 yrs"
-                    4 "15-19 yrs"
-                    5 "20-24 yrs"
-                    6 "25-29 yrs"
-                    7 "30-34 yrs"
-                    8 "35-39 yrs"
-                    9 "40-44 yrs"
-                    10 "45-49 yrs"
-                    11 "50-54 yrs"
-                    12 "55-59 yrs"
-                    13 "60-64 yrs"
-                    14 "65-69 yrs"
-                    15 "70-74 yrs"
-                    16 "75-79 yrs"
-                    17 "80-84 yrs"
-                    18 "85+ yrs"; 
-#delimit cr 
-label values age age_ 
-** drop agegroup 
-label var age "Age in 18 groups"
+label var age "Age standardised / All ages"
 label var country "Country name" 
 label var year "Year of measurement"
-order iso3c country year age 
+order iso3c country year age
 
 ** SEX
 rename sex temp1 
@@ -235,20 +186,21 @@ label var value_low "Uncertainty lower bound"
 label var value_up "Uncertainty upper bound" 
 
 ** Drop unwanted sub-regions from the dataset - we will connect our own PAHO sub-regions
-drop if iso3c=="LMIC" | iso3c=="UMIC" | iso3c=="HIC"  
-drop if iso3c=="ANR" | iso3c=="CAI" | iso3c=="NAR" | iso3c=="NLC" | iso3c=="SCR" | iso3c=="AMRO" | iso3c=="LAC"
+drop if iso3c=="LMIC" | iso3c=="UMIC" | iso3c=="HIC" | iso3c=="AMRO" 
+** drop if iso3c=="ANR" | iso3c=="CAI" | iso3c=="NAR" | iso3c=="NLC" | iso3c=="SCR" | iso3c=="LAC"
 
 ** Drop crude rates.
-drop if metric==2 
-drop metric 
+drop if (age=="All ages" & metric==2) 
+** drop metric 
 
 ** Drop the uncertainty parameters and "leading causes" indicator for now 
 drop value_low value_up leadc 
 
 ** Save the FULL DATASET
-label data "WHO GHE 2024: Deaths, 2000-2021, individual countries"
+label data "WHO GHE 2021: Deaths, 2000-2021, individual countries"
 tempfile ghe01 
 save `ghe01', replace
+
 
 
 ** ************************************************************
@@ -472,24 +424,25 @@ sort paho_subregion iso3c
 save "`datapath'\regions", replace
 
 
+
+
 ** JOIN FINAL DEATHS DATASET with ADDITIONAL REGIONS INFORMATION 
 use `ghe01', clear 
 merge m:1 iso3c using  "`datapath'\regions"
 drop if _merge==2 
 drop _merge 
-order iso3c iso3n country year age sex cid value amro un_subregion paho_subregion clevel clabel cname 
-
+order iso3c iso3n country year age sex cid metric value amro un_subregion paho_subregion clevel clabel cname 
 
 ** ADD POPULATION COLUMN
 ** Comes from UN-WPP 2024 dataset 
 ** Prepared in --> paper2-2025-001.do 
-merge m:1 iso3c year sex age using "`datapath'/un-wpp-2024"
+merge m:1 iso3c year sex using "`datapath'/un-wpp-2024-check"
 order pop, after(country)
 drop _merge 
 gen un_region = 19 
 label define un_region_ 19 "Americas" 
 label values un_region un_region_ 
- label var un_region "The Americas. M49 classification"
+label var un_region "The Americas. M49 classification"
 label var un_subregion "Sub-regions of the Americas. M49 classification" 
 label var paho_subregion "Sub-regions of the Americas. Defined by PAAHO"
 
@@ -499,4 +452,4 @@ labmask iso3n, values(country)
 ** Save the FULL DATASET of counts.
 sort year country sex age cid 
 label data "WHO GHE 2021: Deaths, 2000-2021, individual countries, extra region information"
-save "`datapath'\ghe-2021-Deaths-001", replace
+save "`datapath'\ghe-2021-death-001-check", replace

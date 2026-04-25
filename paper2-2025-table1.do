@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "C:\yasuki\Sync\output\analyse-write\w003\data\2025"
+    local datapath "C:\yoshimi-hot\output\analyse-write\w003\data\2025"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "C:\yasuki\Sync\output\analyse-write\w003\tech-docs\2025"
+    local logpath "C:\yoshimi-hot\output\analyse-write\w003\tech-docs\2025"
 
     ** REPORTS and Other outputs
-    local outputpath "C:\yasuki\Sync\output\analyse-write\w003\outputs\2025"
+    local outputpath "C:\yoshimi-hot\output\analyse-write\w003\outputs\2025"
     
     ** Close any open log file and open a new log file
     capture log close

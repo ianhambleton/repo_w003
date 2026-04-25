@@ -42,7 +42,7 @@ tempfile kcancer region_mr12 region_mr3 region_daly12 region_daly3
 use "`datapath'\from-who\chap2_000_adjusted", clear
 rename mortr arate
 rename dalyr drate
-/*
+
 
 ** -----------------------------------------------------
 ** Keep only the TOP conditions used in the report
@@ -277,18 +277,18 @@ restore
 ** -----------------------------------------------------
 ** GRAPHICS COLOR SCHEME
 ** -----------------------------------------------------
-    colorpalette ptol, rainbow n(12)  nograph
-    local list r(p) 
-    ** Mortality Rate
-    local mrate `r(p1)'
-    ** DALY
-    local daly `r(p4)'
-    ** Improve and worsen
-    local improve `r(p7)'
-    local worsen `r(p12)'
+    ** colorpalette ptol, rainbow n(12)  nograph
+    ** local list r(p) 
+    ** ** Mortality Rate
+    ** local mrate `r(p1)'
+    ** ** DALY
+    ** local daly `r(p4)'
+    ** ** Improve and worsen
+    ** local improve `r(p7)'
+    ** local worsen `r(p12)'
 
     ** generate a local for the ColorBrewer color scheme
-    colorpalette d3, 20 n(20) nograph
+    colorpalette d3 20, n(20) nograph
     local list r(p) 
     ** CVD
     local cvd1 `r(p9)'

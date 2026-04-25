@@ -1,13 +1,13 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    paper2-2025-supplement-s1-road-injury.do
+    //  algorithm name			    paper2-2026-table1.do
     //  project:				    UN WPP (2019 edition)
     //  analysts:				    Ian HAMBLETON
-    // 	date last modified	    	24-Mar-2022
-    //  algorithm task			    Supplement - Road Injuries
+    // 	date last modified	    	22-JUN-2025
+    //  algorithm task			    Injuries paper - Table 1
 
     ** General algorithm set-up
-    version 17
+    version 18
     clear all
     macro drop _all
     set more 1
@@ -23,74 +23,45 @@
 
     ** REPORTS and Other outputs
     local outputpath "C:\yoshimi-hot\output\analyse-write\w003\outputs\2025"
-
+    
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\paper2-2025-supplement-s1-road-injury", replace
+    log using "`logpath'\paper2-2026-table1", replace
 ** HEADER -----------------------------------------------------
 
 ** Load population file from: 
-**      paper2-100-datasets.do 
+**      paper2-2025-005-datasets
 use "`datapath'/dataset01", clear
-/*
+
 ** ------------------------------------------------------------
 ** Table 1 as follows
 ** ------------------------------------------------------------
-** Deaths: numbers + rates in 2019
-** Burden: DALY numbers + rates in 2019
+** Deaths: numbers + rates in 2021
+** Burden: DALY numbers + rates in 2021
 ** ---
 ** COL 1: Region / Subregion
 ** COL 2: Population count
 ** ---
-** COL 3: Count 2019 (women N)
-** COL 4: Count 2019 (men N)
-** COL 5: Count 2019 (both N)
+** COL 3: Count 2021 (women N)
+** COL 4: Count 2021 (men N)
+** COL 5: Count 2021 (both N)
 ** ---
-** COL 6: Rate 2019 (women N)
-** COL 7: Rate 2019 (men N)
-** COL 8: Rate 2019 (both N)
+** COL 6: Rate 2021 (women N)
+** COL 7: Rate 2021 (men N)
+** COL 8: Rate 2021 (both N)
 ** ---
-** COL 9: Rate change (2000-2019) (women N)
-** COL 10: Rate change (2000-2019) (men N)
+** COL 9: Rate change (2000-2021) (women N)
+** COL 10: Rate change (2000-2021) (men N)
 ** ------------------------------------------------------------
 
 ** Keep selected years
-keep if year==2000 | year==2021
+keep if year==2000 | year==2021 
 
-** Keep selected regions + subregions
+** Keep Americas (44) + eight subregions (36-43)
 keep if (region>=36 & region<=44) 
 
-** (ghecause 48. road injury)
-** (ghecause 49. poisonings)
-** (ghecause 50. falls)
-** (ghecause 51. fire and heat)
-** (ghecause 52. drowning)
-** (ghecause 53. mechanical forces)
-** (ghecause 54. natural disasters)
-** (ghecause 55. self harm)
-** (ghecause 56. interpersonal violence)
-** (ghecause 57. collective violence)
-**
-**  (ghecause: 1) - all causes 
-**  (ghecause: 2) - communicable 
-**  (ghecause: 3) - NCDs 
-**  (ghecause: 4) - injuries
-**  (ghecause: 5) - unintentional injuries
-**  (ghecause: 6) - intentional injuries
-**
-**  (ghecause  7) - road injury
-**  (ghecause  8) - poisonings
-**  (ghecause  9) - falls
-**  (ghecause 10) - fire and heat
-**  (ghecause 11) - drowning
-**  (ghecause 12) - mechanical forces
-**  (ghecause 13) - natural disasters
-**  (ghecause 14) - self harm
-**  (ghecause 15) - interpersonal violence
-**  (ghecause 16) - collective violence
-
-** KEEP Road Injuries (was 48, now 7)
-keep if ghecause==7
+** Keep total injuries (ghecause=4)
+keep if ghecause==4
 
 ** Drop unwanted variables
 drop paho_subregion pop_dalyr ghecause
@@ -117,12 +88,20 @@ gen ch_deaths = ((deaths2021 - deaths2000) / deaths2000) * 100
 ** Reshape to long (Pop, Deaths, DALYs) in single column
 drop pop2000 daly2000 deaths2000 dalyr2000 mortr2000
 rename pop2021 metric1
+
+** COL 2-4 
 rename deaths2021 metric2
 rename daly2021 metric3
+
+** COL 8-10
 rename mortr2021 metric4
 rename dalyr2021 metric5
+
+** COL 11-13 
 rename ch_mortr metric6
 rename ch_dalyr metric7
+
+** COL 5-7
 rename ch_deaths metric8
 rename ch_daly metric9
 
@@ -142,8 +121,7 @@ label define uid_   1 "North America"
                     6 "non-Latin Caribbean"
                     7 "Brazil"
                     8 "Mexico"
-                    9 "Americas"
-                    10 "World", modify;
+                    9 "Americas", modify;
 #delimit cr
 label values uid uid_
 
@@ -155,7 +133,7 @@ decode uid, gen(rtext)
 ** ------------------------------------------------------
 
     ** COL1. Region name
-            forval r = 1(1)10 {   
+            forval r = 1(1)9 {   
                 forval s = 1(1)3 {
                     preserve
                         keep if type ==1 & uid==`r' & sex==`s'
@@ -169,7 +147,7 @@ decode uid, gen(rtext)
             }
 
     ** COLS 2/4. Count 2021 (deaths)
-            forval r = 1(1)10 {   
+            forval r = 1(1)9 {   
                 forval s = 1(1)3 {
                     preserve
                         keep if type ==2 & uid==`r' & sex==`s'
@@ -181,11 +159,11 @@ decode uid, gen(rtext)
             }
 
     ** COLS 2.4. Count 2021 (DALYs)
-            forval r = 1(1)10 {   
+            forval r = 1(1)9 {   
                 forval s = 1(1)3 {
                     preserve
                         keep if type ==3 & uid==`r' & sex==`s'
-                        ** (COLS 3/5) Count of deaths
+                        ** (COLS 3/5) Count of DALYs
                         local  dc_`r'_`s' = metric
                         global dc_`r'_`s' : dis %14.0fc `dc_`r'_`s''
                     restore
@@ -194,11 +172,11 @@ decode uid, gen(rtext)
 
 
     ** COLS 5/7. Change 2000-2021 (deaths)
-            forval r = 1(1)10 {   
+            forval r = 1(1)9 {   
                 forval s = 1(1)3 {
                     preserve
                         keep if type ==8 & uid==`r' & sex==`s'
-                        ** (COLS 3/5) Count of deaths
+                        ** (COLS 3/5) Percentage change in number of deaths
                         local  mp1_`r'_`s' = metric
                         global mp1_`r'_`s' : dis %9.1fc `mp1_`r'_`s''
                     restore
@@ -206,11 +184,11 @@ decode uid, gen(rtext)
             }
 
     ** COLS 5/7. Change 2000-2021 (DALYs)
-            forval r = 1(1)10 {   
+            forval r = 1(1)9 {   
                 forval s = 1(1)3 {
                     preserve
                         keep if type ==9 & uid==`r' & sex==`s'
-                        ** (COLS 3/5) Count of deaths
+                        ** (COLS 3/5) Percentage change in number of DALYs
                         local  dp1_`r'_`s' = metric
                         global dp1_`r'_`s' : dis %9.1fc `dp1_`r'_`s''
                     restore
@@ -219,7 +197,7 @@ decode uid, gen(rtext)
 
 
     ** COLS 8/10. Rate 2021 (death)
-            forval r = 1(1)10 {   
+            forval r = 1(1)9 {   
                 forval s = 1(1)3 {
                     preserve
                         keep if type ==4 & uid==`r' & sex==`s'
@@ -231,7 +209,7 @@ decode uid, gen(rtext)
             }
 
     ** COLS 8/10. Rate 2021 (DALYs)
-            forval r = 1(1)10 {   
+            forval r = 1(1)9 {   
                 forval s = 1(1)3 {
                     preserve
                         keep if type ==5 & uid==`r' & sex==`s'
@@ -243,7 +221,7 @@ decode uid, gen(rtext)
             }
 
     ** COLS 11/13. Change 2000-2021 (death rate)
-            forval r = 1(1)10 {   
+            forval r = 1(1)9 {   
                 forval s = 1(1)3 {
                     preserve
                         keep if type ==6 & uid==`r' & sex==`s'
@@ -255,7 +233,7 @@ decode uid, gen(rtext)
             }
 
     ** COLS 11/13. Change 2000-2021 (DALY rate)
-            forval r = 1(1)10 {   
+            forval r = 1(1)9 {   
                 forval s = 1(1)3 {
                     preserve
                         keep if type ==7 & uid==`r' & sex==`s'
@@ -270,11 +248,11 @@ decode uid, gen(rtext)
         putdocx begin , landscape font("calibri light", 10) margin(left, 0.65) margin(right, 0.6)
 
         putdocx paragraph
-        putdocx text ("TABLE. "), bold
+        putdocx text ("TABLE 1. "), bold
         putdocx text ("Deaths and Years Lived with Disability (DALYs) among women and men ")
         putdocx text ("in 8 subregions of the Americas (2000 - 2021). ")
 
-        putdocx table t1 = (23,13) 
+        putdocx table t1 = (21,13) 
 
         ** Structural formats
         putdocx table t1(.,1)  , width(16%)
@@ -297,11 +275,12 @@ decode uid, gen(rtext)
         putdocx table t1(1,5) , colspan(3)
         putdocx table t1(1,.) , shading("bfbfbf")
         putdocx table t1(2,.) , shading("e6e6e6")
-        putdocx table t1(13,.) , shading("e6e6e6")
+        putdocx table t1(12,.) , shading("e6e6e6")
 
         ** Grey out some minor cell dividing lines
-        putdocx table t1(3/11,.),border(bottom, single, "e6e6e6")
-        putdocx table t1(14/22,.),border(bottom, single, "e6e6e6")
+        putdocx table t1(3/10,.),border(bottom, single, "e6e6e6")
+        putdocx table t1(13/20,.),border(bottom, single, "e6e6e6")
+
         putdocx table t1(.,2/3),border(right, single, "e6e6e6")
         putdocx table t1(.,5/6),border(right, single, "e6e6e6")
         putdocx table t1(.,8/9),border(right, single, "e6e6e6")
@@ -315,7 +294,7 @@ decode uid, gen(rtext)
         ** Row 1
         putdocx table t1(1,1) = ("Region"), halign(left)
         putdocx table t1(2,1) = ("DEATHS"), halign(left)
-        putdocx table t1(13,1) = ("DALYs"), halign(left)
+        putdocx table t1(12,1) = ("DALYs"), halign(left)
         putdocx table t1(1,2) = ("Count (2021)"), halign(left)
         putdocx table t1(1,3) = ("Percent change in count (2000 to 2021)"), halign(left)
         putdocx table t1(1,4) = ("Rate (per 100,000)"), halign(left)
@@ -333,18 +312,18 @@ decode uid, gen(rtext)
         putdocx table t1(2,11) = ("Men"), halign(right)
         putdocx table t1(2,12) = ("Women"), halign(right)
         putdocx table t1(2,13) = ("Total"), halign(right)
-        putdocx table t1(13,2) = ("Men"), halign(right)
-        putdocx table t1(13,3) = ("Women"), halign(right)
-        putdocx table t1(13,4) = ("Total"), halign(right)
-        putdocx table t1(13,5) = ("Men"), halign(right)
-        putdocx table t1(13,6) = ("Women"), halign(right)
-        putdocx table t1(13,7) = ("Total"), halign(right)
-        putdocx table t1(13,8) = ("Men"), halign(right)
-        putdocx table t1(13,9) = ("Women"), halign(right)
-        putdocx table t1(13,10) = ("Total"), halign(right)
-        putdocx table t1(13,11) = ("Men"), halign(right)
-        putdocx table t1(13,12) = ("Women"), halign(right)
-        putdocx table t1(13,13) = ("Total"), halign(right)
+        putdocx table t1(12,2) = ("Men"), halign(right)
+        putdocx table t1(12,3) = ("Women"), halign(right)
+        putdocx table t1(12,4) = ("Total"), halign(right)
+        putdocx table t1(12,5) = ("Men"), halign(right)
+        putdocx table t1(12,6) = ("Women"), halign(right)
+        putdocx table t1(12,7) = ("Total"), halign(right)
+        putdocx table t1(12,8) = ("Men"), halign(right)
+        putdocx table t1(12,9) = ("Women"), halign(right)
+        putdocx table t1(12,10) = ("Total"), halign(right)
+        putdocx table t1(12,11) = ("Men"), halign(right)
+        putdocx table t1(12,12) = ("Women"), halign(right)
+        putdocx table t1(12,13) = ("Total"), halign(right)
 
         ** COL 1: Region
         ** COL 2: Population
@@ -374,8 +353,8 @@ decode uid, gen(rtext)
             putdocx table t1(`r',12) = ("${mp2_${roi}_2}"), halign(right)
             putdocx table t1(`r',13) = ("${mp2_${roi}_3}"), halign(right)
             }
-        forval r = 14(1)22 {
-            global roi = `r' - 13
+        forval r = 13(1)21 {
+            global roi = `r' - 12
             putdocx table t1(`r',1) =  ("${col1_${roi}_3}"), halign(right)
             ///putdocx table t1(`r',2) =  ("${col2_${roi}_3}"), halign(right)
             putdocx table t1(`r',2) =  ("${dc_${roi}_1}"), halign(right)
@@ -392,5 +371,5 @@ decode uid, gen(rtext)
             putdocx table t1(`r',13) = ("${dp2_${roi}_3}"), halign(right)
             }
         ** Save Word table
-        putdocx save "`outputpath'/inj_table_s1_road_injury", replace 
+        putdocx save "`outputpath'/inj_table1", replace 
 

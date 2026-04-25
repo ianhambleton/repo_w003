@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    chap2-000z-final-prep.do
+    //  algorithm name			    paper2-2026-005-datasets.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	19-August-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\chap2-000z-final-prep", replace
+    log using "`logpath'\paper2-2026-005-datasets", replace
 ** HEADER -----------------------------------------------------
 
 
@@ -117,6 +117,32 @@ label var pop_mortr "Estimated national population"
 
 label data "GHE 2000-2021: Mortality and DALY, by sex, country, subregion, region" 
 save "`datapath'\dataset01", replace
+
+
+use "`datapath'\ghe-2021-death-daly-yll-yld-rate-002", clear
+** Variable labelling 
+label var ghecause "Grouped cause of mortality / DALYs / YLLs / YLDs"
+label var region "Unique label for country/sub-region/region (1-44)"
+label var paho_subregion " PAHO-defined subregions of the Americas"
+label var daly "Estimated count, yrs of illness"
+label var dalyr "Estimated DALY rate per 100,000"
+label var pop_dalyr "Estimated national population"
+label var dths "Estimated count, deaths"
+label var mortr "Estimated mortality rate per 100,000"
+label var pop_mortr "Estimated national population"
+
+label var yll "Estimated count, yrs of life lost"
+label var yllr "Estimated DALY rate per 100,000"
+label var pop_yllr "Estimated national population"
+
+label var yld "Estimated count, yrs lived with disability"
+label var yldr "Estimated YLD rate per 100,000"
+label var pop_yldr "Estimated national population"
+
+label data "GHE 2000-2021: Mortality, DALY, YLL, YLD, by sex, country, subregion, region" 
+save "`datapath'\dataset03", replace
+
+
 
 
 ** -----------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    paper2-2025-001.do
+    //  algorithm name			    paper2-2026-001.do
     //  project:				    WHO Global Health Estimates 2021
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	19-JUN-2025
@@ -27,7 +27,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\paper2-2025-001", replace
+    log using "`logpath'\paper2-2026-001", replace
 ** HEADER -----------------------------------------------------
 
 

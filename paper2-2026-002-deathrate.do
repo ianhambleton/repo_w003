@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    paper2-2025-002-deathrate.do
+    //  algorithm name			    paper2-2026-002-deathrate.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	26-Apr-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\cpaper2-2025-002-deathrate", replace
+    log using "`logpath'\cpaper2-2026-002-deathrate", replace
 ** HEADER -----------------------------------------------------
 
 ** ------------------------------------------

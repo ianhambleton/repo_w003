@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    paper2-2025-002-death.do
+    //  algorithm name			    paper2-2026-002-death.do
     //  project:				    WHO Global Health Estimates 2021
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	16-JUN-2025
@@ -27,7 +27,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\paper2-2025-002-death", replace
+    log using "`logpath'\paper2-2026-002-death", replace
 ** HEADER -----------------------------------------------------
 
     
@@ -500,3 +500,4 @@ labmask iso3n, values(country)
 sort year country sex age cid 
 label data "WHO GHE 2021: Deaths, 2000-2021, individual countries, extra region information"
 save "`datapath'\ghe-2021-Deaths-001", replace
+save "`datapath'\ghe-2021-death-001", replace

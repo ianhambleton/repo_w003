@@ -435,7 +435,7 @@ save `file_mf' , replace
 ** ------------------------------------------
 
 use "`datapath'\from-who\who-ghe-yld-001-who2-allcauses", replace
-
+/*
 ** Restrict to selected disease categories
     #delimit ;
     keep if     

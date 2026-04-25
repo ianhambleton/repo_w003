@@ -16,13 +16,13 @@
     ** Set working directories: this is for DATASET and LOGFILE import and export
 
     ** DATASETS to encrypted SharePoint folder
-    local datapath "X:\OneDrive - The University of the West Indies\Writing\w003\data"
+    local datapath "C:\yasuki\Sync\output\analyse-write\w003\data"
 
     ** LOGFILES to unencrypted OneDrive folder (.gitignore set to IGNORE log files on PUSH to GitHub)
-    local logpath "X:\OneDrive - The University of the West Indies\Writing\w003\tech-docs"
+    local logpath "C:\yasuki\Sync\output\analyse-write\w003\tech-docs"
 
     ** REPORTS and Other outputs
-    local outputpath "X:\OneDrive - The University of the West Indies\Writing\w003\outputs"
+    local outputpath "C:\yasuki\Sync\output\analyse-write\w003\outputs"
 
     ** Close any open log file and open a new log file
     capture log close
@@ -66,8 +66,8 @@ use "`datapath'\from-owid\regions", clear
 **      Restrict mortality categories 
 **      and save external files: by METRIC and by UN-REGION
 ** **********************************************************
-** foreach var in yll yld daly deaths { 
-foreach var in deaths daly { 
+foreach var in yll yld daly deaths { 
+** foreach var in deaths daly { 
     frame change `var'
     use "`datapath'\from-who\who-ghe-`var'-001", clear
 **    #delimit ;
@@ -168,7 +168,7 @@ foreach var in deaths daly {
     labmask ghecause, values(causename)
     drop causename
     label data "WHO GHE 2019: `var', global, all years"
-    save "`datapath'\from-who\who-ghe-`var'-001-world-allcauses", replace
+    save "`datapath'\phd\who-ghe-`var'-001-world-allcauses", replace
 
     /// ** restrict to WHO Africa (who_regions==1) 
     /// frame copy `var' `var'_who1 

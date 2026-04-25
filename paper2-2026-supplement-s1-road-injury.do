@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    paper2-2025-supplement-s1-road-injury.do
+    //  algorithm name			    paper2-2026-supplement-s1-road-injury.do
     //  project:				    UN WPP (2019 edition)
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	24-Mar-2022
@@ -26,13 +26,13 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\paper2-2025-supplement-s1-road-injury", replace
+    log using "`logpath'\paper2-2026-supplement-s1-road-injury", replace
 ** HEADER -----------------------------------------------------
 
 ** Load population file from: 
 **      paper2-100-datasets.do 
 use "`datapath'/dataset01", clear
-/*
+
 ** ------------------------------------------------------------
 ** Table 1 as follows
 ** ------------------------------------------------------------

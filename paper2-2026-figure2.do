@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    paper2-2025-figure2.do
+    //  algorithm name			    paper2-2026-figure2.do
     //  project:				    WHO Global Health Estimates
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	16-Apr-2021
@@ -26,7 +26,7 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\paper2-2025-figure2", replace
+    log using "`logpath'\paper2-2026-figure2", replace
 ** HEADER -----------------------------------------------------
 
 ** SUPPLEMENT TABLE 11

@@ -1,10 +1,10 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    paper2-2025-002-death.do
+    //  algorithm name			    paper2-2026-003b-yld.do
     //  project:				    WHO Global Health Estimates 2021
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	16-JUN-2025
-    //  algorithm task			    Reading the WHO GHE 2021 dataset: DEATH data
+    //  algorithm task			    Reading the WHO GHE 2021 dataset: YLD data
 
     ** General algorithm set-up
     version 18
@@ -27,15 +27,15 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\paper2-2025-002-death", replace
+    log using "`logpath'\paper2-2026-003b-yld", replace
 ** HEADER -----------------------------------------------------
 
     
 ** ************************************************************
-** LOAD and prepare GHE 2021 death data
+** LOAD and prepare GHE 2021 YLD data
 ** ************************************************************
-** import delimited using "`datapath'\AMR-GHE-2021\AMR_GHE_2021_Deaths.csv", clear rowrange(1:1000000)
-import delimited using "`datapath'\AMR-GHE-2021\AMR_GHE_2021_Deaths.csv", clear 
+** import delimited using "`datapath'\AMR-GHE-2021\AMR_GHE_2021_YLDs.csv", clear rowrange(1:1000000)
+import delimited using "`datapath'\AMR-GHE-2021\AMR_GHE_2021_YLDs.csv", clear 
 
 ** There are some special category age groups that we delete 
 drop if agegroup=="1-4 years"
@@ -46,30 +46,29 @@ drop if agegroup=="All ages"
 
 ** Restrict immediately to just injury categories + (major others)
 ** ------------------------------------
-** (1) 0  All cause 
-** (2) 10 Communicable
-** (3) 600 NCDs 
+** 0  All cause 
+** 10 Communicable
+** 600 NCDs 
 ** ------------------------------------
-** (4) 1510 III. Injuries 
-** (5) 1520 A. Unintentional injuries 
-**     (7) 1530 1. Road injury
-**     (8) 1540 2. Poisonings 
-**     (9) 1550 3. Falls 
-**     (10) 1560 4. Fire, heat and hot substances 
-**     (11) 1570 5. Drowning 
-**     (12) 1575 6. Exposure to mechanical forces 
-**     (13) 1580 7. Natural disasters 
-**     (--) 1590 8. Other unintentional injuries 
-** (6) 1600 B. Intentional injuries 
-**     (14) 1610 1. Self-harm 
-**     (15) 1620 2. Interpersonal violence 
-**     (16) 1630 3. Collective violence and legal intervention 
+** 1510 III. Injuries 
+** 1520 A. Unintentional injuries 
+**      1530 1. Road injuryj 
+**      1540 2. Poisonings 
+**      1550 3. Falls 
+**      1560 4. Fire, heat and hot substances 
+**      1570 5. Drowning 
+**      1575 6. Exposure to mechanical forces 
+**      1580 7. Natural disasters 
+**      1590 8. Other unintentional injuries 
+** 1600 B. Intentional injuries 
+**      1610 1. Self-harm 
+**      1620 2. Interpersonal violence 
+**      1630 3. Collective violence and legal intervention 
 ** ------------------------------------
     #delimit ;
     keep if     causeid==0      |
                 causeid==10     |
                 causeid==600    |
-
                 causeid==1510   |
                 causeid==1520   |
                 causeid==1530   |                
@@ -79,7 +78,6 @@ drop if agegroup=="All ages"
                 causeid==1570   |                
                 causeid==1575   |                
                 causeid==1580   |            
-
                 causeid==1600   |
                 causeid==1610   |                
                 causeid==1620   |                
@@ -110,7 +108,7 @@ drop if agegroup=="All ages"
 ** ISO3 (text) 
 rename iso3 iso3c 
 label var iso3 "Country ISO3 code (text)"
-** Identifies the data as deaths 
+** Identifies the data as YLDs 
 drop measure_name_en
 rename locationname country
 
@@ -183,7 +181,7 @@ label var metric "Metric (number or crude rate)"
 order metric, after(sex)
 drop metric_name_en 
 
-** CAUSE OF DEATH
+** CAUSE OF YLDs
 ** cause level 
 ** 0 =  All causes
 ** 1 =  I  (Communicable)
@@ -205,10 +203,10 @@ label var clabel "Cause identifier label"
 rename causename_eng cname    
 label var cname "Text description of cause category"
 
-** Leading cause of death - new variable for 2021 
+** Leading cause of illness - new variable for 2021 
 ** (not sure we'll use this, but preparing for completeness)
 rename leading_code leadc 
-label var leadc "Leading cause of death categories" 
+label var leadc "Leading cause of illness categories" 
 labmask leadc, values(leadingcategory)
 drop leadingcategory
 
@@ -229,7 +227,7 @@ drop amrosubregions
 order amro, after(country)
 label var amro "AMRO subregions"
 
-** Deaths
+** Illness
 label var value "Point estimate" 
 label var value_low "Uncertainty lower bound" 
 label var value_up "Uncertainty upper bound" 
@@ -246,7 +244,7 @@ drop metric
 drop value_low value_up leadc 
 
 ** Save the FULL DATASET
-label data "WHO GHE 2024: Deaths, 2000-2021, individual countries"
+label data "WHO GHE 2024: YLDs, 2000-2021, individual countries"
 tempfile ghe01 
 save `ghe01', replace
 
@@ -472,7 +470,7 @@ sort paho_subregion iso3c
 save "`datapath'\regions", replace
 
 
-** JOIN FINAL DEATHS DATASET with ADDITIONAL REGIONS INFORMATION 
+** JOIN FINAL YLDs DATASET with ADDITIONAL REGIONS INFORMATION 
 use `ghe01', clear 
 merge m:1 iso3c using  "`datapath'\regions"
 drop if _merge==2 
@@ -498,5 +496,5 @@ labmask iso3n, values(country)
 
 ** Save the FULL DATASET of counts.
 sort year country sex age cid 
-label data "WHO GHE 2021: Deaths, 2000-2021, individual countries, extra region information"
-save "`datapath'\ghe-2021-Deaths-001", replace
+label data "WHO GHE 2021: YLDs, 2000-2021, individual countries, extra region information"
+save "`datapath'\ghe-2021-yld-001", replace

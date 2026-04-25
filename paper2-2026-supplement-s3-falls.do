@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    paper2-2025-supplement-s1-road-injury.do
+    //  algorithm name			    paper2-2026-supplement-s3-falls.do
     //  project:				    UN WPP (2019 edition)
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	24-Mar-2022
@@ -26,13 +26,13 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\paper2-2025-supplement-s1-road-injury", replace
+    log using "`logpath'\paper2-2026-supplement-s3-falls", replace
 ** HEADER -----------------------------------------------------
 
 ** Load population file from: 
 **      paper2-100-datasets.do 
 use "`datapath'/dataset01", clear
-/*
+
 ** ------------------------------------------------------------
 ** Table 1 as follows
 ** ------------------------------------------------------------
@@ -89,8 +89,8 @@ keep if (region>=36 & region<=44)
 **  (ghecause 15) - interpersonal violence
 **  (ghecause 16) - collective violence
 
-** KEEP Road Injuries (was 48, now 7)
-keep if ghecause==7
+** KEEP Falls (was 50, now 9)
+keep if ghecause==9
 
 ** Drop unwanted variables
 drop paho_subregion pop_dalyr ghecause
@@ -147,9 +147,11 @@ label define uid_   1 "North America"
 #delimit cr
 label values uid uid_
 
+format metric %15.2fc 
+sort region sex type 
 ** Region as String 
 decode uid, gen(rtext) 
-
+/*
 ** ------------------------------------------------------
 ** TABLE ONE
 ** ------------------------------------------------------
@@ -392,5 +394,5 @@ decode uid, gen(rtext)
             putdocx table t1(`r',13) = ("${dp2_${roi}_3}"), halign(right)
             }
         ** Save Word table
-        putdocx save "`outputpath'/inj_table_s1_road_injury", replace 
+        putdocx save "`outputpath'/inj_table_s3-falls", replace 
 

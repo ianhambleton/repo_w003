@@ -1,6 +1,6 @@
 ** HEADER -----------------------------------------------------
 **  DO-FILE METADATA
-    //  algorithm name			    paper2-2025-supplement-s1-road-injury.do
+    //  algorithm name			    paper2-2026-supplement-s9-unintentional.do
     //  project:				    UN WPP (2019 edition)
     //  analysts:				    Ian HAMBLETON
     // 	date last modified	    	24-Mar-2022
@@ -26,13 +26,13 @@
 
     ** Close any open log file and open a new log file
     capture log close
-    log using "`logpath'\paper2-2025-supplement-s1-road-injury", replace
+    log using "`logpath'\paper2-2026-supplement-s9-unintentional", replace
 ** HEADER -----------------------------------------------------
 
 ** Load population file from: 
 **      paper2-100-datasets.do 
 use "`datapath'/dataset01", clear
-/*
+
 ** ------------------------------------------------------------
 ** Table 1 as follows
 ** ------------------------------------------------------------
@@ -89,8 +89,8 @@ keep if (region>=36 & region<=44)
 **  (ghecause 15) - interpersonal violence
 **  (ghecause 16) - collective violence
 
-** KEEP Road Injuries (was 48, now 7)
-keep if ghecause==7
+** KEEP Unintentional (was 1100, now 5)
+keep if ghecause==5
 
 ** Drop unwanted variables
 drop paho_subregion pop_dalyr ghecause
@@ -392,5 +392,5 @@ decode uid, gen(rtext)
             putdocx table t1(`r',13) = ("${dp2_${roi}_3}"), halign(right)
             }
         ** Save Word table
-        putdocx save "`outputpath'/inj_table_s1_road_injury", replace 
+        putdocx save "`outputpath'/inj_table_s9-unintentional", replace 
 
